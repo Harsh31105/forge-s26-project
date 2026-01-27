@@ -1,0 +1,20 @@
+# Automated code review workflow using Claude AI
+# Triggers on new PRs and when PRs are updated
+name: Code Review
+on:
+  pull_request:
+    # Run when PR is first opened or when new commits are pushed
+    types: [opened, synchronize]
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      # Use Claude AI to perform automated code review
+      - uses: anthropics/claude-code-action@v1
+        with:
+          # API key stored in GitHub secrets
+          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          # Trigger the review command
+          prompt: "/review"
+          # Allow up to 5 conversation turns for thorough review
+          claude_args: "--max-turns 5"
