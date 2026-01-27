@@ -22,7 +22,7 @@ jobs:
     steps:
       # Clone the repository code
       - name: Checkout Code
-        uses: action/checkout@v6
+        uses: actions/checkout@v6
       # Run MegaLinter to check code quality
       - name: MegaLinter
         uses: oxsecurity/megalinter@v7
@@ -43,7 +43,7 @@ jobs:
     steps:
       # Clone the repository code
       - name: Checkout Code
-        uses: action/checkout@v6
+        uses: actions/checkout@v6
       # Set up Node.js environment
       - name: Setup Node.js
         uses: actions/setup-node@v4
