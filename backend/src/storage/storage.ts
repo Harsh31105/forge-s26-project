@@ -1,22 +1,25 @@
 import { Pool } from "pg";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {Sample} from "../models/sample";
+import {SampleRepositorySchema} from "./postgres/schema/samples";
 
 export class Repository {
-    public sample: SampleRepository;
-    private readonly db: Pool;
+    public readonly sample: SampleRepository;
+    private readonly pool: Pool;
+    private readonly db: NodePgDatabase;
 
-    constructor(db :Pool) {
+    constructor(pool: Pool, db: NodePgDatabase) {
+        this.pool = pool;
         this.db = db;
-        this.sample = schema.SampleRepository(db);
+        this.sample = new SampleRepositorySchema(db);
     }
 
-    getDB(): Pool {
+    getDB(): NodePgDatabase {
         return this.db;
     }
 
     async close(): Promise<void> {
-        await this.db.end();
+        await this.pool.end();
     }
 }
 
