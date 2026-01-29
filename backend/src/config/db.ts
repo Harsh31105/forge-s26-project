@@ -23,3 +23,13 @@ export const dbConfig: DB = {
     maxConnIdleTime: parseInt(process.env.DB_CONN_MAX_IDLE_TIME || '100000'),
     connMaxLifetime: parseInt(process.env.DB_CONN_MAX_LIFETIME || '0'),
 }
+
+export function getConnectionString(config: DB): string {
+    return `postgresql://${config.user}:${config.password}@${config.host}:${config.port}/${config.name}?sslmode=require`
+}
+
+export function configurePool(pool: any, config: DB) {
+    pool.options.max = config.maxOpenConns ?? 25;
+    pool.options.idleTimeoutMillis = (config.maxConnIdleTime ?? 300000);
+    pool.options.connectionTimeoutMillis = (config.connMaxLifetime ?? 0) * 1000;
+}
