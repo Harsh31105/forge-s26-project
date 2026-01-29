@@ -1,0 +1,22 @@
+-- uuid extension
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
+
+-- initial migration for sample endpoint
+CREATE TABLE IF NOT EXISTS sample (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    name VARCHAR(100) NOT NULL,
+    created_at TIMESTAMPTZ DEFAULT now(),
+    updated_at TIMESTAMPTZ DEFAULT now()
+)
+
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Create triggers for automatic updated_at timestamp updates
+CREATE TRIGGER sample_updated_at BEFORE UPDATE ON sample
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
