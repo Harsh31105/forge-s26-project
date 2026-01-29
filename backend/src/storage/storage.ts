@@ -1,4 +1,5 @@
 import { Pool } from "pg";
+import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
 
 export class Repository {
     public sample: SampleRepository;
@@ -16,4 +17,8 @@ export class Repository {
     async close(): Promise<void> {
         await this.db.end();
     }
+}
+
+export interface SampleRepository {
+    // TODO: Some Func.
 }
