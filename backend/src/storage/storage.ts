@@ -1,5 +1,6 @@
 import { Pool } from "pg";
 import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import type {Sample} from "../models/sample";
 
 export class Repository {
     public sample: SampleRepository;
@@ -20,5 +21,5 @@ export class Repository {
 }
 
 export interface SampleRepository {
-    // TODO: Some Func.
+    getSample(): Promise<Sample[]>
 }
