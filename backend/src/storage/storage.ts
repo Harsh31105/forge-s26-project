@@ -1,5 +1,5 @@
 import { Pool } from "pg";
-import { drizzle, type NodePgDatabase } from "drizzle-orm/node-postgres";
+import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {Sample} from "../models/sample";
 import {SampleRepositorySchema} from "./postgres/schema/samples";
 
