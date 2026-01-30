@@ -23,7 +23,8 @@
     "express": "^5.2.1",
     "github.com": "^1.0.0",
     "pg": "^8.17.2",
-    "testcontainers": "^11.11.0"
+    "testcontainers": "^11.11.0",
+    "zod": "^4.3.6"
   },
   "devDependencies": {
     "@types/express": "^5.0.6",
