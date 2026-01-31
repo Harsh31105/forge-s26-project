@@ -6,7 +6,7 @@ export class SampleRepositorySchema implements SampleRepository {
     constructor(private readonly db: NodePgDatabase) {}
 
     // TODO: Stubs.
-    async getSample(): Promise<Sample[]> {
+    async getSamples(): Promise<Sample[]> {
         return []
     }
 }

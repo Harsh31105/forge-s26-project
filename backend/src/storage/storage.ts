@@ -4,17 +4,17 @@ import type {Sample} from "../models/sample";
 import {SampleRepositorySchema} from "./postgres/schema/samples";
 
 export class Repository {
-    public readonly sample: SampleRepository;
+    public readonly samples: SampleRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
 
     constructor(pool: Pool, db: NodePgDatabase) {
         this.pool = pool;
         this.db = db;
-        this.sample = new SampleRepositorySchema(db);
+        this.samples = new SampleRepositorySchema(db);
     }
 
-    getDB(): NodePgDatabase {
+    async getDB(): Promise<NodePgDatabase> {
         return this.db;
     }
 
@@ -24,5 +24,5 @@ export class Repository {
 }
 
 export interface SampleRepository {
-    getSample(): Promise<Sample[]>
+    getSamples(): Promise<Sample[]>
 }
