@@ -50,7 +50,7 @@ class App {
         this.server.use("/api/v1", apiV1);
 
         const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
-        this.server.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
+        this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
         registerRoutes(apiV1, this.repo);
 
