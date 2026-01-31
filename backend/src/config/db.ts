@@ -25,7 +25,8 @@ export const dbConfig: DB = {
 }
 
 export function getConnectionString(config: DB): string {
-    return `postgresql://${config.user}:${config.password}@${config.host}:${config.port}/${config.name}?sslmode=require`
+    console.log(`postgresql://${config.user}:${encodeURIComponent(config.password)}@${config.host}:${config.port}/${config.name}`)
+    return `postgresql://${config.user}:${encodeURIComponent(config.password)}@${config.host}:${config.port}/${config.name}`;
 }
 
 export function configurePool(pool: any, config: DB) {

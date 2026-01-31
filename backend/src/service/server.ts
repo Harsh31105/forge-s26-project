@@ -39,7 +39,6 @@ class App {
             credentials: true,
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));
-        this.server.use(errorHandler);
 
         this.server.get("/health", (_req, res) => res.sendStatus(200));
         this.server.get("/", (req, res) => {
@@ -54,6 +53,7 @@ class App {
 
         registerRoutes(apiV1, this.repo);
 
+        this.server.use(errorHandler);
         this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
     }
 
@@ -67,6 +67,7 @@ class App {
 export function initApp(): App {
     const pool = new Pool({
         connectionString: getConnectionString(config.db),
+        ssl: { rejectUnauthorized: false },
     })
     configurePool(pool, config.db);
 
@@ -78,5 +79,5 @@ export function initApp(): App {
 
 function registerRoutes(router: Router, repo: Repository) {
     const sampleHandler = new SampleHandler(repo.samples);
-    router.use("/api/v1/samples", sampleRoutes(sampleHandler));
+    router.use("/samples", sampleRoutes(sampleHandler));
 }

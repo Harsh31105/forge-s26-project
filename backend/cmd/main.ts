@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { initApp } from "../src/service/server";
 import { config } from "../src/config/config";
 
