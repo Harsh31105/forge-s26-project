@@ -8,10 +8,11 @@ import {SampleHandler} from "./handler/sample";
 import {sampleRoutes} from "./handler/sample/routes";
 import morgan from "morgan";
 import compression from "compression";
-import favicon from "serve-favicon";
-import path from "path";
 import cors from "cors";
 import {errorHandler} from "../errs/httpError";
+import YAML from "yamljs";
+import path from "path";
+import swaggerUi from "swagger-ui-express";
 
 class App {
     public server: Express;
@@ -25,7 +26,6 @@ class App {
         this.server.use(express.urlencoded({ extended: true }));
         this.server.use(morgan("dev"));
         this.server.use(compression());
-        this.server.use(favicon(path.join(process.cwd(), "public", "favicon.io")));
         this.server.use(cors({
             origin: [
                 "http://localhost:3000",
@@ -42,9 +42,15 @@ class App {
         this.server.use(errorHandler);
 
         this.server.get("/health", (_req, res) => res.sendStatus(200));
+        this.server.get("/", (req, res) => {
+            res.send("API is running!");
+        });
 
         const apiV1 = Router();
         this.server.use("/api/v1", apiV1);
+
+        const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
+        this.server.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
         registerRoutes(apiV1, this.repo);
 
