@@ -19,18 +19,24 @@
   "description": "",
   "dependencies": {
     "@jest/globals": "^30.2.0",
+    "compression": "^1.8.1",
     "drizzle-orm": "^0.45.1",
     "express": "^5.2.1",
     "github.com": "^1.0.0",
+    "morgan": "^1.10.1",
     "pg": "^8.17.2",
+    "serve-favicon": "^2.5.1",
     "testcontainers": "^11.11.0",
     "uuid": "^13.0.0",
     "zod": "^4.3.6"
   },
   "devDependencies": {
+    "@types/compression": "^1.8.1",
     "@types/express": "^5.0.6",
+    "@types/morgan": "^1.9.10",
     "@types/node": "^25.0.10",
     "@types/pg": "^8.16.0",
+    "@types/serve-favicon": "^2.5.7",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.9.3"
   }
