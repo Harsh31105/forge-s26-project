@@ -4,7 +4,7 @@ import {
     SamplePostInputSchema,
     SamplePostInputType
 } from "../../../models/sample";
-import {BadRequest, InternalServerError} from "../../../errs/httpError";
+import {BadRequest, InternalServerError, NotFound, NotFoundError} from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 
@@ -26,14 +26,14 @@ export class SampleHandler {
 
     async handleGetByID(req: Request, res: Response): Promise<void> {
         let sample: Sample;
-        const id = Number(req.params.id);
-        if (isNaN(id) || !isUUID(id)) throw BadRequest("Empty ID cannot be given")
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("Empty ID cannot be given")
 
         try {
             sample = await this.repo.getSampleByID(id);
         } catch (err) {
             console.log(err);
-            // TODO: If Not Found, throw not found error. Else, Internal-500.
+            if (err instanceof NotFoundError) NotFound("sample not found");
 
             throw InternalServerError("failed to retrieve sample");
         }
@@ -42,8 +42,11 @@ export class SampleHandler {
     }
 
     async handlePost(req: Request, res: Response): Promise<void> {
-        let postSample: SamplePostInputType;
-        postSample = SamplePostInputSchema.safeParse(req.body);
+        const result = SamplePostInputSchema.safeParse(req.body);
+        if (!result.success) {
+            throw BadRequest("unable to parse input for post-sample")
+        }
+        const postSample: SamplePostInputType = result.data;
 
         let newSample: Sample;
         try {
@@ -57,11 +60,14 @@ export class SampleHandler {
     }
 
     async handlePatch(req: Request, res: Response): Promise<void> {
-        const id = Number(req.params.id);
-        if (isNaN(id) || !isUUID(id)) throw BadRequest("invalid ID given");
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
-        let patchSample: SamplePatchInputType;
-        patchSample = SamplePatchInputSchema.safeParse(req.body);
+        const result = SamplePatchInputSchema.safeParse(req.body);
+        if (!result.success) {
+            throw BadRequest("unable to parse input for patch-sample")
+        }
+        const patchSample: SamplePatchInputType = result.data;
 
         let updatedSample: Sample;
         try {
@@ -75,8 +81,8 @@ export class SampleHandler {
     }
 
     async handleDelete(req: Request, res: Response): Promise<void> {
-        const id = Number(req.params.id);
-        if (isNaN(id) || !isUUID(id)) throw BadRequest("invalid ID was given");
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
         try {
             await this.repo.deleteSample(id);
