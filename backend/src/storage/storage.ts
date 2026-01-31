@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type {Sample} from "../models/sample";
+import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
 import {SampleRepositorySchema} from "./postgres/schema/samples";
 
 export class Repository {
@@ -24,5 +24,9 @@ export class Repository {
 }
 
 export interface SampleRepository {
-    getSamples(): Promise<Sample[]>
+    getSamples(): Promise<Sample[]>;
+    getSampleByID(id: string): Promise<Sample>;
+    createSample(input: SamplePostInputType): Promise<Sample>;
+    patchSample(id: string, input: SamplePatchInputType): Promise<Sample>;
+    deleteSample(id: string): Promise<void>;
 }

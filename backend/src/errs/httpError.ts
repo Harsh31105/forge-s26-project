@@ -69,3 +69,10 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
         message: httperror.message,
     })
 }
+
+export class NotFoundError extends Error {
+    constructor(message: string) {
+        super(message);
+        this.name = "Not Found Error";
+    }
+}
