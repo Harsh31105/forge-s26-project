@@ -1,4 +1,4 @@
-import express, { Express } from "express";
+import express, {Express, Router} from "express";
 import { Repository } from "../storage/storage";
 import {Pool} from "pg";
 import {configurePool, getConnectionString} from "../config/db";
@@ -43,7 +43,10 @@ class App {
 
         this.server.get("/health", (_req, res) => res.sendStatus(200));
 
-        registerRoutes(this.server, this.repo);
+        const apiV1 = Router();
+        this.server.use("/api/v1", apiV1);
+
+        registerRoutes(apiV1, this.repo);
 
         this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
     }
@@ -55,7 +58,7 @@ class App {
     }
 }
 
-function initApp(): App {
+export function initApp(): App {
     const pool = new Pool({
         connectionString: getConnectionString(config.db),
     })
@@ -67,7 +70,7 @@ function initApp(): App {
     return new App(repo);
 }
 
-function registerRoutes(app: Express, repo: Repository) {
+function registerRoutes(router: Router, repo: Repository) {
     const sampleHandler = new SampleHandler(repo.samples);
-    app.use("/api/v1/samples", sampleRoutes(sampleHandler));
+    router.use("/api/v1/samples", sampleRoutes(sampleHandler));
 }
