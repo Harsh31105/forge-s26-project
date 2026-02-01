@@ -39,6 +39,7 @@ export class SampleHandler {
         } catch (err) {
             console.log(err);
             if (err instanceof NotFoundError) NotFound("sample not found");
+
             mapDBError(err, "failed to retrieve sample");
         }
 
