@@ -11,55 +11,30 @@ export class SampleRepositorySchema implements SampleRepository {
     }
 
     async getSamples(): Promise<Sample[]> {
-        const rows = await this.db.select().from(sample);
-        return rows.map(r => ({
-            ...r,
-            createdAt: r.createdAt!,
-            updatedAt: r.updatedAt!,
-        }));
+        return this.db.select().from(sample);
     }
 
     async getSampleByID(id: string): Promise<Sample> {
         const [row] = await this.db.select().from(sample).where(eq(sample.id, id));
-
         if (!row) throw new NotFoundError("sample with given ID not found");
 
-        return {
-            ...row,
-            id: row.id!,
-            name: row.name!,
-            createdAt: row.createdAt!,
-            updatedAt: row.updatedAt!,
-        };
+        return row
     }
 
     async createSample(input: SamplePostInputType): Promise<Sample> {
         const [row] = await this.db.insert(sample).values({
             name: input.name,
         }).returning();
+        if (!row) throw Error();
 
-        if (!row) throw new NotFoundError("sample with given ID not found");
-
-        return {
-            id: row.id!,
-            name: row.name!,
-            createdAt: row.createdAt!,
-            updatedAt: row.updatedAt!,
-        };
+        return row;
     }
 
     async patchSample(id: string, input: SamplePatchInputType): Promise<Sample> {
         const [row] = await this.db.update(sample).set({ ...input }).where(eq(sample.id, id)).returning();
+        if (!row) throw new Error();
 
-        if (!row) throw new NotFoundError("sample with given ID not found");
-
-        return {
-            ...row,
-            id: row.id!,
-            name: row.name!,
-            createdAt: row.createdAt!,
-            updatedAt: row.updatedAt!,
-        };
+        return row;
     }
 
     async deleteSample(id: string): Promise<void> {

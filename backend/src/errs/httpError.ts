@@ -70,9 +70,37 @@ export const errorHandler = (err: any, req: Request, res: Response, next: NextFu
     })
 }
 
+// Internal DB Error Management.
 export class NotFoundError extends Error {
     constructor(message: string) {
         super(message);
         this.name = "Not Found Error";
+    }
+}
+
+// DB Error Handling.
+function getErrorMessage(err :unknown): string {
+    if (err instanceof Error) return err.message;
+    if (typeof err === "string") return err;
+    try {
+        return JSON.stringify(err);
+    } catch {
+        return "unknown error";
+    }
+}
+
+export function mapDBError(err: unknown, str: string): never {
+    const message = getErrorMessage(err).toLowerCase();
+
+    if (message.includes("foreign key")) {
+        throw BadRequest("invalid reference");
+    } else if (message.includes("check constraint")) {
+        throw BadRequest("violated a check constraint");
+    } else if (message.includes("duplicate key") || message.includes("unique constraint")) {
+        throw Conflict("duplicate value");
+    } else if (message.includes("connection refused")) {
+        throw InternalServerError("database connection refused");
+    } else {
+        throw InternalServerError(str);
     }
 }
