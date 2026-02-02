@@ -1,14 +1,14 @@
 import { GenericContainer, StartedTestContainer } from "testcontainers";
 import { Pool } from "pg";
-import { drizzle, PostgresJsDatabase } from "drizzle-orm/postgres-js";
+import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 
 let sharedTestDB: {
     pool: Pool;
-    db: PostgresJsDatabase;
+    db: NodePgDatabase;
     container: StartedTestContainer;
 } | null = null;
 
-export async function getSharedTestDB(): Promise<PostgresJsDatabase> {
+export async function getSharedTestDB(): Promise<NodePgDatabase> {
     if (sharedTestDB) return sharedTestDB.db;
 
     const container = await new GenericContainer("postgres:15-alpine")
@@ -49,7 +49,7 @@ async function applyTestOptimizations(pool: Pool) {
         "ALTER SYSTEM SET fsync = off",
         "ALTER SYSTEM SET synchronous_commit = off",
         "ALTER SYSTEM SET full_page_writes = off",
-        "ALTER SYSTEM SET checkpoint_segments = 100",
+        "ALTER SYSTEM SET max_wal_size = '1GB'",
         "ALTER SYSTEM SET checkpoint_completion_target = 0.9",
         "ALTER SYSTEM SET wal_buffers = '64MB'",
         "ALTER SYSTEM SET shared_buffers = '256MB'",
@@ -65,15 +65,16 @@ async function applyTestOptimizations(pool: Pool) {
     }
 }
 
-async function createAllTables(db: PostgresJsDatabase) {
+async function createAllTables(db: NodePgDatabase) {
     await db.execute(`
-      CREATE TABLE IF NOT EXISTS sample (
-      id SERIAL PRIMARY KEY,
-      name TEXT NOT NULL UNIQUE,
-      created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-      updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-    );
-  `);
+        CREATE EXTENSION IF NOT EXISTS "uuid-ossp";        
+
+        CREATE TABLE IF NOT EXISTS sample (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(100) NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );`);
 }
 
 export async function cleanupTestData() {
