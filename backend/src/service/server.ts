@@ -64,7 +64,7 @@ class App {
     }
 }
 
-export function initApp(): App {
+export function initApp(mock?: boolean): App {
     const pool = new Pool({
         connectionString: getConnectionString(config.db),
         ssl: { rejectUnauthorized: false },
@@ -72,7 +72,12 @@ export function initApp(): App {
     configurePool(pool, config.db);
 
     const db = drizzle(pool);
-    const repo = new Repository(pool, db);
+    let repo: Repository;
+    if (!mock) {
+        repo = new Repository(pool, db);
+    } else {
+        repo = new Repository(pool, db, mock);
+    }
 
     return new App(repo);
 }
