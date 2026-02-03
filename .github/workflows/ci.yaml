@@ -65,12 +65,12 @@ jobs:
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
   build:
-    - name: Build Images
-      runs-on: ubuntu-latest
-      steps:
-        - name: Checkout Code
-          uses: actions/checkout@v6
-        - name: Build Frontend Image
-          uses: docker compose build frontend
-        - name: Build Backend Image
-          uses: docker compose build backend
+    name: Build Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+      - name: Build Frontend Image
+        uses: docker compose build frontend
+      - name: Build Backend Image
+        uses: docker compose build backend
