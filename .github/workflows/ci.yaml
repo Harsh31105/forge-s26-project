@@ -55,7 +55,7 @@ jobs:
           cache-dependency-path: backend/package-lock.json
       # Install project dependencies using clean install
       - name: Install dependencies
-        run: npm ci
+        run: npm install
         working-directory: backend
       # Run the test suite
       - name: Run tests
