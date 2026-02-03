@@ -71,6 +71,6 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v6
       - name: Build Frontend Image
-        uses: docker compose build frontend
+        run: docker compose build frontend
       - name: Build Backend Image
-        uses: docker compose build backend
+        run: docker compose build backend
