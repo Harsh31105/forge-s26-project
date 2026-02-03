@@ -4,9 +4,12 @@ services:
   # Frontend web application service
   frontend:
     # Build from local Dockerfile in frontend directory
-    build: ./frontend
+    build:
+      context: ./frontend
+      dockerfile: ../images/frontend/Dockerfile
     # Wait for backend to be ready before starting
-    depends_on: backend
+    depends_on:
+      - backend
     # Map container port 3000 to host port 3000
     ports:
       - "3000:3000"
@@ -17,17 +20,19 @@ services:
   # Backend API service
   backend:
     # Build from local Dockerfile in backend directory
-    build: ./backend
+    build:
+      context: ./backend
+      dockerfile: ../images/backend/Dockerfile
     # Environment variables for database connection
-    environment:
-      # PostgreSQL connection string
-      - DATABASE_URL=postgresql://user:password@db:5432/mydb
+    # environment:
+    #   # PostgreSQL connection string
+    #   - DATABASE_URL=postgresql://user:password@db:5432/mydb
     # Map container port 8080 to host port 8080
     ports:
       - "8080:8080"
     # Wait for database to be ready before starting
-    depends_on:
-      - db
+    # depends_on:
+    #   - db
     # Connect to shared application network
     networks:
       - app-network
@@ -37,17 +42,21 @@ services:
     image: postgres:15
     # Persist database data using named volume
     volumes:
-      - db-data
+      - db-data:/var/lib/postgresql/data
     # PostgreSQL configuration
     environment:
       - POSTGRES_USER=user
       - POSTGRES_PASSWORD=password
       - POSTGRES_DB=mydb
-  # Named volume for persistent database storage
-  volumes:
-    db-data: /var/lib/postgresql/data
+    # Connect to shared application network
+    networks:
+      - app-network
 
-  # Network definition for inter-service communication
-  networks:
-    app-network:
-      driver: bridge
+# Named volume for persistent database storage
+volumes:
+  db-data:
+
+# Network definition for inter-service communication
+networks:
+  app-network:
+    driver: bridge

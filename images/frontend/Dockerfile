@@ -2,7 +2,7 @@
 FROM node:25-alpine3.22 AS builder 
 
 # Set working directory
-WORKDIR /app 
+WORKDIR /app
 
 # Copy package.json first to leverage Docker layer caching
 COPY package.json ./
@@ -10,9 +10,7 @@ COPY package.json ./
 # Install dependencies
 RUN npm install 
 
-# Copy all source files
 COPY . .
-
 # Build the production-ready frontend bundle
 RUN npm run build 
 
