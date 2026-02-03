@@ -4,7 +4,12 @@ import {
     SamplePostInputSchema,
     SamplePostInputType
 } from "../../../models/sample";
-import {BadRequest, InternalServerError, NotFound, NotFoundError} from "../../../errs/httpError";
+import {
+    BadRequest,
+    mapDBError,
+    NotFound,
+    NotFoundError
+} from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 
@@ -18,7 +23,7 @@ export class SampleHandler {
             samples = await this.repo.getSamples();
         } catch (err) {
             console.log("Failed to get samples: ", err);
-            throw InternalServerError("failed to retrieve samples");
+            throw mapDBError(err, "failed to retrieve samples");
         }
 
         res.status(200).json(samples);
@@ -35,7 +40,7 @@ export class SampleHandler {
             console.log(err);
             if (err instanceof NotFoundError) NotFound("sample not found");
 
-            throw InternalServerError("failed to retrieve sample");
+            throw mapDBError(err, "failed to retrieve sample");
         }
 
         res.status(200).json(sample);
@@ -53,7 +58,7 @@ export class SampleHandler {
             newSample = await this.repo.createSample(postSample);
         } catch (err) {
             console.log(err);
-            throw InternalServerError("failed to post sample");
+            throw mapDBError(err, "failed to post sample");
         }
 
         res.status(201).json(newSample);
@@ -74,7 +79,7 @@ export class SampleHandler {
             updatedSample = await this.repo.patchSample(id, patchSample);
         } catch (err) {
             console.log(err);
-            throw InternalServerError("failed to patch sample");
+            throw mapDBError(err, "failed to patch sample");
         }
 
         res.status(200).json(updatedSample);
@@ -88,7 +93,7 @@ export class SampleHandler {
             await this.repo.deleteSample(id);
         } catch (err) {
             console.log(err);
-            throw InternalServerError("failed to delete sample");
+            throw mapDBError(err, "failed to delete sample");
         }
 
         res.sendStatus(204);

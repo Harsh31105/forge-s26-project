@@ -5,8 +5,8 @@
 -- CREATE TABLE IF NOT EXISTS sample (
 --     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
 --     name VARCHAR(100) NOT NULL,
---     created_at TIMESTAMPTZ DEFAULT now(),
---     updated_at TIMESTAMPTZ DEFAULT now()
+--     created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+--     updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
 -- )
 --
 -- CREATE OR REPLACE FUNCTION update_updated_at_column()
