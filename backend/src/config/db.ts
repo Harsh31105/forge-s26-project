@@ -25,7 +25,6 @@ export const dbConfig: DB = {
 }
 
 export function getConnectionString(config: DB): string {
-    console.log(`postgresql://${config.user}:${encodeURIComponent(config.password)}@${config.host}:${config.port}/${config.name}`)
     return `postgresql://${config.user}:${encodeURIComponent(config.password)}@${config.host}:${config.port}/${config.name}`;
 }
 
