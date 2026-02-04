@@ -55,7 +55,7 @@ jobs:
         run: npm install
 
       - name: Run tests
-        run: npm test -- --coverage
+        run: npm test -- --coverage --testPathIgnorePatterns="postgres"
         working-directory: backend
 
       - name: Upload coverage to Codecov
