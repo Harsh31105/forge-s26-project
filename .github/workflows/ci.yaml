@@ -6,10 +6,11 @@ name: CI
 on:
   # Allow manual trigger from GitHub UI
   workflow_dispatch: {}
-  # Run on pushes to main branch
+  # Run on pushes to main and feature branches
   push:
     branches:
       - main
+      - itai/*
   # Run on pull requests targeting main
   pull_request:
     branches:
