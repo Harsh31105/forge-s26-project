@@ -6,11 +6,10 @@ name: CI
 on:
   # Allow manual trigger from GitHub UI
   workflow_dispatch: {}
-  # Run on pushes to main and feature branches
+  # Run on pushes to main
   push:
     branches:
       - main
-      - itai/*
   # Run on pull requests targeting main
   pull_request:
     branches:
@@ -54,8 +53,9 @@ jobs:
           cache-dependency-path: backend/package-lock.json
 
       - name: Install dependencies
-        run: npm ci
-        working-directory: backend
+        run: |
+          cd backend 
+          npm ci
 
       - name: Type check
         run: npm run build
