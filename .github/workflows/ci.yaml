@@ -51,9 +51,17 @@ jobs:
         with:
           node-version: "20"
 
-      - name: Install dependencies
+      - name: Debug npm
         working-directory: backend
-        run: npm ci
+        run: |
+          echo "Node version: $(node -v)"
+          echo "NPM version: $(npm -v)"
+          echo "Files in current dir:"
+          ls -la
+          echo "First 10 lines of package-lock.json:"
+          head -10 package-lock.json
+          echo "Running npm ci..."
+          npm ci
 
       - name: Type check
         run: npm run build
