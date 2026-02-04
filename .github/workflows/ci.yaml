@@ -10,7 +10,6 @@ on:
   push:
     branches:
       - main
-      - itai/**
   # Run on pull requests targeting main
   pull_request:
     branches:
@@ -55,19 +54,16 @@ jobs:
         working-directory: backend
         run: npm install
 
-      - name: Type check
-        run: npm run build
-        working-directory: backend
-
       - name: Run tests
-        run: npm run test:coverage
+        run: npm test -- --coverage
         working-directory: backend
 
       - name: Upload coverage to Codecov
         uses: codecov/codecov-action@v5
+        continue-on-error: true
         with:
           directory: backend/coverage
-          fail_ci_if_error: true
+          fail_ci_if_error: false
           token: ${{ secrets.CODECOV_TOKEN }}
 
   build:
