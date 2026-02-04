@@ -6,10 +6,11 @@ name: CI
 on:
   # Allow manual trigger from GitHub UI
   workflow_dispatch: {}
-  # Run on pushes to main
+  # Run on pushes to main and feature branches
   push:
     branches:
       - main
+      - itai/**
   # Run on pull requests targeting main
   pull_request:
     branches:
@@ -45,22 +46,14 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v6
 
-      - name: Debug - List files
-        run: |
-          echo "Current directory: $(pwd)"
-          ls -la backend/
-
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
-          cache: "npm"
-          cache-dependency-path: backend/package-lock.json
 
       - name: Install dependencies
-        run: |
-          cd backend 
-          npm ci
+        working-directory: backend
+        run: npm ci
 
       - name: Type check
         run: npm run build
