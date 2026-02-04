@@ -153,7 +153,7 @@ CREATE TABLE Professor (
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
-—- Professor
+-- Professor
 CREATE TABLE Professor_Course (
   professor_id INT REFERENCES Professor(professor_id) ON DELETE CASCADE,
   course_id INT REFERENCES Course(course_id) ON DELETE CASCADE,
@@ -162,7 +162,7 @@ CREATE TABLE Professor_Course (
   PRIMARY KEY (professor_id, course_id)
 );
 
-—- RMP
+-- RMP
 CREATE TABLE RMP (
   rmp_id INT PRIMARY KEY,
   professor_id INT REFERENCES Professor(professor_id) ON DELETE CASCADE,
@@ -176,7 +176,7 @@ CREATE TABLE RMP (
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
-—- TRACE
+-- TRACE
 CREATE TABLE Trace (
   trace_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   course_id INT REFERENCES Course(course_id) ON DELETE CASCADE,
@@ -203,7 +203,7 @@ CREATE TABLE Course_Requirements (
   PRIMARY KEY (parent_course_id, req_course_id, req_type)
 );
 
-—- Tag
+-- Tag
 CREATE TABLE Tag (
   tag_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name VARCHAR(100) UNIQUE NOT NULL,
@@ -222,7 +222,7 @@ CREATE TABLE Review (
 );
 
 -- Review_Tag
-CREATE TABLE Review_Tag ( -- ENUM
+CREATE TABLE Review_Tag (
   review_id INT REFERENCES Review(review_id) ON DELETE CASCADE,
   tag_id INT REFERENCES Tag(tag_id) ON DELETE CASCADE,
   created_at TIMESTAMPTZ DEFAULT NOW(),
@@ -261,3 +261,4 @@ CREATE TABLE Favorite (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   PRIMARY KEY (student_id, course_id)
 );
+
