@@ -45,6 +45,11 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v6
 
+      - name: Debug - List files
+        run: |
+          echo "Current directory: $(pwd)"
+          ls -la backend/
+
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
