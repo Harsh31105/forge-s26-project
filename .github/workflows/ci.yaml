@@ -1,0 +1,78 @@
+---
+# Continuous Integration workflow
+# Runs linting and tests on every push to main and on pull requests
+name: CI
+
+on:
+  # Allow manual trigger from GitHub UI
+  workflow_dispatch: {}
+  # Run on pushes to main and feature branches
+  push:
+    branches:
+      - main
+  # Run on pull requests targeting main
+  pull_request:
+    branches:
+      - main
+jobs:
+  # Linting job using MegaLinter
+  megalinter:
+    name: MegaLinter
+    runs-on: ubuntu-latest
+    steps:
+      # Clone the repository code
+      - name: Checkout Code
+        uses: actions/checkout@v6
+      # Run MegaLinter to check code quality
+      - name: MegaLinter
+        uses: oxsecurity/megalinter@v7
+        env:
+          # Only enable JavaScript and TypeScript linters
+          ENABLE_LINTERS: JAVASCRIPT, TYPESCRIPT
+          # Post results as GitHub PR comments
+          REPORTERS: github_comment
+          GITHUB_COMMENT_REPORTER: true
+
+          # Validate all files in the codebase
+          VALIDATE_ALL_CODEBASE: true
+          LOG_LEVEL: INFO
+  # Testing job
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Install dependencies
+        working-directory: backend
+        run: npm install
+
+      - name: Run tests
+        run: npm test -- --coverage --testPathIgnorePatterns="postgres"
+        working-directory: backend
+
+      - name: Upload coverage to Codecov
+        uses: codecov/codecov-action@v5
+        continue-on-error: true
+        with:
+          directory: backend/coverage
+          fail_ci_if_error: false
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  build:
+    name: Build Images
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+      - name: Build Frontend Image
+        run: docker compose build frontend
+      - name: Build Backend Image
+        run: docker compose build backend
