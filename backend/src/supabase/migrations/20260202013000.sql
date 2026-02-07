@@ -299,3 +299,15 @@ CREATE TABLE favorite (
   PRIMARY KEY (id, course_id)
 );
 
+-- Create function to automatically update updated_at timestamp
+CREATE OR REPLACE FUNCTION update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = now();
+    RETURN NEW;
+END;
+$$ language 'plpgsql';
+
+-- Create triggers for automatic updated_at timestamp updates
+CREATE TRIGGER update_therapist_updated_at BEFORE UPDATE ON therapist
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
