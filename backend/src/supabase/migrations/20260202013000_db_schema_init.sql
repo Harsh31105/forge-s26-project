@@ -1,7 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Enums
---- hi 
+--- hi
 CREATE TYPE lecture_type_enum AS ENUM (
   'lecture',
   'lab',
@@ -101,6 +101,13 @@ CREATE TYPE pref_enum AS ENUM (
   'slow_paced',
 );
 
+CREATE TYPE semester_enum AS ENUM (
+    'fall',
+    'spring',
+    'summer_1',
+    'summer_2'
+);
+
 CREATE TABLE major (
     id   SERIAL PRIMARY KEY,
     name VARCHAR(100) NOT NULL UNIQUE
@@ -183,7 +190,8 @@ CREATE TABLE professor (
 -- Review Parent Table
 CREATE TABLE review (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    student_id UUID NOT NULL,
+    review_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    review_text VARCHAR(2000) NOT NULL,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE
@@ -269,14 +277,42 @@ CREATE TABLE favorite (
 );
 
 CREATE TABLE courseReq (
-   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-   course_id INT NOT NULL REFERENCES course(id) ON DELETE CASCADE, 
-   major_id   INT REFERENCES major (id) ON DELETE CASCADE,
-   concentration_id INT REFERENCES concentration (id) ON DELETE CASCADE,
-   minor_id   INT REFERENCES minor (id) ON DELETE CASCADE,
-   required BOOLEAN NOT NULL DEFAULT TRUE,
-   created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-   updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    course_id INT NOT NULL REFERENCES course(id) ON DELETE CASCADE, 
+    major_id   INT REFERENCES major (id) ON DELETE CASCADE,
+    concentration_id INT REFERENCES concentration (id) ON DELETE CASCADE,
+    minor_id   INT REFERENCES minor (id) ON DELETE CASCADE,
+    required BOOLEAN NOT NULL DEFAULT TRUE,
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+);
+
+-- RMP
+CREATE TABLE rmp (
+    rmp_id INT PRIMARY KEY,
+    professor_id INT REFERENCES professor(professor_id) ON DELETE CASCADE,
+    rating_avg INT,
+    rating_wta INT,
+    rating_difficulty INT,
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
+);
+-- TRACE
+CREATE TABLE trace (
+    trace_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    course_id INT REFERENCES course(course_id) ON DELETE CASCADE,
+    professor_id INT REFERENCES professor(professor_id) ON DELETE CASCADE,
+    course_name VARCHAR(255),
+    course_num VARCHAR (50),
+    semester semester_enum NOT NULL,
+    year INT NOT NULL, 
+    course_hist TEXT, -- may not req?
+    lecture_type lecture_type_enum,
+    how_often_percentage INT CHECK (how_often_percentage BETWEEN 0 AND 100),
+    hours_devoted INT CHECK (hours_devoted >= 0),
+    professor_efficiency INT CHECK (professor_efficiency BETWEEN 1 AND 5),
+    created_at TIMESTAMPTZ DEFAULT NOW(),
+    updated_at TIMESTAMPTZ DEFAULT NOW()
 );
 
 -- Create function to automatically update updated_at timestamp
