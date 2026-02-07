@@ -90,9 +90,6 @@ CREATE TYPE pref_enum AS ENUM (
   'project-heavy',
   'group-work',
   'attendance-required',
-  'morning-classes',
-  'afternoon-classes',
-  'evening-classes',
   'strict_deadlines',
   'flexible_deadlines',
   'extra_credit',
@@ -143,9 +140,6 @@ CREATE TABLE student (
     last_name VARCHAR(100) NOT NULL,
     email VARCHAR(255) NOT NULL UNIQUE,
     graduation_year INT CHECK ( graduation_year >= 2025 ),
-    major VARCHAR(100) NOT NULL,
-    concentration VARCHAR(100),
-    minor VARCHAR(100),
     preferences pref_enum[],
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
@@ -187,27 +181,6 @@ CREATE TABLE review (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE
-);
-
--- TODO: So, there exist tags that are not course_tags and prof_tags that go on a review?
--- TODO: IF NOT, delete review_tag and tag tables.
--- Tag
-CREATE TABLE tag (
-    id         SERIAL       PRIMARY KEY,
-    name       VARCHAR(100) NOT NULL UNIQUE,
-    created_at TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ  NOT NULL DEFAULT NOW(),
-);
-
--- Review_Tag
-CREATE TABLE review_tag (
-    review_id UUID NOT NULL,
-    tag_id INT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (review_id, tag_id),
-    FOREIGN KEY (review_id) REFERENCES review(id) ON DELETE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES tag(id) ON DELETE CASCADE,
 );
 
 -- Course_Review Child Table
@@ -291,14 +264,6 @@ CREATE TRIGGER update_professor_updated_at BEFORE UPDATE ON professor
 
 -- Create triggers for automatic updated_at timestamp updates
 CREATE TRIGGER update_review_updated_at BEFORE UPDATE ON review
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Create triggers for automatic updated_at timestamp updates
-CREATE TRIGGER update_tag_updated_at BEFORE UPDATE ON tag
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Create triggers for automatic updated_at timestamp updates
-CREATE TRIGGER update_review_tag_updated_at BEFORE UPDATE ON review_tag
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Create triggers for automatic updated_at timestamp updates
