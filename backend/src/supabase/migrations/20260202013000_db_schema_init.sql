@@ -95,7 +95,7 @@ CREATE TYPE pref_enum AS ENUM (
   'extra_credit',
   'little_to_no_test'
   'fast_paced',
-  'slow_paced',
+  'slow_paced'
 );
 
 CREATE TABLE major (
@@ -113,26 +113,6 @@ CREATE TABLE minor (
     name VARCHAR(100) NOT NULL UNIQUE
 );
 
-CREATE TABLE student_major (
-    student_id UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
-    major_id   INT  NOT NULL REFERENCES major (id) ON DELETE CASCADE,
-    PRIMARY KEY (student_id, major_id)
-);
-
--- Student can have multiple concentrations
-CREATE TABLE student_concentration (
-    student_id       UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
-    concentration_id INT  NOT NULL REFERENCES concentration (id) ON DELETE CASCADE,
-    PRIMARY KEY (student_id, concentration_id)
-);
-
--- Student can have multiple minors
-CREATE TABLE student_minor (
-    student_id UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
-    minor_id   INT  NOT NULL REFERENCES minor (id) ON DELETE CASCADE,
-    PRIMARY KEY (student_id, minor_id)
-);
-
 -- Student
 CREATE TABLE student (
     id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -145,9 +125,29 @@ CREATE TABLE student (
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
+CREATE TABLE student_major (
+    student_id UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
+    major_id INT NOT NULL REFERENCES major (id) ON DELETE CASCADE,
+    PRIMARY KEY (student_id, major_id)
+);
+
+-- Student can have multiple concentrations
+CREATE TABLE student_concentration (
+    student_id UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
+    concentration_id INT NOT NULL REFERENCES concentration (id) ON DELETE CASCADE,
+    PRIMARY KEY (student_id, concentration_id)
+);
+
+-- Student can have multiple minors
+CREATE TABLE student_minor (
+    student_id UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
+    minor_id INT NOT NULL REFERENCES minor (id) ON DELETE CASCADE,
+    PRIMARY KEY (student_id, minor_id)
+);
+
 CREATE TABLE department (
     id SERIAL PRIMARY KEY,
-    name VARCHAR(10) NOT NULL UNIQUE,
+    name VARCHAR(10) NOT NULL UNIQUE
 );
 
 -- Course
@@ -217,7 +217,7 @@ CREATE TABLE course_thread (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (course_review_id) REFERENCES course_review(id) ON DELETE CASCADE
+    FOREIGN KEY (course_review_id) REFERENCES course_review(review_id) ON DELETE CASCADE
 );
 
 CREATE TABLE professor_thread (
@@ -228,7 +228,7 @@ CREATE TABLE professor_thread (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (professor_review_id) REFERENCES professor_review(id) ON DELETE CASCADE
+    FOREIGN KEY (professor_review_id) REFERENCES professor_review(review_id) ON DELETE CASCADE
 );
 
 CREATE TABLE favorite (
