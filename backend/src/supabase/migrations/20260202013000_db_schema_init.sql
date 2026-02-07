@@ -1,6 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Enums
+--- hi 
 CREATE TYPE lecture_type_enum AS ENUM (
   'lecture',
   'lab',
