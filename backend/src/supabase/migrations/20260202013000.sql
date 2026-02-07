@@ -100,6 +100,13 @@ CREATE TYPE pref_enum AS ENUM (
   'slow_paced',
 )
 
+CREATE TYPE semester_enum AS ENUM (
+  'fall',
+  'spring',
+  'summer_1',
+  'summer_2'
+);
+
 -- Student
 CREATE TABLE student (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -211,9 +218,9 @@ CREATE TABLE trace (
   course_id INT REFERENCES course(course_id) ON DELETE CASCADE,
   professor_id INT REFERENCES professor(professor_id) ON DELETE CASCADE,
   course_name VARCHAR(255),
-  course_num INT,
-  course_hist TEXT,
-  prof_course_hist VARCHAR(255),
+  course_num VARCHAR(50),
+  semester semester_enum NOT NULL,
+  year INT NOT NULL,
   lecture_type lecture_type_enum,
   how_often_percentage INT CHECK (how_often_percentage BETWEEN 0 AND 100),
   hours_devoted INT CHECK (hours_devoted >= 0),
@@ -244,8 +251,7 @@ CREATE TABLE tag (
 CREATE TABLE review (
   review_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   id INT REFERENCES student(id) ON DELETE CASCADE,
-  rating INT CHECK (rating BETWEEN 1 AND 5),
-  review_text VARCHAR(2000),
+  review_text VARCHAR(2000) NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -263,6 +269,7 @@ CREATE TABLE review_tag ( -- ENUM
 CREATE TABLE course_review (
   review_id INT PRIMARY KEY REFERENCES review(review_id) ON DELETE CASCADE,
   course_id INT REFERENCES course(course_id) ON DELETE CASCADE,
+  course_rating INT NOT NULL CHECK (course_rating BETWEEN 1 AND 5),
   tags course_tag_enum[]
 );
 
@@ -270,14 +277,15 @@ CREATE TABLE course_review (
 CREATE TABLE professor_review (
   review_id INT PRIMARY KEY REFERENCES review(review_id) ON DELETE CASCADE,
   professor_id INT REFERENCES professor(professor_id) ON DELETE CASCADE,
+  prof_rating INT NOT NULL CHECK (prof_rating BETWEEN 1 AND 5),
   tags professor_tag_enum[]
 );
 
 -- Thread
 CREATE TABLE thread (
   thread_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-  review_id INT REFERENCES review(review_id) ON DELETE CASCADE,
-  thread_desc VARCHAR(2000),
+  review_id INT NOT NULL REFERENCES review(review_id) ON DELETE CASCADE,
+  thread_desc VARCHAR(2000) NOT NULL,
   created_at TIMESTAMPTZ DEFAULT NOW(),
   updated_at TIMESTAMPTZ DEFAULT NOW()
 );
@@ -290,3 +298,4 @@ CREATE TABLE favorite (
   updated_at TIMESTAMPTZ DEFAULT NOW(),
   PRIMARY KEY (id, course_id)
 );
+
