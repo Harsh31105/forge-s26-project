@@ -288,31 +288,34 @@ CREATE TABLE courseReq (
 );
 
 -- RMP
-CREATE TABLE rmp (
-    rmp_id INT PRIMARY KEY,
+CREATE TABLE rmp ( 
+    id SERIAL PRIMARY KEY,
     professor_id INT REFERENCES professor(professor_id) ON DELETE CASCADE,
-    rating_avg INT,
+    rating_avg DECIMAL(3, 2) CHECK (rating_avg >= 1 AND rating_avg <= 5),
     rating_wta INT,
-    rating_difficulty INT,
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    avg_difficulty DECIMAL(3, 2) NOT NULL CHECK (avg_difficulty >= 1 AND avg_difficulty <= 5),
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
 );
 -- TRACE
 CREATE TABLE trace (
-    trace_id INT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    course_id INT REFERENCES course(course_id) ON DELETE CASCADE,
-    professor_id INT REFERENCES professor(professor_id) ON DELETE CASCADE,
-    course_name VARCHAR(255),
+    id SERIAL PRIMARY KEY,
+    course_id UUID NOT NULL,
+    professor_id UUID NOT NULL,
+    course_name VARCHAR(255) NOT NULL,
     course_num VARCHAR (50),
     semester semester_enum NOT NULL,
-    year INT NOT NULL, 
+    year INT NOT NULL CHECK (year >= 2000 AND year <= 10000), 
     course_hist TEXT, -- may not req?
     lecture_type lecture_type_enum,
     how_often_percentage INT CHECK (how_often_percentage BETWEEN 0 AND 100),
     hours_devoted INT CHECK (hours_devoted >= 0),
     professor_efficiency INT CHECK (professor_efficiency BETWEEN 1 AND 5),
-    created_at TIMESTAMPTZ DEFAULT NOW(),
-    updated_at TIMESTAMPTZ DEFAULT NOW()
+    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+
+    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
+    FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
 );
 
 -- Create function to automatically update updated_at timestamp
