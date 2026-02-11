@@ -10,6 +10,9 @@ servers:
 tags:
   - name: Health
     description: Health check operations
+  - name: Course Threads
+    description: Threads under a course review
+  
 
 paths:
   /health:
@@ -26,6 +29,164 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /course-reviews/{id}/threads:
+    get:
+      summary: List threads for a course review
+      tags: [Course Threads]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Course review ID (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: List of threads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CourseThread"
+        "400":
+          description: Invalid course review id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    post:
+      summary: Create a thread on a course review
+      tags: [Course Threads]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Course review ID (UUID)
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CourseThreadPostInput"
+      responses:
+        "201":
+          description: Created thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseThread"
+        "400":
+          description: Bad request (validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+  /course-reviews/{course_id}/threads/{thread_id}:
+    patch:
+      summary: Update a thread
+      tags: [Course Threads]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          description: Course review ID (UUID)
+          schema:
+            type: string
+            format: uuid
+        - name: thread_id
+          in: path
+          required: true
+          description: Thread ID (UUID)
+          schema:
+            type: string
+            format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CourseThreadPatchInput"
+      responses:
+        "200":
+          description: Updated thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseThread"
+        "400":
+          description: Bad request (invalid id or validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Thread not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+    delete:
+      summary: Delete a thread
+      tags: [Course Threads]
+      parameters:
+        - name: course_id
+          in: path
+          required: true
+          description: Course review ID (UUID)
+          schema:
+            type: string
+            format: uuid
+        - name: thread_id
+          in: path
+          required: true
+          description: Thread ID (UUID)
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad request (invalid id)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Thread not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+ 
 
 components:
   schemas:
@@ -45,3 +206,53 @@ components:
             - type: object
           description: Error message or validation errors
           example: "Internal server error"
+    CourseThread:
+      type: object
+      required:
+        - id
+        - studentId
+        - courseReviewId
+        - content
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        studentId:
+          type: string
+          format: uuid
+        courseReviewId:
+          type: string
+          format: uuid
+        content:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+    CourseThreadPostInput:
+      type: object
+      required:
+        - studentId
+        - content
+      properties:
+        studentId:
+          type: string
+          format: uuid
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+    CourseThreadPatchInput:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
