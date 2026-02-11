@@ -1,32 +1,27 @@
 import { z } from "zod";
-import { validate as isUUID } from "uuid";
-
 
 export interface CourseReview {
-    id: String;
-    courseId: String;
-    rating: number;
-    comment: string | null;
-    createdAt: Date;
-    updatedAt: Date;
+  reviewId: string;
+  studentId: string;
+  courseId: string;
+  rating: number;
+  reviewText: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export const CourseReviewPostInputSchema = z.object({
-    courseId: z.coerce.string().refine(isUUID, {
-        message: "courseId must be a valid UUID",}),
-    rating: z
-        .number()
-        .int("rating must be an integer")
-        .min(1, "rating must be at least 1")
-        .max(5, "rating must be at most 5"),
-    comment: z
-        .string()
-        .refine((s) => s === s.trim(), "comment cannot have leading/trailing spaces")
-    .optional(),
-
+  studentId: z.string().uuid("studentId must be a valid UUID"),
+  courseId: z.string().uuid("courseId must be a valid UUID"),
+  rating: z.number().int().min(1).max(5),
+  reviewText: z.string().min(1).max(2000),
 });
 
 export type CourseReviewPostInputType = z.infer<typeof CourseReviewPostInputSchema>;
 
-export const CourseReviewPatchInputSchema = CourseReviewPostInputSchema.partial();
+export const CourseReviewPatchInputSchema = z.object({
+  rating: z.number().int().min(1).max(5).optional(),
+  reviewText: z.string().min(1).max(2000).optional(),
+});
+
 export type CourseReviewPatchInputType = z.infer<typeof CourseReviewPatchInputSchema>;
