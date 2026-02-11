@@ -13,8 +13,8 @@ import {errorHandler} from "../errs/httpError";
 import YAML from "yamljs";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
-import { CourseReviewHandler } from "./handler/courseReview";
-import { courseReviewRoutes } from "./handler/courseReview/routes";
+import { CourseThreadHandler } from "./handler/courseThreads";
+import { courseThreadRoutes } from "./handler/courseThreads/routes";
 
 class App {
     public server: Express;
@@ -82,6 +82,12 @@ export function initApp(): App {
 function registerRoutes(router: Router, repo: Repository) {
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
-    const courseReviewHandler = new CourseReviewHandler(repo.courseReviews);
-    router.use("/course-reviews", courseReviewRoutes(courseReviewHandler));
+
+    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
+
+    // GET + POST
+    router.use("/course-reviews/:id/threads", courseThreadRoutes(courseThreadHandler));
+
+    // PATCH + DELETE (ticket uses course_id + thread_id)
+    router.use("/course-reviews/:course_id/threads", courseThreadRoutes(courseThreadHandler));
 }
