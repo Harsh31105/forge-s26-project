@@ -376,5 +376,9 @@ CREATE TRIGGER update_courseReq_updated_at BEFORE UPDATE ON courseReq
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Create triggers for automatic updated_at timestamp updates
-CREATE TRIGGER update_courseReq_updated_at BEFORE UPDATE ON courseReq
+CREATE TRIGGER update_rmp_updated_at BEFORE UPDATE ON rmp
+    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
+
+-- Create triggers for automatic updated_at timestamp updates
+CREATE TRIGGER update_trace_updated_at BEFORE UPDATE ON trace
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
