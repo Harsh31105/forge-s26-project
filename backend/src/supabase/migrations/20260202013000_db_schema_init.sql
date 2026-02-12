@@ -292,7 +292,7 @@ CREATE TABLE rmp (
     id SERIAL PRIMARY KEY,
     professor_id INT REFERENCES professor(professor_id) ON DELETE CASCADE,
     rating_avg DECIMAL(3, 2) CHECK (rating_avg >= 1 AND rating_avg <= 5),
-    rating_wta INT,
+    rating_wta INT NOT NULL CHECK (rating_wta = -1 OR (rating_wta >= 0 AND rating_wta <= 100)), -- check?
     avg_difficulty DECIMAL(3, 2) NOT NULL CHECK (avg_difficulty >= 1 AND avg_difficulty <= 5),
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
@@ -306,11 +306,10 @@ CREATE TABLE trace (
     course_num VARCHAR (50),
     semester semester_enum NOT NULL,
     year INT NOT NULL CHECK (year >= 2000 AND year <= 10000), 
-    course_hist TEXT, -- may not req?
     lecture_type lecture_type_enum,
     how_often_percentage INT CHECK (how_often_percentage BETWEEN 0 AND 100),
     hours_devoted INT CHECK (hours_devoted >= 0),
-    professor_efficiency INT CHECK (professor_efficiency BETWEEN 1 AND 5),
+    professor_efficiency DECIMAL(3,2) NOT NULL CHECK (professor_efficiency BETWEEN 1.00 AND 5.00)
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 
