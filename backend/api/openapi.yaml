@@ -1,6 +1,6 @@
 openapi: 3.1.3
 info:
-  title: Forge S26 Project API
+  title: NorthStar API
   version: 0.1.0
 
 servers:
