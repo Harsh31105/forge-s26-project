@@ -24,5 +24,5 @@ export interface Sample {
   /** The name of the sample */
   name: string;
   created_at: string;
+  updated_at: string;
 }
-

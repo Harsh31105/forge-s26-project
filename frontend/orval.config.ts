@@ -11,6 +11,7 @@ module.exports = {
                 },
                 naming: 'camelCase',
             },
+            prettier: true,
         },
         input: {
             target: '../backend/api/openapi.yaml'

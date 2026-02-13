@@ -4,27 +4,20 @@
  * NorthStar API
  * OpenAPI spec version: 0.1.0
  */
-import type {
-  Sample
-} from './northStarAPI.schemas';
+import type { Sample } from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getSample = () => {
-/**
- * This endpoint gets all samples that we have
- * @summary Getting Samples
- */
-const getSamples = (
-    
- ) => {
-      return customAxios<Sample>(
-      {url: `/samples`, method: 'GET'
-    },
-      );
-    }
-  return {getSamples}};
-export type GetSamplesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getSample>['getSamples']>>>
+export const getSample = () => {
+  /**
+   * This endpoint gets all samples that we have
+   * @summary Getting Samples
+   */
+  const getSamples = () => {
+    return customAxios<Sample>({ url: `/samples`, method: "GET" });
+  };
+  return { getSamples };
+};
+export type GetSamplesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getSample>["getSamples"]>>
+>;
