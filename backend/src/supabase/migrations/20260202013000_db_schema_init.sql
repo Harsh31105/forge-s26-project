@@ -1,6 +1,7 @@
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Enums
+--- hi
 CREATE TYPE lecture_type_enum AS ENUM (
   'lecture',
   'lab',
@@ -89,239 +90,155 @@ CREATE TYPE pref_enum AS ENUM (
   'project-heavy',
   'group-work',
   'attendance-required',
-  'morning-classes',
-  'afternoon-classes',
-  'evening-classes',
   'strict_deadlines',
   'flexible_deadlines',
   'extra_credit',
-  'little_to_no_test',
+  'little_to_no_test'
   'fast_paced',
   'slow_paced'
 );
 
-CREATE TYPE semester_enum AS ENUM (
-    'fall',
-    'spring',
-    'summer_1',
-    'summer_2'
+CREATE TABLE major (
+                       id   SERIAL PRIMARY KEY,
+                       name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE concentration (
+                               id   SERIAL PRIMARY KEY,
+                               name VARCHAR(100) NOT NULL UNIQUE
+);
+
+CREATE TABLE minor (
+                       id   SERIAL PRIMARY KEY,
+                       name VARCHAR(100) NOT NULL UNIQUE
 );
 
 -- Student
 CREATE TABLE student (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    email VARCHAR(255) NOT NULL UNIQUE,
-    graduation_year INT CHECK ( graduation_year >= 2025 ),
-    preferences pref_enum[],
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
-CREATE TABLE major (
-    id SERIAL PRIMARY KEY,
-    major_name VARCHAR(100) NOT NULL UNIQUE
-);
-
-CREATE TABLE concentration (
-    id SERIAL PRIMARY KEY,
-    concentration_name VARCHAR(100) NOT NULL UNIQUE
-);
-
-CREATE TABLE minor (
-    id SERIAL PRIMARY KEY,
-    minor_name VARCHAR(100) NOT NULL UNIQUE
+                         id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                         first_name VARCHAR(100) NOT NULL,
+                         last_name VARCHAR(100) NOT NULL,
+                         email VARCHAR(255) NOT NULL UNIQUE,
+                         graduation_year INT CHECK ( graduation_year >= 2025 ),
+                         preferences pref_enum[],
+                         created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                         updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 CREATE TABLE student_major (
-    student_id UUID NOT NULL,
-    major_id INT NOT NULL,
-    PRIMARY KEY (student_id, major_id),
-    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (major_id) REFERENCES major(id) ON DELETE CASCADE
+                               student_id UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
+                               major_id INT NOT NULL REFERENCES major (id) ON DELETE CASCADE,
+                               PRIMARY KEY (student_id, major_id)
 );
 
 -- Student can have multiple concentrations
 CREATE TABLE student_concentration (
-    student_id UUID NOT NULL,
-    concentration_id INT NOT NULL,
-    PRIMARY KEY (student_id, concentration_id),
-    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (concentration_id) REFERENCES concentration(id) ON DELETE CASCADE
+                                       student_id UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
+                                       concentration_id INT NOT NULL REFERENCES concentration (id) ON DELETE CASCADE,
+                                       PRIMARY KEY (student_id, concentration_id)
 );
 
 -- Student can have multiple minors
 CREATE TABLE student_minor (
-    student_id UUID NOT NULL,
-    minor_id INT NOT NULL,
-    PRIMARY KEY (student_id, minor_id),
-    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (minor_id) REFERENCES minor(id) ON DELETE CASCADE
+                               student_id UUID NOT NULL REFERENCES student (id) ON DELETE CASCADE,
+                               minor_id INT NOT NULL REFERENCES minor (id) ON DELETE CASCADE,
+                               PRIMARY KEY (student_id, minor_id)
 );
 
 CREATE TABLE department (
-    id SERIAL PRIMARY KEY,
-    department_name VARCHAR(10) NOT NULL UNIQUE
+                            id SERIAL PRIMARY KEY,
+                            name VARCHAR(10) NOT NULL UNIQUE
 );
 
 -- Course
 CREATE TABLE course (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    course_name VARCHAR(255) NOT NULL,
-    department_id INT NOT NULL,
-    course_code INT NOT NULL CHECK ( course_code BETWEEN 1000 AND 10000),
-    course_description VARCHAR(1000) NOT NULL,
-    num_credits INT NOT NULL CHECK ( num_credits BETWEEN 1 AND 6),
-    lecture_type lecture_type_enum,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE,
-    UNIQUE (department_id, course_code)
+                        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        name VARCHAR(255) NOT NULL,
+                        department_id INT NOT NULL,
+                        course_code INT NOT NULL CHECK ( course_code BETWEEN 1000 AND 10000),
+                        description VARCHAR(1000) NOT NULL,
+                        num_credits INT NOT NULL CHECK ( num_credits BETWEEN 1 AND 6),
+                        lecture_type lecture_type_enum,
+                        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                        FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
 );
 
 -- Professor
 CREATE TABLE professor (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    first_name VARCHAR(100) NOT NULL,
-    last_name VARCHAR(100) NOT NULL,
-    tags location_tag_enum[],
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
+                           id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                           first_name VARCHAR(100) NOT NULL,
+                           last_name VARCHAR(100) NOT NULL,
+                           tags location_tag_enum[],
+                           created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                           updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
 -- Review Parent Table
 CREATE TABLE review (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    student_id UUID NOT NULL,
-    review_text VARCHAR(2000) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE
-);
-
--- Tag
-CREATE TABLE tag (
-    id SERIAL PRIMARY KEY,
-    tag_name VARCHAR(100) NOT NULL UNIQUE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
-);
-
--- Review_Tag
-CREATE TABLE review_tag (
-    review_id UUID NOT NULL,
-    tag_id INT NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (review_id, tag_id),
-    FOREIGN KEY (review_id) REFERENCES review(id) ON DELETE CASCADE,
-    FOREIGN KEY (tag_id) REFERENCES tag(id) ON DELETE CASCADE
+                        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                        student_id UUID NOT NULL,
+                        created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                        updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                        FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE
 );
 
 -- Course_Review Child Table
 CREATE TABLE course_review (
-    review_id UUID PRIMARY KEY,
-    course_id UUID NOT NULL,
-    rating INT NOT NULL CHECK ( rating BETWEEN 1 AND 5 ),
-    tags course_tag_enum[],
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (review_id) REFERENCES review(id) ON DELETE CASCADE,
-    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
+                               review_id UUID PRIMARY KEY,
+                               course_id UUID NOT NULL,
+                               rating INT NOT NULL CHECK ( rating BETWEEN 1 AND 5 ),
+                               review_text VARCHAR(2000) NOT NULL,
+                               tags course_tag_enum[],
+                               created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                               updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                               FOREIGN KEY (review_id) REFERENCES review(id) ON DELETE CASCADE,
+                               FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
 );
 
 -- Professor_Review Child Table
 CREATE TABLE professor_review (
-    review_id UUID PRIMARY KEY,
-    professor_id UUID NOT NULL,
-    rating INT NOT NULL CHECK ( rating BETWEEN 1 AND 5 ),
-    tags professor_tag_enum[],
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (review_id) REFERENCES review(id) ON DELETE CASCADE,
-    FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
+                                  review_id UUID PRIMARY KEY,
+                                  professor_id UUID NOT NULL,
+                                  rating INT NOT NULL CHECK ( rating BETWEEN 1 AND 5 ),
+                                  review_text VARCHAR(2000) NOT NULL,
+                                  tags professor_tag_enum[],
+                                  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                                  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                                  FOREIGN KEY (review_id) REFERENCES review(id) ON DELETE CASCADE,
+                                  FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
 );
 
 CREATE TABLE course_thread (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    student_id UUID NOT NULL,
-    course_review_id UUID NOT NULL,
-    content VARCHAR(2000) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (course_review_id) REFERENCES course_review(id) ON DELETE CASCADE
+                               id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                               student_id UUID NOT NULL,
+                               course_review_id UUID NOT NULL,
+                               content VARCHAR(2000) NOT NULL,
+                               created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                               updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                               FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
+                               FOREIGN KEY (course_review_id) REFERENCES course_review(review_id) ON DELETE CASCADE
 );
 
 CREATE TABLE professor_thread (
-    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-    student_id UUID NOT NULL,
-    professor_review_id UUID NOT NULL,
-    content VARCHAR(2000) NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (professor_review_id) REFERENCES professor_review(id) ON DELETE CASCADE
+                                  id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                                  student_id UUID NOT NULL,
+                                  professor_review_id UUID NOT NULL,
+                                  content VARCHAR(2000) NOT NULL,
+                                  created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                                  updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                                  FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
+                                  FOREIGN KEY (professor_review_id) REFERENCES professor_review(review_id) ON DELETE CASCADE
 );
 
 CREATE TABLE favorite (
-    student_id UUID NOT NULL,
-    course_id UUID NOT NULL,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (student_id, course_id),
-    FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
-    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
-);
-
--- degree_requirement: What students is required to take for their degree.
-CREATE TABLE degree_requirement (
-    course_id UUID NOT NULL, 
-    major_id INT,
-    concentration_id INT,
-    minor_id INT,
-    required BOOLEAN NOT NULL DEFAULT TRUE,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    PRIMARY KEY (course_id, major_id, concentration_id, minor_id),
-    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-    FOREIGN KEY (major_id) REFERENCES major(id) ON DELETE CASCADE,
-    FOREIGN KEY (concentration_id) REFERENCES concentration(id) ON DELETE CASCADE,
-    FOREIGN KEY (minor_id) REFERENCES minor(id) ON DELETE CASCADE
-);
-
--- RMP
-CREATE TABLE rmp ( 
-    id SERIAL PRIMARY KEY,
-    professor_id UUID NOT NULL,
-    rating_avg DECIMAL(3, 2) CHECK (rating_avg >= 1 AND rating_avg <= 5),
-    rating_wta INT CHECK (rating_wta BETWEEN 0 AND 100),
-    avg_difficulty DECIMAL(3, 2) NOT NULL CHECK (avg_difficulty >= 1 AND avg_difficulty <= 5),
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
-);
-
--- TRACE
-CREATE TABLE trace (
-    id SERIAL PRIMARY KEY,
-    course_id UUID NOT NULL,
-    professor_id UUID NOT NULL,
-    course_name VARCHAR(255) NOT NULL,
-    department_id INT NOT NULL,
-    course_code INT NOT NULL CHECK (course_code BETWEEN 1000 AND 10000),
-    semester semester_enum NOT NULL,
-    lecture_year INT NOT NULL CHECK (year >= 2000 AND year <= 10000), 
-    lecture_type lecture_type_enum,
-    how_often_percentage INT CHECK (how_often_percentage BETWEEN 0 AND 100),
-    hours_devoted INT CHECK (hours_devoted >= 0),
-    professor_efficiency DECIMAL(3,2) NOT NULL CHECK (professor_efficiency BETWEEN 1.00 AND 5.00),
-    eval TEXT,
-    created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-    FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
+                          student_id UUID NOT NULL,
+                          course_id UUID NOT NULL,
+                          created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                          updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                          PRIMARY KEY (student_id, course_id),
+                          FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
+                          FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
 );
 
 -- Create function to automatically update updated_at timestamp
@@ -350,14 +267,6 @@ CREATE TRIGGER update_review_updated_at BEFORE UPDATE ON review
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
 -- Create triggers for automatic updated_at timestamp updates
-CREATE TRIGGER update_tag_updated_at BEFORE UPDATE ON tag
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Create triggers for automatic updated_at timestamp updates
-CREATE TRIGGER update_review_tag_updated_at BEFORE UPDATE ON review_tag
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Create triggers for automatic updated_at timestamp updates
 CREATE TRIGGER update_course_review_updated_at BEFORE UPDATE ON course_review
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
 
@@ -375,16 +284,4 @@ CREATE TRIGGER update_professor_thread_updated_at BEFORE UPDATE ON professor_thr
 
 -- Create triggers for automatic updated_at timestamp updates
 CREATE TRIGGER update_favorite_updated_at BEFORE UPDATE ON favorite
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Create triggers for automatic updated_at timestamp updates
-CREATE TRIGGER update_degree_requirement_updated_at BEFORE UPDATE ON degree_requirement
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Create triggers for automatic updated_at timestamp updates
-CREATE TRIGGER update_rmp_updated_at BEFORE UPDATE ON rmp
-    FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
-
--- Create triggers for automatic updated_at timestamp updates
-CREATE TRIGGER update_trace_updated_at BEFORE UPDATE ON trace
     FOR EACH ROW EXECUTE FUNCTION update_updated_at_column();
