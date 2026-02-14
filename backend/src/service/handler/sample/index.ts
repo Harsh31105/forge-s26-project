@@ -13,6 +13,56 @@ import {
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 
+export class FavoritesHandler {
+    constructor(private readonly repo: FavoritesRepository) {}
+
+    async handleGet(req: Request, res: Response) :Promise<void> {
+        let favorites: Favorites[];
+
+        try {
+            favorites = await this.repo.getFavorites();
+        } catch (err) {
+            console.log("Failed to get favorites: ", err);
+            throw mapDBError(err, "failed to retrieve favorites");
+        }
+
+        res.status(200).json(favorites);
+    }
+
+    async handlePOST(req: Request, res: Response): Promise<void> {
+        const result = FavoritesPostInputSchema.safeParse(req.body);
+        if (!result.success) {
+            throw BadRequest("unable to parse input for post-sample")
+        }
+        const postFavorites: SamplePostInputType = result.data;
+
+        let newFavorites: Favorites;
+        try {
+            newFavorites = await this.repo.createFavorites(postFavorites);
+        } catch (err) {
+            console.log(err);
+            throw mapDBError(err, "failed to post favorites");
+        }
+
+        res.status(201).json(newFavorites);
+    }
+
+
+    async handleDelete(req: Request, res: Response): Promise<void> {
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("invalid ID was given");
+
+        try {
+            await this.repo.deleteSample(id);
+        } catch (err) {
+            console.log(err);
+            throw mapDBError(err, "failed to delete favorites");
+        }
+
+        res.sendStatus(204);
+    }
+}
+
 export class SampleHandler {
     constructor(private readonly repo: SampleRepository) {}
 
