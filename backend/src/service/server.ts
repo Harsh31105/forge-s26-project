@@ -40,13 +40,13 @@ class App {
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));
 
+        const apiV1 = Router();
+        this.server.use("/api/v1", apiV1);
+
         this.server.get("/health", (_req, res) => res.sendStatus(200));
         this.server.get("/", (req, res) => {
             res.send("API is running!");
         });
-
-        const apiV1 = Router();
-        this.server.use("/api/v1", apiV1);
 
         const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
         this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
