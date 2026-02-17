@@ -20,7 +20,7 @@
 *.d.ts
 *.d.ts.map
 backend/**/*.js
-backend/coverage
+backend/coverage/**
 !backend/jest.config.js
 
 # Build output
