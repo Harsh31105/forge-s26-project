@@ -82,12 +82,7 @@ export function initApp(): App {
 function registerRoutes(router: Router, repo: Repository) {
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
-
+  
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
-
-    // GET + POST
-    router.use("/course-reviews/:id/threads", courseThreadRoutes(courseThreadHandler));
-
-    // PATCH + DELETE (ticket uses course_id + thread_id)
-    router.use("/course-reviews/:course_id/threads", courseThreadRoutes(courseThreadHandler));
-}
+    router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
+  }

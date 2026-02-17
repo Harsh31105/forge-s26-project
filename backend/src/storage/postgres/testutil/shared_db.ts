@@ -74,6 +74,15 @@ async function createAllTables(db: NodePgDatabase) {
         name VARCHAR(100) NOT NULL,
         created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+
+        CREATE TABLE IF NOT EXISTS course_thread (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        student_id UUID NOT NULL,
+        course_review_id UUID NOT NULL,
+        content VARCHAR(2000) NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );`);
 }
 
@@ -84,6 +93,7 @@ export async function cleanupTestData() {
 
     await db.execute(`
     TRUNCATE TABLE 
+      course_thread,
       sample
     RESTART IDENTITY CASCADE;
   `);

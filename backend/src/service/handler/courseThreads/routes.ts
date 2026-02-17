@@ -1,20 +1,22 @@
 import { Router } from "express";
-import { CourseThreadHandler } from "./index";
+import { CourseThreadHandler } from ".";
 
 export function courseThreadRoutes(handler: CourseThreadHandler): Router {
   const router = Router();
 
-  // /course-reviews/:id/threads
-  router.get("/", handler.handleGet.bind(handler));
-  router.post("/", handler.handlePost.bind(handler));
+  // GET + POST
+  router.get("/:id/threads", (req, res) => handler.handleGet(req, res));
+  router.post("/:id/threads", (req, res) => handler.handlePost(req, res));
 
-  // /course-reviews/:course_id/threads/:thread_id
-  router.patch("/:thread_id", (req, res, next) =>
-    handler.handlePatch(req, res).catch(next)
+  // PATCH + DELETE
+  router.patch("/:course_review_id/threads/:course_thread_id", (req, res) =>
+    handler.handlePatch(req, res)
   );
-  router.delete("/:thread_id", (req, res, next) =>
-    handler.handleDelete(req, res).catch(next)
+  
+  router.delete("/:course_review_id/threads/:course_thread_id", (req, res) =>
+    handler.handleDelete(req, res)
   );
+  
 
   return router;
 }

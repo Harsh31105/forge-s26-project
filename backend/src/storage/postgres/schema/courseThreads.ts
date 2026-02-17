@@ -44,10 +44,6 @@ export class CourseThreadRepositorySchema implements CourseThreadRepository {
   }
 
   async deleteThread(threadId: string): Promise<void> {
-    const deleted = await this.db
-      .delete(courseThread)
-      .where(eq(courseThread.id, threadId))
-      .returning({ id: courseThread.id });
-    if (deleted.length === 0) throw new NotFoundError("thread with given ID not found");
+    await this.db.delete(courseThread).where(eq(courseThread.id, threadId));
   }
 }

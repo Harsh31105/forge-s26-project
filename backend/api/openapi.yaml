@@ -10,15 +10,14 @@ servers:
 tags:
   - name: Health
     description: Health check operations
-  - name: Course Threads
-    description: Threads under a course review
-  
+  - name: CourseThread
+    description: Manage discussion threads that belong to a specific course review.
 
 paths:
   /health:
     get:
       summary: Health check
-      description: Check if the API is running and healthy
+      description: Check if the API is running and healthy.
       tags: [Health]
       responses:
         "200":
@@ -28,19 +27,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
+
+
   /course-reviews/{id}/threads:
     get:
       summary: List threads for a course review
-      tags: [Course Threads]
+      description: |
+        Returns all thread messages associated with a single course review (identified by the course review UUID).
+        This is used to display the discussion/comments under a course review in the UI.
+      tags: [CourseThread]
       parameters:
         - name: id
           in: path
           required: true
           description: Course review ID (UUID)
           schema:
-            type: string
-            format: uuid
+            $ref: "#/components/schemas/UuidParam"
       responses:
         "200":
           description: List of threads
@@ -55,24 +58,27 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
+
     post:
       summary: Create a thread on a course review
-      tags: [Course Threads]
+      description: |
+        Creates a new thread message under a specific course review.
+        The course review ID comes from the path, and the request body provides the studentId and message content.
+      tags: [CourseThread]
       parameters:
         - name: id
           in: path
           required: true
           description: Course review ID (UUID)
           schema:
-            type: string
-            format: uuid
+            $ref: "#/components/schemas/UuidParam"
       requestBody:
         required: true
         content:
@@ -91,33 +97,37 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
+
+
   /course-reviews/{course_id}/threads/{thread_id}:
     patch:
       summary: Update a thread
-      tags: [Course Threads]
+      description: |
+        Updates an existing thread message under a course review.
+        The course review ID and thread ID are provided in the path; the request body includes the updated content.
+      tags: [CourseThread]
       parameters:
         - name: course_id
           in: path
           required: true
           description: Course review ID (UUID)
           schema:
-            type: string
-            format: uuid
+            $ref: "#/components/schemas/UuidParam"
         - name: thread_id
           in: path
           required: true
           description: Thread ID (UUID)
           schema:
-            type: string
-            format: uuid
+            $ref: "#/components/schemas/UuidParam"
       requestBody:
+        required: true
         content:
           application/json:
             schema:
@@ -134,37 +144,33 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
-          description: Thread not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
+
     delete:
       summary: Delete a thread
-      tags: [Course Threads]
+      description: |
+        Deletes a thread message under a course review.
+        The course review ID and thread ID are provided in the path.
+      tags: [CourseThread]
       parameters:
         - name: course_id
           in: path
           required: true
           description: Course review ID (UUID)
           schema:
-            type: string
-            format: uuid
+            $ref: "#/components/schemas/UuidParam"
         - name: thread_id
           in: path
           required: true
           description: Thread ID (UUID)
           schema:
-            type: string
-            format: uuid
+            $ref: "#/components/schemas/UuidParam"
       responses:
         "204":
           description: Deleted
@@ -173,23 +179,23 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
-        "404":
-          description: Thread not found
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
- 
+                $ref: "#/components/schemas/InternalServerError"
+
 
 components:
   schemas:
+    # Reusable UUID param schema (so we can reuse the example everywhere)
+    UuidParam:
+      type: string
+      format: uuid
+      example: "2f4c8d2e-3b4f-4bb6-9a41-9f3d7d7c0a12"
+
     Error:
       type: object
       required:
@@ -199,13 +205,26 @@ components:
         code:
           type: integer
           description: HTTP status code
-          example: 500
         message:
           anyOf:
             - type: string
             - type: object
           description: Error message or validation errors
-          example: "Internal server error"
+
+    BadRequestError:
+      allOf:
+        - $ref: "#/components/schemas/Error"
+      example:
+        code: 400
+        message: "Bad request"
+
+    InternalServerError:
+      allOf:
+        - $ref: "#/components/schemas/Error"
+      example:
+        code: 500
+        message: "Internal server error"
+
     CourseThread:
       type: object
       required:
@@ -217,14 +236,11 @@ components:
         - updatedAt
       properties:
         id:
-          type: string
-          format: uuid
+          $ref: "#/components/schemas/UuidParam"
         studentId:
-          type: string
-          format: uuid
+          $ref: "#/components/schemas/UuidParam"
         courseReviewId:
-          type: string
-          format: uuid
+          $ref: "#/components/schemas/UuidParam"
         content:
           type: string
           maxLength: 2000
@@ -234,6 +250,7 @@ components:
         updatedAt:
           type: string
           format: date-time
+
     CourseThreadPostInput:
       type: object
       required:
@@ -241,12 +258,12 @@ components:
         - content
       properties:
         studentId:
-          type: string
-          format: uuid
+          $ref: "#/components/schemas/UuidParam"
         content:
           type: string
           minLength: 1
           maxLength: 2000
+
     CourseThreadPatchInput:
       type: object
       required:
