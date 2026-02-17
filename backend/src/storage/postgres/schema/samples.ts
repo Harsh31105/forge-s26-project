@@ -1,5 +1,5 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type {Sample, SamplePatchInputType, SamplePostInputType} from "../../../models/sample";
+import type {Sample, SamplePatchInputType, SamplePostInputType} from "../../../models/student";
 import {SampleRepository} from "../../storage";
 import {sample} from "../../tables/sample";
 import { eq } from "drizzle-orm";

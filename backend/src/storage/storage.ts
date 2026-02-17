@@ -1,6 +1,6 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
+import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/student";
 import {SampleRepositorySchema} from "./postgres/schema/samples";
 
 export class Repository {

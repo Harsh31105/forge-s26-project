@@ -3,7 +3,7 @@ import {
     Sample, SamplePatchInputSchema, SamplePatchInputType,
     SamplePostInputSchema,
     SamplePostInputType
-} from "../../../models/sample";
+} from "../../../models/student";
 import {
     BadRequest,
     mapDBError,
