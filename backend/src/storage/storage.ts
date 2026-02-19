@@ -1,10 +1,14 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
+import type {Course, CoursePatchInputType, CoursePostInputType} from "../models/course";
+
+import { CourseRepositorySchema } from "./postgres/schema/course";
 import {SampleRepositorySchema} from "./postgres/schema/samples";
 
 export class Repository {
     public readonly samples: SampleRepository;
+    public readonly courses: CourseRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
 
@@ -29,4 +33,12 @@ export interface SampleRepository {
     createSample(input: SamplePostInputType): Promise<Sample>;
     patchSample(id: string, input: SamplePatchInputType): Promise<Sample>;
     deleteSample(id: string): Promise<void>;
+}
+
+export interface CourseRepository {
+    getCourses(): Promise<Course[]>;
+    getCourseByID(id: string): Promise<Course>;
+    createCourse(input: CoursePostInputType): Promise<Course>;
+    patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
+    deleteCourse(id: string): Promise<void>;
 }
