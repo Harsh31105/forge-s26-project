@@ -16,6 +16,7 @@ export class Repository {
         this.pool = pool;
         this.db = db;
         this.samples = new SampleRepositorySchema(db);
+        this.courses = new CourseRepositorySchema(db);
     }
 
     async getDB(): Promise<NodePgDatabase> {

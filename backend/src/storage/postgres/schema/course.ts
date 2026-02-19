@@ -25,8 +25,8 @@ export class CourseRepositorySchema implements CourseRepository {
             description: row.course.description,
             num_credits: row.course.num_credits,
             lecture_type: row.course.lecture_type,
-            createdAt: row.course.createdAt,
-            updatedAt: row.course.updatedAt
+            created_at: row.course.createdAt,
+            updated_at: row.course.updatedAt
         }));
     }
 
@@ -46,8 +46,8 @@ export class CourseRepositorySchema implements CourseRepository {
             description: row.course.description,
             num_credits: row.course.num_credits,
             lecture_type: row.course.lecture_type,
-            createdAt: row.course.createdAt,
-            updatedAt: row.course.updatedAt
+            created_at: row.course.createdAt,
+            updated_at: row.course.updatedAt
         };
     }
 

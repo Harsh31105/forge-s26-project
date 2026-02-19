@@ -294,7 +294,6 @@ components:
         - course_code
         - description
         - num_credits
-        - lecture_type
         - created_at
         - updated_at
      properties:
@@ -337,6 +336,7 @@ components:
         lecture_type:
           type: string
           enum: [lecture, lab, online]
+          nullable: true
           description: The type of lecture format for the course
           example: "online"
         created_at:
@@ -356,7 +356,6 @@ components:
         - course_code
         - description
         - num_credits
-        - lecture_type
       properties:
         name:
           type: string
@@ -385,6 +384,7 @@ components:
         lecture_type:
           type: string
           enum: [lecture, lab, online]
+          nullable: true
           description: The type of lecture format for the course
           example: "online"
 

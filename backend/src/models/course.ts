@@ -5,11 +5,7 @@ export interface Department {
     name: string;
 }
 
-export enum LectureType {
-    LECTURE = "lecture",
-    LAB = "lab",
-    ONLINE = "online",
-}
+export type LectureType = "lecture" | "lab" | "online"; 
 
 export interface Course {
     id: string;
@@ -18,7 +14,7 @@ export interface Course {
     course_code: number;
     description: string;
     num_credits: number;
-    lecture_type: LectureType;
+    lecture_type: LectureType | null;
     created_at: Date;
     updated_at: Date;
 }
@@ -29,7 +25,7 @@ export const CoursePostInputSchema = z.object({
     course_code: z.number().min(1000).max(10000),
     description: z.string(),
     num_credits: z.number().min(1).max(6),
-    lecture_type: z.nativeEnum(LectureType)
+    lecture_type: z.enum(["lecture", "lab", "online"]).optional()
 });
 
 export type CoursePostInputType = z.infer<typeof CoursePostInputSchema>;
