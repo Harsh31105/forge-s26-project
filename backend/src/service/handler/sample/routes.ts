@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { SampleHandler } from "./index";
-import { FavoritesHandler } from "../favorites";
+import { FavoritesHandler } from "./index";
 
 export function sampleRoutes(handler: SampleHandler): Router {
     const router = Router();
@@ -17,9 +17,9 @@ export function sampleRoutes(handler: SampleHandler): Router {
 export function favoritesRoutes(handler: FavoritesHandler): Router {
     const router = Router();
 
-    router.get("/", handler.handleGetFavorites.bind(handler));
-    router.post("/", handler.handleAddFavorite.bind(handler));
-    router.delete("/:id", handler.handleRemoveFavorite.bind(handler));
+    router.get("/", handler.handlePost.bind(handler));
+    router.post("/", handler.handleGet.bind(handler));
+    router.delete("/:id", handler.handleDelete.bind(handler));
 
     return router;
 }

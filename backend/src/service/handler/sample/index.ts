@@ -1,9 +1,16 @@
-import type { SampleRepository } from "../../../storage/storage";
+import type { FavoritesRepository, SampleRepository } from "../../../storage/storage";
 import {
     Sample, SamplePatchInputSchema, SamplePatchInputType,
     SamplePostInputSchema,
     SamplePostInputType
 } from "../../../models/sample";
+
+import {
+    Favorites, 
+    FavoritesPostInputSchema, 
+    FavoritesPostInputType
+} from "../../../models/favorites";
+
 import {
     BadRequest,
     mapDBError,
@@ -12,6 +19,7 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
+
 
 export class FavoritesHandler {
     constructor(private readonly repo: FavoritesRepository) {}
@@ -29,12 +37,12 @@ export class FavoritesHandler {
         res.status(200).json(favorites);
     }
 
-    async handlePOST(req: Request, res: Response): Promise<void> {
+    async handlePost(req: Request, res: Response): Promise<void> {
         const result = FavoritesPostInputSchema.safeParse(req.body);
         if (!result.success) {
-            throw BadRequest("unable to parse input for post-sample")
+            throw BadRequest("unable to parse input for post-favorites")
         }
-        const postFavorites: SamplePostInputType = result.data;
+        const postFavorites: FavoritesPostInputType = result.data;
 
         let newFavorites: Favorites;
         try {
@@ -53,8 +61,8 @@ export class FavoritesHandler {
         if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
         try {
-            await this.repo.deleteSample(id);
-        } catch (err) {
+            await this.repo.deleteFavorites(id);
+            } catch (err) {
             console.log(err);
             throw mapDBError(err, "failed to delete favorites");
         }
