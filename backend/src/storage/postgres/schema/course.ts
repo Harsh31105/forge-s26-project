@@ -4,7 +4,7 @@ import {CourseRepository} from "../../storage";
 import {course} from "../../tables/course";
 import { eq } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
-import { department } from "storage/tables/department";
+import { department } from "../../tables/department";
 
 export class CourseRepositorySchema implements CourseRepository {
     constructor(private readonly db: NodePgDatabase) {
