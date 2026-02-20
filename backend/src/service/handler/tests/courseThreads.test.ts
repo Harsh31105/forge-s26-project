@@ -118,6 +118,52 @@ describe("CourseThreadHandler Endpoints", () => {
   });
 
   describe("POST /course-reviews/:id/threads", () => {
+    test("creates a new thread and returns 201", async () => {
+      mockValidate.mockReturnValue(true);
+
+      const created: CourseThread = {
+        id: "aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa",
+        studentId: "550e8400-e29b-41d4-a716-446655440000",
+        courseReviewId: "33333333-3333-4333-a333-333333333333",
+        content: "Great course!",
+        createdAt: new Date(),
+        updatedAt: new Date(),
+      } as CourseThread;
+
+      repo.createThread.mockResolvedValue(created);
+
+      const res = await request(app)
+        .post("/course-reviews/33333333-3333-4333-a333-333333333333/threads")
+        .send({
+          studentId: "550e8400-e29b-41d4-a716-446655440000",
+          content: "Great course!",
+        });
+
+      expect(res.status).toBe(201);
+      expect(res.body).toEqual(toJsonDates(created));
+      expect(repo.createThread).toHaveBeenCalledWith(
+        "33333333-3333-4333-a333-333333333333",
+        {
+          studentId: "550e8400-e29b-41d4-a716-446655440000",
+          content: "Great course!",
+        }
+      );
+    });
+
+    test("repo error returns 500", async () => {
+      mockValidate.mockReturnValue(true);
+      repo.createThread.mockRejectedValue(new Error("DB error"));
+
+      const res = await request(app)
+        .post("/course-reviews/33333333-3333-4333-a333-333333333333/threads")
+        .send({
+          studentId: "550e8400-e29b-41d4-a716-446655440000",
+          content: "Some content",
+        });
+
+      expect(res.status).toBe(500);
+    });
+
     test("invalid course review UUID returns 400", async () => {
       mockValidate.mockReturnValue(false);
 

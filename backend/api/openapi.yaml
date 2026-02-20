@@ -10,7 +10,7 @@ servers:
 tags:
   - name: Health
     description: Health check operations
-  - name: CourseThread
+  - name: CourseReview
     description: Manage discussion threads that belong to a specific course review.
 
 paths:
@@ -36,7 +36,7 @@ paths:
       description: |
         Returns all thread messages associated with a single course review (identified by the course review UUID).
         This is used to display the discussion/comments under a course review in the UI.
-      tags: [CourseThread]
+      tags: [CourseReview]
       parameters:
         - name: id
           in: path
@@ -71,7 +71,7 @@ paths:
       description: |
         Creates a new thread message under a specific course review.
         The course review ID comes from the path, and the request body provides the studentId and message content.
-      tags: [CourseThread]
+      tags: [CourseReview]
       parameters:
         - name: id
           in: path
@@ -112,7 +112,7 @@ paths:
       description: |
         Updates an existing thread message under a course review.
         The course review ID and thread ID are provided in the path; the request body includes the updated content.
-      tags: [CourseThread]
+      tags: [CourseReview]
       parameters:
         - name: course_id
           in: path
@@ -157,7 +157,7 @@ paths:
       description: |
         Deletes a thread message under a course review.
         The course review ID and thread ID are provided in the path.
-      tags: [CourseThread]
+      tags: [CourseReview]
       parameters:
         - name: course_id
           in: path
