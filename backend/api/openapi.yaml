@@ -106,7 +106,7 @@ paths:
                 $ref: "#/components/schemas/InternalServerError"
 
 
-  /course-reviews/{course_id}/threads/{thread_id}:
+  /course-reviews/{course_review_id}/threads/{thread_id}:
     patch:
       summary: Update a thread
       description: |
@@ -114,7 +114,7 @@ paths:
         The course review ID and thread ID are provided in the path; the request body includes the updated content.
       tags: [CourseReview]
       parameters:
-        - name: course_id
+        - name: course_review_id
           in: path
           required: true
           description: Course review ID (UUID)
@@ -159,7 +159,7 @@ paths:
         The course review ID and thread ID are provided in the path.
       tags: [CourseReview]
       parameters:
-        - name: course_id
+        - name: course_review_id
           in: path
           required: true
           description: Course review ID (UUID)

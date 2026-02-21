@@ -54,10 +54,10 @@ describe("CourseThreadHandler Endpoints", () => {
     app.post("/course-reviews/:id/threads", (req, res, next) =>
       handler.handlePost(req, res).catch(next)
     );
-    app.patch("/course-reviews/:course_id/threads/:thread_id", (req, res, next) =>
+    app.patch("/course-reviews/:course_review_id/threads/:thread_id", (req, res, next) =>
       handler.handlePatch(req, res).catch(next)
     );
-    app.delete("/course-reviews/:course_id/threads/:thread_id", (req, res, next) =>
+    app.delete("/course-reviews/:course_review_id/threads/:thread_id", (req, res, next) =>
       handler.handleDelete(req, res).catch(next)
     );
 

@@ -45,7 +45,7 @@ export class CourseThreadHandler {
   }
 
   async handlePatch(req: Request, res: Response): Promise<void> {
-    const courseReviewId = (req.params.course_id ?? req.params.id) as string;
+    const courseReviewId = (req.params.course_review_id ?? req.params.id) as string;
     const threadId = req.params.thread_id as string;
 
     if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");
@@ -65,7 +65,7 @@ export class CourseThreadHandler {
   }
 
   async handleDelete(req: Request, res: Response): Promise<void> {
-    const courseReviewId = (req.params.course_id ?? req.params.id) as string;
+    const courseReviewId = (req.params.course_review_id ?? req.params.id) as string;
     const threadId = req.params.thread_id as string;
 
     if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");

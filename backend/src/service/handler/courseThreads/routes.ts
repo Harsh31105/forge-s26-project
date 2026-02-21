@@ -9,11 +9,11 @@ export function courseThreadRoutes(handler: CourseThreadHandler): Router {
   router.post("/:id/threads", (req, res) => handler.handlePost(req, res));
 
   // PATCH + DELETE
-  router.patch("/:course_review_id/threads/:course_thread_id", (req, res) =>
+  router.patch("/:course_review_id/threads/:thread_id", (req, res) =>
     handler.handlePatch(req, res)
   );
   
-  router.delete("/:course_review_id/threads/:course_thread_id", (req, res) =>
+  router.delete("/:course_review_id/threads/:thread_id", (req, res) =>
     handler.handleDelete(req, res)
   );
   
