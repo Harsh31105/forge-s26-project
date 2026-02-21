@@ -24,7 +24,7 @@ export class Repository {
 }
 
 export interface SampleRepository {
-    getSamples(): Promise<Sample[]>;
+    getSamples(limit: number, offset: number): Promise<Sample[]>;
     getSampleByID(id: string): Promise<Sample>;
     createSample(input: SamplePostInputType): Promise<Sample>;
     patchSample(id: string, input: SamplePatchInputType): Promise<Sample>;

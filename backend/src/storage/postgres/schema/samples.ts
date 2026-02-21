@@ -10,8 +10,8 @@ export class SampleRepositorySchema implements SampleRepository {
         this.db = db;
     }
 
-    async getSamples(): Promise<Sample[]> {
-        return this.db.select().from(sample);
+    async getSamples(limit: number, offset: number): Promise<Sample[]> {
+        return this.db.select().from(sample).limit(limit).offset(offset);
     }
 
     async getSampleByID(id: string): Promise<Sample> {
