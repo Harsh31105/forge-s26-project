@@ -79,6 +79,7 @@ export class CourseHandler {
             updatedCourse = await this.repo.patchCourse(id, patchCourse);
         } catch (err) {
             console.log(err);
+            if (err instanceof NotFoundError) throw NotFound("Course with given ID not found");
             throw mapDBError(err, "failed to patch course");
         }
 
@@ -93,6 +94,7 @@ export class CourseHandler {
             await this.repo.deleteCourse(id);
         } catch (err) {
             console.log(err);
+            if (err instanceof NotFoundError) throw NotFound("Course with given ID not found");
             throw mapDBError(err, "failed to delete course");
         }
 
