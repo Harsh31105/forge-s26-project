@@ -27,7 +27,7 @@ export class SampleHandler {
         let samples: Sample[];
 
         try {
-            samples = await this.repo.getSamples(pagination.limit, getOffset(pagination));
+            samples = await this.repo.getSamples(pagination);
         } catch (err) {
             console.log("Failed to get samples: ", err);
             throw mapDBError(err, "failed to retrieve samples");

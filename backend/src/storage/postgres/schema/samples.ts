@@ -4,14 +4,15 @@ import {SampleRepository} from "../../storage";
 import {sample} from "../../tables/sample";
 import { eq } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
+import { PaginationType, getOffset} from "utils/pagination";
 
 export class SampleRepositorySchema implements SampleRepository {
     constructor(private readonly db: NodePgDatabase) {
         this.db = db;
     }
 
-    async getSamples(limit: number, offset: number): Promise<Sample[]> {
-        return this.db.select().from(sample).limit(limit).offset(offset);
+    async getSamples(pagination: PaginationType): Promise<Sample[]> {
+        return this.db.select().from(sample).limit(pagination.limit).offset(getOffset(pagination));
     }
 
     async getSampleByID(id: string): Promise<Sample> {

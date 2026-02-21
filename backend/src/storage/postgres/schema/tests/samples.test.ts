@@ -41,7 +41,7 @@ describe("SampleRepositorySchema DB Integration", () => {
             await repo.deleteSample(testSampleID);
 
             const pagination = newPagination();
-            let results = await repo.getSamples(pagination.limit, getOffset(pagination));
+            let results = await repo.getSamples(pagination);
             expect(results).toEqual([]);
 
             await db.insert(sample).values({
@@ -51,7 +51,7 @@ describe("SampleRepositorySchema DB Integration", () => {
                 updatedAt: new Date()
             });
 
-            results = await repo.getSamples(pagination.limit, getOffset(pagination));
+            results = await repo.getSamples(pagination);
             expect(results).toHaveLength(1);
             expect(results[0]!.id).toBe(testSampleID);
         });
