@@ -2,6 +2,7 @@ import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
 import {SampleRepositorySchema} from "./postgres/schema/samples";
+import { PaginationType } from "utils/pagination";
 
 export class Repository {
     public readonly samples: SampleRepository;
@@ -24,7 +25,7 @@ export class Repository {
 }
 
 export interface SampleRepository {
-    getSamples(): Promise<Sample[]>;
+    getSamples(pagination: PaginationType): Promise<Sample[]>;
     getSampleByID(id: string): Promise<Sample>;
     createSample(input: SamplePostInputType): Promise<Sample>;
     patchSample(id: string, input: SamplePatchInputType): Promise<Sample>;
