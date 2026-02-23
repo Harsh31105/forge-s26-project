@@ -36,6 +36,21 @@ paths:
       summary: Getting Samples
       description: This endpoint gets all samples that we have
       tags: [Sample]
+      parameters:
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
       responses:
         "200":
           description: API is working!
@@ -240,6 +255,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+
 
 components:
   schemas:
