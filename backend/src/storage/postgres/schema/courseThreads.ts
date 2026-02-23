@@ -8,14 +8,20 @@ import type {
 } from "../../../models/courseThread";
 import type { CourseThreadRepository } from "../../storage";
 import { courseThread } from "../../tables/courseThread";
+import { type PaginationType, getOffset } from "../../../utils/pagination";
 
 export class CourseThreadRepositorySchema implements CourseThreadRepository {
   constructor(private readonly db: NodePgDatabase) {
     this.db = db;
   }
 
-  async getThreadsByCourseReviewId(courseReviewId: string): Promise<CourseThread[]> {
-    return this.db.select().from(courseThread).where(eq(courseThread.courseReviewId, courseReviewId));
+  async getThreadsByCourseReviewId(courseReviewId: string, pagination: PaginationType): Promise<CourseThread[]> {
+    return this.db
+      .select()
+      .from(courseThread)
+      .where(eq(courseThread.courseReviewId, courseReviewId))
+      .limit(pagination.limit)
+      .offset(getOffset(pagination));
   }
 
   async createThread(courseReviewId: string, input: CourseThreadPostInputType): Promise<CourseThread> {

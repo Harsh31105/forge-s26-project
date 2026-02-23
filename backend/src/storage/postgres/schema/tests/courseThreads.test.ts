@@ -9,6 +9,7 @@ import {
 import { CourseThreadRepositorySchema } from "../courseThreads";
 import { NotFoundError } from "../../../../errs/httpError";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { newPagination } from "../../../../utils/pagination";
 
 describe("CourseThreadRepositorySchema (DB)", () => {
   let db: NodePgDatabase;
@@ -32,7 +33,7 @@ describe("CourseThreadRepositorySchema (DB)", () => {
 
   describe("getThreadsByCourseReviewId", () => {
     it("returns empty array when no threads", async () => {
-      const threads = await repo.getThreadsByCourseReviewId(courseReviewId);
+      const threads = await repo.getThreadsByCourseReviewId(courseReviewId, newPagination());
       expect(threads).toEqual([]);
     });
 
@@ -41,7 +42,7 @@ describe("CourseThreadRepositorySchema (DB)", () => {
         studentId,
         content: "First thread",
       });
-      const threads = await repo.getThreadsByCourseReviewId(courseReviewId);
+      const threads = await repo.getThreadsByCourseReviewId(courseReviewId, newPagination());
       expect(threads).toHaveLength(1);
       const first = threads[0];
       expect(first).toBeDefined();
@@ -95,7 +96,7 @@ describe("CourseThreadRepositorySchema (DB)", () => {
         content: "To delete",
       });
       await repo.deleteThread(created.id);
-      const threads = await repo.getThreadsByCourseReviewId(courseReviewId);
+      const threads = await repo.getThreadsByCourseReviewId(courseReviewId, newPagination());
       expect(threads).toHaveLength(0);
     });
 

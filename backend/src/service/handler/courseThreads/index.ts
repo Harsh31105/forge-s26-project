@@ -9,6 +9,7 @@ import {
 import { BadRequest, mapDBError } from "../../../errs/httpError";
 import type { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
+import { PaginationSchema } from "../../../utils/pagination";
 
 export class CourseThreadHandler {
   constructor(private readonly repo: CourseThreadRepository) {}
@@ -17,11 +18,16 @@ export class CourseThreadHandler {
     const courseReviewId = req.params.id as string;
     if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");
 
+    const result = PaginationSchema.safeParse(req.query);
+    if (!result.success) {
+      throw BadRequest("Invalid pagination parameters");
+    }
+    const pagination = result.data;
+
     try {
-      const threads: CourseThread[] = await this.repo.getThreadsByCourseReviewId(courseReviewId);
+      const threads: CourseThread[] = await this.repo.getThreadsByCourseReviewId(courseReviewId, pagination);
       res.status(200).json(threads);
     } catch (err) {
-      // optional logging (if you want to satisfy that comment)
       console.error("DB error in handleGet (courseThreads):", err);
       throw mapDBError(err, "failed to retrieve threads");
     }
@@ -45,7 +51,7 @@ export class CourseThreadHandler {
   }
 
   async handlePatch(req: Request, res: Response): Promise<void> {
-    const courseReviewId = (req.params.course_review_id ?? req.params.id) as string;
+    const courseReviewId = req.params.course_review_id as string;
     const threadId = req.params.thread_id as string;
 
     if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");
@@ -65,7 +71,7 @@ export class CourseThreadHandler {
   }
 
   async handleDelete(req: Request, res: Response): Promise<void> {
-    const courseReviewId = (req.params.course_review_id ?? req.params.id) as string;
+    const courseReviewId = req.params.course_review_id as string;
     const threadId = req.params.thread_id as string;
 
     if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");

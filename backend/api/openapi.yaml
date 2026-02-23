@@ -1,6 +1,6 @@
-openapi: 3.1.3
+openapi: 3.1.0
 info:
-  title: Forge S26 Project API
+  title: NorthStar API
   version: 0.1.0
 
 servers:
@@ -12,6 +12,8 @@ tags:
     description: Health check operations
   - name: CourseReview
     description: Manage discussion threads that belong to a specific course review.
+  - name: Sample
+    description: Sample API Endpoint for Reference
 
 paths:
   /health:
@@ -44,6 +46,20 @@ paths:
           description: Course review ID (UUID)
           schema:
             $ref: "#/components/schemas/UuidParam"
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
       responses:
         "200":
           description: List of threads
@@ -188,9 +204,62 @@ paths:
                 $ref: "#/components/schemas/InternalServerError"
 
 
+  /samples:
+    get:
+      summary: Getting Samples
+      description: This endpoint gets all samples that we have
+      tags: [Sample]
+      parameters:
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+      responses:
+        "200":
+          description: API is working!
+          content:
+            application/json:
+              schema:
+                $ref:
+                  "#/components/schemas/Sample"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "bad request"
+        "409":
+          description: conflict error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 409
+                message: "duplicate or conflict value"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+
 components:
   schemas:
-    # Reusable UUID param schema (so we can reuse the example everywhere)
     UuidParam:
       type: string
       format: uuid
@@ -210,6 +279,7 @@ components:
             - type: string
             - type: object
           description: Error message or validation errors
+          example: "Internal server error"
 
     BadRequestError:
       allOf:
@@ -224,6 +294,32 @@ components:
       example:
         code: 500
         message: "Internal server error"
+
+    Sample:
+      type: object
+      required:
+        - id
+        - name
+        - created_at
+        - updated_at
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the sample retrieved
+          example: "0f171d80-f523-4c56-9e5c-1d825d484e01"
+        name:
+          type: string
+          description: The name of the sample
+          example: "Harsh Singh"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:35:00Z"
 
     CourseThread:
       type: object

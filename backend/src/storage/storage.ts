@@ -4,7 +4,7 @@ import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/
 import {SampleRepositorySchema} from "./postgres/schema/samples";
 import type { CourseThread, CourseThreadPatchInputType, CourseThreadPostInputType } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
-
+import { PaginationType } from "utils/pagination";
 
 export class Repository {
     public readonly samples: SampleRepository;
@@ -29,7 +29,7 @@ export class Repository {
 }
 
 export interface SampleRepository {
-    getSamples(): Promise<Sample[]>;
+    getSamples(pagination: PaginationType): Promise<Sample[]>;
     getSampleByID(id: string): Promise<Sample>;
     createSample(input: SamplePostInputType): Promise<Sample>;
     patchSample(id: string, input: SamplePatchInputType): Promise<Sample>;
@@ -38,9 +38,8 @@ export interface SampleRepository {
 
 
 export interface CourseThreadRepository {
-    getThreadsByCourseReviewId(courseReviewId: string): Promise<CourseThread[]>;
+    getThreadsByCourseReviewId(courseReviewId: string, pagination: PaginationType): Promise<CourseThread[]>;
     createThread(courseReviewId: string, input: CourseThreadPostInputType): Promise<CourseThread>;
     patchThread(threadId: string, input: CourseThreadPatchInputType): Promise<CourseThread>;
     deleteThread(threadId: string): Promise<void>;
-  }
-  
+}

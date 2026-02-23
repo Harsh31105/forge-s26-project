@@ -94,8 +94,34 @@ describe("CourseThreadHandler Endpoints", () => {
       expect(res.status).toBe(200);
       expect(res.body).toEqual(data.map((t) => toJsonDates(t)));
       expect(repo.getThreadsByCourseReviewId).toHaveBeenCalledWith(
-        "33333333-3333-3333-3333-333333333333"
+        "33333333-3333-3333-3333-333333333333",
+        { page: 1, limit: 10 }
       );
+    });
+
+    test("respects custom pagination query params", async () => {
+      mockValidate.mockReturnValue(true);
+      repo.getThreadsByCourseReviewId.mockResolvedValue([]);
+
+      const res = await request(app).get(
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads?page=2&limit=5"
+      );
+
+      expect(res.status).toBe(200);
+      expect(repo.getThreadsByCourseReviewId).toHaveBeenCalledWith(
+        "33333333-3333-3333-3333-333333333333",
+        { page: 2, limit: 5 }
+      );
+    });
+
+    test("invalid pagination params returns 400", async () => {
+      mockValidate.mockReturnValue(true);
+
+      const res = await request(app).get(
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads?page=-1"
+      );
+
+      expect(res.status).toBe(400);
     });
 
     test("invalid course review UUID returns 400", async () => {
