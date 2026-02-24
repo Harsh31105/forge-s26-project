@@ -4,6 +4,8 @@
  * NorthStar API
  * OpenAPI spec version: 0.1.0
  */
+export type UuidParam = string;
+
 export type ErrorMessageAnyOf = { [key: string]: unknown };
 
 /**
@@ -18,6 +20,10 @@ export interface Error {
   message: ErrorMessage;
 }
 
+export type BadRequestError = Error;
+
+export type InternalServerError = Error;
+
 export interface Sample {
   /** The ID of the sample retrieved */
   id: string;
@@ -26,3 +32,57 @@ export interface Sample {
   created_at: string;
   updated_at: string;
 }
+
+export interface CourseThread {
+  id: UuidParam;
+  studentId: UuidParam;
+  courseReviewId: UuidParam;
+  /** @maxLength 2000 */
+  content: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CourseThreadPostInput {
+  studentId: UuidParam;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  content: string;
+}
+
+export interface CourseThreadPatchInput {
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  content: string;
+}
+
+export type GetCourseReviewsIdThreadsParams = {
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
+};
+
+export type GetSamplesParams = {
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
+};
+

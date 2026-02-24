@@ -354,6 +354,7 @@ async function createAllTables(db: NodePgDatabase) {
             FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
         );
     `);
+
 }
 
 export async function cleanupTestData() {
@@ -363,6 +364,7 @@ export async function cleanupTestData() {
 
     await db.execute(`
     TRUNCATE TABLE 
+      course_thread,
       sample
     RESTART IDENTITY CASCADE;
   `);
