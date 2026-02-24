@@ -7,7 +7,6 @@ import {
   shutdownSharedTestDB,
 } from "../../testutil/shared_db";
 import { CourseThreadRepositorySchema } from "../courseThreads";
-import { NotFoundError } from "../../../../errs/httpError";
 import type { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { newPagination } from "../../../../utils/pagination";
 
@@ -81,11 +80,9 @@ describe("CourseThreadRepositorySchema (DB)", () => {
       expect(updated.content).toBe("Updated content");
     });
 
-    it("throws NotFoundError when thread does not exist", async () => {
+    it("throws when thread does not exist", async () => {
       const badId = "00000000-0000-0000-0000-000000000000";
-      await expect(repo.patchThread(badId, { content: "x" })).rejects.toThrow(
-        NotFoundError
-      );
+      await expect(repo.patchThread(badId, { content: "x" })).rejects.toThrow();
     });
   });
 

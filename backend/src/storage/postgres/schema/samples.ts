@@ -4,7 +4,7 @@ import {SampleRepository} from "../../storage";
 import {sample} from "../../tables/sample";
 import { eq } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
-import { PaginationType, getOffset} from "utils/pagination";
+import { PaginationType, getOffset} from "../../../utils/pagination";
 
 export class SampleRepositorySchema implements SampleRepository {
     constructor(private readonly db: NodePgDatabase) {

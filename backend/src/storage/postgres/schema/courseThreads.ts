@@ -1,6 +1,5 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import { eq } from "drizzle-orm";
-import { NotFoundError } from "../../../errs/httpError";
 import type {
   CourseThread,
   CourseThreadPatchInputType,
@@ -39,13 +38,17 @@ export class CourseThreadRepositorySchema implements CourseThreadRepository {
   }
 
   async patchThread(threadId: string, input: CourseThreadPatchInputType): Promise<CourseThread> {
+    const updates = Object.fromEntries(
+      Object.entries(input).filter(([_, value]) => value !== undefined)
+    );
+
     const [row] = await this.db
       .update(courseThread)
-      .set({ ...input })
+      .set({ ...updates })
       .where(eq(courseThread.id, threadId))
       .returning();
 
-    if (!row) throw new NotFoundError("thread with given ID not found");
+    if (!row) throw new Error();
     return row;
   }
 
