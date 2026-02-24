@@ -1,14 +1,12 @@
 import type { ProfThreadRepository } from "../../../storage/storage";
 
-// need to make a lot of changes -- manan's code for reference attached
-
 import {
-    CourseThread,
-    CourseThreadPatchInputSchema,
-    CourseThreadPatchInputType,
-    CourseThreadPostInputSchema,
-    CourseThreadPostInputType,
-} from "../../../models/courseThread";
+    ProfThread,
+    ProfessorThreadPatchInputSchema,
+    ProfessorThreadPatchInputType,
+    ProfessorThreadPostInputSchema,
+    ProfessorThreadPostInputType,
+} from "../../../models/profThreads";
 import { BadRequest, mapDBError } from "../../../errs/httpError";
 import type { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
@@ -17,11 +15,11 @@ export class ProfThreadHandler {
     constructor(private readonly repo: ProfThreadRepository) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
-    const courseReviewId = req.params.id as string;
-    if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");
+    const professorReviewId = req.params.id as string;
+    if (!isUUID(professorReviewId)) throw BadRequest("invalid professor review id");
 
     try {
-        const threads: CourseThread[] = await this.repo.getThreadsByCourseReviewId(courseReviewId);
+        const threads: ProfThread[] = await this.repo.getThreadsByProfReviewId(professorReviewId);
         res.status(200).json(threads);
     } catch (err) {
         throw mapDBError(err, "failed to retrieve threads");
@@ -29,15 +27,15 @@ export class ProfThreadHandler {
     }
 
     async handlePost(req: Request, res: Response): Promise<void> {
-    const courseReviewId = req.params.id as string;
-    if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");
+    const professorReviewId = req.params.id as string;
+    if (!isUUID(professorReviewId)) throw BadRequest("invalid professor review id");
 
-    const result = CourseThreadPostInputSchema.safeParse(req.body);
+    const result = ProfessorThreadPostInputSchema.safeParse(req.body);
     if (!result.success) throw BadRequest("unable to parse input for post-thread");
-    const input: CourseThreadPostInputType = result.data;
+    const input: ProfessorThreadPostInputType = result.data;
 
     try {
-        const created = await this.repo.createThread(courseReviewId, input);
+        const created = await this.repo.createThread(professorReviewId, input);
         res.status(201).json(created);
     } catch (err) {
         throw mapDBError(err, "failed to create thread");
@@ -45,15 +43,15 @@ export class ProfThreadHandler {
     }
 
     async handlePatch(req: Request, res: Response): Promise<void> {
-    const courseReviewId = (req.params.course_id ?? req.params.id) as string;
+    const professorReviewId = (req.params.professor_id ?? req.params.id) as string;
     const threadId = req.params.thread_id as string;
 
-    if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");
+    if (!isUUID(professorReviewId)) throw BadRequest("invalid professor review id");
     if (!isUUID(threadId)) throw BadRequest("invalid thread id");
 
-    const result = CourseThreadPatchInputSchema.safeParse(req.body);
+    const result = ProfessorThreadPatchInputSchema.safeParse(req.body);
     if (!result.success) throw BadRequest("unable to parse input for patch-thread");
-    const input: CourseThreadPatchInputType = result.data;
+    const input: ProfessorThreadPatchInputType = result.data;
 
     try {
         const updated = await this.repo.patchThread(threadId, input);
@@ -64,10 +62,10 @@ export class ProfThreadHandler {
     }
 
     async handleDelete(req: Request, res: Response): Promise<void> {
-    const courseReviewId = (req.params.course_id ?? req.params.id) as string;
+    const professorReviewId = (req.params.professor_id ?? req.params.id) as string;
     const threadId = req.params.thread_id as string;
 
-    if (!isUUID(courseReviewId)) throw BadRequest("invalid course review id");
+    if (!isUUID(professorReviewId)) throw BadRequest("invalid professor review id");
     if (!isUUID(threadId)) throw BadRequest("invalid thread id");
 
     try {
