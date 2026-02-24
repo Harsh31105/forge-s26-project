@@ -12,3 +12,5 @@ export function professorRoutes(handler: ProfessorHandler): Router {
 
     return router;
 }
+
+// fix this based on service.ts

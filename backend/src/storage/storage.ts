@@ -1,10 +1,13 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
-import {SampleRepositorySchema} from "./postgres/schema/samples";
+import type { Sample, SamplePatchInputType, SamplePostInputType } from "../models/sample";
+import { SampleRepositorySchema } from "./postgres/schema/samples";
+import type { Professor, ProfessorPatchInputType, ProfessorPostInputType } from "../models/professor";
+import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 
 export class Repository {
     public readonly samples: SampleRepository;
+    public readonly professors: ProfessorRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
 
@@ -12,6 +15,7 @@ export class Repository {
         this.pool = pool;
         this.db = db;
         this.samples = new SampleRepositorySchema(db);
+        this.professors = new ProfessorRepositorySchema(db);
     }
 
     async getDB(): Promise<NodePgDatabase> {
@@ -29,4 +33,12 @@ export interface SampleRepository {
     createSample(input: SamplePostInputType): Promise<Sample>;
     patchSample(id: string, input: SamplePatchInputType): Promise<Sample>;
     deleteSample(id: string): Promise<void>;
+}
+
+export interface ProfessorRepository {
+    getProfessors(): Promise<Professor[]>;
+    getProfessorByID(id: string): Promise<Professor>;
+    createProfessor(input: ProfessorPostInputType): Promise<Professor>;
+    patchProfessor(id: string, input: ProfessorPatchInputType): Promise<Professor>;
+    deleteProfessor(id: string): Promise<void>;
 }

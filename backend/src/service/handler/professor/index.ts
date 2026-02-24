@@ -1,16 +1,14 @@
 import type { ProfessorRepository } from "../../../storage/storage";
 import {
-    Professor,
-    ProfessorPatchInputSchema,
-    ProfessorPatchInputType,
+    Professor, ProfessorPatchInputSchema, ProfessorPatchInputType,
     ProfessorPostInputSchema,
-    ProfessorPostInputType,
+    ProfessorPostInputType
 } from "../../../models/professor";
 import {
     BadRequest,
     mapDBError,
     NotFound,
-    NotFoundError,
+    NotFoundError
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
@@ -34,7 +32,7 @@ export class ProfessorHandler {
     async handleGetByID(req: Request, res: Response): Promise<void> {
         let professor: Professor;
         const id = req.params.id as string;
-        if (!isUUID(id)) throw BadRequest("invalid ID was given");
+        if (!isUUID(id)) throw BadRequest("Empty ID cannot be given");
 
         try {
             professor = await this.repo.getProfessorByID(id);
