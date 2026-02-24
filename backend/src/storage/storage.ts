@@ -1,8 +1,8 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
-
 import {SampleRepositorySchema} from "./postgres/schema/samples";
+
 import type { CourseThread, CourseThreadPatchInputType, CourseThreadPostInputType } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
 import { PaginationType } from "utils/pagination";
@@ -48,8 +48,8 @@ export interface CourseThreadRepository {
     patchThread(threadId: string, input: CourseThreadPatchInputType): Promise<CourseThread>;
 }
 export interface ProfThreadRepository {
-    //getThreadsByCourseReviewId(courseReviewId: string, pagination: PaginationType): Promise<ProfThread[]>; //will work after nishas 
-    createThread(courseReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread>;
+    getThreadsByProfReviewId(profReviewId: string, pagination: PaginationType): Promise<ProfThread[]>; //will work after nishas 
+    createThread(profReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread>;
     patchThread(threadId: string, input: ProfessorThreadPatchInputType): Promise<ProfThread>;
     deleteThread(threadId: string): Promise<void>;
 }
