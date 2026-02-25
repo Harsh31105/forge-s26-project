@@ -4,10 +4,7 @@
  * NorthStar API
  * OpenAPI spec version: 0.1.0
  */
-
 export type UuidParam = string;
-
-export type ErrorMessageAnyOf = { [key: string]: unknown };
 
 /**
  * Error message or validation errors
@@ -32,6 +29,117 @@ export interface Sample {
   name: string;
   created_at: string;
   updated_at: string;
+}
+
+/**
+ * The department offering the course
+ */
+export type CourseDepartment = {
+  /** The ID of the department offering the course */
+  id: number;
+  /** The name of the department offering the course */
+  name: string;
+};
+
+/**
+ * The type of lecture format for the course
+ */
+export type CourseLectureType = typeof CourseLectureType[keyof typeof CourseLectureType] | null;
+
+
+export const CourseLectureType = {
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
+} as const;
+
+export interface Course {
+  /** The ID of the course retrieved */
+  id: string;
+  /** The name of the course */
+  name: string;
+  /** The department offering the course */
+  department: CourseDepartment;
+  /** The identifying code for the course within the department */
+  course_code: number;
+  /** A brief description of the course content and objectives */
+  description: string;
+  /** The number of credits awarded for completing the course */
+  num_credits: number;
+  /** The type of lecture format for the course */
+  lecture_type?: CourseLectureType;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * The type of lecture format for the course
+ */
+export type CoursePostInputLectureType = typeof CoursePostInputLectureType[keyof typeof CoursePostInputLectureType] | null;
+
+
+export const CoursePostInputLectureType = {
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
+} as const;
+
+export interface CoursePostInput {
+  /** The name of the course to be created */
+  name: string;
+  /** The ID of the department offering the course */
+  department_id: number;
+  /**
+   * The identifying code for the course within the department
+   * @minimum 1000
+   * @maximum 10000
+   */
+  course_code: number;
+  /** A brief description of the course content and objectives */
+  description: string;
+  /**
+   * The number of credits awarded for completing the course
+   * @minimum 1
+   * @maximum 6
+   */
+  num_credits: number;
+  /** The type of lecture format for the course */
+  lecture_type?: CoursePostInputLectureType;
+}
+
+/**
+ * The type of lecture format for the course
+ */
+export type CoursePatchInputLectureType = typeof CoursePatchInputLectureType[keyof typeof CoursePatchInputLectureType];
+
+
+export const CoursePatchInputLectureType = {
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
+} as const;
+
+export interface CoursePatchInput {
+  /** The name of the course to be created */
+  name?: string;
+  /** The ID of the department offering the course */
+  department_id?: number;
+  /**
+   * The identifying code for the course within the department
+   * @minimum 1000
+   * @maximum 10000
+   */
+  course_code?: number;
+  /** A brief description of the course content and objectives */
+  description?: string;
+  /**
+   * The number of credits awarded for completing the course
+   * @minimum 1
+   * @maximum 6
+   */
+  num_credits?: number;
+  /** The type of lecture format for the course */
+  lecture_type?: CoursePatchInputLectureType;
 }
 
 export interface CourseThread {
@@ -86,3 +194,17 @@ page?: number;
  */
 limit?: number;
 };
+
+export type GetCoursesParams = {
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
+};
+
