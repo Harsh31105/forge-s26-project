@@ -1,6 +1,9 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
+import type {Course, CoursePatchInputType, CoursePostInputType} from "../models/course";
+
+import { CourseRepositorySchema } from "./postgres/schema/course";
 import {SampleRepositorySchema} from "./postgres/schema/samples";
 import type { CourseThread, CourseThreadPatchInputType, CourseThreadPostInputType } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
@@ -8,6 +11,7 @@ import { PaginationType } from "utils/pagination";
 
 export class Repository {
     public readonly samples: SampleRepository;
+    public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
@@ -16,6 +20,7 @@ export class Repository {
         this.pool = pool;
         this.db = db;
         this.samples = new SampleRepositorySchema(db);
+        this.courses = new CourseRepositorySchema(db);
         this.courseThreads = new CourseThreadRepositorySchema(db);
     }
 
@@ -36,6 +41,13 @@ export interface SampleRepository {
     deleteSample(id: string): Promise<void>;
 }
 
+export interface CourseRepository {
+    getCourses(pagination: PaginationType): Promise<Course[]>;
+    getCourseByID(id: string): Promise<Course>;
+    createCourse(input: CoursePostInputType): Promise<Course>;
+    patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
+    deleteCourse(id: string): Promise<void>;
+}
 
 export interface CourseThreadRepository {
     getThreadsByCourseReviewId(courseReviewId: string, pagination: PaginationType): Promise<CourseThread[]>;
