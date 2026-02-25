@@ -72,12 +72,16 @@ export class CourseRepositorySchema implements CourseRepository {
     }
 
     async patchCourse(id: string, input: CoursePatchInputType): Promise<Course> {
-        const [row] = await this.db.update(course).set({ ...input }).where(eq(course.id, id)).returning();
-        
-        const updates = Object.fromEntries(
-            Object.entries(input).filter(([_, value]) => value !== undefined)
-        );
 
+        const updates: Record<string, any> = {};
+        if (input.name !== undefined) updates.name = input.name;
+        if (input.department_id !== undefined) updates.departmentId = input.department_id;
+        if (input.course_code !== undefined) updates.courseCode = input.course_code;
+        if (input.description !== undefined) updates.description = input.description;
+        if (input.num_credits !== undefined) updates.numCredits = input.num_credits;
+        if (input.lecture_type !== undefined) updates.lectureType = input.lecture_type;
+
+        const [row] = await this.db.update(course).set(updates).where(eq(course.id, id)).returning();
         if (!row) throw new Error();
 
         return this.getCourseByID(row.id);
