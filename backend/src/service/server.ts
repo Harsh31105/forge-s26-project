@@ -15,6 +15,8 @@ import path from "path";
 import swaggerUi from "swagger-ui-express";
 import {CourseHandler} from "./handler/course";
 import {courseRoutes} from "./handler/course/routes";
+import { CourseThreadHandler } from "./handler/courseThreads";
+import { courseThreadRoutes } from "./handler/courseThreads/routes";
 
 class App {
     public server: Express;
@@ -85,4 +87,7 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const courseHandler = new CourseHandler(repo.courses);
     router.use("/courses", courseRoutes(courseHandler));
-}
+  
+    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
+    router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
+  }

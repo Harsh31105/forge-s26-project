@@ -11,7 +11,7 @@ import { customAxios } from './apiClient';
 
   export const getHealth = () => {
 /**
- * Check if the API is running and healthy
+ * Check if the API is running and healthy.
  * @summary Health check
  */
 const getHealth = (

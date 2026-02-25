@@ -5,11 +5,14 @@ import type {Course, CoursePatchInputType, CoursePostInputType} from "../models/
 
 import { CourseRepositorySchema } from "./postgres/schema/course";
 import {SampleRepositorySchema} from "./postgres/schema/samples";
+import type { CourseThread, CourseThreadPatchInputType, CourseThreadPostInputType } from "../models/courseThread";
+import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
 import { PaginationType } from "utils/pagination";
 
 export class Repository {
     public readonly samples: SampleRepository;
     public readonly courses: CourseRepository;
+    public readonly courseThreads: CourseThreadRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
 
@@ -18,6 +21,7 @@ export class Repository {
         this.db = db;
         this.samples = new SampleRepositorySchema(db);
         this.courses = new CourseRepositorySchema(db);
+        this.courseThreads = new CourseThreadRepositorySchema(db);
     }
 
     async getDB(): Promise<NodePgDatabase> {
@@ -43,4 +47,11 @@ export interface CourseRepository {
     createCourse(input: CoursePostInputType): Promise<Course>;
     patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
     deleteCourse(id: string): Promise<void>;
+}
+
+export interface CourseThreadRepository {
+    getThreadsByCourseReviewId(courseReviewId: string, pagination: PaginationType): Promise<CourseThread[]>;
+    createThread(courseReviewId: string, input: CourseThreadPostInputType): Promise<CourseThread>;
+    patchThread(threadId: string, input: CourseThreadPatchInputType): Promise<CourseThread>;
+    deleteThread(threadId: string): Promise<void>;
 }
