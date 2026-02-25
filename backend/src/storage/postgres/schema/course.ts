@@ -15,7 +15,7 @@ export class CourseRepositorySchema implements CourseRepository {
     async getCourses(pagination: PaginationType): Promise<Course[]> {
         const rows = await this.db.select()
                                   .from(course)
-                                  .innerJoin(department, eq(course.department_id, department.id))
+                                  .innerJoin(department, eq(course.departmentId, department.id))
                                   .limit(pagination.limit)
                                   .offset(getOffset(pagination));
 
@@ -26,17 +26,17 @@ export class CourseRepositorySchema implements CourseRepository {
                 id: row.department.id,
                 name: row.department.name
             },
-            course_code: row.course.course_code,
+            course_code: row.course.courseCode,
             description: row.course.description,
-            num_credits: row.course.num_credits,
-            lecture_type: row.course.lecture_type,
+            num_credits: row.course.numCredits,
+            lecture_type: row.course.lectureType,
             created_at: row.course.createdAt,
             updated_at: row.course.updatedAt
         }));
     }
 
     async getCourseByID(id: string): Promise<Course> {
-        const [row] = await this.db.select().from(course).innerJoin(department, eq(course.department_id, department.id)).where(eq(course.id, id));
+        const [row] = await this.db.select().from(course).innerJoin(department, eq(course.departmentId, department.id)).where(eq(course.id, id));
         
         if (!row) throw new NotFoundError("Course with given ID not found");
         
@@ -47,10 +47,10 @@ export class CourseRepositorySchema implements CourseRepository {
                 id: row.department.id,
                 name: row.department.name
             },
-            course_code: row.course.course_code,
+            course_code: row.course.courseCode,
             description: row.course.description,
-            num_credits: row.course.num_credits,
-            lecture_type: row.course.lecture_type,
+            num_credits: row.course.numCredits,
+            lecture_type: row.course.lectureType,
             created_at: row.course.createdAt,
             updated_at: row.course.updatedAt
         };
@@ -59,11 +59,11 @@ export class CourseRepositorySchema implements CourseRepository {
     async createCourse(input: CoursePostInputType): Promise<Course> {
         const [row] = await this.db.insert(course).values({
             name: input.name,
-            department_id: input.department_id,
-            course_code: input.course_code,
+            departmentId: input.department_id,
+            courseCode: input.course_code,
             description: input.description,
-            num_credits: input.num_credits,
-            lecture_type: input.lecture_type
+            numCredits: input.num_credits,
+            lectureType: input.lecture_type
         }).returning();
         if (!row) throw Error();
 

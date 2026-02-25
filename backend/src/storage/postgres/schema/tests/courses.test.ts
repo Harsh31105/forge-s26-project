@@ -38,11 +38,11 @@ describe("CourseRepositorySchema DB Integration", () => {
         await db.insert(course).values({
             id,
             name: "Algorithms & Data Structures",
-            department_id: testDepartmentID,
-            course_code: 3000,
+            departmentId: testDepartmentID,
+            courseCode: 3000,
             description: "An introductory course on algorithms and data structures.",
-            num_credits: 4,
-            lecture_type: "lecture",
+            numCredits: 4,
+            lectureType: "lecture",
             createdAt: new Date(),
             updatedAt: new Date()
         });
@@ -64,11 +64,11 @@ describe("CourseRepositorySchema DB Integration", () => {
             await db.insert(course).values({
                 id: testCourseID,
                 name: "Algorithms & Data Structures",
-                department_id: testDepartmentID,
-                course_code: 3000,
+                departmentId: testDepartmentID,
+                courseCode: 3000,
                 description: "An introductory course on algorithms and data structures.",   
-                num_credits: 4,
-                lecture_type: "lecture",
+                numCredits: 4,
+                lectureType: "lecture",
                 createdAt: new Date(),
                 updatedAt: new Date()
             });
@@ -90,11 +90,11 @@ describe("CourseRepositorySchema DB Integration", () => {
             await db.insert(course).values({
                 id: uuid(),
                 name: "Computer Systems",
-                department_id: testDepartmentID,
-                course_code: 3650, 
+                departmentId: testDepartmentID,
+                courseCode: 3650, 
                 description: "An introduction to computer systems and architecture.",
-                num_credits: 4,
-                lecture_type: "online",
+                numCredits: 4,
+                lectureType: "online",
                 createdAt: new Date(),
                 updatedAt: new Date()
             })
@@ -102,11 +102,11 @@ describe("CourseRepositorySchema DB Integration", () => {
             await db.insert(course).values({
                 id: uuid(),
                 name: "Object Oriented Design Lab",
-                department_id: testDepartmentID,
-                course_code: 3501,
+                departmentId: testDepartmentID,
+                courseCode: 3501,
                 description: "Lab for a course on object-oriented design principles and patterns.",
-                num_credits: 1,
-                lecture_type: "lab",
+                numCredits: 1,
+                lectureType: "lab",
                 createdAt: new Date(),
                 updatedAt: new Date()
             });
