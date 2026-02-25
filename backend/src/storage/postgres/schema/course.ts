@@ -5,14 +5,19 @@ import {course} from "../../tables/course";
 import { eq } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
 import { department } from "../../tables/department";
+import { getOffset, PaginationType } from "../../../utils/pagination";
 
 export class CourseRepositorySchema implements CourseRepository {
     constructor(private readonly db: NodePgDatabase) {
         this.db = db;
     }
 
-    async getCourses(): Promise<Course[]> {
-        const rows = await this.db.select().from(course).innerJoin(department, eq(course.department_id, department.id));
+    async getCourses(pagination: PaginationType): Promise<Course[]> {
+        const rows = await this.db.select()
+                                  .from(course)
+                                  .innerJoin(department, eq(course.department_id, department.id))
+                                  .limit(pagination.limit)
+                                  .offset(getOffset(pagination));
 
         return rows.map((row : typeof rows[number]) => ({
             id: row.course.id,
@@ -68,6 +73,11 @@ export class CourseRepositorySchema implements CourseRepository {
 
     async patchCourse(id: string, input: CoursePatchInputType): Promise<Course> {
         const [row] = await this.db.update(course).set({ ...input }).where(eq(course.id, id)).returning();
+        
+        const updates = Object.fromEntries(
+            Object.entries(input).filter(([_, value]) => value !== undefined)
+        );
+
         if (!row) throw new Error();
 
         return this.getCourseByID(row.id);

@@ -20,10 +20,10 @@ export interface Course {
 }
 
 export const CoursePostInputSchema = z.object({
-    name: z.string().min(1).max(2000).refine((s) => s === s.trim(), "Name cannot have leading/trailing spaces"),
-    department_id: z.number(),
+    name: z.string().min(1).max(255).refine((s) => s === s.trim(), "Name cannot have leading/trailing spaces"),
+    department_id: z.number().positive(),
     course_code: z.number().min(1000).max(10000),
-    description: z.string(),
+    description: z.string().max(1000).refine((s) => s === s.trim(), "Description cannot have leading/trailing spaces"),
     num_credits: z.number().min(1).max(6),
     lecture_type: z.enum(["lecture", "lab", "online"]).optional()
 });

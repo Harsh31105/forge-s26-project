@@ -38,7 +38,7 @@ export interface SampleRepository {
 }
 
 export interface CourseRepository {
-    getCourses(): Promise<Course[]>;
+    getCourses(pagination: PaginationType): Promise<Course[]>;
     getCourseByID(id: string): Promise<Course>;
     createCourse(input: CoursePostInputType): Promise<Course>;
     patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;

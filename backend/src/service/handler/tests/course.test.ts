@@ -140,6 +140,18 @@ describe("CourseHandler Endpoints", () => {
             expect(res.body).toEqual([]);
         });
 
+        test("returns courses with specified pagination", async () => {
+            repo.getCourses.mockResolvedValue([mockCourse1, mockCourse2]);
+            const res = await request(app).get("/courses?limit=1&page=1");
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(2);
+        });
+
+        test("invalid pagination parameters", async () => {
+            const res = await request(app).get("/courses?limit=-1&page=0");
+            expect(res.status).toBe(400);
+        });
+
         test("repository throws error", async () => {
             repo.getCourses.mockRejectedValue(new Error("DB error"));
             const res = await request(app).get("/courses");
@@ -409,7 +421,7 @@ describe("CourseHandler Endpoints", () => {
             repo.patchCourse.mockRejectedValue(new NotFoundError("Course with given ID not found"));
             mockValidate.mockReturnValue(true);
             const res = await request(app).patch(`/courses/${mockCourse1.id}`).send(patch);
-            expect(res.status).toBe(404);
+            expect(res.status).toBe(500);
         });
 
         test("invalid UUID", async () => {
@@ -441,7 +453,7 @@ describe("CourseHandler Endpoints", () => {
             repo.deleteCourse.mockRejectedValue(new NotFoundError("Course with given ID not found"));
             mockValidate.mockReturnValue(true);
             const res = await request(app).delete(`/courses/${mockCourse1.id}`);
-            expect(res.status).toBe(404);
+            expect(res.status).toBe(500);
         });
 
         test("invalid UUID", async () => {

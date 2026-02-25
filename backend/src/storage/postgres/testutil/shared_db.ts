@@ -74,7 +74,27 @@ async function createAllTables(db: NodePgDatabase) {
         name VARCHAR(100) NOT NULL,
         created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
-    );`);
+    );
+        CREATE TABLE IF NOT EXISTS department (
+        id SERIAL PRIMARY KEY,
+        name VARCHAR(10) NOT NULL UNIQUE
+    );
+
+        CREATE TYPE lecture_type_enum AS ENUM ('lecture', 'lab', 'online');
+
+        CREATE TABLE IF NOT EXISTS course (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(255) NOT NULL,
+        department_id INTEGER NOT NULL REFERENCES department(id) ON DELETE CASCADE,
+        course_code INTEGER NOT NULL CHECK (course_code >= '1000' AND course_code < '10000'),
+        description VARCHAR(1000) NOT NULL,
+        num_credits INTEGER NOT NULL CHECK (num_credits >= 1 AND num_credits <= 6),
+        lecture_type lecture_type_enum,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );
+        
+    `);
 }
 
 export async function cleanupTestData() {
@@ -84,6 +104,8 @@ export async function cleanupTestData() {
 
     await db.execute(`
     TRUNCATE TABLE 
+      course,
+      department,
       sample
     RESTART IDENTITY CASCADE;
   `);

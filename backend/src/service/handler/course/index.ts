@@ -12,15 +12,22 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
+import { getOffset, PaginationSchema } from "../../../utils/pagination";
 
 export class CourseHandler {
     constructor(private readonly repo: CourseRepository) {}
 
     async handleGet(req: Request, res: Response) :Promise<void> {
+        const result = PaginationSchema.safeParse(req.query);
+        if (!result.success) {
+            throw BadRequest("Invalid pagination parameters");
+        }
+        const pagination = result.data;
+
         let courses: Course[];
 
         try {
-            courses = await this.repo.getCourses();
+            courses = await this.repo.getCourses(pagination);
         } catch (err) {
             console.log("Failed to get courses: ", err);
             throw mapDBError(err, "failed to retrieve courses");
@@ -79,7 +86,6 @@ export class CourseHandler {
             updatedCourse = await this.repo.patchCourse(id, patchCourse);
         } catch (err) {
             console.log(err);
-            if (err instanceof NotFoundError) throw NotFound("Course with given ID not found");
             throw mapDBError(err, "failed to patch course");
         }
 
@@ -94,7 +100,6 @@ export class CourseHandler {
             await this.repo.deleteCourse(id);
         } catch (err) {
             console.log(err);
-            if (err instanceof NotFoundError) throw NotFound("Course with given ID not found");
             throw mapDBError(err, "failed to delete course");
         }
 

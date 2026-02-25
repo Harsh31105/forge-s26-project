@@ -83,11 +83,30 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              example: 
+                code: 500
+                message: "Internal server error"
+
   /courses: 
     get: 
       summary: Getting All Courses
       description: This endpoint retrieves all available courses as a list
       tags: [Course]
+      parameters: 
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
       responses:
         "200":
           description: Successfully retrieved list of courses
@@ -97,12 +116,24 @@ paths:
                 type: array
                 items: 
                   $ref: "#/components/schemas/Course"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "bad request"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
     post: 
       summary: Create a New Course
       description: This endpoint creates a new course with the provided details
@@ -144,9 +175,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error" 
-  /courses/{course_id}:
+              example:
+                code: 500
+                message: "Internal server error"
+
+  /courses/{id}:
     parameters: 
-      - name: course_id
+      - name: id
         in: path
         required: true
         schema:
@@ -171,21 +206,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        "404":
-          description: Course not found with the provided ID
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              example:
-                code: 404
-                message: "Course not found with the provided ID"
+              example: 
+                code: 400
+                message: "Invalid course ID format"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              example: 
+                code: 500
+                message: "Internal server error"
     patch: 
       summary: Update Course by ID
       description: This endpoint updates the details of a specific course by its ID
@@ -212,21 +244,15 @@ paths:
               example:
                 code: 400
                 message: "Invalid input data for updating the course"
-        "404":
-          description: Course not found with the provided ID
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              example:
-                code: 404
-                message: "Course not found with the provided ID"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              example: 
+                code: 500
+                message: "Internal server error"
     delete: 
       summary: Delete Course by ID
       description: This endpoint deletes a specific course by its ID
@@ -240,22 +266,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-        "404":
-          description: Course not found with the provided ID
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              example:
-                code: 404
-                message: "Course not found with the provided ID"
+              example: 
+                code: 400
+                message: "Invalid course ID format"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
+              example:
+                code: 500
+                message: "Internal server error"
 
 components:
   schemas:
