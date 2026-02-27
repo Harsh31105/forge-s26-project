@@ -1,6 +1,4 @@
 // professor.test.ts
-// simple, get all professors?
-
 // this test fakes the database using jest.fn()
 // no docker needed for this
 
@@ -11,8 +9,6 @@ import type { ProfessorRepository } from "../../../storage/storage";
 import type { Professor } from "../../../models/professor";
 import { ProfessorPostInputType, ProfessorPatchInputType } from "../../../models/professor";
 import { errorHandler } from "../../../errs/httpError";
-
-// TODO: clarify do we need pagination for professor names?
 
 jest.mock("uuid", () => ({
   validate: jest.fn(() => true),
@@ -79,7 +75,8 @@ describe("ProfessorHandler Endpoints", () => {
   // get/professors 
   // return all profs
   // repo error returns 500
-  // returns empty arr when no profs exist 
+  // returns empty arr when no profs exist
+  // invalid pagination params returns 400
 
   describe("GET /professors", () => {
     test("returns all professors", async () => {
@@ -104,6 +101,18 @@ describe("ProfessorHandler Endpoints", () => {
       repo.getProfessors.mockRejectedValue(new Error("DB error"));
       const res = await request(app).get("/professors");
       expect(res.status).toBe(500);
+    });
+
+    test("returns empty array when no professors exist", async () => {
+      repo.getProfessors.mockResolvedValue([]);
+      const res = await request(app).get("/professors");
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual([]);
+    });
+
+    test("invalid pagination params returns 400", async () => {
+      const res = await request(app).get("/professors?page=-1");
+      expect(res.status).toBe(400);
     });
   });
 
@@ -146,7 +155,6 @@ describe("ProfessorHandler Endpoints", () => {
   // creates professor and returns 201
   // invalid body returns 400
   // repo error returns 500
-  // empty patch -> should this be allowed
 
   describe("POST /professors", () => {
     test("creates a professor and returns 201", async () => {
@@ -185,9 +193,9 @@ describe("ProfessorHandler Endpoints", () => {
 
   // updates a professor
   // invalid uuid returns 400
-  // invalid body returns
+  // invalid body returns 400
   // repo error returns 500
-  // empty patch -> should this be allowed?
+  // empty patch body returns 400
 
   describe("PATCH /professors/:id", () => {
     test("updates a professor", async () => {
@@ -240,7 +248,6 @@ describe("ProfessorHandler Endpoints", () => {
   // deletes professor
   // invalid uuid -> returns 400
   // repo error returns 500
-  // deleting non-existent professor 
 
   describe("DELETE /professors/:id", () => {
     test("deletes a professor", async () => {

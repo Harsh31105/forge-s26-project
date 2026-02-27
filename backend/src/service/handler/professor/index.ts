@@ -12,21 +12,29 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
+import { PaginationSchema } from "../../../utils/pagination";
 
 export class ProfessorHandler {
     constructor(private readonly repo: ProfessorRepository) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
-        let professors: Professor[];
+    const result = PaginationSchema.safeParse(req.query);
+    if (Object.keys(result.data).length === 0) {
+        throw BadRequest("patch body must contain at least one valid field");
+    }
+    if (!result.success) {
+        throw BadRequest("Invalid pagination parameters");
+    }
+    const pagination = result.data;
 
-        try {
-            professors = await this.repo.getProfessors();
-        } catch (err) {
-            console.log("Failed to get professors: ", err);
-            throw mapDBError(err, "failed to retrieve professors");
-        }
-
-        res.status(200).json(professors);
+    let professors: Professor[];
+    try {
+        professors = await this.repo.getProfessors(pagination);
+    } catch (err) {
+        console.log("Failed to get professors: ", err);
+        throw mapDBError(err, "failed to retrieve professors");
+    }
+    res.status(200).json(professors);
     }
 
     async handleGetByID(req: Request, res: Response): Promise<void> {
