@@ -12,6 +12,8 @@ tags:
     description: Health check operations
   - name: Sample
     description: Sample API Endpoint for Reference
+  - name: Professor
+    description: Professor CRUD operations
 
 paths:
   /health:
@@ -40,8 +42,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref:
-                  "#/components/schemas/Sample"
+                $ref: "#/components/schemas/Sample"
         "400":
           description: bad request
           content:
@@ -62,6 +63,188 @@ paths:
                 message: "duplicate or conflict value"
         "500":
           description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  # top-level resource, no nesting needed
+  /professors:
+    get:
+      # returns all professors w/ pagination
+      summary: Get all professors
+      description: Returns a list of all professors
+      tags: [Professor]
+      responses:
+        "200":
+          description: list of professors retrieved successfully
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Professor"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "bad request"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    post:
+      # creates a new professor, firstName and lastName are required
+      summary: Create a professor
+      description: Creates a new professor
+      tags: [Professor]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfessorPostInput"
+      responses:
+        "201":
+          description: professor created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Professor"
+        "400":
+          description: invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "invalid input data for creating a professor"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  # path param shared across get, patch, delete
+  /professors/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: the unique identifier of the professor
+        example: "0f171d80-f523-4c56-9e5c-1d825d484e01"
+
+    get:
+      # returns a single professor by uuid
+      summary: Get professor by ID
+      description: Returns a single professor by their UUID
+      tags: [Professor]
+      responses:
+        "200":
+          description: professor found successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Professor"
+        "400":
+          description: invalid uuid format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "invalid uuid was given"
+        "404":
+          description: professor not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 404
+                message: "professor with given id not found"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    patch:
+      # all fields optional, only updates what is provided
+      summary: Update a professor
+      description: Partially updates a professor by their UUID
+      tags: [Professor]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfessorPatchInput"
+      responses:
+        "200":
+          description: professor updated successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Professor"
+        "400":
+          description: invalid input or uuid
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "invalid input data for updating the professor"
+        "404":
+          description: professor not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 404
+                message: "professor with given id not found"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+    delete:
+      # returns 204 no content on success
+      summary: Delete a professor
+      description: Deletes a professor by their UUID
+      tags: [Professor]
+      responses:
+        "204":
+          description: professor deleted successfully
+        "400":
+          description: invalid uuid format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "invalid uuid was given"
+        "500":
+          description: internal server error
           content:
             application/json:
               schema:
@@ -107,7 +290,95 @@ components:
           type: string
           format: date-time
           example: "2024-01-15T10:30:00Z"
-          updated_at:
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:35:00Z"
+
+    # professor object returned by all endpoints
+    Professor:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          # uuid generated by the database
+          type: string
+          format: uuid
+          description: the unique id of the professor
+          example: "0f171d80-f523-4c56-9e5c-1d825d484e01"
+        firstName:
+          type: string
+          description: the first name of the professor
+          example: "John"
+        lastName:
+          type: string
+          description: the last name of the professor
+          example: "Doe"
+        tags:
+          # nullable - professor may not have any location tags
+          type: array
+          nullable: true
+          items:
             type: string
-            format: date-time
-            example: "2024-01-15T10:35:00Z"
+            enum: [boston, oakland, london]
+          description: location tags for the professor
+          example: ["boston"]
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:35:00Z"
+
+    # input for creating a new professor
+    ProfessorPostInput:
+      type: object
+      required:
+        - firstName
+        - lastName
+      properties:
+        firstName:
+          # cannot be empty or have leading/trailing spaces (validated by zod)
+          type: string
+          minLength: 1
+          example: "John"
+        lastName:
+          # cannot be empty or have leading/trailing spaces (validated by zod)
+          type: string
+          minLength: 1
+          example: "Doe"
+        tags:
+          # optional, defaults to null if not provided
+          type: array
+          nullable: true
+          items:
+            type: string
+            enum: [boston, oakland, london]
+          example: ["boston"]
+
+    # input for patching a professor, all fields optional
+    ProfessorPatchInput:
+      type: object
+      properties:
+        firstName:
+          type: string
+          minLength: 1
+          example: "John"
+        lastName:
+          type: string
+          minLength: 1
+          example: "Doe"
+        tags:
+          type: array
+          nullable: true
+          items:
+            type: string
+            enum: [boston, oakland, london]
+          example: ["boston"]
