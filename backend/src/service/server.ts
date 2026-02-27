@@ -5,7 +5,7 @@ import {configurePool, getConnectionString} from "../config/db";
 import { config } from "../config/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import {SampleHandler} from "./handler/sample";
-import {sampleRoutes} from "./handler/sample/routes";
+import {sampleRoutes} from "./handler/student/routes";
 import morgan from "morgan";
 import compression from "compression";
 import cors from "cors";
