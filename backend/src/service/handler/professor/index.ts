@@ -18,23 +18,21 @@ export class ProfessorHandler {
     constructor(private readonly repo: ProfessorRepository) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
-    const result = PaginationSchema.safeParse(req.query);
-    if (Object.keys(result.data).length === 0) {
-        throw BadRequest("patch body must contain at least one valid field");
-    }
-    if (!result.success) {
-        throw BadRequest("Invalid pagination parameters");
-    }
-    const pagination = result.data;
+        const result = PaginationSchema.safeParse(req.query);
+        if (!result.success) {
+            throw BadRequest("Invalid pagination parameters");
+        }
+        const pagination = result.data;
 
-    let professors: Professor[];
-    try {
-        professors = await this.repo.getProfessors(pagination);
-    } catch (err) {
-        console.log("Failed to get professors: ", err);
-        throw mapDBError(err, "failed to retrieve professors");
-    }
-    res.status(200).json(professors);
+        let professors: Professor[];
+        try {
+            professors = await this.repo.getProfessors(pagination);
+        } catch (err) {
+            console.log("Failed to get professors: ", err);
+            throw mapDBError(err, "failed to retrieve professors");
+        }
+
+        res.status(200).json(professors);
     }
 
     async handleGetByID(req: Request, res: Response): Promise<void> {
@@ -47,7 +45,6 @@ export class ProfessorHandler {
         } catch (err) {
             console.log(err);
             if (err instanceof NotFoundError) NotFound("professor not found");
-
             throw mapDBError(err, "failed to retrieve professor");
         }
 
@@ -80,6 +77,11 @@ export class ProfessorHandler {
         if (!result.success) {
             throw BadRequest("unable to parse input for patch-professor");
         }
+
+        if (Object.keys(result.data).length === 0) {
+            throw BadRequest("patch body must contain at least one valid field");
+        }
+
         const patchProfessor: ProfessorPatchInputType = result.data;
 
         let updatedProfessor: Professor;
