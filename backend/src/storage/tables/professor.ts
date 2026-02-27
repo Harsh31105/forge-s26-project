@@ -5,6 +5,8 @@ import { sql } from "drizzle-orm";
 
 export const locationTagEnum = pgEnum("location_tag_enum", ["boston", "oakland", "london"]);
 
+export type LocationTag = typeof locationTagEnum.enumValues[number];
+
 export const professor = pgTable("professor", {
     id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
     firstName: varchar("first_name", { length: 100 }).notNull(),
