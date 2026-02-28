@@ -76,7 +76,7 @@ export function initApp(): App {
     configurePool(pool, config.db);
 
     const db = drizzle(pool);
-    const repo = new Repository(pool, db);
+    const repo = new Repository(pool, db, config.s3);
 
     return new App(repo);
 }

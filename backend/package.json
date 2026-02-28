@@ -11,13 +11,15 @@
     "test:coverage": "jest --coverage",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
-    "clean": "rm -rf dist coverage"
+    "clean": "rm -rf dist coverage",
+    "verify-s3": "ts-node scripts/verify-s3.ts"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "@aws-sdk/client-s3": "^3.996.0",
     "@jest/globals": "^30.2.0",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
