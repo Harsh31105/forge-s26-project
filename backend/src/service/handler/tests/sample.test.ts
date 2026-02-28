@@ -2,7 +2,7 @@ import request from "supertest";
 import express, { Express } from "express";
 import { SampleHandler } from "../sample";
 import type { SampleRepository } from "../../../storage/storage";
-import { SamplePostInputType, SamplePatchInputType, Sample } from "../../../models/sample";
+import { SamplePostInputType, SamplePatchInputType, Sample } from "../../../models/student";
 import { validate as isUUID } from "uuid";
 import {errorHandler} from "../../../errs/httpError";
 
