@@ -1,4 +1,4 @@
-openapi: 3.1.3
+openapi: 3.0.0 # changed bc it doesn't accept above 3.1.2 
 info:
   title: Forge S26 Project API
   version: 0.1.0
