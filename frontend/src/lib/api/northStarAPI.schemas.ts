@@ -33,6 +33,128 @@ export interface Sample {
   updated_at: string;
 }
 
+/**
+ * The department offering the course
+ */
+export type CourseDepartment = {
+  /** The ID of the department offering the course */
+  id: number;
+  /** The name of the department offering the course */
+  name: string;
+};
+
+/**
+ * The type of lecture format for the course
+ * @nullable
+ */
+export type CourseLectureType = (typeof CourseLectureType)[keyof typeof CourseLectureType] | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const CourseLectureType = {
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
+} as const;
+
+export interface Course {
+  /** The ID of the course retrieved */
+  id: string;
+  /** The name of the course */
+  name: string;
+  /** The department offering the course */
+  department: CourseDepartment;
+  /** The identifying code for the course within the department */
+  course_code: number;
+  /** A brief description of the course content and objectives */
+  description: string;
+  /** The number of credits awarded for completing the course */
+  num_credits: number;
+  /**
+   * The type of lecture format for the course
+   * @nullable
+   */
+  lecture_type?: CourseLectureType;
+  created_at: string;
+  updated_at: string;
+}
+
+/**
+ * The type of lecture format for the course
+ * @nullable
+ */
+export type CoursePostInputLectureType =
+  | (typeof CoursePostInputLectureType)[keyof typeof CoursePostInputLectureType]
+  | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const CoursePostInputLectureType = {
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
+} as const;
+
+export interface CoursePostInput {
+  /** The name of the course to be created */
+  name: string;
+  /** The ID of the department offering the course */
+  department_id: number;
+  /**
+   * The identifying code for the course within the department
+   * @minimum 1000
+   * @maximum 10000
+   */
+  course_code: number;
+  /** A brief description of the course content and objectives */
+  description: string;
+  /**
+   * The number of credits awarded for completing the course
+   * @minimum 1
+   * @maximum 6
+   */
+  num_credits: number;
+  /**
+   * The type of lecture format for the course
+   * @nullable
+   */
+  lecture_type?: CoursePostInputLectureType;
+}
+
+/**
+ * The type of lecture format for the course
+ */
+export type CoursePatchInputLectureType =
+  (typeof CoursePatchInputLectureType)[keyof typeof CoursePatchInputLectureType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const CoursePatchInputLectureType = {
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
+} as const;
+
+export interface CoursePatchInput {
+  /** The name of the course to be created */
+  name?: string;
+  /** The ID of the department offering the course */
+  department_id?: number;
+  /**
+   * The identifying code for the course within the department
+   * @minimum 1000
+   * @maximum 10000
+   */
+  course_code?: number;
+  /** A brief description of the course content and objectives */
+  description?: string;
+  /**
+   * The number of credits awarded for completing the course
+   * @minimum 1
+   * @maximum 6
+   */
+  num_credits?: number;
+  /** The type of lecture format for the course */
+  lecture_type?: CoursePatchInputLectureType;
+}
+
 export interface CourseThread {
   id: UuidParam;
   studentId: UuidParam;
@@ -60,29 +182,51 @@ export interface CourseThreadPatchInput {
   content: string;
 }
 
+export interface SamplePostInput {
+  /** @minLength 1 */
+  name: string;
+}
+
+export interface SamplePatchInput {
+  /** @minLength 1 */
+  name?: string;
+}
+
 export type GetCourseReviewsIdThreadsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetSamplesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
+export type GetCoursesParams = {
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
+};

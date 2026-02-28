@@ -13,6 +13,8 @@ import {errorHandler} from "../errs/httpError";
 import YAML from "yamljs";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
+import {CourseHandler} from "./handler/course";
+import {courseRoutes} from "./handler/course/routes";
 import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
 
@@ -82,6 +84,9 @@ export function initApp(): App {
 function registerRoutes(router: Router, repo: Repository) {
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
+
+    const courseHandler = new CourseHandler(repo.courses);
+    router.use("/courses", courseRoutes(courseHandler));
   
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
