@@ -44,7 +44,7 @@ export class ProfessorHandler {
             professor = await this.repo.getProfessorByID(id);
         } catch (err) {
             console.log(err);
-            if (err instanceof NotFoundError) NotFound("professor not found");
+            if (err instanceof NotFoundError) throw NotFound("professor not found");
             throw mapDBError(err, "failed to retrieve professor");
         }
 
@@ -89,6 +89,7 @@ export class ProfessorHandler {
             updatedProfessor = await this.repo.patchProfessor(id, patchProfessor);
         } catch (err) {
             console.log(err);
+            if (err instanceof NotFoundError) throw NotFound("professor not found");
             throw mapDBError(err, "failed to patch professor");
         }
 
@@ -103,6 +104,7 @@ export class ProfessorHandler {
             await this.repo.deleteProfessor(id);
         } catch (err) {
             console.log(err);
+            if (err instanceof NotFoundError) throw NotFound("professor not found");
             throw mapDBError(err, "failed to delete professor");
         }
 

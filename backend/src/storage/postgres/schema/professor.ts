@@ -42,6 +42,7 @@ export class ProfessorRepositorySchema implements ProfessorRepository {
     }
 
     async deleteProfessor(id: string): Promise<void> {
-        await this.db.delete(professor).where(eq(professor.id, id));
+    const [row] = await this.db.delete(professor).where(eq(professor.id, id)).returning();
+    if (!row) throw new NotFoundError("professor with given ID not found");
     }
 }
