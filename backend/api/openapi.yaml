@@ -232,8 +232,10 @@ paths:
           content:
             application/json:
               schema:
-                $ref:
-                  "#/components/schemas/Sample"
+                type: array
+                items:
+                  $ref:
+                    "#/components/schemas/Sample"
         "400":
           description: bad request
           content:
@@ -259,6 +261,152 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
               example: 
+                code: 500
+                message: "Internal server error"
+
+    post:
+      summary: Create a New Sample
+      description: This endpoint creates a new sample with the provided details
+      tags: [ Sample ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SamplePostInput"
+      responses:
+        "201":
+          description: Successfully created a new sample
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sample"
+        "400":
+          description: Bad request due to invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid input data for creating a course"
+        "409":
+          description: Conflict error due to duplicate course name
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 409
+                message: "A course with the same name already exists"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
+  /samples/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the course to retrieve
+        example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+    get:
+      summary: Get Sample by ID
+      description: This endpoint retrieves a specific sample by its ID
+      tags: [ Sample ]
+      responses:
+        "200":
+          description: Successfully retrieved the sample details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sample"
+        "400":
+          description: Invalid sample ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid course ID format"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
+    patch:
+      summary: Update Sample by ID
+      description: This endpoint updates the details of a specific sample by its ID
+      tags: [ Sample ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SamplePatchInput"
+      responses:
+        "200":
+          description: Successfully updated the sample details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sample"
+        "400":
+          description: Bad request due to invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid input data for updating the sample"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+    delete:
+      summary: Delete Sample by ID
+      description: This endpoint deletes a specific sample by its ID
+      tags: [ Sample ]
+      responses:
+        "204":
+          description: Successfully deleted the sample (no content)
+        "400":
+          description: Invalid sample ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid course ID format"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
                 code: 500
                 message: "Internal server error"
 
@@ -701,3 +849,19 @@ components:
           type: string
           minLength: 1
           maxLength: 2000
+
+    SamplePostInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+
+    SamplePatchInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
