@@ -4,14 +4,16 @@ import { ProfessorRepository } from "../../storage";
 import { professor } from "../../tables/professor";
 import { eq } from "drizzle-orm";
 import { NotFoundError } from "../../../errs/httpError";
+import { PaginationType, getOffset } from "../../../utils/pagination";
+import { LocationTag } from "../../tables/professor";
 
 export class ProfessorRepositorySchema implements ProfessorRepository {
     constructor(private readonly db: NodePgDatabase) {
         this.db = db;
     }
 
-    async getProfessors(): Promise<Professor[]> {
-        return this.db.select().from(professor);
+    async getProfessors(pagination: PaginationType): Promise<Professor[]> {
+    return this.db.select().from(professor).limit(pagination.limit).offset(getOffset(pagination));
     }
 
     async getProfessorByID(id: string): Promise<Professor> {
@@ -25,7 +27,7 @@ export class ProfessorRepositorySchema implements ProfessorRepository {
         const [row] = await this.db.insert(professor).values({
             firstName: input.firstName,
             lastName: input.lastName,
-            tags: input.tags as any,
+            tags: (input.tags ?? null) as LocationTag[] | null,
         }).returning();
         if (!row) throw Error();
 
