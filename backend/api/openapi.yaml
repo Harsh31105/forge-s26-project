@@ -1,6 +1,6 @@
-openapi: 3.0.0 # changed bc it doesn't accept above 3.1.2 
+openapi: 3.1.0
 info:
-  title: Forge S26 Project API
+  title: NorthStar API
   version: 0.1.0
 
 servers:
@@ -10,8 +10,12 @@ servers:
 tags:
   - name: Health
     description: Health check operations
+  - name: CourseReview
+    description: Manage discussion threads that belong to a specific course review.
   - name: Sample
     description: Sample API Endpoint for Reference
+  - name: Course
+    description: API Endpoint for Specific Course Operations
   - name: Professor
     description: Professor CRUD operations
 
@@ -19,7 +23,7 @@ paths:
   /health:
     get:
       summary: Health check
-      description: Check if the API is running and healthy
+      description: Check if the API is running and healthy.
       tags: [Health]
       responses:
         "200":
@@ -29,20 +33,211 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
+
+
+  /course-reviews/{id}/threads:
+    get:
+      summary: List threads for a course review
+      description: |
+        Returns all thread messages associated with a single course review (identified by the course review UUID).
+        This is used to display the discussion/comments under a course review in the UI.
+      tags: [CourseReview]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Course review ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+      responses:
+        "200":
+          description: List of threads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CourseThread"
+        "400":
+          description: Invalid course review id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Create a thread on a course review
+      description: |
+        Creates a new thread message under a specific course review.
+        The course review ID comes from the path, and the request body provides the studentId and message content.
+      tags: [CourseReview]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Course review ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CourseThreadPostInput"
+      responses:
+        "201":
+          description: Created thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseThread"
+        "400":
+          description: Bad request (validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+
+  /course-reviews/{course_review_id}/threads/{thread_id}:
+    patch:
+      summary: Update a thread
+      description: |
+        Updates an existing thread message under a course review.
+        The course review ID and thread ID are provided in the path; the request body includes the updated content.
+      tags: [CourseReview]
+      parameters:
+        - name: course_review_id
+          in: path
+          required: true
+          description: Course review ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: thread_id
+          in: path
+          required: true
+          description: Thread ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CourseThreadPatchInput"
+      responses:
+        "200":
+          description: Updated thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/CourseThread"
+        "400":
+          description: Bad request (invalid id or validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    delete:
+      summary: Delete a thread
+      description: |
+        Deletes a thread message under a course review.
+        The course review ID and thread ID are provided in the path.
+      tags: [CourseReview]
+      parameters:
+        - name: course_review_id
+          in: path
+          required: true
+          description: Course review ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: thread_id
+          in: path
+          required: true
+          description: Thread ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad request (invalid id)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
 
   /samples:
     get:
       summary: Getting Samples
       description: This endpoint gets all samples that we have
       tags: [Sample]
+      parameters:
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
       responses:
         "200":
           description: API is working!
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Sample"
+                type: array
+                items:
+                  $ref:
+                    "#/components/schemas/Sample"
         "400":
           description: bad request
           content:
@@ -67,6 +262,347 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
+    post:
+      summary: Create a New Sample
+      description: This endpoint creates a new sample with the provided details
+      tags: [ Sample ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SamplePostInput"
+      responses:
+        "201":
+          description: Successfully created a new sample
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sample"
+        "400":
+          description: Bad request due to invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid input data for creating a course"
+        "409":
+          description: Conflict error due to duplicate course name
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 409
+                message: "A course with the same name already exists"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
+  /samples/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the course to retrieve
+        example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+    get:
+      summary: Get Sample by ID
+      description: This endpoint retrieves a specific sample by its ID
+      tags: [ Sample ]
+      responses:
+        "200":
+          description: Successfully retrieved the sample details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sample"
+        "400":
+          description: Invalid sample ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid course ID format"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
+    patch:
+      summary: Update Sample by ID
+      description: This endpoint updates the details of a specific sample by its ID
+      tags: [ Sample ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/SamplePatchInput"
+      responses:
+        "200":
+          description: Successfully updated the sample details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Sample"
+        "400":
+          description: Bad request due to invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid input data for updating the sample"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+    delete:
+      summary: Delete Sample by ID
+      description: This endpoint deletes a specific sample by its ID
+      tags: [ Sample ]
+      responses:
+        "204":
+          description: Successfully deleted the sample (no content)
+        "400":
+          description: Invalid sample ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid course ID format"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
+  /courses:
+    get:
+      summary: Getting All Courses
+      description: This endpoint retrieves all available courses as a list
+      tags: [Course]
+      parameters:
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+      responses:
+        "200":
+          description: Successfully retrieved list of courses
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Course"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "bad request"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+    post:
+      summary: Create a New Course
+      description: This endpoint creates a new course with the provided details
+      tags: [Course]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CoursePostInput"
+      responses:
+        "201":
+          description: Successfully created a new course
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+        "400":
+          description: Bad request due to invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid input data for creating a course"
+        "409":
+          description: Conflict error due to duplicate course name
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 409
+                message: "A course with the same name already exists"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
+  /courses/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the course to retrieve
+        example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+    get:
+      summary: Get Course by ID
+      description: This endpoint retrieves a specific course by its ID
+      tags: [Course]
+      responses:
+        "200":
+          description: Successfully retrieved the course details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+        "400":
+          description: Invalid course ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid course ID format"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+    patch:
+      summary: Update Course by ID
+      description: This endpoint updates the details of a specific course by its ID
+      tags: [Course]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CoursePatchInput"
+      responses:
+        "200":
+          description: Successfully updated the course details
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Course"
+        "400":
+          description: Bad request due to invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid input data for updating the course"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+    delete:
+      summary: Delete Course by ID
+      description: This endpoint deletes a specific course by its ID
+      tags: [Course]
+      responses:
+        "204":
+          description: Successfully deleted the course (no content)
+        "400":
+          description: Invalid course ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Invalid course ID format"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
 
   # top-level resource, no nesting needed
   /professors:
@@ -75,6 +611,21 @@ paths:
       summary: Get all professors
       description: Returns a list of all professors
       tags: [Professor]
+      parameters:
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
       responses:
         "200":
           description: list of professors retrieved successfully
@@ -252,6 +803,11 @@ paths:
 
 components:
   schemas:
+    UuidParam:
+      type: string
+      format: uuid
+      example: "2f4c8d2e-3b4f-4bb6-9a41-9f3d7d7c0a12"
+
     Error:
       type: object
       required:
@@ -261,13 +817,26 @@ components:
         code:
           type: integer
           description: HTTP status code
-          example: 500
         message:
           anyOf:
             - type: string
             - type: object
           description: Error message or validation errors
           example: "Internal server error"
+
+    BadRequestError:
+      allOf:
+        - $ref: "#/components/schemas/Error"
+      example:
+        code: 400
+        message: "Bad request"
+
+    InternalServerError:
+      allOf:
+        - $ref: "#/components/schemas/Error"
+      example:
+        code: 500
+        message: "Internal server error"
 
     Sample:
       type: object
@@ -290,6 +859,211 @@ components:
           type: string
           format: date-time
           example: "2024-01-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:35:00Z"
+
+    Course:
+     type: object
+     required:
+        - id
+        - name
+        - department
+        - course_code
+        - description
+        - num_credits
+        - created_at
+        - updated_at
+     properties:
+        id:
+          type: string
+          format: uuid
+          description: The ID of the course retrieved
+          example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+        name:
+          type: string
+          description: The name of the course
+          example: "Object Oriented Design"
+        department:
+          type: object
+          required:
+            - id
+            - name
+          description: The department offering the course
+          properties:
+            id:
+              type: integer
+              description: The ID of the department offering the course
+              example: 1
+            name:
+              type: string
+              description: The name of the department offering the course
+              example: "CS"
+        course_code:
+          type: integer
+          description: The identifying code for the course within the department
+          example: 3500
+        description:
+          type: string
+          description: A brief description of the course content and objectives
+          example: "An introductory course covering fundamental concepts in computer science, including programming, algorithms, and data structures."
+        num_credits:
+          type: integer
+          description: The number of credits awarded for completing the course
+          example: 4
+        lecture_type:
+          type: string
+          enum: [lecture, lab, online]
+          nullable: true
+          description: The type of lecture format for the course
+          example: "online"
+        created_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+        updated_at:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:35:00Z"
+
+    CoursePostInput:
+      type: object
+      required:
+        - name
+        - department_id
+        - course_code
+        - description
+        - num_credits
+      properties:
+        name:
+          type: string
+          description: The name of the course to be created
+          example: "Object Oriented Design"
+        department_id:
+          type: integer
+          description: The ID of the department offering the course
+          example: 1
+        course_code:
+          type: integer
+          minimum: 1000
+          maximum: 10000
+          description: The identifying code for the course within the department
+          example: 3500
+        description:
+          type: string
+          description: A brief description of the course content and objectives
+          example: "An introductory course covering fundamental concepts in computer science, including programming, algorithms, and data structures."
+        num_credits:
+          type: integer
+          minimum: 1
+          maximum: 6
+          description: The number of credits awarded for completing the course
+          example: 4
+        lecture_type:
+          type: string
+          enum: [lecture, lab, online]
+          nullable: true
+          description: The type of lecture format for the course
+          example: "online"
+
+    CoursePatchInput:
+      type: object
+      properties:
+        name:
+          type: string
+          description: The name of the course to be created
+          example: "Object Oriented Design"
+        department_id:
+          type: integer
+          description: The ID of the department offering the course
+          example: 1
+        course_code:
+          type: integer
+          minimum: 1000
+          maximum: 10000
+          description: The identifying code for the course within the department
+          example: 3500
+        description:
+          type: string
+          description: A brief description of the course content and objectives
+          example: "An introductory course covering fundamental concepts in computer science, including programming, algorithms, and data structures."
+        num_credits:
+          type: integer
+          minimum: 1
+          maximum: 6
+          description: The number of credits awarded for completing the course
+          example: 4
+        lecture_type:
+          type: string
+          enum: [lecture, lab, online]
+          description: The type of lecture format for the course
+          example: "online"
+
+    CourseThread:
+      type: object
+      required:
+        - id
+        - studentId
+        - courseReviewId
+        - content
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          $ref: "#/components/schemas/UuidParam"
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        courseReviewId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    CourseThreadPostInput:
+      type: object
+      required:
+        - studentId
+        - content
+      properties:
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    CourseThreadPatchInput:
+      type: object
+      required:
+        - content
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    SamplePostInput:
+      type: object
+      required:
+        - name
+      properties:
+        name:
+          type: string
+          minLength: 1
+
+    SamplePatchInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 1
         updated_at:
           type: string
           format: date-time

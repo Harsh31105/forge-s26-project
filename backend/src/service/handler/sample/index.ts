@@ -12,27 +12,28 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
-
-import { PaginationSchema } from "../../../utils/pagination";
+import { getOffset, PaginationSchema } from "../../../utils/pagination";
 
 export class SampleHandler {
     constructor(private readonly repo: SampleRepository) {}
 
-    async handleGet(req: Request, res: Response): Promise<void> {
-    const result = PaginationSchema.safeParse(req.query);
-    if (!result.success) {
-        throw BadRequest("Invalid pagination parameters");
-    }
-    const pagination = result.data;
+    async handleGet(req: Request, res: Response) :Promise<void> {
+        const result = PaginationSchema.safeParse(req.query);
+        if (!result.success) {
+            throw BadRequest("Invalid pagination parameters");
+        }
+        const pagination = result.data;
 
-    let samples: Sample[];
-    try {
-        samples = await this.repo.getSamples(pagination);
-    } catch (err) {
-        console.log("Failed to get samples: ", err);
-        throw mapDBError(err, "failed to retrieve samples");
-    }
-    res.status(200).json(samples);
+        let samples: Sample[];
+
+        try {
+            samples = await this.repo.getSamples(pagination);
+        } catch (err) {
+            console.log("Failed to get samples: ", err);
+            throw mapDBError(err, "failed to retrieve samples");
+        }
+
+        res.status(200).json(samples);
     }
 
     async handleGetByID(req: Request, res: Response): Promise<void> {

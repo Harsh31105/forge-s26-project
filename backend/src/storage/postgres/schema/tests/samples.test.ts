@@ -8,6 +8,7 @@ import { sample } from "../../../tables/sample";
 import { v4 as uuid } from "uuid";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import {NotFoundError} from "../../../../errs/httpError";
+import { newPagination, getOffset} from "../../../../utils/pagination";
 
 describe("SampleRepositorySchema DB Integration", () => {
     let db!: NodePgDatabase;
@@ -39,7 +40,8 @@ describe("SampleRepositorySchema DB Integration", () => {
         test("empty and populated DB", async () => {
             await repo.deleteSample(testSampleID);
 
-            let results = await repo.getSamples();
+            const pagination = newPagination();
+            let results = await repo.getSamples(pagination);
             expect(results).toEqual([]);
 
             await db.insert(sample).values({
@@ -49,7 +51,7 @@ describe("SampleRepositorySchema DB Integration", () => {
                 updatedAt: new Date()
             });
 
-            results = await repo.getSamples();
+            results = await repo.getSamples(pagination);
             expect(results).toHaveLength(1);
             expect(results[0]!.id).toBe(testSampleID);
         });
