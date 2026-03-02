@@ -23,7 +23,7 @@ export class SampleHandler {
             throw BadRequest("Invalid pagination parameters");
         }
         const pagination = result.data;
-        
+
         let samples: Sample[];
 
         try {

@@ -6,6 +6,8 @@ import { config } from "../config/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import {SampleHandler} from "./handler/sample";
 import {sampleRoutes} from "./handler/sample/routes";
+import {ProfessorHandler} from "./handler/professor";
+import {professorRoutes} from "./handler/professor/routes";
 import morgan from "morgan";
 import compression from "compression";
 import cors from "cors";
@@ -87,7 +89,10 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const courseHandler = new CourseHandler(repo.courses);
     router.use("/courses", courseRoutes(courseHandler));
-  
+
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
-  }
+
+    const professorHandler = new ProfessorHandler(repo.professors);
+    router.use("/professors", professorRoutes(professorHandler));
+}

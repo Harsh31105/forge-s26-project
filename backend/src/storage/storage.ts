@@ -2,15 +2,17 @@ import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
 import type {Course, CoursePatchInputType, CoursePostInputType} from "../models/course";
-
 import { CourseRepositorySchema } from "./postgres/schema/course";
-import {SampleRepositorySchema} from "./postgres/schema/samples";
 import type { CourseThread, CourseThreadPatchInputType, CourseThreadPostInputType } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
 import { PaginationType } from "utils/pagination";
+import { SampleRepositorySchema } from "./postgres/schema/samples";
+import type { Professor, ProfessorPatchInputType, ProfessorPostInputType } from "../models/professor";
+import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 
 export class Repository {
     public readonly samples: SampleRepository;
+    public readonly professors: ProfessorRepository;
     public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
     private readonly pool: Pool;
@@ -22,6 +24,7 @@ export class Repository {
         this.samples = new SampleRepositorySchema(db);
         this.courses = new CourseRepositorySchema(db);
         this.courseThreads = new CourseThreadRepositorySchema(db);
+        this.professors = new ProfessorRepositorySchema(db);
     }
 
     async getDB(): Promise<NodePgDatabase> {
@@ -54,4 +57,12 @@ export interface CourseThreadRepository {
     createThread(courseReviewId: string, input: CourseThreadPostInputType): Promise<CourseThread>;
     patchThread(threadId: string, input: CourseThreadPatchInputType): Promise<CourseThread>;
     deleteThread(threadId: string): Promise<void>;
+}
+
+export interface ProfessorRepository {
+    getProfessors(pagination: PaginationType): Promise<Professor[]>;
+    getProfessorByID(id: string): Promise<Professor>;
+    createProfessor(input: ProfessorPostInputType): Promise<Professor>;
+    patchProfessor(id: string, input: ProfessorPatchInputType): Promise<Professor>;
+    deleteProfessor(id: string): Promise<void>;
 }
