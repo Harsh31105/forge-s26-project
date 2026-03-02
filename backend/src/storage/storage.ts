@@ -9,22 +9,27 @@ import { PaginationType } from "utils/pagination";
 import { SampleRepositorySchema } from "./postgres/schema/samples";
 import type { Professor, ProfessorPatchInputType, ProfessorPostInputType } from "../models/professor";
 import { ProfessorRepositorySchema } from "./postgres/schema/professor";
+import type { TraceDocumentRepository } from "./s3/traceDocuments";
+import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
+import type { S3 as S3Config } from "../config/s3";
 
 export class Repository {
     public readonly samples: SampleRepository;
     public readonly professors: ProfessorRepository;
     public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
+    public readonly traceDocuments: TraceDocumentRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
 
-    constructor(pool: Pool, db: NodePgDatabase) {
+    constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
         this.pool = pool;
         this.db = db;
         this.samples = new SampleRepositorySchema(db);
         this.courses = new CourseRepositorySchema(db);
         this.courseThreads = new CourseThreadRepositorySchema(db);
         this.professors = new ProfessorRepositorySchema(db);
+        this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
     }
 
     async getDB(): Promise<NodePgDatabase> {
