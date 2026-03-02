@@ -23,7 +23,7 @@ async function streamToBuffer(stream: Readable): Promise<Buffer> {
 async function main() {
     const repo = new TraceDocumentRepositoryS3(s3Config);
     const testKey = {
-        departmentId: 1,
+        department: "CS",
         courseCode: 1200,
         semester: "fall",
         lectureYear: 2025,

@@ -9,7 +9,7 @@ import type { S3 as S3Config } from "../../config/s3";
 import type { Readable } from "stream";
 
 export interface TraceDocumentKey {
-    departmentId: number;
+    department: string;
     courseCode: number;
     semester: string;
     lectureYear: number;
@@ -24,15 +24,15 @@ export interface TraceDocumentRepository {
 
 /**
  * S3 key prefix structure:
- *   trace-evaluations/{departmentId}/{courseCode}/{semester}_{lectureYear}/{professorId}.pdf
+ *   trace-evaluations/{department}/{courseCode}/{semester}_{lectureYear}/{professorId}.pdf
  *
  * Example:
- *   trace-evaluations/3/1200/fall_2025/a1b2c3d4.pdf
+ *   trace-evaluations/CS/1200/fall_2025/a1b2c3d4.pdf
  */
 function buildS3Key(key: TraceDocumentKey): string {
     return [
         "trace-evaluations",
-        String(key.departmentId),
+        key.department.trim().toUpperCase(),
         String(key.courseCode),
         `${key.semester}_${key.lectureYear}`,
         `${key.professorId}.pdf`,
