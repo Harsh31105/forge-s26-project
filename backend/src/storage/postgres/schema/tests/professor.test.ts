@@ -14,6 +14,7 @@ import { professor } from "../../../tables/professor";
 import { v4 as uuid } from "uuid";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { NotFoundError } from "../../../../errs/httpError";
+import {newPagination} from "../../../../utils/pagination";
 
 describe("ProfessorRepositorySchema DB Integration", () => {
     let db!: NodePgDatabase;
@@ -47,7 +48,7 @@ describe("ProfessorRepositorySchema DB Integration", () => {
         test("empty and populated DB", async () => {
             await repo.deleteProfessor(testProfessorID);
 
-            let results = await repo.getProfessors();
+            let results = await repo.getProfessors(newPagination());
             expect(results).toEqual([]);
 
             await db.insert(professor).values({
@@ -59,7 +60,7 @@ describe("ProfessorRepositorySchema DB Integration", () => {
                 updatedAt: new Date()
             });
 
-            results = await repo.getProfessors();
+            results = await repo.getProfessors(newPagination());
             expect(results).toHaveLength(1);
             expect(results[0]!.id).toBe(testProfessorID);
         });
