@@ -13,11 +13,10 @@ export interface CensorshipResult {
 }
 
 leoProfanity.loadDictionary("en");
-
-const legacyBlockedTerms = ["damn", "hell", "shit", "fuck", "bitch", "crap"] as const;
+leoProfanity.add(["damn", "hell", "crap"]);
 
 export const defaultBlockedTerms: readonly string[] = Object.freeze([
-  ...new Set([...leoProfanity.list(), ...legacyBlockedTerms]),
+  ...leoProfanity.list(),
 ]);
 
 function escapeRegExp(value: string): string {
