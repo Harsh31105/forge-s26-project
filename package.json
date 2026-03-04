@@ -1,6 +1,7 @@
 {
   "dependencies": {
     "drizzle-orm": "^0.45.1",
+    "google-auth-library": "^10.6.1",
     "pg": "^8.18.0"
   },
   "devDependencies": {
