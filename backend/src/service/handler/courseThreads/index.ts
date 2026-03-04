@@ -65,6 +65,11 @@ export class CourseThreadHandler {
     if (!result.success) throw BadRequest("unable to parse input for patch-thread");
     const input: CourseThreadPatchInputType = result.data;
 
+    if (input.content) {
+      const censortedContent: CensorshipResult = assessCensorship(input.content);
+      input.content = censortedContent.processedText;
+    }
+
     try {
       const updated = await this.repo.patchThread(threadId, input);
       res.status(200).json(updated);
