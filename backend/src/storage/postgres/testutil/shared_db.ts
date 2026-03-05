@@ -75,6 +75,17 @@ async function createAllTables(db: NodePgDatabase) {
         created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
         updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
     );`);
+
+    await db.execute(`
+        CREATE EXTENSION IF NOT EXISTS "uuid-ossp";        
+
+        CREATE TABLE IF NOT EXISTS favorite (
+        id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+        name VARCHAR(100) NOT NULL,
+        created_at TIMESTAMPTZ NOT NULL DEFAULT now(),
+        updated_at TIMESTAMPTZ NOT NULL DEFAULT now()
+    );`);
+
 }
 
 export async function cleanupTestData() {
@@ -87,6 +98,14 @@ export async function cleanupTestData() {
       sample
     RESTART IDENTITY CASCADE;
   `);
+
+  await db.execute(`
+    TRUNCATE TABLE 
+      favorite
+    RESTART IDENTITY CASCADE;
+  `);
+
+
 }
 
 export async function shutdownSharedTestDB() {

@@ -26,14 +26,116 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  /favorites: 
+    get:
+      summary: List favorites
+      description:  Returns a paginated list of favorietes
+      tags: [Favorites]
+      parameters: 
+        - in: query 
+          name: limit
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 20
+          description: Maximum number of items to return
+        - in: query
+          name: offset
+          required: false
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+          description: number of items to skip
+      responses:
+        "200" :
+          description: paginated favorites
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/FavoritesListResponse"
+
+          "400" :
+            description: invalid query perms
+            content: 
+              application/json: 
+                schema: 
+                  $ref: "#/components/schemas/Error"
+
+    post: 
+      summary: Create Favorite
+      description: create a new favorite
+      tags: [Favorites]
+      requestBody:
+        required: true
+        content: 
+          application/json: 
+            schema: 
+              $ref: "#/components/schemas/FavoriteCreate"
+      responses: 
+        "201" : 
+          description: created favorite
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Favorite" 
+
+        "400" :
+          description: invalid request body
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error" 
+              
+        "500": 
+          description: internal server error
+          content: 
+            application/json:
+              schema: 
+                $ref: "#/components/schemas/Error" 
+
+  /favorites/{id}: 
+    delete: 
+      summary: Delete Favorite
+      description: delete favorite by id
+      tags: [Favorites]
+      parameters: 
+        - in: path
+          name: id
+          required: true
+          schema: 
+            type: string
+            format: uuid
+      responses: 
+        "204": 
+          description: Deleted successfully 
+        "404":
+          description: Favorite not found
+          content: 
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/Error"
+        "400":
+          description: Invalid UUID
+          content: 
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: internal server error
+          content: 
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/Error"
+    
 
 components:
   schemas:
     Error:
       type: object
-      required:
-        - code
-        - message
+      required: [code, message]
       properties:
         code:
           type: integer
@@ -45,3 +147,45 @@ components:
             - type: object
           description: Error message or validation errors
           example: "Internal server error"
+
+    Favorite: 
+      type: object
+      required: [id, name, createdAt, updatedAt]
+      properties: 
+        id : 
+          type: string 
+          format: uuid
+        name: 
+          type: string
+          minLength: 1
+        createdAt: 
+          type: string
+          format: date-time
+        updatedAt: 
+          type: string
+          format: date-time
+    FavoriteCreate: 
+      type: object
+      required: [name]
+      properties: 
+        name: 
+          type: string
+          minLength: 1
+    FavoritesListResponse: 
+      type: object
+      required: [items, total, limit, offset]
+      properties: 
+        items: 
+          type: array
+          items: 
+            $ref: "#/components/schemas/Favorite"
+        total: 
+          type: integer
+          minimum: 0
+        limit: 
+          type: integer
+          minimum: 1
+          maximum: 100
+        offset: 
+          type: integer
+          minimum: 0
