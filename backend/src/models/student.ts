@@ -1,7 +1,4 @@
 import { z } from "zod";
-import { Major } from "./major";
-import { Minor } from "./minor";
-import { Concentration } from "./concentration";
 
 export type StudentPreference =
     | "exam-heavy"
