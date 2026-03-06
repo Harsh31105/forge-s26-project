@@ -13,6 +13,9 @@ export const prefEnum = pgEnum("pref_enum", [
   "little_to_no_test",
   "fast_paced",
   "slow_paced",
+  "morning-classes",
+  "afternoon-classes",
+  "evening-classes",
 ]);
 
 export const student = pgTable("student", {
