@@ -1,7 +1,7 @@
 import { Router } from "express";
-import { StudentHandler } from "../sample/index";
+import { StudentHandler } from "./index";
 
-export function StudentRoutes(handler: StudentHandler): Router {
+export function studentRoutes(handler: StudentHandler): Router {
     const router = Router();
 
     router.get("/", handler.handleGet.bind(handler));

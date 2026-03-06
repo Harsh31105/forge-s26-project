@@ -48,14 +48,14 @@ export interface Concentration {
 
 export interface Student {
     id: string;
-    first_name: string;
-    last_name: string;
+    firstName: string;
+    lastName: string;
     email: string;
-    graduation_year: number;
-    preferences: string[];
-    majors: Major[];
-    concentrations: Concentration[];
-    minors: Minor[];
+    graduationYear: number | null;
+    preferences: string[] | null;
+    majors?: Major[]; // optional
+    concentrations?: Concentration[]; // optional
+    minors?: Minor[]; // optional
     createdAt: Date;
     updatedAt: Date;
 }
@@ -68,10 +68,10 @@ export type StudentGetInputType = z.infer<typeof StudentGetInputSchema>;
 
 // POST
 export const StudentPostInputSchema = z.object({
-    first_name: z.string().min(1, "first name must not be empty"),
-    last_name: z.string().min(1, "last name must not be empty"),
+    firstName: z.string().min(1, "first name must not be empty"),
+    lastName: z.string().min(1, "last name must not be empty"),
     email: z.string().email("must be a valid email"),
-    graduation_year: z.number().int().min(1900).max(3000),
+    graduationYear: z.number().int().min(1900).max(3000),
     preferences: z.array(StudentPreferenceEnum),
 });
 export type StudentPostInputType = z.infer<typeof StudentPostInputSchema>;

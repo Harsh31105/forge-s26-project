@@ -1307,10 +1307,10 @@ components:
       type: object
       required:
         - id
-        - first_name
-        - last_name
+        - firstName
+        - lastName
         - email
-        - graduation_year
+        - graduationYear
         - preferences
         - createdAt
         - updatedAt
@@ -1318,14 +1318,14 @@ components:
         id:
           type: string
           format: uuid
-        first_name:
+        firstName:
           type: string
-        last_name:
+        lastName:
           type: string
         email:
           type: string
           format: email
-        graduation_year:
+        graduationYear:
           type: integer
         preferences:
           type: object
@@ -1340,19 +1340,19 @@ components:
       type: object
       description: Fields required to create a new student.
       required:
-        - first_name
-        - last_name
+        - firstName
+        - lastName
         - email
-        - graduation_year
+        - graduationYear
       properties:
-        first_name:
+        firstName:
           type: string
-        last_name:
+        lastName:
           type: string
         email:
           type: string
           format: email
-        graduation_year:
+        graduationYear:
           type: integer
         preferences:
           type: object
@@ -1361,14 +1361,14 @@ components:
       type: object
       description: Fields allowed when updating a student.
       properties:
-        first_name:
+        firstName:
           type: string
-        last_name:
+        lastName:
           type: string
         email:
           type: string
           format: email
-        graduation_year:
+        graduationYear:
           type: integer
         preferences:
           type: object

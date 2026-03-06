@@ -1,8 +1,9 @@
-import type { SampleRepository } from "../../../storage/storage";
+import type { StudentRepository } from "../../../storage/storage";
 import {
-    Sample, SamplePatchInputSchema, SamplePatchInputType,
-    SamplePostInputSchema,
-    SamplePostInputType
+    StudentPostInputSchema,
+    StudentPostInputType,
+    StudentPatchInputSchema,
+    StudentPatchInputType,
 } from "../../../models/student";
 import {
     BadRequest,
@@ -12,97 +13,112 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
-import { getOffset, PaginationSchema } from "../../../utils/pagination";
+import { PaginationSchema } from "../../../utils/pagination";
 
-export class SampleHandler {
-    constructor(private readonly repo: SampleRepository) {}
+export class StudentHandler {
+    constructor(private readonly repo: StudentRepository) {}
 
+    // GET/students
     async handleGet(req: Request, res: Response) :Promise<void> {
+
+        // Pagination
         const result = PaginationSchema.safeParse(req.query);
+
         if (!result.success) {
             throw BadRequest("Invalid pagination parameters");
         }
+
         const pagination = result.data;
-        
-        let samples: Sample[];
 
         try {
-            samples = await this.repo.getSamples(pagination);
+            const students = await this.repo.getStudents(pagination);
+            res.status(200).json(students);
         } catch (err) {
-            console.log("Failed to get samples: ", err);
-            throw mapDBError(err, "failed to retrieve samples");
+            console.error("Failed to get students: ", err);
+            throw mapDBError(err, "Failed to retrieve students");
         }
-
-        res.status(200).json(samples);
     }
 
+    // GET/students/{id}
     async handleGetByID(req: Request, res: Response): Promise<void> {
-        let sample: Sample;
         const id = req.params.id as string;
-        if (!isUUID(id)) throw BadRequest("Empty ID cannot be given")
+
+        if (!isUUID(id))
+            throw BadRequest("Invalid student ID")
 
         try {
-            sample = await this.repo.getSampleByID(id);
+            const student = await this.repo.getStudentByID(id);
+            res.status(200).json(student);
         } catch (err) {
-            console.log(err);
-            if (err instanceof NotFoundError) NotFound("sample not found");
+            console.error(err);
 
-            throw mapDBError(err, "failed to retrieve sample");
+            if (err instanceof NotFoundError)
+                throw NotFound("Student not found");
+
+            throw mapDBError(err, "Failed to retrieve student");
         }
-
-        res.status(200).json(sample);
     }
 
+    // POST/students
     async handlePost(req: Request, res: Response): Promise<void> {
-        const result = SamplePostInputSchema.safeParse(req.body);
+        const result = StudentPostInputSchema.safeParse(req.body);
+
         if (!result.success) {
-            throw BadRequest("unable to parse input for post-sample")
+            throw BadRequest("Unable to parse input for student POST")
         }
-        const postSample: SamplePostInputType = result.data;
 
-        let newSample: Sample;
+        const postStudent: StudentPostInputType = result.data;
+
         try {
-            newSample = await this.repo.createSample(postSample);
+            const newStudent = await this.repo.createStudent(postStudent);
+            res.status(201).json(newStudent);
         } catch (err) {
-            console.log(err);
-            throw mapDBError(err, "failed to post sample");
+            console.error(err);
+            throw mapDBError(err, "Failed to create student")
         }
-
-        res.status(201).json(newSample);
     }
 
+    // PATCH/students/{id}
     async handlePatch(req: Request, res: Response): Promise<void> {
         const id = req.params.id as string;
-        if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
-        const result = SamplePatchInputSchema.safeParse(req.body);
+        if (!isUUID(id))
+            throw BadRequest("Invalid student ID was given");
+
+        const result = StudentPatchInputSchema.safeParse(req.body);
+
         if (!result.success) {
-            throw BadRequest("unable to parse input for patch-sample")
+            throw BadRequest("Unable to parse input for student PATCH")
         }
-        const patchSample: SamplePatchInputType = result.data;
 
-        let updatedSample: Sample;
+        const patchStudent: StudentPatchInputType = result.data;
+
         try {
-            updatedSample = await this.repo.patchSample(id, patchSample);
+            const updatedStudent = await this.repo.patchStudent(id, patchStudent);
+            res.status(200).json(updatedStudent);
         } catch (err) {
-            console.log(err);
-            throw mapDBError(err, "failed to patch sample");
-        }
+            console.error(err);
 
-        res.status(200).json(updatedSample);
+            if (err instanceof NotFoundError)
+                throw NotFound("Student not found");
+
+            throw mapDBError(err, "Failed to patch student");
+        }
     }
 
+    // DELETE/students/{id}
     async handleDelete(req: Request, res: Response): Promise<void> {
         const id = req.params.id as string;
-        if (!isUUID(id)) throw BadRequest("invalid ID was given");
+
+        if (!isUUID(id))
+            throw BadRequest("Invalid student ID was given");
 
         try {
-            await this.repo.deleteSample(id);
+            await this.repo.deleteStudent(id);
+            res.sendStatus(204);
         } catch (err) {
-            console.log(err);
-            throw mapDBError(err, "failed to delete sample");
+            console.error(err);
+            throw mapDBError(err, "Failed to delete student");
         }
-
-        res.sendStatus(204);
     }
 }
