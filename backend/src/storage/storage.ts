@@ -12,6 +12,8 @@ import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
+import {Student, StudentPatchInputType, StudentPostInputType} from "../models/student";
+import { StudentRepositorySchema } from "./postgres/schema/students";
 
 export class Repository {
     public readonly samples: SampleRepository;
@@ -19,6 +21,7 @@ export class Repository {
     public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
     public readonly traceDocuments: TraceDocumentRepository;
+    public readonly students: StudentRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
 
@@ -30,6 +33,7 @@ export class Repository {
         this.courseThreads = new CourseThreadRepositorySchema(db);
         this.professors = new ProfessorRepositorySchema(db);
         this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+        this.students = new StudentRepositorySchema(db);
     }
 
     async getDB(): Promise<NodePgDatabase> {
@@ -70,4 +74,12 @@ export interface ProfessorRepository {
     createProfessor(input: ProfessorPostInputType): Promise<Professor>;
     patchProfessor(id: string, input: ProfessorPatchInputType): Promise<Professor>;
     deleteProfessor(id: string): Promise<void>;
+}
+
+export interface StudentRepository {
+    getStudents(pagination: PaginationType): Promise<Student[]>;
+    getStudentByID(id: string): Promise<Student>;
+    createStudent(input: StudentPostInputType): Promise<Student>;
+    patchStudent(id: string, input: StudentPatchInputType): Promise<Student>;
+    deleteStudent(id: string): Promise<void>;
 }
