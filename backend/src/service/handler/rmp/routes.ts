@@ -15,7 +15,7 @@ export function professorRMPRoutes(handler: RMPHandler): Router {
     const router = Router({ mergeParams: true });
 
     // GET /professors/:id/rmp
-    router.get("/rmp", handler.handleGet.bind(handler));
+    router.get("/:id/rmp", handler.handleGet.bind(handler));
 
     return router;
 }
