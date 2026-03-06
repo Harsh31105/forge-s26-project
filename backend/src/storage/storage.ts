@@ -1,7 +1,7 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
-import type {Course, CoursePatchInputType, CoursePostInputType} from "../models/course";
+import type { Sample, SamplePatchInputType, SamplePostInputType } from "../models/sample";
+import type { Course, CoursePatchInputType, CoursePostInputType } from "../models/course";
 import { CourseRepositorySchema } from "./postgres/schema/course";
 import type { CourseThread, CourseThreadPatchInputType, CourseThreadPostInputType } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
@@ -12,6 +12,8 @@ import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
+import type { RMP, RMPPostInputType } from "../models/rmp";
+import { RMPRepositorySchema } from "./postgres/schema/rmp";
 
 export class Repository {
     public readonly samples: SampleRepository;
@@ -19,6 +21,7 @@ export class Repository {
     public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
     public readonly traceDocuments: TraceDocumentRepository;
+    public readonly rmp: RMPRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
 
@@ -30,6 +33,7 @@ export class Repository {
         this.courseThreads = new CourseThreadRepositorySchema(db);
         this.professors = new ProfessorRepositorySchema(db);
         this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+        this.rmp = new RMPRepositorySchema(db);
     }
 
     async getDB(): Promise<NodePgDatabase> {
@@ -70,4 +74,9 @@ export interface ProfessorRepository {
     createProfessor(input: ProfessorPostInputType): Promise<Professor>;
     patchProfessor(id: string, input: ProfessorPatchInputType): Promise<Professor>;
     deleteProfessor(id: string): Promise<void>;
+}
+
+export interface RMPRepository {
+    getRMPByProfessorID(professorId: string): Promise<RMP>;
+    postRMP(input: RMPPostInputType): Promise<RMP>;
 }
