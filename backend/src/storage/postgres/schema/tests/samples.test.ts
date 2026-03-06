@@ -3,8 +3,8 @@ import {
     setupTestWithCleanup,
     shutdownSharedTestDB
 } from "../../testutil/shared_db";
-import { SampleRepositorySchema } from "../samples";
-import { sample } from "../../../tables/sample";
+import { SampleRepositorySchema } from "../students";
+import { sample } from "../../../tables/student";
 import { v4 as uuid } from "uuid";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import {NotFoundError} from "../../../../errs/httpError";
