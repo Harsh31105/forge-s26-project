@@ -9,6 +9,5 @@ module.exports = {
     ...tsJestTransformCfg,
   },
   testPathIgnorePatterns: ['/node_modules/'],
-  transformIgnorePatterns: ['/node_modules/(?!uuid)/'],
-  testTimout: 30000,
+  transformIgnorePatterns: ['/node_modules/(?!uuid)/']
 };
