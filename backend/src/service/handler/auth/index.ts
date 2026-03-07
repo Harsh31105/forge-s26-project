@@ -4,13 +4,11 @@ import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { config } from "../../../config/config";
 import { eq } from "drizzle-orm";
 import { student } from "../../../storage/tables/student";
-import { StudentRepository } from "../../../storage/storage";
+//import { StudentRepository } from "../../../storage/storage";
 
 export class AuthHandler {
     constructor(
-        private readonly db: NodePgDatabase,
-        private readonly studentRepo: StudentRepository
-    ) {}
+        private readonly db: NodePgDatabase) {}
 
     async handleRedirect(req: Request, res: Response): Promise<void> {
         const url = getAuthUrl();
@@ -48,11 +46,17 @@ export class AuthHandler {
         if (studentAuth) {
             res.status(200).json({ student: studentAuth});
         } else {
-            const newStudent = await this.studentRepo.createStudent({
+            const newStudent = await this.db.insert(student).values({
                 firstName: payload.given_name!,
                 lastName: payload.family_name!,
                 email: payload.email,
-            });
+            }).returning();
+            
+            // await this.studentRepo.createStudent({
+            //     firstName: payload.given_name!,
+            //     lastName: payload.family_name!,
+            //     email: payload.email,
+            // });
             res.status(201).json({ student: newStudent });
         }
 

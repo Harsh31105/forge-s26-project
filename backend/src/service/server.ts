@@ -21,12 +21,13 @@ import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { AuthHandler } from "./handler/auth";
 import { authRoutes } from "./handler/auth/routes";
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
 
 class App {
     public server: Express;
     public repo: Repository;
 
-    constructor(repo: Repository) {
+    constructor(repo: Repository, db: NodePgDatabase) {
         this.server = express();
         this.repo = repo;
 
@@ -59,7 +60,7 @@ class App {
         const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
         this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-        registerRoutes(apiV1, this.repo);
+        registerRoutes(apiV1, this.repo, db);
 
         this.server.use(errorHandler);
         this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
@@ -82,10 +83,10 @@ export function initApp(): App {
     const db = drizzle(pool);
     const repo = new Repository(pool, db, config.s3);
 
-    return new App(repo);
+    return new App(repo, db);
 }
 
-function registerRoutes(router: Router, repo: Repository) {
+function registerRoutes(router: Router, repo: Repository, db: NodePgDatabase) {
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
 
@@ -98,6 +99,6 @@ function registerRoutes(router: Router, repo: Repository) {
     const professorHandler = new ProfessorHandler(repo.professors);
     router.use("/professors", professorRoutes(professorHandler));
 
-    const authHandler = new AuthHandler(repo.getDB, repo.students);
+    const authHandler = new AuthHandler(db);
     router.use("/auth", authRoutes(authHandler));
 }
