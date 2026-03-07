@@ -18,7 +18,7 @@ describe("SampleRepositorySchema DB Integration", () => {
     beforeAll(async () => {
         db = await setupTestWithCleanup();
         repo = new SampleRepositorySchema(db);
-    });
+    }, 30000);
 
     beforeEach(async () => {
         await cleanupTestData();
