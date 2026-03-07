@@ -1,14 +1,12 @@
 import { Request, Response } from "express";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { config } from "../../../config/config";
-import { eq } from "drizzle-orm";
-import { student } from "../../../storage/tables/student";
-//import { StudentRepository } from "../../../storage/storage";
+import { Conflict, mapDBError } from "../../../errs/httpError";
+import { StudentRepository } from "../../../storage/storage";
 
 export class AuthHandler {
     constructor(
-        private readonly db: NodePgDatabase) {}
+        private readonly studentRepo: StudentRepository) {}
 
     async handleRedirect(req: Request, res: Response): Promise<void> {
         const url = getAuthUrl();
@@ -41,27 +39,29 @@ export class AuthHandler {
             return;
         }
 
-        const [ studentAuth ] = await this.db.select().from(student).where(eq(student.email, payload.email));
-
-        if (studentAuth) {
-            res.status(200).json({ student: studentAuth});
-        } else {
-            const newStudent = await this.db.insert(student).values({
+        try {
+            await this.studentRepo.createStudent({
                 firstName: payload.given_name!,
                 lastName: payload.family_name!,
                 email: payload.email,
-            }).returning();
-            
-            // await this.studentRepo.createStudent({
-            //     firstName: payload.given_name!,
-            //     lastName: payload.family_name!,
-            //     email: payload.email,
-            // });
-            res.status(201).json({ student: newStudent });
+            });
+            res.status(201).json({ 
+                message: "Signup successful",
+                email: payload.email,
+                name: payload.name
+             });
+            return;
+        } catch (error) {
+            const mappedError : any= mapDBError(error, "failed to create student");
+            if (mappedError instanceof Conflict) {
+                res.status(200).json({ 
+                    message: "Login successful",
+                    email: payload.email,
+                    name: payload.name
+                });
+                return;
+            }
+            throw mappedError;
         }
-
-        googleClient.setCredentials(tokens);
-
-        res.status(200).json({ message: "Authenticated user." });
     }
 }
