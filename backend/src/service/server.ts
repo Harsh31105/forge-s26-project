@@ -6,6 +6,8 @@ import { config } from "../config/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import {SampleHandler} from "./handler/sample";
 import {sampleRoutes} from "./handler/sample/routes";
+import {ProfessorHandler} from "./handler/professor";
+import {professorRoutes} from "./handler/professor/routes";
 import morgan from "morgan";
 import compression from "compression";
 import cors from "cors";
@@ -13,6 +15,8 @@ import {errorHandler} from "../errs/httpError";
 import YAML from "yamljs";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
+import {CourseHandler} from "./handler/course";
+import {courseRoutes} from "./handler/course/routes";
 import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
 
@@ -74,7 +78,7 @@ export function initApp(): App {
     configurePool(pool, config.db);
 
     const db = drizzle(pool);
-    const repo = new Repository(pool, db);
+    const repo = new Repository(pool, db, config.s3);
 
     return new App(repo);
 }
@@ -82,7 +86,13 @@ export function initApp(): App {
 function registerRoutes(router: Router, repo: Repository) {
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
-  
+
+    const courseHandler = new CourseHandler(repo.courses);
+    router.use("/courses", courseRoutes(courseHandler));
+
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
-  }
+
+    const professorHandler = new ProfessorHandler(repo.professors);
+    router.use("/professors", professorRoutes(professorHandler));
+}

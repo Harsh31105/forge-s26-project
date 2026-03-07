@@ -10,6 +10,7 @@ import { BadRequest, mapDBError } from "../../../errs/httpError";
 import type { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
+import { assessCensorship, CensorshipResult } from "../../../utils/censorship";
 
 export class CourseThreadHandler {
   constructor(private readonly repo: CourseThreadRepository) {}
@@ -41,6 +42,9 @@ export class CourseThreadHandler {
     if (!result.success) throw BadRequest("unable to parse input for post-thread");
     const input: CourseThreadPostInputType = result.data;
 
+    const censoredContent: CensorshipResult = assessCensorship(input.content);
+    input.content = censoredContent.processedText;
+
     try {
       const created = await this.repo.createThread(courseReviewId, input);
       res.status(201).json(created);
@@ -60,6 +64,11 @@ export class CourseThreadHandler {
     const result = CourseThreadPatchInputSchema.safeParse(req.body);
     if (!result.success) throw BadRequest("unable to parse input for patch-thread");
     const input: CourseThreadPatchInputType = result.data;
+
+    if (input.content) {
+      const censortedContent: CensorshipResult = assessCensorship(input.content);
+      input.content = censortedContent.processedText;
+    }
 
     try {
       const updated = await this.repo.patchThread(threadId, input);
