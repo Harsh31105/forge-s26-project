@@ -7,14 +7,13 @@ import type {
 } from "../../../models/profThreads";
 import type { ProfThreadRepository } from "../../storage";
 import { profThread } from "../../tables/profThread";
-//import { type PaginationType, getOffset } from "../../../utils/pagination";
+import { type PaginationType, getOffset } from "../../../utils/pagination";
 
 export class ProfThreadRepositorySchema implements ProfThreadRepository {
   constructor(private readonly db: NodePgDatabase) {
     this.db = db;
   }
 
-  //pagination error due to brnach not being up to date with nishas pr 
   async getThreadsByProfReviewId(profReviewId: string, pagination: PaginationType): Promise<ProfThread[]> {
     return this.db
       .select()
