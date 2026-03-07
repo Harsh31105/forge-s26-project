@@ -805,21 +805,21 @@ paths:
   
   /auth/login: 
     get: 
-    summary: Login Feature with Google
-    description: Redirects the user to Google's OAuth consent screen for authentication
-    tags: [ Auth ]
-    responses: 
-      "302":
-        description: Redirect to Google OAuth consent screen
-      "500":
-        description: Internal server error
-        content: 
-          application/json: 
-            schema: 
-              $ref: "#/components/schemas/Erorr"
-            example:
-              code: 500
-              message: "Internal server error"
+      summary: Login Feature with Google
+      description: Redirects the user to Google's OAuth consent screen for authentication
+      tags: [ Auth ]
+      responses: 
+        "302":
+          description: Redirect to Google OAuth consent screen
+        "500":
+          description: Internal server error
+          content: 
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
 
   /auth/signup: 
     get: 
@@ -834,7 +834,7 @@ paths:
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/Erorr"
+                $ref: "#/components/schemas/Error"
               example:
                 code: 500
                 message: "Internal server error"
@@ -858,14 +858,12 @@ paths:
             application/json: 
               schema: 
                 $ref: "#/components/schemas/Student" 
-
         "201": 
           description: New student created successfully
           content:
             application/json: 
               schema:
-              $ref: "#components/schemas/Student"
-        
+                $ref: "#/components/schemas/Student"
         "400":
           description: Failed to get authorization code
           content:
@@ -875,7 +873,6 @@ paths:
               example:
                 code: 400
                 message: "Missing authorization code"
-
         "403":
           description: Email is not a Northeastern email
           content: 
@@ -885,7 +882,6 @@ paths:
               example:
                 code: 403
                 message: "Only Northeastern email addresses are valid"
-        
         "500":
           description: Internal server error
           content:
