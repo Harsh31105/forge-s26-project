@@ -69,8 +69,8 @@ export interface CourseThreadRepository {
     deleteThread(threadId: string): Promise<void>;
 }
 export interface ProfThreadRepository {
-    getThreadsByProfReviewId(profReviewId: string, pagination: PaginationType): Promise<ProfThread[]>; //will work after nishas 
-    createThread(profReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread>;
+    getThreadsByProfessorReviewId(professorReviewId: string, pagination: PaginationType): Promise<ProfThread[]>; //will work after nishas 
+    createThread(professorReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread>;
     patchThread(threadId: string, input: ProfessorThreadPatchInputType): Promise<ProfThread>;
     deleteThread(threadId: string): Promise<void>;
 }

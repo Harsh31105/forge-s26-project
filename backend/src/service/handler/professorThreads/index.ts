@@ -10,6 +10,7 @@ import {
 import { BadRequest, mapDBError } from "../../../errs/httpError";
 import type { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
+import { newPagination } from "utils/pagination";
 
 export class ProfThreadHandler {
     constructor(private readonly repo: ProfThreadRepository) {}
@@ -19,7 +20,7 @@ export class ProfThreadHandler {
     if (!isUUID(professorReviewId)) throw BadRequest("invalid professor review id");
 
     try {
-        const threads: ProfThread[] = await this.repo.getThreadsByProfReviewId(professorReviewId);
+        const threads: ProfThread[] = await this.repo.getThreadsByProfessorReviewId(professorReviewId, newPagination());
         res.status(200).json(threads);
     } catch (err) {
         throw mapDBError(err, "failed to retrieve threads");

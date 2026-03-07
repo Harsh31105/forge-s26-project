@@ -14,7 +14,7 @@ describe("ProfThreadRepositorySchema (DB)", () => {
   let db: NodePgDatabase;
   let repo: ProfThreadRepositorySchema;
 
-  const profReviewId = "11111111-1111-1111-1111-111111111111";
+  const professorReviewId = "11111111-1111-1111-1111-111111111111";
   const studentId = "22222222-2222-2222-2222-222222222222";
 
   beforeAll(async () => {
@@ -30,36 +30,36 @@ describe("ProfThreadRepositorySchema (DB)", () => {
     await setupTestWithCleanup();
   });
 
-  describe("getThreadsByProfReviewId", () => {
+  describe("getThreadsByProfessorReviewId", () => {
     it("returns empty array when no threads", async () => {
-      const threads = await repo.getThreadsByProfReviewId(profReviewId, newPagination());
+      const threads = await repo.getThreadsByProfessorReviewId(professorReviewId, newPagination());
       expect(threads).toEqual([]);
     });
 
-    it("returns threads for the given prof review id", async () => {
-      const created = await repo.createThread(profReviewId, {
+    it("returns threads for the given professor review id", async () => {
+      const created = await repo.createThread(professorReviewId, {
         studentId,
         content: "First thread",
       });
-      const threads = await repo.getThreadsByProfReviewId(profReviewId, newPagination());
+      const threads = await repo.getThreadsByProfessorReviewId(professorReviewId, newPagination());
       expect(threads).toHaveLength(1);
       const first = threads[0];
       expect(first).toBeDefined();
       expect(first!.id).toBe(created.id);
       expect(first!.content).toBe("First thread");
-      expect(first!.profReviewId).toBe(profReviewId);
+      expect(first!.professorReviewId).toBe(professorReviewId);
       expect(first!.studentId).toBe(studentId);
     });
   });
 
   describe("createThread", () => {
     it("inserts and returns thread with id and timestamps", async () => {
-      const created = await repo.createThread(profReviewId, {
+      const created = await repo.createThread(professorReviewId, {
         studentId,
         content: "New thread content",
       });
       expect(created.id).toBeDefined();
-      expect(created.profReviewId).toBe(profReviewId);
+      expect(created.professorReviewId).toBe(professorReviewId);
       expect(created.studentId).toBe(studentId);
       expect(created.content).toBe("New thread content");
       expect(created.createdAt).toBeInstanceOf(Date);
@@ -69,7 +69,7 @@ describe("ProfThreadRepositorySchema (DB)", () => {
 
   describe("patchThread", () => {
     it("updates content and returns updated thread", async () => {
-      const created = await repo.createThread(profReviewId, {
+      const created = await repo.createThread(professorReviewId, {
         studentId,
         content: "Original",
       });
@@ -88,12 +88,12 @@ describe("ProfThreadRepositorySchema (DB)", () => {
 
   describe("deleteThread", () => {
     it("deletes thread by id", async () => {
-      const created = await repo.createThread(profReviewId, {
+      const created = await repo.createThread(professorReviewId, {
         studentId,
         content: "To delete",
       });
       await repo.deleteThread(created.id);
-      const threads = await repo.getThreadsByProfReviewId(profReviewId, newPagination());
+      const threads = await repo.getThreadsByProfessorReviewId(professorReviewId, newPagination());
       expect(threads).toHaveLength(0);
     });
 

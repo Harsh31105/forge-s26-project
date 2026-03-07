@@ -14,20 +14,20 @@ export class ProfThreadRepositorySchema implements ProfThreadRepository {
     this.db = db;
   }
 
-  async getThreadsByProfReviewId(profReviewId: string, pagination: PaginationType): Promise<ProfThread[]> {
+  async getThreadsByProfessorReviewId(professorReviewId: string, pagination: PaginationType): Promise<ProfThread[]> {
     return this.db
       .select()
       .from(profThread)
-      .where(eq(profThread.profReviewId, profReviewId))
+      .where(eq(profThread.professorReviewId, professorReviewId))
       .limit(pagination.limit)
       .offset(getOffset(pagination));
   }
 
-  async createThread(profReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread> {
+  async createThread(professorReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread> {
     const [row] = await this.db
       .insert(profThread)
       .values({
-        profReviewId,
+        professorReviewId,
         studentId: input.studentId,
         content: input.content,
       })
