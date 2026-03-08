@@ -1,9 +1,8 @@
 import type { StudentRepository } from "../../../storage/storage";
 import {
     StudentPostInputSchema,
-    StudentPostInputType,
     StudentPatchInputSchema,
-    StudentPatchInputType,
+    StudentPatchInputType
 } from "../../../models/student";
 import {
     BadRequest,
@@ -30,25 +29,27 @@ export class StudentHandler {
 
         const pagination = result.data;
 
+        let students;
         try {
-            const students = await this.repo.getStudents(pagination);
-            res.status(200).json(students);
+            students = await this.repo.getStudents(pagination);
         } catch (err) {
             console.error("Failed to get students: ", err);
             throw mapDBError(err, "Failed to retrieve students");
         }
+        res.status(200).json(students);
     }
 
     // GET/students/{id}
     async handleGetByID(req: Request, res: Response): Promise<void> {
         const id = req.params.id as string;
 
-        if (!isUUID(id))
+        if (!isUUID(id)) {
             throw BadRequest("Invalid student ID")
+        }
 
+        let student;
         try {
-            const student = await this.repo.getStudentByID(id);
-            res.status(200).json(student);
+            student = await this.repo.getStudentByID(id);
         } catch (err) {
             console.error(err);
 
@@ -57,6 +58,7 @@ export class StudentHandler {
 
             throw mapDBError(err, "Failed to retrieve student");
         }
+        res.status(200).json(student);
     }
 
     // POST/students
@@ -69,13 +71,14 @@ export class StudentHandler {
 
         const postStudent: StudentPostInputType = result.data;
 
+        let newStudent;
         try {
-            const newStudent = await this.repo.createStudent(postStudent);
-            res.status(201).json(newStudent);
+            newStudent = await this.repo.createStudent(postStudent);
         } catch (err) {
             console.error(err);
             throw mapDBError(err, "Failed to create student")
         }
+        res.status(201).json(newStudent);
     }
 
     // PATCH/students/{id}
@@ -93,17 +96,14 @@ export class StudentHandler {
 
         const patchStudent: StudentPatchInputType = result.data;
 
+        let updatedStudent;
         try {
-            const updatedStudent = await this.repo.patchStudent(id, patchStudent);
-            res.status(200).json(updatedStudent);
+            updatedStudent = await this.repo.patchStudent(id, patchStudent);
         } catch (err) {
             console.error(err);
-
-            if (err instanceof NotFoundError)
-                throw NotFound("Student not found");
-
             throw mapDBError(err, "Failed to patch student");
         }
+        res.status(200).json(updatedStudent);
     }
 
     // DELETE/students/{id}
@@ -115,10 +115,10 @@ export class StudentHandler {
 
         try {
             await this.repo.deleteStudent(id);
-            res.sendStatus(204);
         } catch (err) {
             console.error(err);
             throw mapDBError(err, "Failed to delete student");
         }
+        res.sendStatus(204);
     }
 }
