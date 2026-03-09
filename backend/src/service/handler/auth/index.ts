@@ -75,7 +75,6 @@ export class AuthHandler {
                     message: "Login successful",
                     token,
                 });
-                
                 return;
             }
             throw mappedError;
