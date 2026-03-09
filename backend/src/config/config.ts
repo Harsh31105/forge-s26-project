@@ -47,6 +47,7 @@ export function validateConfig() {
     if (!config.google.clientId) missing.push("GOOGLE_CLIENT_ID");
     if (!config.google.clientSecret) missing.push("GOOGLE_CLIENT_SECRET");
     if (!config.google.redirectURI) missing.push("GOOGLE_REDIRECT_URI");
+    if (!config.google.jwtSecret) missing.push("JWT_SECRET");
 
     if (missing.length > 0) {
         throw new Error(`Missing required environment variables: \n${missing.join("\n")}`);
