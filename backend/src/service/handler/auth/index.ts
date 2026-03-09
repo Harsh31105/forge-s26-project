@@ -3,6 +3,7 @@ import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { config } from "../../../config/config";
 import { Conflict, mapDBError } from "../../../errs/httpError";
 import { StudentRepository } from "../../../storage/storage";
+import jwt from "jsonwebtoken";
 
 export class AuthHandler {
     constructor(
@@ -45,20 +46,36 @@ export class AuthHandler {
                 lastName: payload.family_name!,
                 email: payload.email,
             });
+
+            const token = jwt.sign(
+                { email: payload.email,  
+                name: payload.name },
+                config.google.jwtSecret,
+                { expiresIn: "24h" }
+            );
+
             res.status(201).json({ 
                 message: "Signup successful",
-                email: payload.email,
-                name: payload.name
+                token,
              });
             return;
+
         } catch (error) {
             const mappedError : any= mapDBError(error, "failed to create student");
             if (mappedError instanceof Conflict) {
+
+                const token = jwt.sign(
+                { email: payload.email,  
+                name: payload.name },
+                config.google.jwtSecret,
+                { expiresIn: "24h" }
+                );
+                
                 res.status(200).json({ 
                     message: "Login successful",
-                    email: payload.email,
-                    name: payload.name
+                    token,
                 });
+                
                 return;
             }
             throw mappedError;

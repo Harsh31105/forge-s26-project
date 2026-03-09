@@ -21,6 +21,7 @@ import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { AuthHandler } from "./handler/auth";
 import { authRoutes } from "./handler/auth/routes";
+import { authMiddleware } from "../auth/middleware";
 
 class App {
     public server: Express;
@@ -86,6 +87,11 @@ export function initApp(): App {
 }
 
 function registerRoutes(router: Router, repo: Repository) {
+    const authHandler = new AuthHandler(repo.students);
+    router.use("/auth", authRoutes(authHandler));
+
+    router.use(authMiddleware);
+
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
 
@@ -98,6 +104,4 @@ function registerRoutes(router: Router, repo: Repository) {
     const professorHandler = new ProfessorHandler(repo.professors);
     router.use("/professors", professorRoutes(professorHandler));
 
-    const authHandler = new AuthHandler(repo.students);
-    router.use("/auth", authRoutes(authHandler));
 }
