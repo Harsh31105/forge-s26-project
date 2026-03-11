@@ -1,3 +1,2 @@
-2026/03/11-14:30:34.668 2370d0 Reusing MANIFEST /Users/manang/forge-s26-project/backend/.trace-playwright/Default/Sync Data/LevelDB/MANIFEST-000001
-2026/03/11-14:30:34.679 2370d0 Recovering log #3
-2026/03/11-14:30:34.680 2370d0 Reusing old log /Users/manang/forge-s26-project/backend/.trace-playwright/Default/Sync Data/LevelDB/000003.log 
+2026/03/11-18:14:21.488 27a937 Creating DB /Users/manang/forge-s26-project/backend/.trace-playwright/Default/Sync Data/LevelDB since it was missing.
+2026/03/11-18:14:21.494 27a937 Reusing MANIFEST /Users/manang/forge-s26-project/backend/.trace-playwright/Default/Sync Data/LevelDB/MANIFEST-000001
