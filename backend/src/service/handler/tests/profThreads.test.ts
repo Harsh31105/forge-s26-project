@@ -174,7 +174,7 @@ describe("ProfThreadHandler Endpoints", () => {
         "33333333-3333-4333-a333-333333333333",
         {
           studentId: "550e8400-e29b-41d4-a716-446655440000",
-          content: "Great Professor!",
+          content: "Great Professor",
         }
       );
     });
