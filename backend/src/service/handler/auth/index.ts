@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { config } from "../../../config/config";
-import { Conflict, mapDBError } from "../../../errs/httpError";
+import { mapDBError, getErrorMessage } from "../../../errs/httpError";
 // TODO: Uncomment the import below
 // import { StudentRepository } from "../../../storage/storage";
 import jwt from "jsonwebtoken";
@@ -60,7 +60,7 @@ export class AuthHandler {
                 firstName: payload.given_name!, 
                 lastName: payload.family_name!,
                 email: payload.email,
-            }).returning();
+            })
 
             const token = jwt.sign(
                 { email: payload.email,  
@@ -77,10 +77,11 @@ export class AuthHandler {
 
         } catch (error) {
             if (error instanceof Error) {
-                const message = error.message.toLowerCase();
+                const message = getErrorMessage(error).toLowerCase();
 
-                if (message.includes("duplicate key") || message.includes("unique constraint")) {
-                    const token = jwt.sign(
+                if (String(error.cause).includes("duplicate key") || String(error.cause).includes("unique constraint")) {
+                    
+                const token = jwt.sign(
                 { email: payload.email,  
                 name: payload.name },
                 config.google.jwtSecret,
@@ -94,7 +95,7 @@ export class AuthHandler {
                 return;
 
                 } else {
-                    throw error;
+                    throw mapDBError(error, error.message);
                 }
             }
 

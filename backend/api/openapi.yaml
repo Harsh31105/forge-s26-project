@@ -803,27 +803,9 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
   
-  /auth/login: 
+  /auth/signin: 
     get: 
-      summary: Login Feature with Google
-      description: Redirects the user to Google's OAuth consent screen for authentication
-      tags: [ Auth ]
-      responses: 
-        "302":
-          description: Redirect to Google OAuth consent screen
-        "500":
-          description: Internal server error
-          content: 
-            application/json: 
-              schema: 
-                $ref: "#/components/schemas/Error"
-              example:
-                code: 500
-                message: "Internal server error"
-
-  /auth/signup: 
-    get: 
-      summary: Login Feature with Google
+      summary: Signin Feature with Google
       description: Redirects the user to Google's OAuth consent screen for authentication
       tags: [ Auth ]
       responses: 
