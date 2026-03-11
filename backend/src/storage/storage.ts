@@ -16,13 +16,13 @@ import type { S3 as S3Config } from "../config/s3";
 
 import type { ProfThread, ProfessorThreadPostInputType, ProfessorThreadPatchInputType } from "../models/profThreads";
 import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
-//import { PaginationType } from "utils/pagination";
 
 export class Repository {
     public readonly samples: SampleRepository;
     public readonly professors: ProfessorRepository;
     public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
+    public readonly profThreads: ProfThreadRepository;
     public readonly traceDocuments: TraceDocumentRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
@@ -34,6 +34,7 @@ export class Repository {
         this.courses = new CourseRepositorySchema(db);
         this.courseThreads = new CourseThreadRepositorySchema(db);
         this.professors = new ProfessorRepositorySchema(db);
+        this.profThreads = new ProfThreadRepositorySchema(db);
         this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
     }
 
@@ -69,7 +70,7 @@ export interface CourseThreadRepository {
     deleteThread(threadId: string): Promise<void>;
 }
 export interface ProfThreadRepository {
-    getThreadsByProfessorReviewId(professorReviewId: string, pagination: PaginationType): Promise<ProfThread[]>; //will work after nishas 
+    getThreadsByProfessorReviewId(professorReviewId: string, pagination: PaginationType): Promise<ProfThread[]>;
     createThread(professorReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread>;
     patchThread(threadId: string, input: ProfessorThreadPatchInputType): Promise<ProfThread>;
     deleteThread(threadId: string): Promise<void>;

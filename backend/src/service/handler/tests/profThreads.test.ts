@@ -1,14 +1,12 @@
-// backend/src/service/handler/tests/courseThreads.test.ts
-// manan code
-
+// backend/src/service/handler/tests/profThreads.test.ts
 
 import request from "supertest";
 import express, { type Express } from "express";
 
-import { CourseThreadHandler } from "../courseThreads";
+import { ProfThreadHandler } from "../professorThreads";
 
-import type { CourseThreadRepository } from "../../../storage/storage";
-import type { CourseThread } from "../../../models/courseThread";
+import type { ProfThreadRepository } from "../../../storage/storage";
+import type { ProfThread } from "../../../models/profThreads";
 import { errorHandler } from "../../../errs/httpError";
 
 // Mock uuid.validate so handler sees it; default true so valid-UUID tests pass unless overridden
@@ -27,10 +25,10 @@ function toJsonDates<T extends { createdAt: Date; updatedAt: Date }>(obj: T) {
   };
 }
 
-describe("CourseThreadHandler Endpoints", () => {
+describe("ProfThreadHandler Endpoints", () => {
   let app: Express;
-  let repo: jest.Mocked<CourseThreadRepository>;
-  let handler: CourseThreadHandler;
+  let repo: jest.Mocked<ProfThreadRepository>;
+  let handler: ProfThreadHandler;
 
   beforeEach(() => {
     jest.spyOn(console, "error").mockImplementation(() => {});
@@ -38,28 +36,31 @@ describe("CourseThreadHandler Endpoints", () => {
     mockValidate.mockReturnValue(true);
 
     repo = {
-      getThreadsByCourseReviewId: jest.fn(),
+      getThreadsByProfessorReviewId: jest.fn(),
       createThread: jest.fn(),
       patchThread: jest.fn(),
       deleteThread: jest.fn(),
-    } as unknown as jest.Mocked<CourseThreadRepository>;
+    } as unknown as jest.Mocked<ProfThreadRepository>;
 
-    handler = new CourseThreadHandler(repo);
+    handler = new ProfThreadHandler(repo);
 
     app = express();
     app.use(express.json());
 
-    // Register routes with full paths (like sample.test.ts) so req.params.id / course_id / thread_id are set
-    app.get("/course-reviews/:id/threads", (req, res, next) =>
+    // Register routes with full paths (like sample.test.ts) so req.params.id / professor_id / thread_id are set
+
+    //prof or professor - check
+
+    app.get("/professor-reviews/:id/threads", (req, res, next) =>
       handler.handleGet(req, res).catch(next)
     );
-    app.post("/course-reviews/:id/threads", (req, res, next) =>
+    app.post("/professor-reviews/:id/threads", (req, res, next) =>
       handler.handlePost(req, res).catch(next)
     );
-    app.patch("/course-reviews/:course_review_id/threads/:thread_id", (req, res, next) =>
+    app.patch("/professor-reviews/:professor_review_id/threads/:thread_id", (req, res, next) =>
       handler.handlePatch(req, res).catch(next)
     );
-    app.delete("/course-reviews/:course_review_id/threads/:thread_id", (req, res, next) =>
+    app.delete("/professor-reviews/:professor_review_id/threads/:thread_id", (req, res, next) =>
       handler.handleDelete(req, res).catch(next)
     );
 
@@ -72,30 +73,30 @@ describe("CourseThreadHandler Endpoints", () => {
     mockValidate.mockReturnValue(true);
   });
 
-  describe("GET /course-reviews/:id/threads", () => {
-    test("returns all threads for a course review", async () => {
+  describe("GET /professor-reviews/:id/threads", () => {
+    test("returns all threads for a professor review", async () => {
       mockValidate.mockReturnValue(true);
 
-      const data: CourseThread[] = [
+      const data: ProfThread[] = [
         {
           id: "11111111-1111-1111-1111-111111111111",
           studentId: "22222222-2222-2222-2222-222222222222",
-          courseReviewId: "33333333-3333-3333-3333-333333333333",
+          professorReviewId: "33333333-3333-3333-3333-333333333333",
           content: "first thread",
           createdAt: new Date(),
           updatedAt: new Date(),
-        } as CourseThread,
+        } as ProfThread,
       ];
 
-      repo.getThreadsByCourseReviewId.mockResolvedValue(data);
+      repo.getThreadsByProfessorReviewId.mockResolvedValue(data);
 
       const res = await request(app).get(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads"
+        "/professor-reviews/33333333-3333-3333-3333-333333333333/threads"
       );
 
       expect(res.status).toBe(200);
       expect(res.body).toEqual(data.map((t) => toJsonDates(t)));
-      expect(repo.getThreadsByCourseReviewId).toHaveBeenCalledWith(
+      expect(repo.getThreadsByProfessorReviewId).toHaveBeenCalledWith(
         "33333333-3333-3333-3333-333333333333",
         { page: 1, limit: 10 }
       );
@@ -103,14 +104,14 @@ describe("CourseThreadHandler Endpoints", () => {
 
     test("respects custom pagination query params", async () => {
       mockValidate.mockReturnValue(true);
-      repo.getThreadsByCourseReviewId.mockResolvedValue([]);
+      repo.getThreadsByProfessorReviewId.mockResolvedValue([]);
 
       const res = await request(app).get(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads?page=2&limit=5"
+        "/professor-reviews/33333333-3333-3333-3333-333333333333/threads?page=2&limit=5"
       );
 
       expect(res.status).toBe(200);
-      expect(repo.getThreadsByCourseReviewId).toHaveBeenCalledWith(
+      expect(repo.getThreadsByProfessorReviewId).toHaveBeenCalledWith(
         "33333333-3333-3333-3333-333333333333",
         { page: 2, limit: 5 }
       );
@@ -120,51 +121,51 @@ describe("CourseThreadHandler Endpoints", () => {
       mockValidate.mockReturnValue(true);
 
       const res = await request(app).get(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads?page=-1"
+        "/professor-reviews/33333333-3333-3333-3333-333333333333/threads?page=-1"
       );
 
       expect(res.status).toBe(400);
     });
 
-    test("invalid course review UUID returns 400", async () => {
+    test("invalid professor review UUID returns 400", async () => {
       mockValidate.mockReturnValue(false);
 
-      const res = await request(app).get("/course-reviews/not-a-uuid/threads");
+      const res = await request(app).get("/professor-reviews/not-a-uuid/threads");
       expect(res.status).toBe(400);
     });
 
     test("repo error returns 500", async () => {
       mockValidate.mockReturnValue(true);
-      repo.getThreadsByCourseReviewId.mockRejectedValue(new Error("DB error"));
+      repo.getThreadsByProfessorReviewId.mockRejectedValue(new Error("DB error"));
 
       const res = await request(app).get(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads"
+        "/professor-reviews/33333333-3333-3333-3333-333333333333/threads"
       );
 
       expect(res.status).toBe(500);
     });
   });
 
-  describe("POST /course-reviews/:id/threads", () => {
+  describe("POST /professor-reviews/:id/threads", () => {
     test("creates a new thread and returns 201", async () => {
       mockValidate.mockReturnValue(true);
 
-      const created: CourseThread = {
+      const created: ProfThread = {
         id: "aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa",
         studentId: "550e8400-e29b-41d4-a716-446655440000",
-        courseReviewId: "33333333-3333-4333-a333-333333333333",
-        content: "Great course!",
+        professorReviewId: "33333333-3333-4333-a333-333333333333",
+        content: "Great Professor!",
         createdAt: new Date(),
         updatedAt: new Date(),
-      } as CourseThread;
+      } as ProfThread;
 
       repo.createThread.mockResolvedValue(created);
 
       const res = await request(app)
-        .post("/course-reviews/33333333-3333-4333-a333-333333333333/threads")
+        .post("/professor-reviews/33333333-3333-4333-a333-333333333333/threads")
         .send({
           studentId: "550e8400-e29b-41d4-a716-446655440000",
-          content: "Great course!",
+          content: "Great Professor",
         });
 
       expect(res.status).toBe(201);
@@ -173,7 +174,7 @@ describe("CourseThreadHandler Endpoints", () => {
         "33333333-3333-4333-a333-333333333333",
         {
           studentId: "550e8400-e29b-41d4-a716-446655440000",
-          content: "Great course!",
+          content: "Great Professor!",
         }
       );
     });
@@ -183,7 +184,7 @@ describe("CourseThreadHandler Endpoints", () => {
       repo.createThread.mockRejectedValue(new Error("DB error"));
 
       const res = await request(app)
-        .post("/course-reviews/33333333-3333-4333-a333-333333333333/threads")
+        .post("/professor-reviews/33333333-3333-4333-a333-333333333333/threads")
         .send({
           studentId: "550e8400-e29b-41d4-a716-446655440000",
           content: "Some content",
@@ -192,11 +193,11 @@ describe("CourseThreadHandler Endpoints", () => {
       expect(res.status).toBe(500);
     });
 
-    test("invalid course review UUID returns 400", async () => {
+    test("invalid professor review UUID returns 400", async () => {
       mockValidate.mockReturnValue(false);
 
       const res = await request(app)
-        .post("/course-reviews/not-a-uuid/threads")
+        .post("/professor-reviews/not-a-uuid/threads")
         .send({
           studentId: "22222222-2222-2222-2222-222222222222",
           content: "x",
@@ -209,33 +210,33 @@ describe("CourseThreadHandler Endpoints", () => {
       mockValidate.mockReturnValue(true);
 
       const res = await request(app)
-        .post("/course-reviews/33333333-3333-3333-3333-333333333333/threads")
+        .post("/professor-reviews/33333333-3333-3333-3333-333333333333/threads")
         .send({ bad: "payload" });
 
       expect(res.status).toBe(400);
     });
   });
 
-  describe("PATCH /course-reviews/:course_review_id/threads/:course_thread_id", () => {
+  describe("PATCH /professor-reviews/:professor_review_id/threads/:professor_thread_id", () => {
     test("updates a thread", async () => {
       mockValidate.mockReturnValue(true);
 
       const patchBody = { content: "updated content" };
 
-      const updated: CourseThread = {
+      const updated: ProfThread = {
         id: "11111111-1111-1111-1111-111111111111",
         studentId: "22222222-2222-2222-2222-222222222222",
-        courseReviewId: "33333333-3333-3333-3333-333333333333",
+        professorReviewId: "33333333-3333-3333-3333-333333333333",
         content: patchBody.content,
         createdAt: new Date(),
         updatedAt: new Date(),
-      } as CourseThread;
+      } as ProfThread;
 
       repo.patchThread.mockResolvedValue(updated);
 
       const res = await request(app)
         .patch(
-          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+          "/professor-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
         )
         .send(patchBody);
 
@@ -248,21 +249,21 @@ describe("CourseThreadHandler Endpoints", () => {
       );
     });
 
-    test("invalid course_review_id returns 400", async () => {
+    test("invalid professor_review_id returns 400", async () => {
       mockValidate.mockReturnValue(false);
 
       const res = await request(app)
-        .patch("/course-reviews/not-a-uuid/threads/11111111-1111-1111-1111-111111111111")
+        .patch("/professor-reviews/not-a-uuid/threads/11111111-1111-1111-1111-111111111111")
         .send({ content: "x" });
 
       expect(res.status).toBe(400);
     });
 
-    test("invalid course_thread_id returns 400", async () => {
+    test("invalid professor_thread_id returns 400", async () => {
       mockValidate.mockReturnValueOnce(true).mockReturnValueOnce(false);
 
       const res = await request(app)
-        .patch("/course-reviews/33333333-3333-3333-3333-333333333333/threads/not-a-uuid")
+        .patch("/professor-reviews/33333333-3333-3333-3333-333333333333/threads/not-a-uuid")
         .send({ content: "x" });
 
       expect(res.status).toBe(400);
@@ -273,7 +274,7 @@ describe("CourseThreadHandler Endpoints", () => {
 
       const res = await request(app)
         .patch(
-          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+          "/professor-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
         )
         .send({ nope: true });
 
@@ -286,7 +287,7 @@ describe("CourseThreadHandler Endpoints", () => {
 
       const res = await request(app)
         .patch(
-          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+          "/professor-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
         )
         .send({ content: "x" });
 
@@ -294,13 +295,13 @@ describe("CourseThreadHandler Endpoints", () => {
     });
   });
 
-  describe("DELETE /course-reviews/:course_review_id/threads/:course_thread_id", () => {
+  describe("DELETE /professor-reviews/:professor_review_id/threads/:professor_thread_id", () => {
     test("deletes a thread", async () => {
       mockValidate.mockReturnValue(true);
       repo.deleteThread.mockResolvedValue(undefined);
 
       const res = await request(app).delete(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+        "/professor-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
       );
 
       expect(res.status).toBe(204);
@@ -309,21 +310,21 @@ describe("CourseThreadHandler Endpoints", () => {
       );
     });
 
-    test("invalid course_review_id returns 400", async () => {
+    test("invalid professor_review_id returns 400", async () => {
       mockValidate.mockReturnValue(false);
 
       const res = await request(app).delete(
-        "/course-reviews/not-a-uuid/threads/11111111-1111-1111-1111-111111111111"
+        "/professor-reviews/not-a-uuid/threads/11111111-1111-1111-1111-111111111111"
       );
 
       expect(res.status).toBe(400);
     });
 
-    test("invalid course_thread_id returns 400", async () => {
+    test("invalid professor_thread_id returns 400", async () => {
       mockValidate.mockReturnValueOnce(true).mockReturnValueOnce(false);
 
       const res = await request(app).delete(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/not-a-uuid"
+        "/professor-reviews/33333333-3333-3333-3333-333333333333/threads/not-a-uuid"
       );
 
       expect(res.status).toBe(400);
@@ -334,7 +335,7 @@ describe("CourseThreadHandler Endpoints", () => {
       repo.deleteThread.mockRejectedValue(new Error("DB error"));
 
       const res = await request(app).delete(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+        "/professor-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
       );
 
       expect(res.status).toBe(500);
