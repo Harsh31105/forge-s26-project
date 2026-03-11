@@ -2,12 +2,19 @@ import { Request, Response } from "express";
 import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { config } from "../../../config/config";
 import { Conflict, mapDBError } from "../../../errs/httpError";
-import { StudentRepository } from "../../../storage/storage";
+// TODO: Uncomment the import below
+// import { StudentRepository } from "../../../storage/storage";
 import jwt from "jsonwebtoken";
+
+// Delete the two imports below "NodePgDatabase" and "student"
+import { NodePgDatabase } from "drizzle-orm/node-postgres";
+import { student } from "../../../storage/tables/student"
 
 export class AuthHandler {
     constructor(
-        private readonly studentRepo: StudentRepository) {}
+        // CHANGE NodePgDatabase to be StudentRepo
+        private readonly studentRepo: NodePgDatabase
+    ) {}
 
     async handleRedirect(req: Request, res: Response): Promise<void> {
         const url = getAuthUrl();
@@ -41,11 +48,19 @@ export class AuthHandler {
         }
 
         try {
-            await this.studentRepo.createStudent({
-                firstName: payload.given_name!,
+            // TODO: Uncomment this when you're done with Students endpoint and replace the block below. 
+            // await this.studentRepo.createStudent({
+            //     firstName: payload.given_name!,
+            //     lastName: payload.family_name!,
+            //     email: payload.email,
+            // });
+            
+            // REPLACE lines 59-64 with the code above
+            const newStudent = await this.studentRepo.insert(student).values({
+                firstName: payload.given_name!, 
                 lastName: payload.family_name!,
                 email: payload.email,
-            });
+            }).returning();
 
             const token = jwt.sign(
                 { email: payload.email,  
@@ -61,10 +76,11 @@ export class AuthHandler {
             return;
 
         } catch (error) {
-            const mappedError : any= mapDBError(error, "failed to create student");
-            if (mappedError instanceof Conflict) {
+            if (error instanceof Error) {
+                const message = error.message.toLowerCase();
 
-                const token = jwt.sign(
+                if (message.includes("duplicate key") || message.includes("unique constraint")) {
+                    const token = jwt.sign(
                 { email: payload.email,  
                 name: payload.name },
                 config.google.jwtSecret,
@@ -76,8 +92,12 @@ export class AuthHandler {
                     token,
                 });
                 return;
+
+                } else {
+                    throw error;
+                }
             }
-            throw mappedError;
+
         }
     }
 }
