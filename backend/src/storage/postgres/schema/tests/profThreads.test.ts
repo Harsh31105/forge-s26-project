@@ -56,6 +56,12 @@ describe("ProfThreadRepositorySchema (DB)", () => {
       lastName: "Test",
     });
 
+    // ADD THIS: Insert the review record first - copilot fix
+    await db.insert(review).values({
+      id: reviewId,
+      studentId,
+  });
+
     await db.insert(profReview).values({
       reviewId: reviewId,
       //studentId,
