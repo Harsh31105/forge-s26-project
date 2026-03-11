@@ -29,7 +29,7 @@ import { createInterface } from "readline/promises";
 import { chromium, type BrowserContext, type Frame, type Page } from "playwright";
 
 import { s3Config } from "../src/config/s3";
-import { TraceDocumentRepositoryS3 } from "../src/storage/s3/traceDocuments";
+import { TraceDocumentRepositoryS3, type TraceDocumentKey } from "../src/storage/s3/traceDocuments";
 
 const DEFAULT_REPORT_BROWSER_URL = "https://www.applyweb.com/eval/new/reportbrowser";
 const DEFAULT_USER_DATA_DIR = path.resolve(process.cwd(), ".trace-playwright");
@@ -37,7 +37,7 @@ const DEFAULT_MANIFEST_PATH = path.resolve(process.cwd(), "scripts/output/trace-
 
 interface CliOptions {
     department: string;
-    courseCode: number;
+    courseCode?: number;
     reportUrl?: string;
     reportBrowserUrl: string;
     limit?: number;
@@ -68,7 +68,7 @@ interface ScrapedReportMetadata {
 
 interface TraceManifestEntry extends ScrapedReportMetadata {
     department: string;
-    courseCode: number;
+    courseCode?: number;
     s3Key: string;
     uploadedAt: string;
 }
@@ -76,13 +76,13 @@ interface TraceManifestEntry extends ScrapedReportMetadata {
 function printUsage(): void {
     console.log(`
 Usage:
-  npx ts-node scripts/scrape-trace-to-s3.ts --department CS --course-code 3000 [options]
+  npx ts-node scripts/scrape-trace-to-s3.ts --department CS [--course-code 3000] [options]
 
 Required:
   --department <value>    Department prefix used for the S3 path (e.g. CS)
-  --course-code <value>   Course code used for the S3 path (e.g. 3000)
 
 Optional:
+  --course-code <value>         Course code for S3 path (e.g. 3000). Omit to scrape entire department.
   --report-url <url>            Process one report page directly
   --report-browser-url <url>    Override the TRACE browser URL
   --limit <n>                   Stop after n reports
@@ -189,9 +189,22 @@ function looksLikePdf(buffer: Buffer): boolean {
     return buffer.subarray(0, 4).toString("utf8") === "%PDF";
 }
 
-function shouldSkipTerm(semester: string, year: number, allowExcluded2025: boolean): boolean {
-    if (allowExcluded2025) return false;
-    return year === 2025 && (semester === "fall" || semester.startsWith("summer"));
+const MIN_YEAR = 2021;
+const MIN_SEMESTER = "spring";
+
+function semesterOrder(sem: string): number {
+    if (sem.startsWith("spring")) return 1;
+    if (sem.startsWith("summer")) return 2;
+    if (sem.startsWith("fall")) return 3;
+    return 0;
+}
+
+function shouldSkipTerm(semester: string, year: number, allowExcluded2025: boolean): "too-old" | "excluded" | false {
+    if (year < MIN_YEAR) return "too-old";
+    if (year === MIN_YEAR && semesterOrder(semester) < semesterOrder(MIN_SEMESTER)) return "too-old";
+
+    if (!allowExcluded2025 && year === 2025 && (semester === "fall" || semester.startsWith("summer"))) return "excluded";
+    return false;
 }
 
 function requireEnv(name: string): void {
@@ -355,14 +368,17 @@ function parseOptions(argv: string[]): CliOptions {
     const department = getStringArg(args, "department");
     const courseCodeValue = getStringArg(args, "course-code");
 
-    if (!department || !courseCodeValue) {
+    if (!department) {
         printUsage();
-        throw new Error("Both --department and --course-code are required.");
+        throw new Error("--department is required.");
     }
 
-    const courseCode = Number(courseCodeValue);
-    if (!Number.isInteger(courseCode) || courseCode <= 0) {
-        throw new Error(`Invalid --course-code value: ${courseCodeValue}`);
+    let courseCode: number | undefined;
+    if (courseCodeValue) {
+        courseCode = Number(courseCodeValue);
+        if (!Number.isInteger(courseCode) || courseCode <= 0) {
+            throw new Error(`Invalid --course-code value: ${courseCodeValue}`);
+        }
     }
 
     const limitValue = getStringArg(args, "limit");
@@ -374,7 +390,6 @@ function parseOptions(argv: string[]): CliOptions {
     const reportUrl = getStringArg(args, "report-url");
     const options: CliOptions = {
         department: department.trim().toUpperCase(),
-        courseCode,
         reportBrowserUrl: getStringArg(args, "report-browser-url") ?? DEFAULT_REPORT_BROWSER_URL,
         headless: getBooleanArg(args, "headless"),
         userDataDir: path.resolve(getStringArg(args, "user-data-dir") ?? DEFAULT_USER_DATA_DIR),
@@ -382,6 +397,10 @@ function parseOptions(argv: string[]): CliOptions {
         allowExcluded2025: getBooleanArg(args, "allow-excluded-2025"),
         dryRun: getBooleanArg(args, "dry-run"),
     };
+
+    if (courseCode !== undefined) {
+        options.courseCode = courseCode;
+    }
 
     if (reportUrl) {
         options.reportUrl = reportUrl;
@@ -544,15 +563,42 @@ async function collectReportUrlsFromBrowser(page: Page, limit?: number): Promise
 
     while (true) {
         await page.waitForLoadState("networkidle");
+        await page.waitForTimeout(2000);
 
-        const hrefs = await page
-            .locator("a")
-            .evaluateAll((elements) =>
-                elements
-                    .filter((element) => element.textContent?.trim() === "View")
-                    .map((element) => (element as HTMLAnchorElement).href)
-                    .filter((href) => href.length > 0)
-            );
+        const iframeLocator = page.frameLocator("#contentFrame");
+
+        let hrefs: string[] = [];
+
+        try {
+            hrefs = await iframeLocator
+                .locator("a")
+                .evaluateAll((elements) =>
+                    elements
+                        .filter((element) => {
+                            const text = element.textContent?.trim().toLowerCase() ?? "";
+                            const href = (element as HTMLAnchorElement).href ?? "";
+                            return text === "view" || href.includes("coursereport");
+                        })
+                        .map((element) => (element as HTMLAnchorElement).href)
+                        .filter((href) => href.length > 0)
+                );
+            console.log(`Found ${hrefs.length} report link(s) in iframe on current page.`);
+        } catch {
+            console.log("DEBUG: Could not access #contentFrame iframe, trying top page...");
+            hrefs = await page
+                .locator("a")
+                .evaluateAll((elements) =>
+                    elements
+                        .filter((element) => {
+                            const text = element.textContent?.trim().toLowerCase() ?? "";
+                            const href = (element as HTMLAnchorElement).href ?? "";
+                            return text === "view" || href.includes("coursereport");
+                        })
+                        .map((element) => (element as HTMLAnchorElement).href)
+                        .filter((href) => href.length > 0)
+                );
+            console.log(`Found ${hrefs.length} report link(s) on top page.`);
+        }
 
         hrefs.forEach((href) => {
             if (!limit || urls.size < limit) {
@@ -562,28 +608,37 @@ async function collectReportUrlsFromBrowser(page: Page, limit?: number): Promise
 
         if (limit && urls.size >= limit) break;
 
-        const nextLink = page.locator("a:has-text('Next')").first();
-        if (!(await nextLink.isVisible().catch(() => false))) break;
-
-        const previousUrls = new Set(urls);
-        await Promise.all([
-            page.waitForLoadState("networkidle"),
-            nextLink.click(),
-        ]);
-
-        if (urls.size === previousUrls.size) {
-            const currentPageHrefs = await page
-                .locator("a")
-                .evaluateAll((elements) =>
-                    elements
-                        .filter((element) => element.textContent?.trim() === "View")
-                        .map((element) => (element as HTMLAnchorElement).href)
-                        .filter((href) => href.length > 0)
+        let hasOldTerms = false;
+        try {
+            const termTexts = await (iframeLocator ?? page)
+                .locator("td")
+                .evaluateAll((cells) =>
+                    cells.map((c) => c.textContent?.trim() ?? "").filter((t) => /\b(19|20)\d{2}\b/.test(t))
                 );
 
-            const added = currentPageHrefs.some((href) => !previousUrls.has(href));
-            if (!added) break;
+            hasOldTerms = termTexts.some((t) => {
+                const yearMatch = t.match(/\b(20\d{2})\b/);
+                return yearMatch && Number(yearMatch[1]) < MIN_YEAR;
+            });
+        } catch { /* ignore */ }
+
+        if (hasOldTerms) {
+            console.log(`Detected pre-${MIN_YEAR} terms on current page. Stopping URL collection.`);
+            break;
         }
+
+        let nextLink = iframeLocator.locator("a:has-text('Next')").first();
+        let nextVisible = await nextLink.isVisible().catch(() => false);
+        if (!nextVisible) {
+            nextLink = page.locator("a:has-text('Next')").first();
+            nextVisible = await nextLink.isVisible().catch(() => false);
+        }
+        if (!nextVisible) break;
+
+        const previousUrls = new Set(urls);
+        await nextLink.click();
+        await page.waitForLoadState("networkidle").catch(() => undefined);
+        await page.waitForTimeout(2000);
     }
 
     return [...urls];
@@ -679,31 +734,44 @@ async function main(): Promise<void> {
                     ? await scrapeReportMetadataFromCurrentPage(reportPage, reportUrl)
                     : await scrapeReportMetadata(reportPage, reportUrl);
 
-                if (shouldSkipTerm(metadata.semester, metadata.lectureYear, options.allowExcluded2025)) {
+                const skipReason = shouldSkipTerm(metadata.semester, metadata.lectureYear, options.allowExcluded2025);
+                if (skipReason === "too-old") {
+                    console.log(`Reached pre-${MIN_YEAR} report (${metadata.termLabel}). Stopping.`);
+                    break;
+                }
+                if (skipReason === "excluded") {
                     console.log(`Skipping excluded term ${metadata.termLabel}: ${reportUrl}`);
                     continue;
                 }
 
                 const pdfBuffer = await downloadPdf(context, metadata.pdfUrl);
-                const uploadKeyInput = {
+                const uploadKeyInput: TraceDocumentKey = {
                     department: options.department,
-                    courseCode: options.courseCode,
                     semester: metadata.semester,
                     lectureYear: metadata.lectureYear,
                     professorId: metadata.sourceId,
                 };
+                if (options.courseCode !== undefined) {
+                    uploadKeyInput.courseCode = options.courseCode;
+                }
+
+                const dryRunParts = [uploadKeyInput.department];
+                if (uploadKeyInput.courseCode !== undefined) dryRunParts.push(String(uploadKeyInput.courseCode));
+                dryRunParts.push(`${uploadKeyInput.semester}_${uploadKeyInput.lectureYear}`, `${uploadKeyInput.professorId}.pdf`);
 
                 const s3Key = options.dryRun
-                    ? `dry-run:${uploadKeyInput.department}/${uploadKeyInput.courseCode}/${uploadKeyInput.semester}_${uploadKeyInput.lectureYear}/${uploadKeyInput.professorId}.pdf`
+                    ? `dry-run:${dryRunParts.join("/")}`
                     : await repo!.uploadPdf(uploadKeyInput, pdfBuffer);
 
                 const manifestEntry: TraceManifestEntry = {
                     ...metadata,
                     department: options.department,
-                    courseCode: options.courseCode,
                     s3Key,
                     uploadedAt: new Date().toISOString(),
                 };
+                if (options.courseCode !== undefined) {
+                    manifestEntry.courseCode = options.courseCode;
+                }
 
                 await appendManifest(options.manifestPath, manifestEntry);
                 console.log(`Uploaded ${metadata.termLabel} report for ${metadata.instructor || "unknown instructor"} -> ${s3Key}`);

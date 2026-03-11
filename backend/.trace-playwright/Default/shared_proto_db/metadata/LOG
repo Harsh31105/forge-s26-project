@@ -1,2 +1,3 @@
-2026/03/11-18:14:21.775 27a945 Creating DB /Users/manang/forge-s26-project/backend/.trace-playwright/Default/shared_proto_db/metadata since it was missing.
-2026/03/11-18:14:21.781 27a945 Reusing MANIFEST /Users/manang/forge-s26-project/backend/.trace-playwright/Default/shared_proto_db/metadata/MANIFEST-000001
+2026/03/11-19:19:21.918 2977a9 Reusing MANIFEST /Users/manang/forge-s26-project/backend/.trace-playwright/Default/shared_proto_db/metadata/MANIFEST-000001
+2026/03/11-19:19:21.918 2977a9 Recovering log #3
+2026/03/11-19:19:21.919 2977a9 Reusing old log /Users/manang/forge-s26-project/backend/.trace-playwright/Default/shared_proto_db/metadata/000003.log 

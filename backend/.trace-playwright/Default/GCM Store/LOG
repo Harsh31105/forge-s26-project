@@ -1,2 +1,3 @@
-2026/03/11-18:14:27.094 27a938 Creating DB /Users/manang/forge-s26-project/backend/.trace-playwright/Default/GCM Store since it was missing.
-2026/03/11-18:14:27.105 27a938 Reusing MANIFEST /Users/manang/forge-s26-project/backend/.trace-playwright/Default/GCM Store/MANIFEST-000001
+2026/03/11-19:19:24.855 2977aa Reusing MANIFEST /Users/manang/forge-s26-project/backend/.trace-playwright/Default/GCM Store/MANIFEST-000001
+2026/03/11-19:19:24.857 2977aa Recovering log #3
+2026/03/11-19:19:24.857 2977aa Reusing old log /Users/manang/forge-s26-project/backend/.trace-playwright/Default/GCM Store/000003.log 
