@@ -16,7 +16,7 @@ import { assessCensorship, CensorshipResult } from "../../../utils/censorship";
 export class ProfThreadHandler {
     constructor(private readonly repo: ProfThreadRepository) {}
 
-    async handleGet(req: Request, res: Response): Promise<void> {
+    async handleGet(req: Request, res: Response): Promise<void> {   
     const professorReviewId = req.params.id as string;
     if (!isUUID(professorReviewId)) throw BadRequest("invalid professor review id");
 

@@ -99,5 +99,5 @@ function registerRoutes(router: Router, repo: Repository) {
     router.use("/professors", professorRoutes(professorHandler));
 
     const profThreadHandler = new ProfThreadHandler(repo.profThreads);
-    router.use("/professor-reviews/:id/threads", professorThreadRoutes(profThreadHandler));
+    router.use("/professor-reviews", professorThreadRoutes(profThreadHandler));
 }
