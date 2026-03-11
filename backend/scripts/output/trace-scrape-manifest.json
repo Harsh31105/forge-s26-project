@@ -1,0 +1,18 @@
+[
+  {
+    "reportUrl": "https://www.applyweb.com/eval/new/coursereport?sp=105548&sp=4112&sp=198",
+    "pdfUrl": "https://www.applyweb.com/eval/new/showreport/pdf?c=105548&i=4112&t=198&r=27&d=true",
+    "courseTitle": "Algorithms Data",
+    "instructor": "Strange, Elena",
+    "section": "01",
+    "courseId": "40429",
+    "termLabel": "Summer 1 2025",
+    "semester": "summer_1",
+    "lectureYear": 2025,
+    "sourceId": "strange-elena-section-01-course-40429-sp-105548-4112-198-179dc8c742",
+    "department": "CS",
+    "courseCode": 3000,
+    "s3Key": "trace-evaluations/CS/3000/summer_1_2025/strange-elena-section-01-course-40429-sp-105548-4112-198-179dc8c742.pdf",
+    "uploadedAt": "2026-03-11T18:31:19.352Z"
+  }
+]
