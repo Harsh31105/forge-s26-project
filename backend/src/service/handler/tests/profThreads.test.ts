@@ -154,7 +154,7 @@ describe("ProfThreadHandler Endpoints", () => {
         id: "aaaaaaaa-aaaa-4aaa-aaaa-aaaaaaaaaaaa",
         studentId: "550e8400-e29b-41d4-a716-446655440000",
         professorReviewId: "33333333-3333-4333-a333-333333333333",
-        content: "Great Professor!",
+        content: "Great Professor",
         createdAt: new Date(),
         updatedAt: new Date(),
       } as ProfThread;
