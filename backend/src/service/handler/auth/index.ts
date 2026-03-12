@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { config } from "../../../config/config";
-import { mapDBError, getErrorMessage } from "../../../errs/httpError";
+import { mapDBError } from "../../../errs/httpError";
 // TODO: Uncomment the import below
 // import { StudentRepository } from "../../../storage/storage";
 import jwt from "jsonwebtoken";
@@ -77,7 +77,6 @@ export class AuthHandler {
 
         } catch (error) {
             if (error instanceof Error) {
-                const message = getErrorMessage(error).toLowerCase();
 
                 if (String(error.cause).includes("duplicate key") || String(error.cause).includes("unique constraint")) {
                     
