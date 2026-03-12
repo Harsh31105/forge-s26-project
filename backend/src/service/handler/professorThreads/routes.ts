@@ -9,11 +9,11 @@ export function professorThreadRoutes(handler: ProfThreadHandler): Router {
   router.post("/:id/threads", handler.handlePost.bind(handler));
 
   // /professor-reviews/:prof_id/threads/:thread_id
-  router.patch("/:professor_review_id/threads/:thread_id", (req, res, next) =>
-    handler.handlePatch(req, res).catch(next)
+  router.patch("/:professor_review_id/threads/:thread_id", (req, res) =>
+    handler.handlePatch(req, res)
   );
-  router.delete("/:professor_review_id/threads/:thread_id", (req, res, next) =>
-    handler.handleDelete(req, res).catch(next)
+  router.delete("/:professor_review_id/threads/:thread_id", (req, res) =>
+    handler.handleDelete(req, res)
   );
 
   return router;

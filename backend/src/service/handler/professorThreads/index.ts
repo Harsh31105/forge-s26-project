@@ -81,7 +81,7 @@ export class ProfThreadHandler {
     }
 
     async handleDelete(req: Request, res: Response): Promise<void> {
-    const professorReviewId = (req.params.professor_id ?? req.params.id) as string;
+    const professorReviewId = req.params.professor_id = req.params.id as string;
     const threadId = req.params.thread_id as string;
 
     if (!isUUID(professorReviewId)) throw BadRequest("invalid professor review id");

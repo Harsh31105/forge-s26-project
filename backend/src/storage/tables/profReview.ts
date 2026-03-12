@@ -2,12 +2,13 @@ import { pgTable, uuid, integer, varchar, timestamp, check } from "drizzle-orm/p
 import { sql } from "drizzle-orm";
 import { review } from "./review";
 import { professor } from "./professor";
+import { professorTagEnum } from "./profTagEnum";
 
 export const profReview = pgTable("professor_review", {
     reviewId: uuid("review_id").primaryKey().references(() => review.id, { onDelete: "cascade" }),
     professorId: uuid("professor_id").notNull().references(() => professor.id, { onDelete: "cascade" }),
     rating: integer("rating").notNull(),
-    //tags
+    tags: professorTagEnum("tags").array(),
     reviewText: varchar("review_text", { length: 2000 }).notNull(),
     createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
     updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
