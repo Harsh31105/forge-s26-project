@@ -6,12 +6,16 @@ import type { S3 } from "./s3";
 import { s3Config } from "./s3";
 import type { Supabase } from "./supabase"
 import { supabaseConfig } from "./supabase";
+import { googleConfig } from "./google";
+import type { Google } from "./google";
+
 
 export interface configuration {
     application: Application;
     db: DB,
     s3: S3,
-    supabase: Supabase
+    supabase: Supabase,
+    google : Google
 }
 
 export const config = Object.freeze({
@@ -19,6 +23,7 @@ export const config = Object.freeze({
     db: dbConfig,
     s3: s3Config,
     supabase: supabaseConfig,
+    google: googleConfig
 });
 
 export function validateConfig() {
@@ -38,6 +43,11 @@ export function validateConfig() {
     if (!config.supabase.url) missing.push("SUPABASE_URL");
     if (!config.supabase.anonKey) missing.push("SUPABASE_ANON_KEY");
     if (!config.supabase.serviceRoleKey) missing.push("SUPABASE_SERVICE_ROLE_KEY");
+
+    if (!config.google.clientId) missing.push("GOOGLE_CLIENT_ID");
+    if (!config.google.clientSecret) missing.push("GOOGLE_CLIENT_SECRET");
+    if (!config.google.redirectURI) missing.push("GOOGLE_REDIRECT_URI");
+    if (!config.google.jwtSecret) missing.push("JWT_SECRET");
 
     if (missing.length > 0) {
         throw new Error(`Missing required environment variables: \n${missing.join("\n")}`);
