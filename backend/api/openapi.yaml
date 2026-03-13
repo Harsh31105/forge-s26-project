@@ -839,13 +839,29 @@ paths:
           content: 
             application/json: 
               schema: 
-                $ref: "#/components/schemas/Student" 
+                type: object 
+                properties: 
+                  message: 
+                    type: string
+                    example: "Login successful"
+                  token: 
+                    type: string 
+                    description: JWT access token
+                    example: "eyJhbGciOi..."
         "201": 
           description: New student created successfully
           content:
             application/json: 
-              schema:
-                $ref: "#/components/schemas/Student"
+              schema: 
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    example: "Signup successful"
+                  token: 
+                    type: string
+                    description: JWT access token
+                    example: "eyJhbGciOi..."
         "400":
           description: Failed to get authorization code
           content:

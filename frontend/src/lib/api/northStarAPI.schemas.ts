@@ -314,3 +314,15 @@ export type GetAuthCallbackParams = {
    */
   code: string;
 };
+
+export type GetAuthCallback200 = {
+  message?: string;
+  /** JWT access token */
+  token?: string;
+};
+
+export type GetAuthCallback201 = {
+  message?: string;
+  /** JWT access token */
+  token?: string;
+};

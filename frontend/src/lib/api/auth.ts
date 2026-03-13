@@ -4,7 +4,11 @@
  * NorthStar API
  * OpenAPI spec version: 0.1.0
  */
-import type { GetAuthCallbackParams, Student } from "./northStarAPI.schemas";
+import type {
+  GetAuthCallback200,
+  GetAuthCallback201,
+  GetAuthCallbackParams,
+} from "./northStarAPI.schemas";
 
 import { customAxios } from "./apiClient";
 
@@ -21,7 +25,11 @@ export const getAuth = () => {
    * @summary Google OAuth callback
    */
   const getAuthCallback = (params: GetAuthCallbackParams) => {
-    return customAxios<Student | Student>({ url: `/auth/callback`, method: "GET", params });
+    return customAxios<GetAuthCallback200 | GetAuthCallback201>({
+      url: `/auth/callback`,
+      method: "GET",
+      params,
+    });
   };
   return { getAuthSignin, getAuthCallback };
 };
