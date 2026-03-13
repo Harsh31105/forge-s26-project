@@ -25,7 +25,7 @@ const mockCourseReview: CourseReview = {
 const mockProfReview: ProfessorReview = {
     id: "e4da3b7f-bbce-4a9b-9f0e-1c2f3a4b5c6d",
     studentId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
-    profId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+    profId: "c3d4e5f6-a7b8-4012-8def-123456789012",
     rating: 5,
     reviewText: "Excellent professor, very clear explanations.",
     tags: ["engaging"],
@@ -82,7 +82,7 @@ describe("ReviewHandler Endpoints", () => {
             });
             expect(res.body[1]).toMatchObject({
                 id: "e4da3b7f-bbce-4a9b-9f0e-1c2f3a4b5c6d",
-                profId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+                profId: "c3d4e5f6-a7b8-4012-8def-123456789012",
                 rating: 5,
             });
         });
@@ -147,7 +147,7 @@ describe("ReviewHandler Endpoints", () => {
             expect(res.status).toBe(200);
             expect(res.body).toMatchObject({
                 id: "e4da3b7f-bbce-4a9b-9f0e-1c2f3a4b5c6d",
-                profId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+                profId: "c3d4e5f6-a7b8-4012-8def-123456789012",
                 rating: 5,
             });
         });
@@ -210,7 +210,7 @@ describe("ReviewHandler Endpoints", () => {
 
             const payload = {
                 studentId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
-                profId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+                profId: "c3d4e5f6-a7b8-4012-8def-123456789012",
                 rating: 5,
                 reviewText: "Excellent professor, very clear explanations.",
                 tags: ["engaging"],
@@ -219,7 +219,7 @@ describe("ReviewHandler Endpoints", () => {
             const res = await request(app).post("/reviews").send(payload);
             expect(res.status).toBe(201);
             expect(res.body).toMatchObject({
-                profId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+                profId: "c3d4e5f6-a7b8-4012-8def-123456789012",
                 rating: 5,
             });
             expect(repo.createParentReview).toHaveBeenCalledWith(payload.studentId);
@@ -289,7 +289,7 @@ describe("ReviewHandler Endpoints", () => {
         test("both courseId and profId provided returns 400", async () => {
             const payload = {
                 courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
-                profId: "c3d4e5f6-a7b8-9012-cdef-123456789012",
+                profId: "c3d4e5f6-a7b8-4012-8def-123456789012",
                 rating: 4,
                 reviewText: "Conflicting IDs.",
             };

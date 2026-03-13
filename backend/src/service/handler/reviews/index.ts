@@ -15,7 +15,7 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
-import leoProfanity from "leo-profanity";
+import { assessCensorship } from "../../../utils/censorship";
 
 export class ReviewHandler {
   constructor(private readonly repo: ReviewRepository) {}
@@ -57,7 +57,7 @@ export class ReviewHandler {
       throw BadRequest("unable to parse input for post-review");
     }
     const postReview: ReviewPostInputType = result.data;
-    const censoredText = leoProfanity.clean(postReview.reviewText);
+    const censoredText = assessCensorship(postReview.reviewText).processedText;
 
     let newReview: Review;
     try {
@@ -95,7 +95,7 @@ export class ReviewHandler {
     }
     const patchReview: ReviewPatchInputType = {
       ...result.data,
-      ...(result.data.reviewText && { reviewText: leoProfanity.clean(result.data.reviewText) }),
+      ...(result.data.reviewText && { reviewText: assessCensorship(result.data.reviewText).processedText }),
     };
 
     let updatedReview: Review;

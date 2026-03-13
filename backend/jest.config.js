@@ -8,6 +8,8 @@ module.exports = {
   transform: {
     ...tsJestTransformCfg,
   },
+  testMatch: ['**/*.test.ts'],
+  moduleFileExtensions: ['ts', 'tsx', 'js', 'jsx', 'json', 'node'],
   testPathIgnorePatterns: ['/node_modules/'],
   transformIgnorePatterns: ['/node_modules/(?!uuid)/'],
   moduleNameMapper: {
