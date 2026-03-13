@@ -8,6 +8,8 @@ import {SampleHandler} from "./handler/sample";
 import {FavoriteHandler} from "./handler/favorite";
 import {sampleRoutes} from "./handler/sample/routes";
 import {favoritesRoutes} from "./handler/favorite/routes";
+import {ProfessorHandler} from "./handler/professor";
+import {professorRoutes} from "./handler/professor/routes";
 import morgan from "morgan";
 import compression from "compression";
 import cors from "cors";
@@ -15,8 +17,10 @@ import {errorHandler} from "../errs/httpError";
 import YAML from "yamljs";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
-import { favorite } from "storage/tables/favorite";
-import { get } from "http";
+import {CourseHandler} from "./handler/course";
+import {courseRoutes} from "./handler/course/routes";
+import { CourseThreadHandler } from "./handler/courseThreads";
+import { courseThreadRoutes } from "./handler/courseThreads/routes";
 
 class App {
     public server: Express;
@@ -81,7 +85,7 @@ export function initApp(): App {
     configurePool(pool, config.db);
 
     const db = drizzle(pool);
-    const repo = new Repository(pool, db);
+    const repo = new Repository(pool, db, config.s3);
 
     const conn = getConnectionString(config.db);
     console.log("DB CONNECTION STR:", conn);
@@ -93,6 +97,12 @@ function registerRoutes(router: Router, repo: Repository) {
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
 
-    const favoriteHandler = new FavoriteHandler(repo.favorites);
-    router.use("/favorites", favoritesRoutes(favoriteHandler));
+    const courseHandler = new CourseHandler(repo.courses);
+    router.use("/courses", courseRoutes(courseHandler));
+
+    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
+    router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
+
+    const professorHandler = new ProfessorHandler(repo.professors);
+    router.use("/professors", professorRoutes(professorHandler));
 }
