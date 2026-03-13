@@ -5,7 +5,9 @@ import {configurePool, getConnectionString} from "../config/db";
 import { config } from "../config/config";
 import { drizzle } from "drizzle-orm/node-postgres";
 import {SampleHandler} from "./handler/sample";
+import {FavoriteHandler} from "./handler/favorite";
 import {sampleRoutes} from "./handler/sample/routes";
+import {favoritesRoutes} from "./handler/favorite/routes";
 import {ProfessorHandler} from "./handler/professor";
 import {professorRoutes} from "./handler/professor/routes";
 import morgan from "morgan";
@@ -54,6 +56,7 @@ class App {
             res.send("API is running!");
         });
 
+
         const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
         this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
@@ -63,8 +66,12 @@ class App {
         this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
     }
 
-    listen(port: string) {
-        this.server.listen(port, () => {
+    listen(port: string | number) {
+        const p = Number(port);
+        if (!Number.isFinite(p) || p <= 0) {
+            throw new Error(`Invalid port: ${port}`);
+        }
+        this.server.listen(p, () => {
             console.log(`Server running on http://localhost:${port}`);
         });
     }
@@ -79,6 +86,9 @@ export function initApp(): App {
 
     const db = drizzle(pool);
     const repo = new Repository(pool, db, config.s3);
+
+    const conn = getConnectionString(config.db);
+    console.log("DB CONNECTION STR:", conn);
 
     return new App(repo);
 }

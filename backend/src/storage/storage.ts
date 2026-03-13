@@ -13,8 +13,19 @@ import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
 
+import type {Favorite,
+    FavoritePostInputType, 
+    FavoritePostInputSchema,
+    } from "../models/favorite";
+
+import { FavoritesRepositorySchema} from "./postgres/schema/favorites";
+
+
+
 export class Repository {
     public readonly samples: SampleRepository;
+    public readonly favorites: FavoriteRepository;
+
     public readonly professors: ProfessorRepository;
     public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
@@ -25,6 +36,8 @@ export class Repository {
     constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
         this.pool = pool;
         this.db = db;
+        
+        this.favorites = new FavoritesRepositorySchema(db);
         this.samples = new SampleRepositorySchema(db);
         this.courses = new CourseRepositorySchema(db);
         this.courseThreads = new CourseThreadRepositorySchema(db);
@@ -70,4 +83,11 @@ export interface ProfessorRepository {
     createProfessor(input: ProfessorPostInputType): Promise<Professor>;
     patchProfessor(id: string, input: ProfessorPatchInputType): Promise<Professor>;
     deleteProfessor(id: string): Promise<void>;
+}
+
+
+export interface FavoriteRepository {
+    getFavorites(pagination: PaginationType): Promise<Favorite[]>;
+    createFavorite(input: FavoritePostInputType): Promise<Favorite>;
+    deleteFavorite(student_id: string, course_id: string): Promise<void>;
 }

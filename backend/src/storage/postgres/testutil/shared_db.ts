@@ -370,6 +370,14 @@ export async function cleanupTestData() {
       sample
     RESTART IDENTITY CASCADE;
   `);
+
+  await db.execute(`
+    TRUNCATE TABLE 
+      favorite
+    RESTART IDENTITY CASCADE;
+  `);
+
+
 }
 
 export async function shutdownSharedTestDB() {
