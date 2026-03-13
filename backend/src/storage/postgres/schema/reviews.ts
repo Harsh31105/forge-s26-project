@@ -1,79 +1,84 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
   CourseReview,
+  PaginationQueryType,
   ProfessorReview,
   Review,
   ReviewPatchInputType,
-  ReviewPostInputType,
 } from "../../../models/review";
-import { ReviewRepository } from "../../storage";
-import { review, courseReview, profReview } from "../../tables/review";
+import type {
+  CourseReviewChildInput,
+  ProfessorReviewChildInput,
+  ReviewRepository,
+} from "../../storage";
+import { review } from "../../tables/review";
+import { courseReview } from "../../tables/courseReview";
+import { profReview } from "../../tables/profReview";
 import { eq } from "drizzle-orm";
 import { NotFoundError } from "../../../errs/httpError";
 
 export class ReviewRepositorySchema implements ReviewRepository {
   constructor(private readonly db: NodePgDatabase) {}
 
-  async getReviews(): Promise<Review[]> {
+  async getReviews(pagination: PaginationQueryType): Promise<Review[]> {
     const courseReviews = await this.db
       .select({
         id: review.id,
         studentId: review.studentId,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt,
         courseId: courseReview.courseId,
         rating: courseReview.rating,
         reviewText: courseReview.reviewText,
         tags: courseReview.tags,
-        createdAt: courseReview.createdAt,
-        updatedAt: courseReview.updatedAt,
       })
       .from(review)
-      .innerJoin(courseReview, eq(review.id, courseReview.id));
+      .innerJoin(courseReview, eq(review.id, courseReview.id))
+      .limit(pagination.limit)
+      .offset(pagination.offset);
 
     const profReviews = await this.db
       .select({
         id: review.id,
         studentId: review.studentId,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt,
         profId: profReview.professorId,
         rating: profReview.rating,
         reviewText: profReview.reviewText,
         tags: profReview.tags,
-        createdAt: profReview.createdAt,
-        updatedAt: profReview.updatedAt,
       })
       .from(review)
-      .innerJoin(profReview, eq(review.id, profReview.id));
+      .innerJoin(profReview, eq(review.id, profReview.id))
+      .limit(pagination.limit)
+      .offset(pagination.offset);
 
-    const mappedProfReviews: ProfessorReview[] = profReviews.map(
+    const mappedCourse: CourseReview[] = courseReviews.map(
       ({ tags, ...r }) => ({
         ...r,
-        type: "professor" as const,
         ...(tags && { tags: tags as string[] }),
       }),
     );
 
-    const mappedCourseReviews: CourseReview[] = courseReviews.map(
-      ({ tags, ...r }) => ({
-        ...r,
-        type: "course" as const,
-        ...(tags && { tags: tags as string[] }),
-      }),
-    );
+    const mappedProf: ProfessorReview[] = profReviews.map(({ tags, ...r }) => ({
+      ...r,
+      ...(tags && { tags: tags as string[] }),
+    }));
 
-    return [...mappedCourseReviews, ...mappedProfReviews];
+    return [...mappedCourse, ...mappedProf];
   }
 
   async getReviewByID(id: string): Promise<Review> {
-    // Try course review first
     const [courseResult] = await this.db
       .select({
         id: review.id,
         studentId: review.studentId,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt,
         courseId: courseReview.courseId,
         rating: courseReview.rating,
         reviewText: courseReview.reviewText,
         tags: courseReview.tags,
-        createdAt: courseReview.createdAt,
-        updatedAt: courseReview.updatedAt,
       })
       .from(review)
       .innerJoin(courseReview, eq(review.id, courseReview.id))
@@ -81,24 +86,19 @@ export class ReviewRepositorySchema implements ReviewRepository {
 
     if (courseResult) {
       const { tags, ...rest } = courseResult;
-      return {
-        ...rest,
-        type: "course" as const,
-        ...(tags && { tags: tags as string[] }),
-      };
+      return { ...rest, ...(tags && { tags: tags as string[] }) };
     }
 
-    // Try professor review
     const [profResult] = await this.db
       .select({
         id: review.id,
         studentId: review.studentId,
+        createdAt: review.createdAt,
+        updatedAt: review.updatedAt,
         profId: profReview.professorId,
         rating: profReview.rating,
         reviewText: profReview.reviewText,
         tags: profReview.tags,
-        createdAt: profReview.createdAt,
-        updatedAt: profReview.updatedAt,
       })
       .from(review)
       .innerJoin(profReview, eq(review.id, profReview.id))
@@ -106,121 +106,92 @@ export class ReviewRepositorySchema implements ReviewRepository {
 
     if (profResult) {
       const { tags, ...rest } = profResult;
-      return {
-        ...rest,
-        type: "professor" as const,
-        ...(tags && { tags: tags as string[] }),
-      };
+      return { ...rest, ...(tags && { tags: tags as string[] }) };
     }
 
     throw new NotFoundError("review with given ID not found");
   }
 
-  async createReview(input: ReviewPostInputType): Promise<Review> {
-    // First insert into parent review table
-    const [parentRow] = await this.db
+  async createParentReview(studentId?: string | null): Promise<string> {
+    const [row] = await this.db
       .insert(review)
+      .values({ studentId: studentId ?? null } as any)
+      .returning();
+    if (!row) throw new Error("Failed to create parent review");
+    return row.id;
+  }
+
+  async createCourseReview(
+    parentId: string,
+    input: CourseReviewChildInput,
+  ): Promise<CourseReview> {
+    const [row] = await this.db
+      .insert(courseReview)
       .values({
-        // studentId can be added here if available from context
+        id: parentId,
+        courseId: input.courseId,
+        rating: input.rating,
+        reviewText: input.reviewText,
+        tags: input.tags as any,
       })
       .returning();
 
-    if (!parentRow) throw new Error("Failed to create review");
+    if (!row) throw new Error("Failed to create course review");
 
-    // Then insert into appropriate child table
-    if (input.courseId) {
-      const [courseRow] = await this.db
-        .insert(courseReview)
-        .values({
-          id: parentRow.id,
-          courseId: input.courseId,
-          rating: input.rating,
-          reviewText: input.reviewText,
-          tags: input.tags as any,
-        })
-        .returning();
+    const result = await this.getReviewByID(parentId);
+    return result as CourseReview;
+  }
 
-      if (!courseRow) throw new Error("Failed to create course review");
+  async createProfessorReview(
+    parentId: string,
+    input: ProfessorReviewChildInput,
+  ): Promise<ProfessorReview> {
+    const [row] = await this.db
+      .insert(profReview)
+      .values({
+        id: parentId,
+        professorId: input.profId,
+        rating: input.rating,
+        reviewText: input.reviewText,
+        tags: input.tags as any,
+      })
+      .returning();
 
-      return {
-        ...parentRow,
-        courseId: courseRow.courseId,
-        rating: courseRow.rating,
-        reviewText: courseRow.reviewText,
-        createdAt: courseRow.createdAt,
-        updatedAt: courseRow.updatedAt,
-        type: 'course' as const,
-        ...(courseRow.tags && { tags: courseRow.tags as string[] }),
-      };
-    } else if (input.profId) {
-      const [profRow] = await this.db
-        .insert(profReview)
-        .values({
-          id: parentRow.id,
-          professorId: input.profId,
-          rating: input.rating,
-          reviewText: input.reviewText,
-          tags: input.tags as any,
-        })
-        .returning();
+    if (!row) throw new Error("Failed to create professor review");
 
-      if (!profRow) throw new Error("Failed to create professor review");
-
-      return {
-        ...parentRow,
-        profId: profRow.professorId,
-        rating: profRow.rating,
-        reviewText: profRow.reviewText,
-        createdAt: profRow.createdAt,
-        updatedAt: profRow.updatedAt,
-        type: 'professor' as const,
-        ...(profRow.tags && { tags: profRow.tags as string[] }),
-      };
-    }
-
-    throw new Error("Invalid review input");
+    const result = await this.getReviewByID(parentId);
+    return result as ProfessorReview;
   }
 
   async patchReview(id: string, input: ReviewPatchInputType): Promise<Review> {
-    // Update parent table timestamp
-    await this.db
-      .update(review)
-      .set({ updatedAt: new Date() })
-      .where(eq(review.id, id));
+    const updates: Record<string, unknown> = {};
+    if (input.rating !== undefined) updates.rating = input.rating;
+    if (input.reviewText !== undefined) updates.reviewText = input.reviewText;
+    if (input.tags !== undefined) updates.tags = input.tags;
 
-    // Try updating course review
+    if (Object.keys(updates).length === 0) return this.getReviewByID(id);
+
+    // Try course review first
     const [updatedCourse] = await this.db
       .update(courseReview)
-      .set({
-        rating: input.rating,
-        reviewText: input.reviewText,
-        tags: input.tags as any,
-      })
+      .set(updates as any)
       .where(eq(courseReview.id, id))
       .returning();
 
-    if (updatedCourse) {
-      // Fetch complete review with parent data
-      return this.getReviewByID(id);
-    }
+    if (updatedCourse) return this.getReviewByID(id);
 
-    // Try updating professor review
+    // Try professor review
     const [updatedProf] = await this.db
       .update(profReview)
-      .set({
-        rating: input.rating,
-        reviewText: input.reviewText,
-        tags: input.tags as any,
-      })
+      .set(updates as any)
       .where(eq(profReview.id, id))
       .returning();
 
-    if (updatedProf) {
-      return this.getReviewByID(id);
-    }
+    if (updatedProf) return this.getReviewByID(id);
 
-    throw new NotFoundError("review with given ID not found");
+    throw new Error("review with given ID not found");
   }
+
   async deleteReview(id: string): Promise<void> {
     await this.db.delete(review).where(eq(review.id, id));
   }

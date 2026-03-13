@@ -9,5 +9,8 @@ module.exports = {
     ...tsJestTransformCfg,
   },
   testPathIgnorePatterns: ['/node_modules/'],
-  transformIgnorePatterns: ['/node_modules/(?!uuid)/']
+  transformIgnorePatterns: ['/node_modules/(?!uuid)/'],
+  moduleNameMapper: {
+    '^postgres$': '<rootDir>/src/__mocks__/postgres.js',
+  },
 };

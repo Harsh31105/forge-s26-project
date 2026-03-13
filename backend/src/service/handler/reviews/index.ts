@@ -1,96 +1,125 @@
 import type { ReviewRepository } from "../../../storage/storage";
 import {
-    Review,
-    ReviewPatchInputSchema,
-    ReviewPatchInputType,
-    ReviewPostInputSchema,
-    ReviewPostInputType,
+  Review,
+  ReviewPatchInputSchema,
+  ReviewPatchInputType,
+  ReviewPostInputSchema,
+  ReviewPostInputType,
+  PaginationQuerySchema,
 } from "../../../models/review";
-import { BadRequest, mapDBError, NotFound, NotFoundError } from "../../../errs/httpError";
+import {
+  BadRequest,
+  mapDBError,
+  NotFound,
+  NotFoundError,
+} from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
+import leoProfanity from "leo-profanity";
 
 export class ReviewHandler {
-    constructor(private readonly repo: ReviewRepository) {}
+  constructor(private readonly repo: ReviewRepository) {}
 
-    async handleGet(req: Request, res: Response): Promise<void> {
-        let reviews: Review[];
+  async handleGet(req: Request, res: Response): Promise<void> {
+    const pagination = PaginationQuerySchema.safeParse(req.query);
+    if (!pagination.success) throw BadRequest("invalid pagination parameters");
 
-        try {
-            reviews = await this.repo.getReviews();
-        } catch (err) {
-            console.log("Failed to get reviews: ", err);
-            throw mapDBError(err, "failed to retrieve reviews");
-        }
+    let reviews: Review[];
 
-        res.status(200).json(reviews);
+    try {
+      reviews = await this.repo.getReviews(pagination.data);
+    } catch (err) {
+      console.log("Failed to get reviews: ", err);
+      throw mapDBError(err, "failed to retrieve reviews");
     }
 
-    async handleGetByID(req: Request, res: Response): Promise<void> {
-        const id = req.params.id as string;
-        if (!isUUID(id)) throw BadRequest("invalid ID was given");
+    res.status(200).json(reviews);
+  }
 
-        let review: Review;
-        try {
-            review = await this.repo.getReviewByID(id);
-        } catch (err) {
-            if (err instanceof NotFoundError) throw NotFound("review not found");
-            throw mapDBError(err, "failed to retrieve review");
-        }
+  async handleGetByID(req: Request, res: Response): Promise<void> {
+    const id = req.params.id as string;
+    if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
-        res.status(200).json(review);
+    let review: Review;
+    try {
+      review = await this.repo.getReviewByID(id);
+    } catch (err) {
+      if (err instanceof NotFoundError) throw NotFound("review not found");
+      throw mapDBError(err, "failed to retrieve review");
     }
 
-    async handlePost(req: Request, res: Response): Promise<void> {
-        const result = ReviewPostInputSchema.safeParse(req.body);
-        if (!result.success) {
-            throw BadRequest("unable to parse input for post-review");
-        }
-        const postReview: ReviewPostInputType = result.data;
+    res.status(200).json(review);
+  }
 
-        let newReview: Review;
-        try {
-            newReview = await this.repo.createReview(postReview);
-        } catch (err) {
-            console.log(err);
-            throw mapDBError(err, "failed to post review");
-        }
+  async handlePost(req: Request, res: Response): Promise<void> {
+    const result = ReviewPostInputSchema.safeParse(req.body);
+    if (!result.success) {
+      throw BadRequest("unable to parse input for post-review");
+    }
+    const postReview: ReviewPostInputType = result.data;
+    const censoredText = leoProfanity.clean(postReview.reviewText);
 
-        res.status(201).json(newReview);
+    let newReview: Review;
+    try {
+      const parentId = await this.repo.createParentReview(postReview.studentId);
+      if (postReview.courseId) {
+        newReview = await this.repo.createCourseReview(parentId, {
+          courseId: postReview.courseId,
+          rating: postReview.rating,
+          reviewText: censoredText,
+          ...(postReview.tags && { tags: postReview.tags }),
+        });
+      } else {
+        newReview = await this.repo.createProfessorReview(parentId, {
+          profId: postReview.profId!,
+          rating: postReview.rating,
+          reviewText: censoredText,
+          ...(postReview.tags && { tags: postReview.tags }),
+        });
+      }
+    } catch (err) {
+      console.log(err);
+      throw mapDBError(err, "failed to post review");
     }
 
-    async handlePatch(req: Request, res: Response): Promise<void> {
-        const id = req.params.id as string;
-        if (!isUUID(id)) throw BadRequest("invalid ID was given");
+    res.status(201).json(newReview);
+  }
 
-        const result = ReviewPatchInputSchema.safeParse(req.body);
-        if (!result.success) {
-            throw BadRequest("unable to parse input for patch-review");
-        }
-        const patchReview: ReviewPatchInputType = result.data;
+  async handlePatch(req: Request, res: Response): Promise<void> {
+    const id = req.params.id as string;
+    if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
-        let updatedReview: Review;
-        try {
-            updatedReview = await this.repo.patchReview(id, patchReview);
-        } catch (err) {
-            if (err instanceof NotFoundError) throw NotFound("review not found");
-            throw mapDBError(err, "failed to patch review");
-        }
+    const result = ReviewPatchInputSchema.safeParse(req.body);
+    if (!result.success) {
+      throw BadRequest("unable to parse input for patch-review");
+    }
+    const patchReview: ReviewPatchInputType = {
+      ...result.data,
+      ...(result.data.reviewText && { reviewText: leoProfanity.clean(result.data.reviewText) }),
+    };
 
-        res.status(200).json(updatedReview);
+    let updatedReview: Review;
+    try {
+      updatedReview = await this.repo.patchReview(id, patchReview);
+    } catch (err) {
+      console.log(err);
+      throw mapDBError(err, "failed to patch review");
     }
 
-    async handleDelete(req: Request, res: Response): Promise<void> {
-        const id = req.params.id as string;
-        if (!isUUID(id)) throw BadRequest("invalid ID was given");
+    res.status(200).json(updatedReview);
+  }
 
-        try {
-            await this.repo.deleteReview(id);
-        } catch (err) {
-            console.log(err);
-            throw mapDBError(err, "failed to delete review");
-        }
+  async handleDelete(req: Request, res: Response): Promise<void> {
+    const id = req.params.id as string;
+    if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
-        res.sendStatus(204);
+    try {
+      await this.repo.deleteReview(id);
+    } catch (err) {
+      console.log(err);
+      throw mapDBError(err, "failed to delete review");
     }
+
+    res.sendStatus(204);
+  }
 }
