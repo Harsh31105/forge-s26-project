@@ -1,68 +1,82 @@
 import type { FavoriteRepository } from "../../../storage/storage";
 
-import {
-    Favorite, 
-    FavoritePostInputSchema, 
+import{
+    Favorite,
+    FavoritePostInputSchema,
     FavoritePostInputType, 
-    FavoritesListQueryType,
-    FavoritesListQuerySchema
 } from "../../../models/favorite";
 import {
     BadRequest,
     mapDBError,
-    NotFound,
-    NotFoundError
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 
+import { getOffset, PaginationSchema } from "../../../utils/pagination";
+
+
 import { z } from "zod";
+import { student } from "storage/tables/student";
 
 
 export class FavoriteHandler {
     constructor(private readonly repo: FavoriteRepository) {}
 
     async handleGet(req: Request, res: Response) :Promise<void> {
-        const query = FavoritesListQuerySchema.safeParse(req.query);
-        if (!query.success) throw BadRequest("invalid query params for favorites");
-
-        try {
-            const result = await this.repo.getFavorites(query.data);
-            res.status(200).json(result);
+            const result = PaginationSchema.safeParse(req.query);
+            if (!result.success) {
+                throw BadRequest("Invalid pagination parameters");
+            }
+            const pagination = result.data;
+    
+            let favorites: Favorite[];
+    
+            try {
+                favorites = await this.repo.getFavorites(pagination);
             } catch (err) {
-            console.log("Failed to get favorites: ", err);
-            throw mapDBError(err, "failed to retrieve favorites");
+                console.log("Failed to get favorites: ", err);
+                throw mapDBError(err, "failed to retrieve favorites");
+            }
+    
+            res.status(200).json(favorites);
         }
-
-
-    }
 
 
     async handlePost(req: Request, res: Response): Promise<void> {
-        const parsed = FavoritePostInputSchema.safeParse(req.body);
-        if (!parsed.success) {
-            throw BadRequest("unable to parse input for post-favorite")
+            const result = FavoritePostInputSchema.safeParse(req.body);
+            if (!result.success) {
+                throw BadRequest("unable to parse input for post-favorite")
+            }
+            const postSample: FavoritePostInputType = result.data;
+    
+            let newFavorite: Favorite;
+            try {
+                newFavorite = await this.repo.createFavorite(postSample);
+            } catch (err) {
+                console.log(err);
+                throw mapDBError(err, "failed to post sample");
+            }
+    
+            res.status(201).json(newFavorite);
         }
-       
-        try {
-            const created = await this.repo.createFavorite(parsed.data);
-            res.status(201).json(created);
-        } catch (err) {
-            console.log(err);
-            throw mapDBError(err, "failed to post favorite");
-        }
-    }
 
 
     async handleDelete(req: Request, res: Response): Promise<void> {
-        const id = req.params.id as string;
-        if (!isUUID(id)) throw BadRequest("invalid ID was given");
+        const student_id = req.params.student_id as string;
+        const course_id = req.params.course_id as string;
+
+        if (!isUUID(student_id)) {
+            throw BadRequest("invalid student ID was given")};
+        
+        if (!isUUID(course_id)) {
+            throw BadRequest("invalid course ID was given")};
+        
 
         try {
-            await this.repo.deleteFavorite(id);
+            await this.repo.deleteFavorite(student_id, course_id);
         } catch (err) {
             console.log(err);
-            throw mapDBError(err, "failed to delete sample");
+            throw mapDBError(err, "failed to delete favorite");
         }
 
         res.sendStatus(204);

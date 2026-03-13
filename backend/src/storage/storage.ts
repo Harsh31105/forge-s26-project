@@ -12,12 +12,11 @@ import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
-import {SampleRepositorySchema} from "./postgres/schema/samples";
 
 import type {Favorite,
     FavoritePostInputType, 
-    FavoritesListQueryType,
-    FavoritesListResponse} from "../models/favorite";
+    FavoritePostInputSchema,
+    } from "../models/favorite";
 
 import { FavoritesRepositorySchema} from "./postgres/schema/favorites";
 
@@ -88,7 +87,7 @@ export interface ProfessorRepository {
 
 
 export interface FavoriteRepository {
-    getFavorites(query: FavoritesListQueryType): Promise<FavoritesListResponse>;
+    getFavorites(pagination: PaginationType): Promise<Favorite[]>;
     createFavorite(input: FavoritePostInputType): Promise<Favorite>;
-    deleteFavorite(id: string): Promise<void>;
+    deleteFavorite(student_id: string, course_id: string): Promise<void>;
 }

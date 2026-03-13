@@ -18,6 +18,8 @@ tags:
     description: API Endpoint for Specific Course Operations
   - name: Professor
     description: Professor CRUD operations
+  - name: Favorites
+    description: Manage student favorites for courses
 
 paths:
   /health:

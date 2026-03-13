@@ -1,28 +1,15 @@
 import { z } from "zod";
 
 export interface Favorite {
-    id: string;
-    name: string;
-    createdAt: Date;
-    updatedAt: Date;
+    student_id: string;
+    course_id: string;
+    created_at: Date;
+    updated_at: Date;
 }
 
 export const FavoritePostInputSchema = z.object({
-    name: z.string().min(1, "Name cannot be empty")
-    .refine((s) => s === s.trim(), "Name cannot have leading/trailing spaces"),
+    student_id: z.string().uuid("student_id must be a valid input"),
+    course_id: z.string().uuid("course_id must be a valid UUID"),
 })
 export type FavoritePostInputType = z.infer<typeof FavoritePostInputSchema>;
 
-export const FavoritesListQuerySchema = z.object({
-    limit: z.coerce.number().int().min(1).max(100).default(20), 
-    offset: z.coerce.number().int().min(0).default(0),
-});
-
-export type FavoritesListQueryType = z.infer<typeof FavoritesListQuerySchema>;
-
-export interface FavoritesListResponse {
-    items: Favorite[];
-    total: number;
-    limit: number;
-    offset: number;
-}
