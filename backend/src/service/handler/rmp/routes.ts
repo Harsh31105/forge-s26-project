@@ -9,13 +9,3 @@ export function rmpRoutes(handler: RMPHandler): Router {
 
     return router;
 }
-
-export function professorRMPRoutes(handler: RMPHandler): Router {
-    // so nested route can access the :id from the parent professor route
-    const router = Router({ mergeParams: true });
-
-    // GET /professors/:id/rmp
-    router.get("/:id/rmp", handler.handleGet.bind(handler));
-
-    return router;
-}

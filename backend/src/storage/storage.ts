@@ -78,5 +78,5 @@ export interface ProfessorRepository {
 
 export interface RMPRepository {
     getRMPByProfessorID(professorId: string): Promise<RMP>;
-    postRMP(input: RMPPostInputType): Promise<RMP>;
+    postRMP(input: RMPPostInputType[]): Promise<RMP[]>;
 }

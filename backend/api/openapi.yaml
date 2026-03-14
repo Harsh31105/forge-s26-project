@@ -816,7 +816,7 @@ paths:
     get:
       summary: Get RMP data for a professor
       description: Returns the Rate My Professor data stored in our DB for a given professor
-      tags: [RMP]
+      tags: [Professor] # changed from RMP
       responses:
         "200":
           description: RMP data found successfully
@@ -825,11 +825,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/RMP"
         "400":  
-          description: invalid uuid format
+          description: bad request (bad uuid format, etc.) # updated description & ref
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
               example:
                 code: 400
                 message: "invalid professor id was given"
@@ -851,15 +851,9 @@ paths:
 
   /rmp:
     post:
-      summary: Save RMP data for a professor
-      description: Creates a new RMP record linked to a professor in our DB
-      tags: [RMP]
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: "#/components/schemas/RMPPostInput"
+      summary: Fetch and save RMP data for all professors
+      description: Pings the external RMP API, matches data to professors in our DB, and bulk inserts
+      tags: [Professor] # changed from RMP
       responses:
         "201":
           description: RMP data saved successfully
@@ -868,11 +862,11 @@ paths:
               schema:
                 $ref: "#/components/schemas/RMP"
         "400":
-          description: invalid input
+          description: bad request
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
               example:
                 code: 400
                 message: "unable to parse input for post-rmp"
@@ -1274,30 +1268,30 @@ components:
           format: date-time
           example: "2024-01-15T10:35:00Z"
 
-    RMPPostInput:
-      type: object
-      required:
-        - professorId
-        - avgDifficulty
-      properties:
-        professorId:
-          type: string
-          format: uuid
-          example: "0f171d80-f523-4c56-9e5c-1d825d484e01"
-        ratingAvg:
-          type: number
-          minimum: 1
-          maximum: 5
-          nullable: true
-          example: 4.5
-        ratingWta:
-          type: integer
-          minimum: 0
-          maximum: 100
-          nullable: true
-          example: 85
-        avgDifficulty:
-          type: number
-          minimum: 1
-          maximum: 5
-          example: 3.2
+    # RMPPostInput:
+    #   type: object
+    #   required:
+    #     - professorId
+    #     - avgDifficulty
+    #   properties:
+    #     professorId:
+    #       type: string
+    #       format: uuid
+    #       example: "0f171d80-f523-4c56-9e5c-1d825d484e01"
+    #     ratingAvg:
+    #       type: number
+    #       minimum: 1
+    #       maximum: 5
+    #       nullable: true
+    #       example: 4.5
+    #     ratingWta:
+    #       type: integer
+    #       minimum: 0
+    #       maximum: 100
+    #       nullable: true
+    #       example: 85
+    #     avgDifficulty:
+    #       type: number
+    #       minimum: 1
+    #       maximum: 5
+    #       example: 3.2

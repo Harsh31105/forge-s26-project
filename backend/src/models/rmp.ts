@@ -10,14 +10,10 @@ export interface RMP {
     updatedAt: Date;
 }
 
-// post input
-export const RMPPostInputSchema = z.object({
-    professorId: z.string().uuid("professorId must be a valid UUID"),
-    ratingAvg: z.number().min(1).max(5).nullable().optional(),
-    ratingWta: z.number().int().min(0).max(100).nullable().optional(),
-    avgDifficulty: z.number().min(1).max(5),
-});
-
-// no patch since we only need post rn
-
-export type RMPPostInputType = z.infer<typeof RMPPostInputSchema>;
+// add input types
+export interface RMPPostInputType {
+    professorId: string;
+    ratingAvg: number | null;
+    ratingWta: number | null;
+    avgDifficulty: number;
+}

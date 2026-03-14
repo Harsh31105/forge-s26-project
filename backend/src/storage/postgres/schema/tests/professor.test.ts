@@ -16,6 +16,7 @@ import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { NotFoundError } from "../../../../errs/httpError";
 import {newPagination} from "../../../../utils/pagination";
 
+
 describe("ProfessorRepositorySchema DB Integration", () => {
     let db!: NodePgDatabase;
     let repo!: ProfessorRepositorySchema;

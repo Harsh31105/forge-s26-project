@@ -1,4 +1,5 @@
-import type { ProfessorRepository } from "../../../storage/storage";
+import type { ProfessorRepository, RMPRepository } from "../../../storage/storage";
+import type { RMP } from "../../../models/rmp";
 import {
     Professor, ProfessorPatchInputSchema, ProfessorPatchInputType,
     ProfessorPostInputSchema,
@@ -15,7 +16,11 @@ import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
 
 export class ProfessorHandler {
-    constructor(private readonly repo: ProfessorRepository) {}
+    // constructor(private readonly repo: ProfessorRepository) {}
+    constructor(
+        private readonly repo: ProfessorRepository,
+        private readonly rmpRepo: RMPRepository
+    ) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
         const result = PaginationSchema.safeParse(req.query);
@@ -109,5 +114,22 @@ export class ProfessorHandler {
         }
 
         res.sendStatus(204);
+    }
+
+    // GET /professors/:id/rmp - get RMP data for a professor
+    async handleGetRMP(req: Request, res: Response): Promise<void> {
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("invalid professor ID was given");
+
+        let rmpData: RMP;
+        try {
+            rmpData = await this.rmpRepo.getRMPByProfessorID(id); // use rmpRepo here
+        } catch (err) {
+            console.log(err);
+            if (err instanceof NotFoundError) throw NotFound("RMP data not found for given professor");
+            throw mapDBError(err, "failed to retrieve RMP data");
+        }
+
+        res.status(200).json(rmpData);
     }
 }

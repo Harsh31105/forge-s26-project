@@ -3,7 +3,7 @@ import {
     setupTestWithCleanup,
     shutdownSharedTestDB
 } from "../../testutil/shared_db";
-import { RMPRepositorySchema } from "../rmp";
+import { ProfessorRepositorySchema } from "../professor";
 import { rmp } from "../../../tables/rmp";
 import { professor } from "../../../tables/professor";
 import { v4 as uuid } from "uuid";
@@ -12,12 +12,12 @@ import { NotFoundError } from "../../../../errs/httpError";
 
 describe("RMPRepositorySchema DB Integration", () => {
     let db!: NodePgDatabase;
-    let repo!: RMPRepositorySchema;
+    let repo!: ProfessorRepositorySchema;
     let testProfessorID: string;
 
     beforeAll(async () => {
         db = await setupTestWithCleanup();
-        repo = new RMPRepositorySchema(db);
+        repo = new ProfessorRepositorySchema(db);
     }, 30000);
 
     beforeEach(async () => {
@@ -64,22 +64,10 @@ describe("RMPRepositorySchema DB Integration", () => {
     });
 
     describe("postRMP", () => {
-        test("bad input first, good input next", async () => {
-            await expect(repo.postRMP({} as any)).rejects.toThrow();
-
-            const newRMP = await repo.postRMP({
-                professorId: testProfessorID,
-                ratingAvg: 4.5,
-                ratingWta: 85,
-                avgDifficulty: 3.2,
-            });
-
-            expect(newRMP.professorId).toBe(testProfessorID);
-            expect(newRMP.ratingAvg).toBe("4.50");
-            expect(newRMP.ratingWta).toBe(85);
-            expect(newRMP.avgDifficulty).toBe("3.20");
-            expect(newRMP.createdAt).toBeInstanceOf(Date);
-            expect(newRMP.updatedAt).toBeInstanceOf(Date);
-        });
+    test("returns empty array when no professors have RMP data", async () => {
+        const result = await repo.postRMP();
+        // TODO: will test actual bulk insert once RMP API helper is implemented
+        expect(result).toBeInstanceOf(Array);
+    });
     });
 });

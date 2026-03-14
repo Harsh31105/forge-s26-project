@@ -16,14 +16,18 @@ export class RMPRepositorySchema implements RMPRepository {
         return row;
     }
 
-    async postRMP(input: RMPPostInputType): Promise<RMP> {
-        const [row] = await this.db.insert(rmp).values({
-            professorId: input.professorId,
-            ratingAvg: input.ratingAvg?.toString() ?? null,
-            ratingWta: input.ratingWta ?? null,
-            avgDifficulty: input.avgDifficulty.toString(),
-        }).returning();
-        if (!row) throw Error();
-        return row;
+    async postRMP(input: RMPPostInputType[]): Promise<RMP[]> {
+        if (input.length === 0) return [];
+        
+        const rows = await this.db.insert(rmp).values(
+            input.map(d => ({
+                professorId: d.professorId,
+                ratingAvg: d.ratingAvg?.toString() ?? null,
+                ratingWta: d.ratingWta ?? null,
+                avgDifficulty: d.avgDifficulty.toString(),
+            }))
+        ).returning();
+
+        return rows;
     }
 }

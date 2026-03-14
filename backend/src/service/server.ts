@@ -20,7 +20,7 @@ import {courseRoutes} from "./handler/course/routes";
 import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { RMPHandler } from "./handler/rmp";
-import { rmpRoutes, professorRMPRoutes } from "./handler/rmp/routes";
+import { rmpRoutes } from "./handler/rmp/routes";
 
 class App {
     public server: Express;
@@ -95,10 +95,9 @@ function registerRoutes(router: Router, repo: Repository) {
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 
-    const professorHandler = new ProfessorHandler(repo.professors);
+    const professorHandler = new ProfessorHandler(repo.professors, repo.rmp);
     router.use("/professors", professorRoutes(professorHandler));
 
-    const rmpHandler = new RMPHandler(repo.rmp);
+    const rmpHandler = new RMPHandler(repo.rmp, repo.professors);
     router.use("/rmp", rmpRoutes(rmpHandler));
-    router.use("/professors", professorRMPRoutes(rmpHandler));
 }
