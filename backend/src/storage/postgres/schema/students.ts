@@ -6,7 +6,6 @@ import type {
 } from "../../../models/student";
 import {StudentRepository} from "../../storage";
 import {eq} from "drizzle-orm";
-import {NotFoundError} from "../../../errs/httpError";
 import {student} from "../../tables/student";
 import {type PaginationType, getOffset} from "../../../utils/pagination";
 
@@ -30,7 +29,7 @@ export class StudentRepositorySchema implements StudentRepository {
             .where(eq(student.id, id));
 
         if (!row) {
-            throw new NotFoundError("Student with given ID not found");
+            throw new Error("Student not found");
         }
         return row;
     }
@@ -58,24 +57,19 @@ export class StudentRepositorySchema implements StudentRepository {
 
         const [row] = await this.db
             .update(student)
-            .set(input)
+            .set({...updates})
             .where(eq(student.id, id))
             .returning();
 
         if (!row) {
-            throw new NotFoundError("Student not found");
+            throw new Error("Failed to update student");
         }
         return row;
     }
 
     async deleteStudent(id: string): Promise<void> {
-        const result = await this.db
+        await this.db
             .delete(student)
             .where(eq(student.id, id))
-            .returning();
-
-        if (!result.length) {
-            throw new NotFoundError("Student not found");
-        }
     }
 }
