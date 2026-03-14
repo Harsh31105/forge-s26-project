@@ -800,8 +800,40 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
+  # trace
+  /trace:
+    get:
+      summary: Get traces
+      description: Returns all traces optionally filtered by course, professor or department
+      parameters:
+        - in: query
+          name: course_id
+          schema:
+            type: string
+          description: Filter by course ID
+        - in: query
+          name: professor_id
+          schema:
+            type: string
+          description: Filter by professor ID
+        - in: query
+          name: department_id
+          schema:
+            type: string
+          description: Filter by department ID
+      responses:
+        '200':
+          description: List of traces
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/Trace'
+        '500':
+          description: Internal server error
 
-components:
+  components:
   schemas:
     UuidParam:
       type: string
@@ -1156,3 +1188,35 @@ components:
             type: string
             enum: [boston, oakland, london]
           example: ["boston"]
+
+  # trace
+    Trace:
+      type: object
+      required:
+        - id
+        - courseId
+        - professorId
+        - departmentId
+        - action
+        - timestamp
+      properties:
+        id:
+          type: string
+          format: uuid
+          example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+        courseId:
+          type: string
+          example: "101"
+        professorId:
+          type: string
+          example: "201"
+        departmentId:
+          type: string
+          example: "301"
+        action:
+          type: string
+          example: "go to lecture"
+        timestamp:
+          type: string
+          format: date-time
+          example: "2026-03-14T12:00:00Z"
