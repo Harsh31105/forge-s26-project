@@ -1,17 +1,5 @@
 import { z } from "zod";
 
-export type StudentPreference =
-    | "exam-heavy"
-    | "project-heavy"
-    | "group-work"
-    | "attendance-required"
-    | "strict_deadlines"
-    | "flexible_deadlines"
-    | "extra_credit"
-    | "little_to_no_test"
-    | "fast_paced"
-    | "slow_paced";
-
 export const StudentPreferenceEnum = z.enum([
     "exam-heavy",
     "project-heavy",
@@ -24,6 +12,8 @@ export const StudentPreferenceEnum = z.enum([
     "fast_paced",
     "slow_paced",
 ]);
+
+export type StudentPreference = z.infer<typeof StudentPreferenceEnum>;
 
 export interface Major {
     id: number;
@@ -46,7 +36,7 @@ export interface Student {
     lastName: string;
     email: string;
     graduationYear: number | null;
-    preferences: string[] | null;
+    preferences: StudentPreference[];
     majors?: Major[]; // optional
     concentrations?: Concentration[]; // optional
     minors?: Minor[]; // optional
