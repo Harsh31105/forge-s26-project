@@ -1338,16 +1338,8 @@ components:
           items:
             type: string
             enum:
-              - exam-heavy
-              - project-heavy
-              - group-work
-              - attendance-required
-              - strict_deadlines
-              - flexible_deadlines
-              - extra_credit
-              - little_to_no_test
-              - fast_paced
-              - slow_paced
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
         createdAt:
           type: string
           format: date-time
@@ -1373,7 +1365,12 @@ components:
         graduationYear:
           type: integer
         preferences:
-          type: object
+          type: array
+          items:
+            type: string
+            enum:
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
 
     StudentPatchInput:
       type: object
@@ -1389,4 +1386,9 @@ components:
         graduationYear:
           type: integer
         preferences:
-          type: object
+          type: array
+          items:
+            type: string
+            enum:
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
