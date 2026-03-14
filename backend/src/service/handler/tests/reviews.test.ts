@@ -282,7 +282,7 @@ describe("ReviewHandler Endpoints", () => {
             const res = await request(app).post("/reviews").send(payload);
             expect(res.status).toBe(201);
             // Verify that the text passed to createCourseReview was censored (not the raw input)
-            const calledWith = repo.createCourseReview.mock.calls[0][1];
+            const calledWith = repo.createCourseReview.mock.calls[0]![1]!;
             expect(calledWith.reviewText).not.toBe(payload.reviewText);
         });
 
@@ -421,7 +421,7 @@ describe("ReviewHandler Endpoints", () => {
 
             const res = await request(app).patch(`/reviews/${mockCourseReview.id}`).send(patch);
             expect(res.status).toBe(200);
-            const calledWith = repo.patchReview.mock.calls[0][1];
+            const calledWith = repo.patchReview.mock.calls[0]![1]!;
             expect(calledWith.reviewText).not.toBe(patch.reviewText);
         });
 
