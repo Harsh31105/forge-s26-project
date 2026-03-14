@@ -4,7 +4,7 @@ import {SampleRepository} from "../../storage";
 import {sample} from "../../tables/sample";
 import { eq } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
-import { PaginationType, getOffset} from "utils/pagination";
+import { PaginationType, getOffset} from "../../../utils/pagination";
 
 export class SampleRepositorySchema implements SampleRepository {
     constructor(private readonly db: NodePgDatabase) {
@@ -32,7 +32,11 @@ export class SampleRepositorySchema implements SampleRepository {
     }
 
     async patchSample(id: string, input: SamplePatchInputType): Promise<Sample> {
-        const [row] = await this.db.update(sample).set({ ...input }).where(eq(sample.id, id)).returning();
+        const updates = Object.fromEntries(
+            Object.entries(input).filter(([_, value]) => value !== undefined)
+        );
+
+        const [row] = await this.db.update(sample).set({ ...updates }).where(eq(sample.id, id)).returning();
         if (!row) throw new Error();
 
         return row;

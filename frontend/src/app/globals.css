@@ -5,13 +5,6 @@
   --foreground: #171717;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
 @media (prefers-color-scheme: dark) {
   :root {
     --background: #0a0a0a;
@@ -23,4 +16,57 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+@layer base {
+  :root {
+    
+    /* Primary Navy Blue */
+    --color-primary-navy: #2E4B8E;
+    --color-primary-navy-rgb: 46, 75, 142;
+    
+    /* Bronze */
+    --color-accent-copper: #B45309;
+    --color-accent-copper-rgb: 180, 83, 9;
+    
+    /* Background Colors */
+    --color-background-cream: #FEF3C7;
+    --color-background-cream-rgb: 254, 243, 199;
+    
+    --color-surface-light-cream: #FEF9E7;
+    --color-surface-light-cream-rgb: 254, 249, 231;
+    
+    --color-surface-extra-light: #FFFBEB;
+    --color-surface-extra-light-rgb: 255, 251, 235;
+    
+    --color-white: #FFFFFF;
+    --color-white-rgb: 255, 255, 255;
+    
+    /* Text Colors */
+    --color-text-primary: #1C1917;
+    --color-text-primary-rgb: 28, 25, 23;
+    
+    --color-text-secondary: #57534E;
+    --color-text-secondary-rgb: 87, 83, 78;
+    
+    /* Border Colors */
+    --color-border-tan: #D4A574;
+    --color-border-tan-rgb: 212, 165, 116;
+    
+    
+    /* Semantic Colors */
+    --color-success: #10B981;
+    --color-warning: #F59E0B;
+    --color-error: #DC2626;
+    
+    /* Font Families */
+    --font-heading: 'Libre Baskerville', Georgia, serif;
+    --font-body: 'Merriweather', Georgia, serif;
+    
+    /* Font Weights */
+    --font-weight-light: 300;
+    --font-weight-regular: 400;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+  }   
 }

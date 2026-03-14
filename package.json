@@ -1,0 +1,12 @@
+{
+  "dependencies": {
+    "drizzle-orm": "^0.45.1",
+    "pg": "^8.18.0"
+  },
+  "devDependencies": {
+    "@types/express": "^5.0.6",
+    "@types/jest": "^30.0.0",
+    "@types/pg": "^8.16.0",
+    "@types/supertest": "^6.0.3"
+  }
+}
