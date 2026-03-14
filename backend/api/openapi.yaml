@@ -832,13 +832,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
 
     post:
       summary: Create a student
@@ -862,13 +862,13 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
 
   /students/{id}:
     parameters:
@@ -891,18 +891,24 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
         "404":
           description: Student not found
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
 
     patch:
       summary: Update a student
@@ -921,18 +927,18 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Student"
-        "404":
-          description: Student not found
+        "400":
+          description: Invalid UUID or bad input
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
 
     delete:
       summary: Delete a student
@@ -941,18 +947,18 @@ paths:
       responses:
         "204":
           description: Student deleted successfully
-        "404":
-          description: Student not found
+        "400":
+          description: Invalid UUID format
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/BadRequestError"
         "500":
           description: Internal server error
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/Error"
+                $ref: "#/components/schemas/InternalServerError"
 
 components:
   schemas:
@@ -1328,7 +1334,20 @@ components:
         graduationYear:
           type: integer
         preferences:
-          type: object
+          type: array
+          items:
+            type: string
+            enum:
+              - exam-heavy
+              - project-heavy
+              - group-work
+              - attendance-required
+              - strict_deadlines
+              - flexible_deadlines
+              - extra_credit
+              - little_to_no_test
+              - fast_paced
+              - slow_paced
         createdAt:
           type: string
           format: date-time
@@ -1343,7 +1362,6 @@ components:
         - firstName
         - lastName
         - email
-        - graduationYear
       properties:
         firstName:
           type: string
