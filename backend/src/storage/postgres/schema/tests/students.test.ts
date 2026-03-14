@@ -8,6 +8,7 @@ import {prefEnum, student} from "../../../tables/student";
 import { v4 as uuid } from "uuid";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { newPagination } from "../../../../utils/pagination";
+import {id} from "zod/locales";
 
 describe("StudentRepositorySchema DB Integration", () => {
     let db!: NodePgDatabase;
@@ -55,7 +56,7 @@ describe("StudentRepositorySchema DB Integration", () => {
                 id: testStudentID,
                 firstName: "Test",
                 lastName: "Student",
-                email: "test@test.com",
+                email: `${id}@test.com`,
                 graduationYear: 2026,
                 preferences: [],
                 createdAt: new Date(),

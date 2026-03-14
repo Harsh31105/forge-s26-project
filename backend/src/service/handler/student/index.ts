@@ -64,9 +64,12 @@ export class StudentHandler {
 
     // POST/students
     async handlePost(req: Request, res: Response): Promise<void> {
+        console.log("REQ BODY:", req.body);
+
         const result = StudentPostInputSchema.safeParse(req.body);
 
         if (!result.success) {
+            console.log(result.error);
             throw BadRequest("Unable to parse input for student POST")
         }
 

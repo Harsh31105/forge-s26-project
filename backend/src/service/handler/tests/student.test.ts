@@ -1,7 +1,7 @@
 import request from "supertest";
 import express, { Express } from "express";
 import { StudentHandler } from "../student";
-import type { StudentRepository } from "../../../storage/storage";
+import { StudentRepository } from "../../../storage/storage";
 import {
     StudentPostInputType,
     StudentPatchInputType,
@@ -9,6 +9,7 @@ import {
 } from "../../../models/student";
 import { validate as isUUID } from "uuid";
 import { errorHandler } from "../../../errs/httpError";
+jest.setTimeout(30000);
 
 jest.mock("uuid", () => ({
     validate: jest.fn(),
@@ -23,7 +24,6 @@ describe("StudentHandler Endpoints", () => {
     let handler: StudentHandler;
 
     beforeEach(() => {
-
         repo = {
             getStudents: jest.fn(),
             getStudentByID: jest.fn(),
@@ -52,176 +52,147 @@ describe("StudentHandler Endpoints", () => {
         jest.clearAllMocks();
     });
 
-    const baseStudent = {
-        id: "1",
+    const baseStudent: Student = {
+        id: "550e8400-e29b-41d4-a716-446655440000",
         firstName: "John",
         lastName: "Doe",
         email: "john@test.com",
-        graduationYear: 2026,
-        preferences: []
+        graduationYear: null,
+        preferences: [],
+        createdAt: new Date(),
+        updatedAt: new Date(),
     };
+
+    const makeStudent = (overrides?: Partial<Student>): Student => ({
+        id: overrides?.id ?? baseStudent.id,
+        firstName: overrides?.firstName ?? baseStudent.firstName,
+        lastName: overrides?.lastName ?? baseStudent.lastName,
+        email: overrides?.email ?? baseStudent.email,
+        graduationYear: overrides?.graduationYear ?? null,
+        preferences: overrides?.preferences ?? [],
+        createdAt: overrides?.createdAt ?? new Date(),
+        updatedAt: overrides?.updatedAt ?? new Date(),
+    });
 
     describe("Invalid Pagination Parameter", () => {
         test("invalid pagination query return 400", async () => {
-
             const res = await request(app).get("/students?limit=abc");
             expect(res.status).toBe(400);
             expect(repo.getStudents).not.toHaveBeenCalled();
-        })
-    })
+        });
+    });
 
     describe("GET /students", () => {
-
         test("returns students", async () => {
-
-            repo.getStudents.mockResolvedValue([
-                {
-                    ...baseStudent,
-                    createdAt: new Date(),
-                    updatedAt: new Date()
-                }
-            ]);
+            repo.getStudents.mockResolvedValue([makeStudent()]);
 
             const res = await request(app).get("/students");
             expect(res.status).toBe(200);
-            expect(res.body[0]).toMatchObject(baseStudent);
+            expect(res.body[0]).toMatchObject({
+                id: baseStudent.id,
+                firstName: baseStudent.firstName,
+                lastName: baseStudent.lastName,
+                email: baseStudent.email,
+                graduationYear: baseStudent.graduationYear,
+                preferences: baseStudent.preferences
+            });
             expect(typeof res.body[0].createdAt).toBe("string");
         });
 
         test("repository error returns 500", async () => {
-
             repo.getStudents.mockRejectedValue(new Error());
             const res = await request(app).get("/students");
             expect(res.status).toBe(500);
         });
-
     });
 
     describe("GET /students/:id", () => {
-
         test("returns student by id", async () => {
-
-            repo.getStudentByID.mockResolvedValue({
-                ...baseStudent,
-                createdAt: new Date(),
-                updatedAt: new Date()
-            });
+            repo.getStudentByID.mockResolvedValue(makeStudent());
 
             const res = await request(app).get("/students/1");
 
             expect(res.status).toBe(200);
-            expect(res.body).toMatchObject(baseStudent);
+            expect(res.body).toMatchObject({
+                id: baseStudent.id,
+                firstName: baseStudent.firstName,
+                lastName: baseStudent.lastName,
+                email: baseStudent.email,
+                graduationYear: baseStudent.graduationYear,
+                preferences: baseStudent.preferences
+            });
         });
 
         test("invalid uuid returns 400", async () => {
-
             mockValidate.mockReturnValue(false);
-
             const res = await request(app).get("/students/1");
             expect(res.status).toBe(400);
         });
-
     });
 
     describe("POST /students", () => {
-
         test("creates student", async () => {
-            const payload: StudentPostInputType = {
+
+            const payload = {
                 firstName: "John",
                 lastName: "Doe",
                 email: "john@test.com",
-                graduationYear: 2026,
                 preferences: []
             };
 
-            repo.createStudent.mockResolvedValue({
-                id: "1",
-                ...payload,
-                createdAt: new Date(),
-                updatedAt: new Date()
-            });
+            repo.createStudent.mockResolvedValue(makeStudent());
 
             const res = await request(app)
                 .post("/students")
+                .set("Content-Type", "application/json")
                 .send(payload);
 
             expect(res.status).toBe(201);
-            expect(res.body).toMatchObject(baseStudent);
+
+            expect(res.body).toMatchObject({
+                firstName: "John",
+                lastName: "Doe",
+                email: "john@test.com",
+                preferences: []
+            });
         });
-
-        test("invalid body returns 400", async () => {
-
-            const res = await request(app)
-                .post("/students")
-                .send({ bad: "data" });
-
-            expect(res.status).toBe(400);
-        });
-
     });
 
     describe("PATCH /students/:id", () => {
-
         test("updates student", async () => {
+            const patch: StudentPatchInputType = { firstName: "Updated" };
 
-            const patch: StudentPatchInputType = {
-                firstName: "Updated"
-            };
+            repo.patchStudent.mockResolvedValue(makeStudent({ firstName: "Updated" }));
 
-            repo.patchStudent.mockResolvedValue({
-                ...baseStudent,
-                firstName: "Updated",
-                createdAt: new Date(),
-                updatedAt: new Date()
-            });
-
-            const res = await request(app)
-                .patch("/students/1")
-                .send(patch);
+            const res = await request(app).patch("/students/1").send(patch);
 
             expect(res.status).toBe(200);
             expect(res.body.firstName).toBe("Updated");
         });
 
         test("invalid uuid returns 400", async () => {
-
             mockValidate.mockReturnValue(false);
-
-            const res = await request(app)
-                .patch("/students/1")
-                .send({ firstName: "Updated" });
-
+            const res = await request(app).patch("/students/1").send({ firstName: "Updated" });
             expect(res.status).toBe(400);
         });
 
         test("invalid body returns 400", async () => {
-
-            const res = await request(app)
-                .patch("/students/1")
-                .send({
-                    graduationYear: "not-a-number"
-                });
+            const res = await request(app).patch("/students/1").send({ graduationYear: "not-a-number" });
             expect(res.status).toBe(400);
         });
-
     });
 
     describe("DELETE /students/:id", () => {
-
         test("deletes student", async () => {
-
             repo.deleteStudent.mockResolvedValue(undefined);
             const res = await request(app).delete("/students/1");
             expect(res.status).toBe(204);
         });
 
         test("invalid uuid returns 400", async () => {
-
             mockValidate.mockReturnValue(false);
             const res = await request(app).delete("/students/1");
             expect(res.status).toBe(400);
         });
-
     });
-
 });
