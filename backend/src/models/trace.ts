@@ -2,9 +2,9 @@ import { z } from "zod";
 
 export interface Trace {
     id: string;
-    courseId?: string; // optional
-    professorId?: string; // optional
-    departmentId?: string; // optional
+    courseId: string; // optional
+    professorId: string; // optional
+    departmentId: string; // optional
     action: string;
     timestamp: Date;
 }
