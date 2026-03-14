@@ -180,6 +180,69 @@ export interface SamplePatchInput {
   updated_at?: string;
 }
 
+export type ProfessorTagsItem = (typeof ProfessorTagsItem)[keyof typeof ProfessorTagsItem];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorTagsItem = {
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
+} as const;
+
+export interface Professor {
+  /** the unique id of the professor */
+  id: string;
+  /** the first name of the professor */
+  firstName: string;
+  /** the last name of the professor */
+  lastName: string;
+  /**
+   * location tags for the professor
+   * @nullable
+   */
+  tags?: ProfessorTagsItem[] | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ProfessorPostInputTagsItem =
+  (typeof ProfessorPostInputTagsItem)[keyof typeof ProfessorPostInputTagsItem];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorPostInputTagsItem = {
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
+} as const;
+
+export interface ProfessorPostInput {
+  /** @minLength 1 */
+  firstName: string;
+  /** @minLength 1 */
+  lastName: string;
+  /** @nullable */
+  tags?: ProfessorPostInputTagsItem[] | null;
+}
+
+export type ProfessorPatchInputTagsItem =
+  (typeof ProfessorPatchInputTagsItem)[keyof typeof ProfessorPatchInputTagsItem];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorPatchInputTagsItem = {
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
+} as const;
+
+export interface ProfessorPatchInput {
+  /** @minLength 1 */
+  firstName?: string;
+  /** @minLength 1 */
+  lastName?: string;
+  /** @nullable */
+  tags?: ProfessorPatchInputTagsItem[] | null;
+}
+
 export type ProfessorTagsItem = typeof ProfessorTagsItem[keyof typeof ProfessorTagsItem];
 
 
@@ -324,56 +387,34 @@ page?: number;
 limit?: number;
 };
 
-export type GetSamplesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
-};
-
-export type GetCoursesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
-};
-
-export type GetReviewsParams = {
-/**
- * Number of items to return (1–100)
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
-/**
- * Number of items to skip
- * @minimum 0
- */
-offset?: number;
-};
-
 export type GetProfessorsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
+export type GetAuthCallbackParams = {
+  /**
+   * Authorization code from Google OAuth 2.0
+   */
+  code: string;
+};
+
+export type GetAuthCallback200 = {
+  message?: string;
+  /** JWT access token */
+  token?: string;
+};
+
+export type GetAuthCallback201 = {
+  message?: string;
+  /** JWT access token */
+  token?: string;
+};

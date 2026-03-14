@@ -8,84 +8,71 @@ import type {
   GetProfessorsParams,
   Professor,
   ProfessorPatchInput,
-  ProfessorPostInput
-} from './northStarAPI.schemas';
+  ProfessorPostInput,
+} from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getProfessor = () => {
-/**
- * Returns a list of all professors
- * @summary Get all professors
- */
-const getProfessors = (
-    params?: GetProfessorsParams,
- ) => {
-      return customAxios<Professor[]>(
-      {url: `/professors`, method: 'GET',
-        params
-    },
-      );
-    }
+export const getProfessor https://github.com/Harsh31105/forge-s26-project/pull/63/conflict?name=backend%252Fsrc%252Fservice%252Fserver.ts&ancestor_oid=6f14a3db262012199f3280a5bdd2a55d0bc57a55&base_oid=a8c5341ea81a8e5a6a4dca70f090b3c8b16e2eb5&head_oid=c11522cfea4fde8ebbd72add31898e4b8e82891c= () => {
   /**
- * Creates a new professor
- * @summary Create a professor
- */
-const postProfessors = (
-    professorPostInput: ProfessorPostInput,
- ) => {
-      return customAxios<Professor>(
-      {url: `/professors`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: professorPostInput
-    },
-      );
-    }
+   * Returns a list of all professors
+   * @summary Get all professors
+   */
+  const getProfessors = (params?: GetProfessorsParams) => {
+    return customAxios<Professor[]>({ url: `/professors`, method: "GET", params });
+  };
   /**
- * Returns a single professor by their UUID
- * @summary Get professor by ID
- */
-const getProfessorsId = (
-    id: string,
- ) => {
-      return customAxios<Professor>(
-      {url: `/professors/${id}`, method: 'GET'
-    },
-      );
-    }
+   * Creates a new professor
+   * @summary Create a professor
+   */
+  const postProfessors = (professorPostInput: ProfessorPostInput) => {
+    return customAxios<Professor>({
+      url: `/professors`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: professorPostInput,
+    });
+  };
   /**
- * Partially updates a professor by their UUID
- * @summary Update a professor
- */
-const patchProfessorsId = (
-    id: string,
-    professorPatchInput: ProfessorPatchInput,
- ) => {
-      return customAxios<Professor>(
-      {url: `/professors/${id}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: professorPatchInput
-    },
-      );
-    }
+   * Returns a single professor by their UUID
+   * @summary Get professor by ID
+   */
+  const getProfessorsId = (id: string) => {
+    return customAxios<Professor>({ url: `/professors/${id}`, method: "GET" });
+  };
   /**
- * Deletes a professor by their UUID
- * @summary Delete a professor
- */
-const deleteProfessorsId = (
-    id: string,
- ) => {
-      return customAxios<void>(
-      {url: `/professors/${id}`, method: 'DELETE'
-    },
-      );
-    }
-  return {getProfessors,postProfessors,getProfessorsId,patchProfessorsId,deleteProfessorsId}};
-export type GetProfessorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['getProfessors']>>>
-export type PostProfessorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['postProfessors']>>>
-export type GetProfessorsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['getProfessorsId']>>>
-export type PatchProfessorsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['patchProfessorsId']>>>
-export type DeleteProfessorsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['deleteProfessorsId']>>>
+   * Partially updates a professor by their UUID
+   * @summary Update a professor
+   */
+  const patchProfessorsId = (id: string, professorPatchInput: ProfessorPatchInput) => {
+    return customAxios<Professor>({
+      url: `/professors/${id}`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: professorPatchInput,
+    });
+  };
+  /**
+   * Deletes a professor by their UUID
+   * @summary Delete a professor
+   */
+  const deleteProfessorsId = (id: string) => {
+    return customAxios<void>({ url: `/professors/${id}`, method: "DELETE" });
+  };
+  return { getProfessors, postProfessors, getProfessorsId, patchProfessorsId, deleteProfessorsId };
+};
+export type GetProfessorsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getProfessor>["getProfessors"]>>
+>;
+export type PostProfessorsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getProfessor>["postProfessors"]>>
+>;
+export type GetProfessorsIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getProfessor>["getProfessorsId"]>>
+>;
+export type PatchProfessorsIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getProfessor>["patchProfessorsId"]>>
+>;
+export type DeleteProfessorsIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getProfessor>["deleteProfessorsId"]>>
+>;

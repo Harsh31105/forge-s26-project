@@ -21,65 +21,64 @@ import { CourseHandler } from "./handler/course";
 import { courseRoutes } from "./handler/course/routes";
 import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
+import { AuthHandler } from "./handler/auth";
+import { authRoutes } from "./handler/auth/routes";
+import { authMiddleware } from "../auth/middleware";
 
 class App {
-  public server: Express;
-  public repo: Repository;
+    public server: Express;
+    public repo: Repository;
+    // Delete entirity of line 30
+    public db : NodePgDatabase
 
-  constructor(repo: Repository) {
-    this.server = express();
-    this.repo = repo;
+    // Delete db parameter
+    constructor(repo: Repository, db: NodePgDatabase) {
+        this.server = express();
+        this.repo = repo;
+        // Delete entirity of line 35
+        this.db = db;
 
-    this.server.use(express.json());
-    this.server.use(express.urlencoded({ extended: true }));
-    this.server.use(morgan("dev"));
-    this.server.use(compression());
-    this.server.use(
-      cors({
-        origin: [
-          "http://localhost:3000",
-          "http://localhost:3001",
-          "http://localhost:8080",
-          "http://127.0.0.1:8080",
-          "http://127.0.0.1:3000",
-        ],
-        methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-        allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization"],
-        credentials: true,
-        exposedHeaders: ["Content-Length", "X-Request-ID"],
-      }),
-    );
+        this.server.use(express.json());
+        this.server.use(express.urlencoded({ extended: true }));
+        this.server.use(morgan("dev"));
+        this.server.use(compression());
+        this.server.use(cors({
+            origin: [
+                "http://localhost:3000",
+                "http://localhost:3001",
+                "http://localhost:8080",
+                "http://127.0.0.1:8080",
+                "http://127.0.0.1:3000",
+            ],
+            methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
+            allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization"],
+            credentials: true,
+            exposedHeaders: ["Content-Length", "X-Request-ID"],
+        }));
 
-    const apiV1 = Router();
-    this.server.use("/api/v1", apiV1);
+        const apiV1 = Router();
+        this.server.use("/api/v1", apiV1);
 
-    this.server.get("/health", (_req, res) => res.sendStatus(200));
-    this.server.get("/", (req, res) => {
-      res.send("API is running!");
-    });
+        this.server.get("/health", (_req, res) => res.sendStatus(200));
+        this.server.get("/", (req, res) => {
+            res.send("API is running!");
+        });
 
-    const swaggerDocument = YAML.load(
-      path.join(__dirname, "../../api/openapi.yaml"),
-    );
-    this.server.use(
-      "/swagger/index.html",
-      swaggerUi.serve,
-      swaggerUi.setup(swaggerDocument),
-    );
+        const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
+        this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-    registerRoutes(apiV1, this.repo);
+        // Delete DB parameter
+        registerRoutes(apiV1, this.repo, db);
 
-    this.server.use(errorHandler);
-    this.server.use((_req, res) =>
-      res.status(404).json({ error: "Route not found" }),
-    );
-  }
+        this.server.use(errorHandler);
+        this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
+    }
 
-  listen(port: string) {
-    this.server.listen(port, () => {
-      console.log(`Server running on http://localhost:${port}`);
-    });
-  }
+    listen(port: string) {
+        this.server.listen(port, () => {
+            console.log(`Server running on http://localhost:${port}`);
+        });
+    }
 }
 
 export function initApp(): App {
@@ -92,12 +91,20 @@ export function initApp(): App {
   const db = drizzle(pool);
   const repo = new Repository(pool, db, config.s3);
 
-  return new App(repo);
+    // DELETE THE DB PARAMATER, so only new App(repo)
+    return new App(repo, db);
 }
 
-function registerRoutes(router: Router, repo: Repository) {
-  const sampleHandler = new SampleHandler(repo.samples);
-  router.use("/samples", sampleRoutes(sampleHandler));
+// DELETE THE DB PARAMAETER, so header is registerRoutes(router: Router, repo: Repository)
+function registerRoutes(router: Router, repo: Repository, db : NodePgDatabase) {
+    // change db to be repo.students in new AuthHandler(db)
+    const authHandler = new AuthHandler(db);
+    router.use("/auth", authRoutes(authHandler));
+
+    router.use(authMiddleware);
+
+    const sampleHandler = new SampleHandler(repo.samples);
+    router.use("/samples", sampleRoutes(sampleHandler));
 
   const reviewHandler = new ReviewHandler(repo.reviews);
   router.use("/reviews", reviewRoutes(reviewHandler));
