@@ -25,7 +25,7 @@ describe("ProfessorRepositorySchema DB Integration", () => {
     beforeAll(async () => {
         db = await setupTestWithCleanup();
         repo = new ProfessorRepositorySchema(db);
-    });
+    }, 30000);
 
     beforeEach(async () => {
         await cleanupTestData();
