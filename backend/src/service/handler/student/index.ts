@@ -2,7 +2,8 @@ import type { StudentRepository } from "../../../storage/storage";
 import {
     StudentPostInputSchema,
     StudentPatchInputSchema,
-    StudentPatchInputType
+    StudentPatchInputType,
+    StudentPostInputType
 } from "../../../models/student";
 import {
     BadRequest,

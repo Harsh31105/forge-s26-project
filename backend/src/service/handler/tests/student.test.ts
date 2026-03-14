@@ -61,6 +61,15 @@ describe("StudentHandler Endpoints", () => {
         preferences: []
     };
 
+    describe("Invalid Pagination Parameter", () => {
+        test("invalid pagination query return 400", async () => {
+
+            const res = await request(app).get("/students?limit=abc");
+            expect(res.status).toBe(400);
+            expect(repo.getStudents).not.toHaveBeenCalled();
+        })
+    })
+
     describe("GET /students", () => {
 
         test("returns students", async () => {
@@ -182,6 +191,16 @@ describe("StudentHandler Endpoints", () => {
                 .patch("/students/1")
                 .send({ firstName: "Updated" });
 
+            expect(res.status).toBe(400);
+        });
+
+        test("invalid body returns 400", async () => {
+
+            const res = await request(app)
+                .patch("/students/1")
+                .send({
+                    graduationYear: "not-a-number"
+                });
             expect(res.status).toBe(400);
         });
 
