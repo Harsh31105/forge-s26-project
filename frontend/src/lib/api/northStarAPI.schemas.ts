@@ -47,13 +47,14 @@ export type CourseDepartment = {
  * The type of lecture format for the course
  * @nullable
  */
-export type CourseLectureType = (typeof CourseLectureType)[keyof typeof CourseLectureType] | null;
+export type CourseLectureType = typeof CourseLectureType[keyof typeof CourseLectureType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CourseLectureType = {
-  lecture: "lecture",
-  lab: "lab",
-  online: "online",
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
 } as const;
 
 export interface Course {
@@ -82,15 +83,14 @@ export interface Course {
  * The type of lecture format for the course
  * @nullable
  */
-export type CoursePostInputLectureType =
-  | (typeof CoursePostInputLectureType)[keyof typeof CoursePostInputLectureType]
-  | null;
+export type CoursePostInputLectureType = typeof CoursePostInputLectureType[keyof typeof CoursePostInputLectureType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePostInputLectureType = {
-  lecture: "lecture",
-  lab: "lab",
-  online: "online",
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
 } as const;
 
 export interface CoursePostInput {
@@ -122,14 +122,14 @@ export interface CoursePostInput {
 /**
  * The type of lecture format for the course
  */
-export type CoursePatchInputLectureType =
-  (typeof CoursePatchInputLectureType)[keyof typeof CoursePatchInputLectureType];
+export type CoursePatchInputLectureType = typeof CoursePatchInputLectureType[keyof typeof CoursePatchInputLectureType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePatchInputLectureType = {
-  lecture: "lecture",
-  lab: "lab",
-  online: "online",
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
 } as const;
 
 export interface CoursePatchInput {
@@ -190,43 +190,134 @@ export interface SamplePostInput {
 export interface SamplePatchInput {
   /** @minLength 1 */
   name?: string;
+  updated_at?: string;
+}
+
+export type ProfessorTagsItem = typeof ProfessorTagsItem[keyof typeof ProfessorTagsItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorTagsItem = {
+  boston: 'boston',
+  oakland: 'oakland',
+  london: 'london',
+} as const;
+
+export interface Professor {
+  /** the unique id of the professor */
+  id: string;
+  /** the first name of the professor */
+  firstName: string;
+  /** the last name of the professor */
+  lastName: string;
+  /**
+   * location tags for the professor
+   * @nullable
+   */
+  tags?: ProfessorTagsItem[] | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ProfessorPostInputTagsItem = typeof ProfessorPostInputTagsItem[keyof typeof ProfessorPostInputTagsItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorPostInputTagsItem = {
+  boston: 'boston',
+  oakland: 'oakland',
+  london: 'london',
+} as const;
+
+export interface ProfessorPostInput {
+  /** @minLength 1 */
+  firstName: string;
+  /** @minLength 1 */
+  lastName: string;
+  /** @nullable */
+  tags?: ProfessorPostInputTagsItem[] | null;
+}
+
+export type ProfessorPatchInputTagsItem = typeof ProfessorPatchInputTagsItem[keyof typeof ProfessorPatchInputTagsItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorPatchInputTagsItem = {
+  boston: 'boston',
+  oakland: 'oakland',
+  london: 'london',
+} as const;
+
+export interface ProfessorPatchInput {
+  /** @minLength 1 */
+  firstName?: string;
+  /** @minLength 1 */
+  lastName?: string;
+  /** @nullable */
+  tags?: ProfessorPatchInputTagsItem[] | null;
+}
+
+export interface Rmp {
+  id: number;
+  professorId: string;
+  /** @nullable */
+  ratingAvg?: string | null;
+  /** @nullable */
+  ratingWta?: number | null;
+  avgDifficulty: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export type GetCourseReviewsIdThreadsParams = {
-  /**
-   * Page number of pagination
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Number of items per page in pagination
-   * @minimum 1
-   */
-  limit?: number;
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
 };
 
 export type GetSamplesParams = {
-  /**
-   * Page number of pagination
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Number of items per page in pagination
-   * @minimum 1
-   */
-  limit?: number;
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
 };
 
 export type GetCoursesParams = {
-  /**
-   * Page number of pagination
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Number of items per page in pagination
-   * @minimum 1
-   */
-  limit?: number;
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
 };
+
+export type GetProfessorsParams = {
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
+};
+
