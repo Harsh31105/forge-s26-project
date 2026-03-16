@@ -64,7 +64,7 @@ describe("CourseThreadRepositorySchema (DB)", () => {
     });
 
     await db.insert(courseReview).values({
-      id: reviewId,
+      reviewId,
       courseId,
       rating: 5,
       reviewText: "Great course",

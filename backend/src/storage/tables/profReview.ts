@@ -15,7 +15,7 @@ import { review } from "./review";
 export const profReview = pgTable(
   "professor_review",
   {
-    id: uuid("review_id")
+    reviewId: uuid("review_id")
       .primaryKey()
       .references(() => review.id, { onDelete: "cascade" }), // FK to review
     professorId: uuid("professor_id")
@@ -24,6 +24,12 @@ export const profReview = pgTable(
     rating: integer("rating").notNull(),
     reviewText: varchar("review_text", { length: 2000 }).notNull(),
     tags: professorTagEnum("tags").array(),
+    createdAt: timestamp("created_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true })
+      .defaultNow()
+      .notNull(),
   },
   (table) => [
     check("prof_review_rating_check", sql`${table.rating} BETWEEN 1 AND 5`),

@@ -12,7 +12,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
   let repo!: ReviewRepositorySchema;
   let testStudentId: string;
   let testCourseId: string;
-  let testProfId: string;
+  let testprofessorId: string;
 
   beforeAll(async () => {
     db = await setupTestWithCleanup();
@@ -28,7 +28,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
 
     testStudentId = uuid();
     testCourseId = uuid();
-    testProfId = uuid();
+    testprofessorId = uuid();
 
     await db.execute(`
             INSERT INTO student (id, first_name, last_name, email)
@@ -40,7 +40,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
             VALUES ('${testCourseId}', 'Test Course', 1, 1000, 'A test course', 3);
 
             INSERT INTO professor (id, first_name, last_name)
-            VALUES ('${testProfId}', 'Test', 'Prof');
+            VALUES ('${testprofessorId}', 'Test', 'Prof');
         `);
   });
 
@@ -89,7 +89,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
       const parentId = await repo.createParentReview(testStudentId);
       await expect(
         repo.createProfessorReview(parentId, {
-          profId: uuid(), // non-existent professor
+          professorId: uuid(), // non-existent professor
           rating: 4,
           reviewText: "Great!",
         }),
@@ -97,18 +97,18 @@ describe("ReviewRepositorySchema DB Integration", () => {
 
       const parentId2 = await repo.createParentReview(testStudentId);
       const created = await repo.createProfessorReview(parentId2, {
-        profId: testProfId,
+        professorId: testprofessorId,
         rating: 5,
         reviewText: "Excellent professor!",
       });
-      expect(created.profId).toBe(testProfId);
+      expect(created.professorId).toBe(testprofessorId);
       expect(created.rating).toBe(5);
     });
   });
 
   describe("getReviews", () => {
     test("empty and populated DB", async () => {
-      const pagination = { limit: 20, offset: 0 };
+      const pagination = { limit: 20, page: 1 };
 
       let results = await repo.getReviews(pagination);
       expect(results).toEqual([]);
@@ -138,7 +138,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
         reviewText: "Second",
       });
 
-      const results = await repo.getReviews({ limit: 1, offset: 0 });
+      const results = await repo.getReviews({ limit: 1, page: 1 });
       expect(results).toHaveLength(1);
     });
   });
@@ -154,8 +154,8 @@ describe("ReviewRepositorySchema DB Integration", () => {
         reviewText: "Excellent!",
       });
 
-      const found = await repo.getReviewByID(created.id);
-      expect(found.id).toBe(created.id);
+      const found = await repo.getReviewByID(created.reviewId);
+      expect(found.reviewId).toBe(created.reviewId);
       expect("courseId" in found).toBe(true);
     });
   });
@@ -171,7 +171,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
         reviewText: "Original text",
       });
 
-      const patched = await repo.patchReview(created.id, { rating: 2 });
+      const patched = await repo.patchReview(created.reviewId, { rating: 2 });
       expect(patched.rating).toBe(2);
       // Unprovided field should be unchanged
       expect(patched.reviewText).toBe("Original text");
@@ -180,12 +180,12 @@ describe("ReviewRepositorySchema DB Integration", () => {
     test("patches professor review", async () => {
       const parentId = await repo.createParentReview(testStudentId);
       const created = await repo.createProfessorReview(parentId, {
-        profId: testProfId,
+        professorId: testprofessorId,
         rating: 3,
         reviewText: "Decent",
       });
 
-      const patched = await repo.patchReview(created.id, {
+      const patched = await repo.patchReview(created.reviewId, {
         reviewText: "Updated!",
       });
       expect(patched.reviewText).toBe("Updated!");
@@ -202,8 +202,8 @@ describe("ReviewRepositorySchema DB Integration", () => {
         reviewText: "To be deleted",
       });
 
-      await expect(repo.deleteReview(created.id)).resolves.not.toThrow();
-      await expect(repo.getReviewByID(created.id)).rejects.toThrow(
+      await expect(repo.deleteReview(created.reviewId)).resolves.not.toThrow();
+      await expect(repo.getReviewByID(created.reviewId)).rejects.toThrow(
         NotFoundError,
       );
     });

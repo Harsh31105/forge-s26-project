@@ -5,10 +5,10 @@ import {
   ReviewPatchInputType,
   ReviewPostInputSchema,
   ReviewPostInputType,
-  PaginationQuerySchema,
 } from "../../../models/review";
 import {
   BadRequest,
+  InvalidRequestData,
   mapDBError,
   NotFound,
   NotFoundError,
@@ -16,12 +16,14 @@ import {
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { assessCensorship } from "../../../utils/censorship";
+import { PaginationSchema } from "../../../utils/pagination";
 
 export class ReviewHandler {
   constructor(private readonly repo: ReviewRepository) {}
 
   async handleGet(req: Request, res: Response): Promise<void> {
-    const pagination = PaginationQuerySchema.safeParse(req.query);
+    console.log("[ReviewHandler] GET /reviews", req.query);
+    const pagination = PaginationSchema.safeParse(req.query);
     if (!pagination.success) throw BadRequest("invalid pagination parameters");
 
     let reviews: Review[];
@@ -37,6 +39,7 @@ export class ReviewHandler {
   }
 
   async handleGetByID(req: Request, res: Response): Promise<void> {
+    console.log("[ReviewHandler] GET /reviews/:id", req.params.id);
     const id = req.params.id as string;
     if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
@@ -52,9 +55,13 @@ export class ReviewHandler {
   }
 
   async handlePost(req: Request, res: Response): Promise<void> {
+    console.log("[ReviewHandler] POST /reviews", req.body);
+
     const result = ReviewPostInputSchema.safeParse(req.body);
     if (!result.success) {
-      throw BadRequest("unable to parse input for post-review");
+      throw InvalidRequestData(
+        result.error.flatten().fieldErrors as Record<string, string>,
+      );
     }
     const postReview: ReviewPostInputType = result.data;
     const censoredText = assessCensorship(postReview.reviewText).processedText;
@@ -71,7 +78,7 @@ export class ReviewHandler {
         });
       } else {
         newReview = await this.repo.createProfessorReview(parentId, {
-          profId: postReview.profId!,
+          professorId: postReview.professorId!,
           rating: postReview.rating,
           reviewText: censoredText,
           ...(postReview.tags && { tags: postReview.tags }),
@@ -86,6 +93,7 @@ export class ReviewHandler {
   }
 
   async handlePatch(req: Request, res: Response): Promise<void> {
+    console.log("[ReviewHandler] PATCH /reviews/:id", req.params.id, req.body);
     const id = req.params.id as string;
     if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
@@ -95,7 +103,9 @@ export class ReviewHandler {
     }
     const patchReview: ReviewPatchInputType = {
       ...result.data,
-      ...(result.data.reviewText && { reviewText: assessCensorship(result.data.reviewText).processedText }),
+      ...(result.data.reviewText && {
+        reviewText: assessCensorship(result.data.reviewText).processedText,
+      }),
     };
 
     let updatedReview: Review;
@@ -110,6 +120,7 @@ export class ReviewHandler {
   }
 
   async handleDelete(req: Request, res: Response): Promise<void> {
+    console.log("[ReviewHandler] DELETE /reviews/:id", req.params.id);
     const id = req.params.id as string;
     if (!isUUID(id)) throw BadRequest("invalid ID was given");
 

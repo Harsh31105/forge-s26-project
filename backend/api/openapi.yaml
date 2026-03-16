@@ -615,7 +615,7 @@ paths:
             type: integer
             minimum: 1
             maximum: 100
-            default: 20
+            default: 10
         - name: offset
           in: query
           description: Number of items to skip
@@ -649,7 +649,7 @@ paths:
       summary: Create a review
       description: |
         Creates a new course or professor review.
-        Exactly one of `courseId` or `profId` must be provided.
+        Exactly one of `courseId` or `professorId` must be provided.
       tags: [Review]
       requestBody:
         required: true
@@ -665,7 +665,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/Review"
         "400":
-          description: Invalid input (missing fields, both/neither courseId and profId, out-of-range rating, foreign key violation)
+          description: Invalid input (missing fields, both/neither courseId and professorId, out-of-range rating, foreign key violation)
           content:
             application/json:
               schema:
@@ -1357,7 +1357,7 @@ components:
           type: array
           nullable: true
           items:
-            type: string
+            type: enum
           description: Optional tags attached to the review
           example: ["challenging", "rewarding"]
         createdAt:
@@ -1369,7 +1369,7 @@ components:
           format: date-time
           example: "2026-01-15T10:30:00Z"
 
-    # course review — has courseId, no profId
+    # course review — has courseId, no professorId
     CourseReview:
       allOf:
         - $ref: "#/components/schemas/BaseReview"
@@ -1383,27 +1383,27 @@ components:
               description: The ID of the course being reviewed
               example: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d"
 
-    # professor review — has profId, no courseId
+    # professor review — has professorId, no courseId
     ProfessorReview:
       allOf:
         - $ref: "#/components/schemas/BaseReview"
         - type: object
           required:
-            - profId
+            - professorId
           properties:
-            profId:
+            professorId:
               type: string
               format: uuid
               description: The ID of the professor being reviewed
               example: "c3d4e5f6-a7b8-9012-cdef-123456789012"
 
-    # discriminated union: exactly one of courseId or profId will be present
+    # discriminated union: exactly one of courseId or professorId will be present
     Review:
       oneOf:
         - $ref: "#/components/schemas/CourseReview"
         - $ref: "#/components/schemas/ProfessorReview"
 
-    # input for POST /reviews — exactly one of courseId or profId must be provided
+    # input for POST /reviews — exactly one of courseId or professorId must be provided
     ReviewPostInput:
       type: object
       required:
@@ -1432,9 +1432,9 @@ components:
           type: string
           format: uuid
           nullable: true
-          description: The ID of the course to review (mutually exclusive with profId)
+          description: The ID of the course to review (mutually exclusive with professorId)
           example: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d"
-        profId:
+        professorId:
           type: string
           format: uuid
           nullable: true
@@ -1467,6 +1467,6 @@ components:
           type: array
           nullable: true
           items:
-            type: string
+            type: enum
           description: Updated tags (null clears all tags)
           example: ["rewarding"]

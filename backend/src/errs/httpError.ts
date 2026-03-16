@@ -54,14 +54,15 @@ export const InvalidJSON = (msg?: string) => {
     throw new HTTPError(400, msg || "invalid json");
 }
 
-export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: any, req: Request, res: Response, _next: NextFunction) => {
     let httperror: HTTPError;
 
     if (err instanceof HTTPError) {
         httperror = err;
+        console.error(`[${httperror.code}] ${req.method} ${req.path}`, httperror.message);
     } else {
-        httperror = InternalServerError();
-        console.error("Unexpected Error: ", err);
+        console.error(`[500] ${req.method} ${req.path}`, err);
+        httperror = new HTTPError(500, "internal server error");
     }
 
     return res.status(httperror.code).json({
@@ -98,7 +99,7 @@ export function mapDBError(err: unknown, str: string): never {
         throw BadRequest("violated a check constraint");
     } else if (message.includes("duplicate key") || message.includes("unique constraint")) {
         throw Conflict("duplicate value");
-    } else if (message.includes("connection refused")) {
+    } else if (message.includes("connection refused") || message.includes("err_invalid_url") || message.includes("invalid url")) {
         throw InternalServerError("database connection refused");
     } else {
         throw InternalServerError(str);

@@ -10,10 +10,10 @@ import type {
   ProfessorReview,
   Review,
   ReviewPatchInputType,
-  PaginationQueryType,
 } from "../models/review";
 import { SampleRepositorySchema } from "./postgres/schema/samples";
 import { ReviewRepositorySchema } from "./postgres/schema/reviews";
+
 import type {
   Course,
   CoursePatchInputType,
@@ -83,14 +83,14 @@ export interface CourseReviewChildInput {
 }
 
 export interface ProfessorReviewChildInput {
-  profId: string;
+  professorId: string;
   rating: number;
   reviewText: string;
   tags?: string[];
 }
 
 export interface ReviewRepository {
-  getReviews(pagination: PaginationQueryType): Promise<Review[]>;
+  getReviews(pagination: PaginationType): Promise<Review[]>;
   getReviewByID(id: string): Promise<Review>;
   createParentReview(studentId?: string | null): Promise<string>;
   createCourseReview(

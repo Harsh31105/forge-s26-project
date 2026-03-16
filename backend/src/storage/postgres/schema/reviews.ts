@@ -1,11 +1,13 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
   CourseReview,
-  PaginationQueryType,
   ProfessorReview,
   Review,
   ReviewPatchInputType,
 } from "../../../models/review";
+
+import { PaginationType, getOffset } from "../../../utils/pagination";
+
 import type {
   CourseReviewChildInput,
   ProfessorReviewChildInput,
@@ -16,26 +18,35 @@ import { courseReview } from "../../tables/courseReview";
 import { profReview } from "../../tables/profReview";
 import { eq } from "drizzle-orm";
 import { NotFoundError } from "../../../errs/httpError";
+import { CourseReviewHelper } from "./courseReviews";
+import { ProfReviewHelper } from "./profReviews";
 
 export class ReviewRepositorySchema implements ReviewRepository {
-  constructor(private readonly db: NodePgDatabase) {}
+  private readonly courseReviewHelper: CourseReviewHelper;
+  private readonly profReviewHelper: ProfReviewHelper;
 
-  async getReviews(pagination: PaginationQueryType): Promise<Review[]> {
+  constructor(private readonly db: NodePgDatabase) {
+    this.courseReviewHelper = new CourseReviewHelper(db);
+    this.profReviewHelper = new ProfReviewHelper(db);
+  }
+
+  async getReviews(pagination: PaginationType): Promise<Review[]> {
     const courseReviews = await this.db
       .select({
         id: review.id,
         studentId: review.studentId,
         createdAt: review.createdAt,
         updatedAt: review.updatedAt,
+        reviewId: courseReview.reviewId,
         courseId: courseReview.courseId,
         rating: courseReview.rating,
         reviewText: courseReview.reviewText,
         tags: courseReview.tags,
       })
       .from(review)
-      .innerJoin(courseReview, eq(review.id, courseReview.id))
+      .innerJoin(courseReview, eq(review.id, courseReview.reviewId))
       .limit(pagination.limit)
-      .offset(pagination.offset);
+      .offset(getOffset(pagination));
 
     const profReviews = await this.db
       .select({
@@ -43,15 +54,16 @@ export class ReviewRepositorySchema implements ReviewRepository {
         studentId: review.studentId,
         createdAt: review.createdAt,
         updatedAt: review.updatedAt,
-        profId: profReview.professorId,
+        reviewId: profReview.reviewId,
+        professorId: profReview.professorId,
         rating: profReview.rating,
         reviewText: profReview.reviewText,
         tags: profReview.tags,
       })
       .from(review)
-      .innerJoin(profReview, eq(review.id, profReview.id))
+      .innerJoin(profReview, eq(review.id, profReview.reviewId))
       .limit(pagination.limit)
-      .offset(pagination.offset);
+      .offset(getOffset(pagination));
 
     const mappedCourse: CourseReview[] = courseReviews.map(
       ({ tags, ...r }) => ({
@@ -76,12 +88,13 @@ export class ReviewRepositorySchema implements ReviewRepository {
         createdAt: review.createdAt,
         updatedAt: review.updatedAt,
         courseId: courseReview.courseId,
+        reviewId: courseReview.reviewId,
         rating: courseReview.rating,
         reviewText: courseReview.reviewText,
         tags: courseReview.tags,
       })
       .from(review)
-      .innerJoin(courseReview, eq(review.id, courseReview.id))
+      .innerJoin(courseReview, eq(review.id, courseReview.reviewId))
       .where(eq(review.id, id));
 
     if (courseResult) {
@@ -95,13 +108,14 @@ export class ReviewRepositorySchema implements ReviewRepository {
         studentId: review.studentId,
         createdAt: review.createdAt,
         updatedAt: review.updatedAt,
-        profId: profReview.professorId,
+        reviewId: profReview.reviewId,
+        professorId: profReview.professorId,
         rating: profReview.rating,
         reviewText: profReview.reviewText,
         tags: profReview.tags,
       })
       .from(review)
-      .innerJoin(profReview, eq(review.id, profReview.id))
+      .innerJoin(profReview, eq(review.id, profReview.reviewId))
       .where(eq(review.id, id));
 
     if (profResult) {
@@ -125,49 +139,29 @@ export class ReviewRepositorySchema implements ReviewRepository {
     parentId: string,
     input: CourseReviewChildInput,
   ): Promise<CourseReview> {
-    const [row] = await this.db
-      .insert(courseReview)
-      .values({
-        id: parentId,
-        courseId: input.courseId,
-        rating: input.rating,
-        reviewText: input.reviewText,
-        tags: input.tags as any,
-      })
-      .returning();
-
-    if (!row) throw new Error("Failed to create course review");
-
-    const result = await this.getReviewByID(parentId);
-    return result as CourseReview;
+    console.log("DATABASE");
+    return this.courseReviewHelper.createCourseReview(
+      parentId,
+      input,
+      this.getReviewByID.bind(this),
+    );
   }
 
   async createProfessorReview(
     parentId: string,
     input: ProfessorReviewChildInput,
   ): Promise<ProfessorReview> {
-    const [row] = await this.db
-      .insert(profReview)
-      .values({
-        id: parentId,
-        professorId: input.profId,
-        rating: input.rating,
-        reviewText: input.reviewText,
-        tags: input.tags as any,
-      })
-      .returning();
-
-    if (!row) throw new Error("Failed to create professor review");
-
-    const result = await this.getReviewByID(parentId);
-    return result as ProfessorReview;
+    return this.profReviewHelper.createProfessorReview(
+      parentId,
+      input,
+      this.getReviewByID.bind(this),
+    );
   }
 
   async patchReview(id: string, input: ReviewPatchInputType): Promise<Review> {
-    const updates: Record<string, unknown> = {};
-    if (input.rating !== undefined) updates.rating = input.rating;
-    if (input.reviewText !== undefined) updates.reviewText = input.reviewText;
-    if (input.tags !== undefined) updates.tags = input.tags;
+    const updates = Object.fromEntries(
+      Object.entries(input).filter(([_, value]) => value !== undefined),
+    );
 
     if (Object.keys(updates).length === 0) return this.getReviewByID(id);
 
@@ -175,7 +169,7 @@ export class ReviewRepositorySchema implements ReviewRepository {
     const [updatedCourse] = await this.db
       .update(courseReview)
       .set(updates as any)
-      .where(eq(courseReview.id, id))
+      .where(eq(courseReview.reviewId, id))
       .returning();
 
     if (updatedCourse) return this.getReviewByID(id);
@@ -184,7 +178,7 @@ export class ReviewRepositorySchema implements ReviewRepository {
     const [updatedProf] = await this.db
       .update(profReview)
       .set(updates as any)
-      .where(eq(profReview.id, id))
+      .where(eq(profReview.reviewId, id))
       .returning();
 
     if (updatedProf) return this.getReviewByID(id);

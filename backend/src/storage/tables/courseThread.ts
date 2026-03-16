@@ -9,7 +9,7 @@ export const courseThread = pgTable("course_thread", {
     .references(() => student.id, { onDelete: "cascade" }),
   courseReviewId: uuid("course_review_id")
     .notNull()
-    .references(() => courseReview.id, { onDelete: "cascade" }),
+    .references(() => courseReview.reviewId, { onDelete: "cascade" }),
   content: varchar("content", { length: 2000 }).notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
