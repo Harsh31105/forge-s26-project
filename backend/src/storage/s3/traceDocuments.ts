@@ -34,9 +34,7 @@ function buildS3Key(key: TraceDocumentKey): string {
         "trace-evaluations",
         key.department.trim().toUpperCase(),
     ];
-    if (key.courseCode !== undefined) {
-        parts.push(String(key.courseCode));
-    }
+    parts.push(key.courseCode !== undefined ? String(key.courseCode) : "all-courses");
     parts.push(`${key.semester}_${key.lectureYear}`, `${key.professorId}.pdf`);
     return parts.join("/");
 }

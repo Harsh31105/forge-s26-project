@@ -639,6 +639,27 @@ async function collectReportUrlsFromBrowser(page: Page, limit?: number): Promise
         await nextLink.click();
         await page.waitForLoadState("networkidle").catch(() => undefined);
         await page.waitForTimeout(2000);
+
+        // Guard against pagination loops where "Next" is visible but data does not advance.
+        const advancedHrefs = await iframeLocator
+            .locator("a")
+            .evaluateAll((elements) =>
+                elements
+                    .filter((element) => {
+                        const text = element.textContent?.trim().toLowerCase() ?? "";
+                        const href = (element as HTMLAnchorElement).href ?? "";
+                        return text === "view" || href.includes("coursereport");
+                    })
+                    .map((element) => (element as HTMLAnchorElement).href)
+                    .filter((href) => href.length > 0)
+            )
+            .catch(() => []);
+
+        const advanced = advancedHrefs.some((href) => !previousUrls.has(href));
+        if (!advanced) {
+            console.log("No new report links after clicking Next; stopping URL collection.");
+            break;
+        }
     }
 
     return [...urls];
@@ -755,8 +776,7 @@ async function main(): Promise<void> {
                     uploadKeyInput.courseCode = options.courseCode;
                 }
 
-                const dryRunParts = [uploadKeyInput.department];
-                if (uploadKeyInput.courseCode !== undefined) dryRunParts.push(String(uploadKeyInput.courseCode));
+                const dryRunParts = [uploadKeyInput.department, uploadKeyInput.courseCode !== undefined ? String(uploadKeyInput.courseCode) : "all-courses"];
                 dryRunParts.push(`${uploadKeyInput.semester}_${uploadKeyInput.lectureYear}`, `${uploadKeyInput.professorId}.pdf`);
 
                 const s3Key = options.dryRun
