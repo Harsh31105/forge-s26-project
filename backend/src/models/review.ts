@@ -50,7 +50,7 @@ const courseTags = [
 // Input schemas
 export const ReviewPostInputSchema = z
   .object({
-    studentId: z.uuid(),
+    studentId: z.uuid().optional(),
     rating: z.number().int().min(1).max(5),
     reviewText: z.string().min(1, "Content cannot be empty").max(2000),
     courseId: z.uuid().optional().nullable(),

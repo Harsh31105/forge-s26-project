@@ -79,13 +79,13 @@ describe("ReviewHandler Endpoints", () => {
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(2);
       expect(res.body[0]).toMatchObject({
-        id: "57166e68-57ee-4fd4-a08f-2b3ea3bcd1bb",
+        reviewId: "57166e68-57ee-4fd4-a08f-2b3ea3bcd1bb",
         courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
         rating: 4,
         reviewText: "Great course, highly recommend!",
       });
       expect(res.body[1]).toMatchObject({
-        id: "e4da3b7f-bbce-4a9b-9f0e-1c2f3a4b5c6d",
+        reviewId: "e4da3b7f-bbce-4a9b-9f0e-1c2f3a4b5c6d",
         professorId: "c3d4e5f6-a7b8-4012-8def-123456789012",
         rating: 5,
       });
@@ -100,10 +100,10 @@ describe("ReviewHandler Endpoints", () => {
 
     test("returns reviews with explicit pagination", async () => {
       repo.getReviews.mockResolvedValue([mockCourseReview]);
-      const res = await request(app).get("/reviews?limit=10&offset=0");
+      const res = await request(app).get("/reviews?limit=10&page=1");
       expect(res.status).toBe(200);
       expect(res.body.length).toBe(1);
-      expect(repo.getReviews).toHaveBeenCalledWith({ limit: 10, offset: 0 });
+      expect(repo.getReviews).toHaveBeenCalledWith({ limit: 10, page: 1 });
     });
 
     test("invalid pagination - limit too low", async () => {
@@ -116,8 +116,8 @@ describe("ReviewHandler Endpoints", () => {
       expect(res.status).toBe(400);
     });
 
-    test("invalid pagination - negative offset", async () => {
-      const res = await request(app).get("/reviews?offset=-1");
+    test("invalid pagination - page below minimum", async () => {
+      const res = await request(app).get("/reviews?page=0");
       expect(res.status).toBe(400);
     });
 
@@ -138,7 +138,7 @@ describe("ReviewHandler Endpoints", () => {
       );
       expect(res.status).toBe(200);
       expect(res.body).toMatchObject({
-        id: "57166e68-57ee-4fd4-a08f-2b3ea3bcd1bb",
+        reviewId: "57166e68-57ee-4fd4-a08f-2b3ea3bcd1bb",
         courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
         rating: 4,
         reviewText: "Great course, highly recommend!",
@@ -152,7 +152,7 @@ describe("ReviewHandler Endpoints", () => {
       const res = await request(app).get(`/reviews/${mockProfReview.reviewId}`);
       expect(res.status).toBe(200);
       expect(res.body).toMatchObject({
-        id: "e4da3b7f-bbce-4a9b-9f0e-1c2f3a4b5c6d",
+        reviewId: "e4da3b7f-bbce-4a9b-9f0e-1c2f3a4b5c6d",
         professorId: "c3d4e5f6-a7b8-4012-8def-123456789012",
         rating: 5,
       });
@@ -196,7 +196,7 @@ describe("ReviewHandler Endpoints", () => {
         courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
         rating: 4,
         reviewText: "Great course, highly recommend!",
-        tags: ["challenging", "rewarding"],
+        tags: ["challenging", "exam_heavy"],
       };
 
       const res = await request(app).post("/reviews").send(payload);
@@ -211,7 +211,7 @@ describe("ReviewHandler Endpoints", () => {
         courseId: payload.courseId,
         rating: payload.rating,
         reviewText: payload.reviewText,
-        tags: payload.tags,
+        tags: ["challenging", "exam_heavy"],
       });
     });
 

@@ -3,7 +3,7 @@ import { Repository } from "../storage/storage";
 import { Pool } from "pg";
 import { configurePool, getConnectionString } from "../config/db";
 import { config } from "../config/config";
-import { drizzle } from "drizzle-orm/node-postgres";
+import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 import { SampleHandler } from "./handler/sample";
 import { sampleRoutes } from "./handler/sample/routes";
 import { ReviewHandler } from "./handler/reviews";
