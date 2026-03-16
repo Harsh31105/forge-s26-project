@@ -3,7 +3,8 @@ import { Repository } from "../storage/storage";
 import {Pool} from "pg";
 import {configurePool, getConnectionString} from "../config/db";
 import { config } from "../config/config";
-import { drizzle } from "drizzle-orm/node-postgres";
+// Delete the NodePgDatabase import but keep the drizzle import
+import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
 import {SampleHandler} from "./handler/sample";
 import {sampleRoutes} from "./handler/sample/routes";
 import {ProfessorHandler} from "./handler/professor";
@@ -19,16 +20,24 @@ import {CourseHandler} from "./handler/course";
 import {courseRoutes} from "./handler/course/routes";
 import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
+import { AuthHandler } from "./handler/auth";
+import { authRoutes } from "./handler/auth/routes";
+import { authMiddleware } from "../auth/middleware";
 import { ProfThreadHandler } from "./handler/professorThreads";
 import { professorThreadRoutes } from "./handler/professorThreads/routes";
 
 class App {
     public server: Express;
     public repo: Repository;
+    // Delete entirity of line 30
+    public db : NodePgDatabase
 
-    constructor(repo: Repository) {
+    // Delete db parameter
+    constructor(repo: Repository, db: NodePgDatabase) {
         this.server = express();
         this.repo = repo;
+        // Delete entirity of line 35
+        this.db = db;
 
         this.server.use(express.json());
         this.server.use(express.urlencoded({ extended: true }));
@@ -59,7 +68,8 @@ class App {
         const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
         this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-        registerRoutes(apiV1, this.repo);
+        // Delete DB parameter
+        registerRoutes(apiV1, this.repo, db);
 
         this.server.use(errorHandler);
         this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
@@ -82,10 +92,18 @@ export function initApp(): App {
     const db = drizzle(pool);
     const repo = new Repository(pool, db, config.s3);
 
-    return new App(repo);
+    // DELETE THE DB PARAMATER, so only new App(repo)
+    return new App(repo, db);
 }
 
-function registerRoutes(router: Router, repo: Repository) {
+// DELETE THE DB PARAMAETER, so header is registerRoutes(router: Router, repo: Repository)
+function registerRoutes(router: Router, repo: Repository, db : NodePgDatabase) {
+    // change db to be repo.students in new AuthHandler(db)
+    const authHandler = new AuthHandler(db);
+    router.use("/auth", authRoutes(authHandler));
+
+    router.use(authMiddleware);
+
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
 
