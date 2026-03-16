@@ -13,7 +13,7 @@ import type {
 
 import { customAxios } from "./apiClient";
 
-export const getProfessor https://github.com/Harsh31105/forge-s26-project/pull/63/conflict?name=backend%252Fsrc%252Fservice%252Fserver.ts&ancestor_oid=6f14a3db262012199f3280a5bdd2a55d0bc57a55&base_oid=a8c5341ea81a8e5a6a4dca70f090b3c8b16e2eb5&head_oid=c11522cfea4fde8ebbd72add31898e4b8e82891c= () => {
+export const getProfessor = () => {
   /**
    * Returns a list of all professors
    * @summary Get all professors
