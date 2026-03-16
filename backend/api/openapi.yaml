@@ -20,6 +20,8 @@ tags:
     description: Professor CRUD operations
   - name: Auth
     description: Authentication Management Operations for Google OAuth 2.0
+  - name: ProfessorReview
+    description: API Endpoint for Specific Professor Review
 
 paths:
   /health:
@@ -209,6 +211,169 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
 
+
+# ------
+
+  /professor-reviews/{id}/threads:
+    get:
+      summary: List threads for a professor review
+      description: |
+        Returns all thread messages associated with a single professor review.
+      tags: [ProfessorReview]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Professor review ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+      responses:
+        "200":
+          description: List of professor review threads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProfThread"
+        "400":
+          description: Invalid professor review id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Create a thread on a professor review
+      description: |
+        Creates a new thread message under a professor review.
+      tags: [ProfessorReview]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Professor review ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfThreadPostInput"
+      responses:
+        "201":
+          description: Created thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfThread"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+
+  /professor-reviews/{professor_review_id}/threads/{thread_id}:
+    patch:
+      summary: Update a professor review thread
+      tags: [ProfessorReview]
+      parameters:
+        - name: professor_review_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfThreadPatchInput"
+      responses:
+        "200":
+          description: Updated thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfThread"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    delete:
+      summary: Delete a professor review thread
+      tags: [ProfessorReview]
+      parameters:
+        - name: professor_review_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+# ------
 
   /samples:
     get:
@@ -802,31 +967,31 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  
-  /auth/signin: 
-    get: 
+
+  /auth/signin:
+    get:
       summary: Signin Feature with Google
       description: Redirects the user to Google's OAuth consent screen for authentication
       tags: [ Auth ]
-      responses: 
+      responses:
         "302":
           description: Redirect to Google OAuth consent screen
         "500":
           description: Internal server error
-          content: 
-            application/json: 
-              schema: 
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/Error"
               example:
                 code: 500
                 message: "Internal server error"
-  
+
   /auth/callback:
-    get: 
+    get:
       summary: Google OAuth callback
       description: Handles redirect from Google after authentication, validating Northeastern email, and creating or finding student
       tags: [ Auth ]
-      parameters: 
+      parameters:
         - name: code
           in: query
           required: true
@@ -836,29 +1001,29 @@ paths:
       responses:
         "200":
           description: Existing student logged in successfully
-          content: 
-            application/json: 
-              schema: 
-                type: object 
-                properties: 
-                  message: 
-                    type: string
-                    example: "Login successful"
-                  token: 
-                    type: string 
-                    description: JWT access token
-                    example: "eyJhbGciOi..."
-        "201": 
-          description: New student created successfully
           content:
-            application/json: 
-              schema: 
+            application/json:
+              schema:
                 type: object
                 properties:
-                  message: 
+                  message:
+                    type: string
+                    example: "Login successful"
+                  token:
+                    type: string
+                    description: JWT access token
+                    example: "eyJhbGciOi..."
+        "201":
+          description: New student created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
                     type: string
                     example: "Signup successful"
-                  token: 
+                  token:
                     type: string
                     description: JWT access token
                     example: "eyJhbGciOi..."
@@ -873,9 +1038,9 @@ paths:
                 message: "Missing authorization code"
         "403":
           description: Email is not a Northeastern email
-          content: 
-            application/json: 
-              schema: 
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/Error"
               example:
                 code: 403
@@ -889,7 +1054,7 @@ paths:
               example:
                 code: 500
                 message: "Internal server error"
-    
+
 components:
   schemas:
     UuidParam:
@@ -1245,3 +1410,43 @@ components:
             type: string
             enum: [boston, oakland, london]
           example: ["boston"]
+
+    ProfThread:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UuidParam"
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        profReviewId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProfThreadPostInput:
+      type: object
+      required:
+        - studentId
+        - content
+      properties:
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    ProfThreadPatchInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000

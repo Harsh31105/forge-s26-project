@@ -3,6 +3,7 @@ import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {Sample, SamplePatchInputType, SamplePostInputType} from "../models/sample";
 import type {Course, CoursePatchInputType, CoursePostInputType} from "../models/course";
 import { CourseRepositorySchema } from "./postgres/schema/course";
+
 import type { CourseThread, CourseThreadPatchInputType, CourseThreadPostInputType } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
 import { PaginationType } from "utils/pagination";
@@ -13,11 +14,15 @@ import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
 
+import type { ProfThread, ProfessorThreadPostInputType, ProfessorThreadPatchInputType } from "../models/profThreads";
+import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
+
 export class Repository {
     public readonly samples: SampleRepository;
     public readonly professors: ProfessorRepository;
     public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
+    public readonly profThreads: ProfThreadRepository;
     public readonly traceDocuments: TraceDocumentRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
@@ -29,6 +34,7 @@ export class Repository {
         this.courses = new CourseRepositorySchema(db);
         this.courseThreads = new CourseThreadRepositorySchema(db);
         this.professors = new ProfessorRepositorySchema(db);
+        this.profThreads = new ProfThreadRepositorySchema(db);
         this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
     }
 
@@ -61,6 +67,12 @@ export interface CourseThreadRepository {
     getThreadsByCourseReviewId(courseReviewId: string, pagination: PaginationType): Promise<CourseThread[]>;
     createThread(courseReviewId: string, input: CourseThreadPostInputType): Promise<CourseThread>;
     patchThread(threadId: string, input: CourseThreadPatchInputType): Promise<CourseThread>;
+    deleteThread(threadId: string): Promise<void>;
+}
+export interface ProfThreadRepository {
+    getThreadsByProfessorReviewId(professorReviewId: string, pagination: PaginationType): Promise<ProfThread[]>;
+    createThread(professorReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread>;
+    patchThread(threadId: string, input: ProfessorThreadPatchInputType): Promise<ProfThread>;
     deleteThread(threadId: string): Promise<void>;
 }
 

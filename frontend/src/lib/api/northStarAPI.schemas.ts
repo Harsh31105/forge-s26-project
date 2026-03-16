@@ -256,7 +256,47 @@ export interface ProfessorPatchInput {
   tags?: ProfessorPatchInputTagsItem[] | null;
 }
 
+export interface ProfThread {
+  id?: UuidParam;
+  studentId?: UuidParam;
+  profReviewId?: UuidParam;
+  /** @maxLength 2000 */
+  content?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ProfThreadPostInput {
+  studentId: UuidParam;
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  content: string;
+}
+
+export interface ProfThreadPatchInput {
+  /**
+   * @minLength 1
+   * @maxLength 2000
+   */
+  content?: string;
+}
+
 export type GetCourseReviewsIdThreadsParams = {
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
+};
+
+export type GetProfessorReviewsIdThreadsParams = {
   /**
    * Page number of pagination
    * @minimum 1
