@@ -80,7 +80,7 @@ export class NotFoundError extends Error {
 }
 
 // DB Error Handling.
-function getErrorMessage(err :unknown): string {
+export function getErrorMessage(err :unknown): string {
     if (err instanceof Error) return err.message;
     if (typeof err === "string") return err;
     try {

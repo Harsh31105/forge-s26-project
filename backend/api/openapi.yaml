@@ -20,6 +20,8 @@ tags:
     description: Professor CRUD operations
   - name: Review
     description: Course and professor review CRUD operations
+  - name: Auth
+    description: Authentication Management Operations for Google OAuth 2.0
 
 paths:
   /health:
@@ -965,7 +967,94 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-
+  
+  /auth/signin: 
+    get: 
+      summary: Signin Feature with Google
+      description: Redirects the user to Google's OAuth consent screen for authentication
+      tags: [ Auth ]
+      responses: 
+        "302":
+          description: Redirect to Google OAuth consent screen
+        "500":
+          description: Internal server error
+          content: 
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+  
+  /auth/callback:
+    get: 
+      summary: Google OAuth callback
+      description: Handles redirect from Google after authentication, validating Northeastern email, and creating or finding student
+      tags: [ Auth ]
+      parameters: 
+        - name: code
+          in: query
+          required: true
+          description: Authorization code from Google OAuth 2.0
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Existing student logged in successfully
+          content: 
+            application/json: 
+              schema: 
+                type: object 
+                properties: 
+                  message: 
+                    type: string
+                    example: "Login successful"
+                  token: 
+                    type: string 
+                    description: JWT access token
+                    example: "eyJhbGciOi..."
+        "201": 
+          description: New student created successfully
+          content:
+            application/json: 
+              schema: 
+                type: object
+                properties:
+                  message: 
+                    type: string
+                    example: "Signup successful"
+                  token: 
+                    type: string
+                    description: JWT access token
+                    example: "eyJhbGciOi..."
+        "400":
+          description: Failed to get authorization code
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "Missing authorization code"
+        "403":
+          description: Email is not a Northeastern email
+          content: 
+            application/json: 
+              schema: 
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 403
+                message: "Only Northeastern email addresses are valid"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+    
 components:
   schemas:
     UuidParam:

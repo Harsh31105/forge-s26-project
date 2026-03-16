@@ -182,6 +182,7 @@ export interface SamplePatchInput {
 
 export type ProfessorTagsItem = (typeof ProfessorTagsItem)[keyof typeof ProfessorTagsItem];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ProfessorTagsItem = {
   boston: "boston",
   oakland: "oakland",
@@ -195,7 +196,10 @@ export interface Professor {
   firstName: string;
   /** the last name of the professor */
   lastName: string;
-  /** location tags for the professor */
+  /**
+   * location tags for the professor
+   * @nullable
+   */
   tags?: ProfessorTagsItem[] | null;
   createdAt: string;
   updatedAt: string;
@@ -204,6 +208,7 @@ export interface Professor {
 export type ProfessorPostInputTagsItem =
   (typeof ProfessorPostInputTagsItem)[keyof typeof ProfessorPostInputTagsItem];
 
+// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ProfessorPostInputTagsItem = {
   boston: "boston",
   oakland: "oakland",
@@ -215,24 +220,17 @@ export interface ProfessorPostInput {
   firstName: string;
   /** @minLength 1 */
   lastName: string;
+  /** @nullable */
   tags?: ProfessorPostInputTagsItem[] | null;
 }
-
-export type ProfessorPatchInputTagsItem =
-  (typeof ProfessorPatchInputTagsItem)[keyof typeof ProfessorPatchInputTagsItem];
-
-export const ProfessorPatchInputTagsItem = {
-  boston: "boston",
-  oakland: "oakland",
-  london: "london",
-} as const;
 
 export interface ProfessorPatchInput {
   /** @minLength 1 */
   firstName?: string;
   /** @minLength 1 */
   lastName?: string;
-  tags?: ProfessorPatchInputTagsItem[] | null;
+  /** @nullable */
+  tags?: ProfessorPostInputTagsItem[] | null;
 }
 
 export interface BaseReview {
@@ -374,4 +372,23 @@ export type GetProfessorsParams = {
    * @minimum 1
    */
   limit?: number;
+};
+
+export type GetAuthCallbackParams = {
+  /**
+   * Authorization code from Google OAuth 2.0
+   */
+  code: string;
+};
+
+export type GetAuthCallback200 = {
+  message?: string;
+  /** JWT access token */
+  token?: string;
+};
+
+export type GetAuthCallback201 = {
+  message?: string;
+  /** JWT access token */
+  token?: string;
 };
