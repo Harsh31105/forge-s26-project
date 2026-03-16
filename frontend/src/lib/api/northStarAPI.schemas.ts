@@ -44,13 +44,12 @@ export type CourseDepartment = {
 /**
  * The type of lecture format for the course
  */
-export type CourseLectureType = typeof CourseLectureType[keyof typeof CourseLectureType] | null;
-
+export type CourseLectureType = (typeof CourseLectureType)[keyof typeof CourseLectureType] | null;
 
 export const CourseLectureType = {
-  lecture: 'lecture',
-  lab: 'lab',
-  online: 'online',
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
 } as const;
 
 export interface Course {
@@ -75,13 +74,14 @@ export interface Course {
 /**
  * The type of lecture format for the course
  */
-export type CoursePostInputLectureType = typeof CoursePostInputLectureType[keyof typeof CoursePostInputLectureType] | null;
-
+export type CoursePostInputLectureType =
+  | (typeof CoursePostInputLectureType)[keyof typeof CoursePostInputLectureType]
+  | null;
 
 export const CoursePostInputLectureType = {
-  lecture: 'lecture',
-  lab: 'lab',
-  online: 'online',
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
 } as const;
 
 export interface CoursePostInput {
@@ -110,13 +110,13 @@ export interface CoursePostInput {
 /**
  * The type of lecture format for the course
  */
-export type CoursePatchInputLectureType = typeof CoursePatchInputLectureType[keyof typeof CoursePatchInputLectureType];
-
+export type CoursePatchInputLectureType =
+  (typeof CoursePatchInputLectureType)[keyof typeof CoursePatchInputLectureType];
 
 export const CoursePatchInputLectureType = {
-  lecture: 'lecture',
-  lab: 'lab',
-  online: 'online',
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
 } as const;
 
 export interface CoursePatchInput {
@@ -180,13 +180,12 @@ export interface SamplePatchInput {
   updated_at?: string;
 }
 
-export type ProfessorTagsItem = typeof ProfessorTagsItem[keyof typeof ProfessorTagsItem];
-
+export type ProfessorTagsItem = (typeof ProfessorTagsItem)[keyof typeof ProfessorTagsItem];
 
 export const ProfessorTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
 } as const;
 
 export interface Professor {
@@ -202,13 +201,13 @@ export interface Professor {
   updatedAt: string;
 }
 
-export type ProfessorPostInputTagsItem = typeof ProfessorPostInputTagsItem[keyof typeof ProfessorPostInputTagsItem];
-
+export type ProfessorPostInputTagsItem =
+  (typeof ProfessorPostInputTagsItem)[keyof typeof ProfessorPostInputTagsItem];
 
 export const ProfessorPostInputTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
 } as const;
 
 export interface ProfessorPostInput {
@@ -219,13 +218,13 @@ export interface ProfessorPostInput {
   tags?: ProfessorPostInputTagsItem[] | null;
 }
 
-export type ProfessorPatchInputTagsItem = typeof ProfessorPatchInputTagsItem[keyof typeof ProfessorPatchInputTagsItem];
-
+export type ProfessorPatchInputTagsItem =
+  (typeof ProfessorPatchInputTagsItem)[keyof typeof ProfessorPatchInputTagsItem];
 
 export const ProfessorPatchInputTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
 } as const;
 
 export interface ProfessorPatchInput {
@@ -266,7 +265,7 @@ export type CourseReview = BaseReview & {
 
 export type ProfessorReview = BaseReview & {
   /** The ID of the professor being reviewed */
-  profId: string;
+  professorId: string;
 };
 
 export type Review = CourseReview | ProfessorReview;
@@ -286,10 +285,10 @@ export interface ReviewPostInput {
    * @maxLength 2000
    */
   reviewText: string;
-  /** The ID of the course to review (mutually exclusive with profId) */
+  /** The ID of the course to review (mutually exclusive with professorId) */
   courseId?: string | null;
   /** The ID of the professor to review (mutually exclusive with courseId) */
-  profId?: string | null;
+  professorId?: string | null;
   /** Optional tags for the review */
   tags?: string[];
 }
@@ -312,68 +311,67 @@ export interface ReviewPatchInput {
 }
 
 export type GetCourseReviewsIdThreadsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetSamplesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetCoursesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetReviewsParams = {
-/**
- * Number of items to return (1–100)
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
-/**
- * Number of items to skip
- * @minimum 0
- */
-offset?: number;
+  /**
+   * Number of items to return (1–100)
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * Number of items to skip
+   * @minimum 0
+   */
+  offset?: number;
 };
 
 export type GetProfessorsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
-
