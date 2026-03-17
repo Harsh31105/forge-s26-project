@@ -115,7 +115,7 @@ jobs:
 
       - name: Install frontend dependencies
         working-directory: frontend
-        run: npm ci
+        run: npm install --legacy-peer-deps
 
       - name: Run Snyk to check for vulnerabilities (frontend)
         uses: snyk/actions/node@master

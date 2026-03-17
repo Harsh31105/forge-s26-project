@@ -37,8 +37,8 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
-          cache: 'npm'
+          node-version: "20"
+          cache: "npm"
           cache-dependency-path: backend/package-lock.json
 
       - name: Cache backend node_modules
@@ -55,7 +55,8 @@ jobs:
 
       - name: Run schema integration tests
         working-directory: backend
-        run: npm test -- --testPathPattern=schema/tests
+        run: npm test -- --testPathPatterns=schema/tests
+
         env:
           # Database connection variables consumed by the test suite
           POSTGRES_HOST: localhost
