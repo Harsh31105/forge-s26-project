@@ -253,6 +253,7 @@ describe("ReviewHandler Endpoints", () => {
       repo.createCourseReview.mockResolvedValue(reviewNoTags);
 
       const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
         rating: 3,
         reviewText: "Decent course.",
@@ -267,11 +268,7 @@ describe("ReviewHandler Endpoints", () => {
       });
     });
 
-    test("creates review without studentId (anonymous)", async () => {
-      const parentId = "parent-uuid-anon-abcd-ef1234567890";
-      repo.createParentReview.mockResolvedValue(parentId);
-      repo.createCourseReview.mockResolvedValue(mockCourseReview);
-
+    test("creates review without studentId returns 400", async () => {
       const payload = {
         courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
         rating: 4,
@@ -279,8 +276,7 @@ describe("ReviewHandler Endpoints", () => {
       };
 
       const res = await request(app).post("/reviews").send(payload);
-      expect(res.status).toBe(201);
-      expect(repo.createParentReview).toHaveBeenCalledWith(undefined);
+      expect(res.status).toBe(400);
     });
 
     test("censors profane review text", async () => {
@@ -289,6 +285,7 @@ describe("ReviewHandler Endpoints", () => {
       repo.createCourseReview.mockResolvedValue(mockCourseReview);
 
       const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
         rating: 1,
         reviewText: "This is a damn awful course",
@@ -372,6 +369,7 @@ describe("ReviewHandler Endpoints", () => {
       );
 
       const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
         rating: 4,
         reviewText: "Foreign key error.",
@@ -385,6 +383,7 @@ describe("ReviewHandler Endpoints", () => {
       repo.createParentReview.mockRejectedValue(new Error("DB error"));
 
       const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
         courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
         rating: 4,
         reviewText: "Some review.",
