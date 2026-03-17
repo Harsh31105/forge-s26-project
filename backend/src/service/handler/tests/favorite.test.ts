@@ -30,7 +30,7 @@ describe("FavoriteHandler Endpoints", () => {
 
         app.get("/favorites", handler.handleGet.bind(handler));
         app.post("/favorites", handler.handlePost.bind(handler));
-        app.delete("/favorites/:id", handler.handleDelete.bind(handler));
+        app.delete("/favorites/:student_id/:course_id", handler.handleDelete.bind(handler));
 
         app.use(errorHandler);
     });
@@ -41,11 +41,14 @@ describe("FavoriteHandler Endpoints", () => {
 
     describe("GET /favorites", () => {
             test("returns all favorites", async () => {
+                const createdAt = new Date();
+                const updatedAt = new Date();
+
                 const data: Favorite[] = 
-                [{ student_id: "1", 
-                    course_id: "Favorite 1", 
-                    created_at: new Date(), 
-                    updated_at: new Date() } ];
+                [{ student_id: "123e4567-e89b-12d3-a456-426614174000", 
+                    course_id: "550e8400-e29b-41d4-a716-446655440000", 
+                    created_at: createdAt, 
+                    updated_at: updatedAt } as Favorite,];
 
                 repo.getFavorites.mockResolvedValue(data);
     
@@ -54,11 +57,13 @@ describe("FavoriteHandler Endpoints", () => {
                 expect(res.body).toHaveLength(1);
                 expect(res.body[0].student_id).toBe(data[0]!.student_id);
                 expect(res.body[0].course_id).toBe(data[0]!.course_id);
+                expect(res.body[0].created_at).toBe(createdAt.toISOString());
+                expect(res.body[0].updated_at).toBe(updatedAt.toISOString());
             });
     
             test("repository throws error", async () => {
                 repo.getFavorites.mockRejectedValue(new Error("DB error"));
-                const res = await request(app).get("/favorite");
+                const res = await request(app).get("/favorites");
                 expect(res.status).toBe(500);
             });
         });
@@ -69,20 +74,26 @@ describe("FavoriteHandler Endpoints", () => {
     describe("POST /favorites", () => {
         test("creates favorites", async () => {
             const payload: FavoritePostInputType = { 
-                student_id: "2",
-                course_id: "New Favorite" };
+                student_id: "123e4567-e89b-12d3-a456-426614174000",
+                course_id: "550e8400-e29b-41d4-a716-446655440000" };
+
+            const createdAt = new Date();
+            const updatedAt = new Date();
 
             const createdFavorite: Favorite = { 
-                student_id: "2", 
-                course_id: "33",
-                created_at: new Date(), 
-                updated_at: new Date() };
+                student_id: "payload.student_id", 
+                course_id: "payload.course_id",
+                created_at: createdAt, 
+                updated_at: updatedAt };
             repo.createFavorite.mockResolvedValue(createdFavorite);
 
             const res = await request(app).post("/favorites").send(payload);
+
             expect(res.status).toBe(201);
-            expect(res.body[0].student_id).toBe(payload.student_id);
-            expect(res.body[0].student_id).toBe(payload.student_id);
+            expect(res.body.student_id).toBe(payload.student_id);
+            expect(res.body.course_id).toBe(payload.course_id);
+            expect(res.body.created_at).toBe(createdAt.toISOString());
+            expect(res.body.updated_at).toBe(updatedAt.toISOString());
 
         });
 
@@ -99,9 +110,12 @@ describe("FavoriteHandler Endpoints", () => {
             repo.deleteFavorite.mockResolvedValue(undefined);
             mockValidate.mockReturnValue(true);
 
-            const res = await request(app).delete("/favorites/2/33");
+            const studentId = "123e4567-e89b-12d3-a456-426614174000";
+            const courseId = "550e8400-e29b-41d4-a716-446655440000";
+
+            const res = await request(app).delete(`/favorites/${studentId}/${courseId}`);
             expect(res.status).toBe(204);
-            expect(repo.deleteFavorite).toHaveBeenCalledWith("2", "33");
+            expect(repo.deleteFavorite).toHaveBeenCalledWith(studentId, courseId);
         });
 
         test("invalid UUID", async () => {

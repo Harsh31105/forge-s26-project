@@ -7,7 +7,7 @@ import {FavoriteRepository} from "../../storage";
 import {favorite} from "../../tables/favorite";
 import { eq, and } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
-import { getOffset, PaginationType } from "utils/pagination";
+import { getOffset, PaginationType } from "../../../utils/pagination";
 
 export class FavoritesRepositorySchema implements FavoriteRepository {
     constructor(private readonly db: NodePgDatabase) {
