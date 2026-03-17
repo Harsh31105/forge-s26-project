@@ -37,26 +37,29 @@ import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
 
-export class Repository {
-  public readonly samples: SampleRepository;
-  public readonly reviews: ReviewRepository;
-  public readonly professors: ProfessorRepository;
-  public readonly courses: CourseRepository;
-  public readonly courseThreads: CourseThreadRepository;
-  public readonly traceDocuments: TraceDocumentRepository;
-  private readonly pool: Pool;
-  private readonly db: NodePgDatabase;
+import type { ProfThread, ProfessorThreadPostInputType, ProfessorThreadPatchInputType } from "../models/profThreads";
+import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
 
-  constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
-    this.pool = pool;
-    this.db = db;
-    this.samples = new SampleRepositorySchema(db);
-    this.reviews = new ReviewRepositorySchema(db);
-    this.courses = new CourseRepositorySchema(db);
-    this.courseThreads = new CourseThreadRepositorySchema(db);
-    this.professors = new ProfessorRepositorySchema(db);
-    this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
-  }
+export class Repository {
+    public readonly samples: SampleRepository;
+    public readonly professors: ProfessorRepository;
+    public readonly courses: CourseRepository;
+    public readonly courseThreads: CourseThreadRepository;
+    public readonly profThreads: ProfThreadRepository;
+    public readonly traceDocuments: TraceDocumentRepository;
+    private readonly pool: Pool;
+    private readonly db: NodePgDatabase;
+
+    constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
+        this.pool = pool;
+        this.db = db;
+        this.samples = new SampleRepositorySchema(db);
+        this.courses = new CourseRepositorySchema(db);
+        this.courseThreads = new CourseThreadRepositorySchema(db);
+        this.professors = new ProfessorRepositorySchema(db);
+        this.profThreads = new ProfThreadRepositorySchema(db);
+        this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+    }
 
   async getDB(): Promise<NodePgDatabase> {
     return this.db;
@@ -127,6 +130,12 @@ export interface CourseThreadRepository {
     input: CourseThreadPatchInputType,
   ): Promise<CourseThread>;
   deleteThread(threadId: string): Promise<void>;
+}
+export interface ProfThreadRepository {
+    getThreadsByProfessorReviewId(professorReviewId: string, pagination: PaginationType): Promise<ProfThread[]>;
+    createThread(professorReviewId: string, input: ProfessorThreadPostInputType): Promise<ProfThread>;
+    patchThread(threadId: string, input: ProfessorThreadPatchInputType): Promise<ProfThread>;
+    deleteThread(threadId: string): Promise<void>;
 }
 
 export interface ProfessorRepository {

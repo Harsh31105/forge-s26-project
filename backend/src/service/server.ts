@@ -24,6 +24,8 @@ import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { AuthHandler } from "./handler/auth";
 import { authRoutes } from "./handler/auth/routes";
 import { authMiddleware } from "../auth/middleware";
+import { ProfThreadHandler } from "./handler/professorThreads";
+import { professorThreadRoutes } from "./handler/professorThreads/routes";
 
 class App {
     public server: Express;

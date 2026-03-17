@@ -10,6 +10,7 @@ import { sql } from "drizzle-orm";
 import { review } from "./review";
 import { courseTagEnum } from "./enums";
 import { course } from "./course";
+import { courseTagEnum } from "./courseTagEnum";
 
 export const courseReview = pgTable(
   "course_review",
