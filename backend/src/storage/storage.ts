@@ -51,8 +51,8 @@ export class Repository {
   public readonly courseThreads: CourseThreadRepository;
   public readonly profThreads: ProfThreadRepository;
   public readonly traceDocuments: TraceDocumentRepository;
+  public readonly reviews: ReviewRepository;
   private readonly pool: Pool;
-  private readonly reviews: ReviewRepository;
   private readonly db: NodePgDatabase;
 
   constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
