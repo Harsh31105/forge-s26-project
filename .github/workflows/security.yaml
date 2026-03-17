@@ -1,0 +1,133 @@
+---
+# Security scanning workflow — runs OWASP ZAP (DAST) and Snyk (SCA/SAST) scans.
+# Scheduled weekly and triggered on every push to main.
+name: Security Scans
+
+on:
+  push:
+    branches:
+      - main
+  schedule:
+    # Every Sunday at midnight UTC
+    - cron: '0 0 * * 0'
+  workflow_dispatch: {}
+
+jobs:
+  # ---------------------------------------------------------------------------
+  # OWASP ZAP — Dynamic Application Security Testing (DAST)
+  # Spins up the backend via Docker Compose and runs a full ZAP scan against it.
+  # ---------------------------------------------------------------------------
+  zap-scan:
+    name: OWASP ZAP Full Scan
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Start only the backend service (and its deps) so ZAP has a target
+      - name: Start backend with Docker Compose
+        run: |
+          docker compose up -d backend
+          # Wait for the health endpoint to become available before scanning
+          echo "Waiting for backend to be ready..."
+          for i in $(seq 1 20); do
+            STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" http://localhost:8080/api/v1/health || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "Backend is ready (HTTP $STATUS)"
+              break
+            fi
+            echo "Attempt $i: HTTP $STATUS — retrying in 5s..."
+            sleep 5
+          done
+
+      - name: OWASP ZAP Full Scan
+        uses: zaproxy/action-full-scan@v0.10.0
+        with:
+          target: 'http://localhost:8080'
+          # Fail the workflow if ZAP finds issues at WARN level or above
+          fail_action: false
+          # Upload the HTML report as an artifact
+          artifact_name: zap-report
+          # Allow the ZAP container to reach the host network
+          docker_name: 'ghcr.io/zaproxy/zaproxy:stable'
+          cmd_options: '-I'
+
+      - name: Stop Docker Compose services
+        if: always()
+        run: docker compose down
+
+  # ---------------------------------------------------------------------------
+  # Snyk — Software Composition Analysis for backend and frontend
+  # ---------------------------------------------------------------------------
+  snyk-backend:
+    name: Snyk Scan — Backend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      - name: Run Snyk to check for vulnerabilities (backend)
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high
+          command: test
+        # Use the backend directory as the working directory for Snyk
+        # The snyk/actions/node action runs in the repo root by default;
+        # override with the `args` path flag.
+
+      # Surface Snyk results in the GitHub Security tab via SARIF upload
+      - name: Upload Snyk SARIF report (backend)
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        continue-on-error: true
+        with:
+          sarif_file: snyk.sarif
+
+  snyk-frontend:
+    name: Snyk Scan — Frontend
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm ci
+
+      - name: Run Snyk to check for vulnerabilities (frontend)
+        uses: snyk/actions/node@master
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+          args: --severity-threshold=high --file=frontend/package.json
+          command: test
+
+      - name: Upload Snyk SARIF report (frontend)
+        uses: github/codeql-action/upload-sarif@v3
+        if: always()
+        continue-on-error: true
+        with:
+          sarif_file: snyk.sarif

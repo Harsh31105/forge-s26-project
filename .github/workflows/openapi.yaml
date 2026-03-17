@@ -1,0 +1,113 @@
+---
+# OpenAPI spec workflow — generates openapi.json from openapi.yaml and deploys
+# it to GitHub Pages alongside the TypeDoc documentation.
+name: OpenAPI Spec Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+
+# Minimum permissions required for a Pages deployment
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+# One concurrent Pages deployment at a time; cancel in-progress runs
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  generate-and-deploy:
+    name: Generate OpenAPI JSON and Deploy to Pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Cache backend node_modules
+        uses: actions/cache@v4
+        with:
+          path: backend/node_modules
+          key: ${{ runner.os }}-backend-node-modules-${{ hashFiles('backend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-backend-node-modules-
+
+      - name: Install backend dependencies
+        working-directory: backend
+        run: npm ci
+
+      # Generate backend/api/openapi.json from backend/api/openapi.yaml
+      - name: Generate OpenAPI JSON
+        working-directory: backend
+        run: npx ts-node scripts/generate-openapi.ts
+
+      # Also generate TypeDoc documentation so both are co-deployed
+      - name: Install TypeDoc
+        working-directory: backend
+        run: npm install --save-dev typedoc
+
+      - name: Generate TypeDoc documentation
+        working-directory: backend
+        run: npx typedoc --entryPointStrategy expand src/ --out docs/
+
+      # Assemble the Pages site:
+      #   /          → TypeDoc HTML documentation
+      #   /openapi/  → openapi.json spec (and a simple viewer)
+      - name: Assemble Pages site
+        run: |
+          mkdir -p _site/openapi
+          # Copy TypeDoc output to site root
+          cp -r backend/docs/. _site/
+          # Copy generated OpenAPI JSON to /openapi/
+          cp backend/api/openapi.json _site/openapi/openapi.json
+          # Create a minimal index page for the openapi directory
+          cat > _site/openapi/index.html <<'HTML'
+          <!DOCTYPE html>
+          <html lang="en">
+          <head>
+            <meta charset="UTF-8" />
+            <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+            <title>NorthStar API Spec</title>
+            <link rel="stylesheet" type="text/css" href="https://unpkg.com/swagger-ui-dist@5/swagger-ui.css" />
+          </head>
+          <body>
+            <div id="swagger-ui"></div>
+            <script src="https://unpkg.com/swagger-ui-dist@5/swagger-ui-bundle.js"></script>
+            <script>
+              SwaggerUIBundle({
+                url: './openapi.json',
+                dom_id: '#swagger-ui',
+                presets: [SwaggerUIBundle.presets.apis, SwaggerUIBundle.SwaggerUIStandalonePreset],
+                layout: 'StandaloneLayout'
+              });
+            </script>
+          </body>
+          </html>
+          HTML
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: _site/
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

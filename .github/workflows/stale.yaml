@@ -1,0 +1,47 @@
+---
+# Stale issue/PR management workflow
+# Marks issues and PRs stale after 30 days of inactivity, closes them after 7 more days
+name: Stale
+
+on:
+  schedule:
+    # Run daily at midnight UTC
+    - cron: '0 0 * * *'
+  workflow_dispatch: {}
+
+jobs:
+  stale:
+    name: Mark and Close Stale Issues and PRs
+    runs-on: ubuntu-latest
+    permissions:
+      issues: write
+      pull-requests: write
+    steps:
+      - name: Stale Action
+        uses: actions/stale@v9
+        with:
+          # Number of days of inactivity before an issue/PR is marked stale
+          days-before-stale: 30
+          # Number of days of inactivity after being marked stale before closing
+          days-before-close: 7
+          stale-issue-message: >
+            This issue has been automatically marked as stale because it has not had
+            any activity in the last 30 days. It will be closed in 7 days if no further
+            activity occurs. If this issue is still relevant, please leave a comment or
+            remove the stale label.
+          stale-pr-message: >
+            This pull request has been automatically marked as stale because it has not had
+            any activity in the last 30 days. It will be closed in 7 days if no further
+            activity occurs. If this PR is still relevant, please leave a comment, push
+            new commits, or remove the stale label.
+          close-issue-message: >
+            This issue was closed automatically after being stale for 7 days with no activity.
+            Feel free to reopen it if the issue is still relevant.
+          close-pr-message: >
+            This pull request was closed automatically after being stale for 7 days with no
+            activity. Feel free to reopen it if the work is still relevant.
+          stale-issue-label: 'stale'
+          stale-pr-label: 'stale'
+          # Labels that prevent an issue/PR from being marked stale
+          exempt-issue-labels: 'pinned,security,bug'
+          exempt-pr-labels: 'pinned,security'

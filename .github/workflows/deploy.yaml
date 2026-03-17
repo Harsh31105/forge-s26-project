@@ -1,0 +1,129 @@
+---
+# Deploy workflow — deploys to staging automatically after CI passes;
+# production requires manual approval via GitHub environment protection rules.
+name: Deploy
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: 'Target environment'
+        required: true
+        default: staging
+        type: choice
+        options:
+          - staging
+          - production
+
+jobs:
+  staging:
+    name: Deploy to Staging
+    runs-on: ubuntu-latest
+    # Uses the "staging" GitHub environment for variable/secret scoping
+    environment: staging
+    # On push to main, always deploy staging.
+    # On manual dispatch, only run this job when staging is selected.
+    if: github.event_name == 'push' || github.event.inputs.environment == 'staging'
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---------------------------------------------------------------
+      # Replace the echo commands below with your real deploy commands.
+      # Examples: kubectl apply, helm upgrade, fly deploy, etc.
+      # ---------------------------------------------------------------
+      - name: Deploy backend to staging
+        run: |
+          # replace with your deploy command
+          echo "Deploying backend to staging..."
+          echo "IMAGE=ghcr.io/${{ github.repository_owner }}/northstar-backend:latest"
+
+      - name: Deploy frontend to staging
+        run: |
+          # replace with your deploy command
+          echo "Deploying frontend to staging..."
+          echo "IMAGE=ghcr.io/${{ github.repository_owner }}/northstar-frontend:latest"
+
+      # Basic smoke test — verifies the health endpoint returns HTTP 200
+      - name: Smoke test — health check
+        run: |
+          echo "Running smoke test against staging health endpoint..."
+          # replace the URL below with your real staging base URL, e.g.:
+          # BASE_URL="${{ vars.STAGING_URL }}"
+          BASE_URL="http://localhost:8080"
+          for i in $(seq 1 5); do
+            STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" "${BASE_URL}/api/v1/health" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed (HTTP $STATUS)"
+              exit 0
+            fi
+            echo "Attempt $i: got HTTP $STATUS, retrying in 5s..."
+            sleep 5
+          done
+          echo "Smoke test failed after 5 attempts"
+          exit 1
+
+  production:
+    name: Deploy to Production
+    runs-on: ubuntu-latest
+    # The "production" GitHub environment must have a required reviewer configured
+    # in Settings → Environments → production → Required reviewers.
+    # GitHub will pause this job until a reviewer approves the deployment.
+    environment: production
+    # On push to main, also queue a production deployment (approval gates it).
+    # On manual dispatch, only run when production is selected.
+    if: github.event_name == 'push' || github.event.inputs.environment == 'production'
+    needs: staging
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # ---------------------------------------------------------------
+      # Replace the echo commands below with your real deploy commands.
+      # ---------------------------------------------------------------
+      - name: Deploy backend to production
+        run: |
+          # replace with your deploy command
+          echo "Deploying backend to production..."
+          echo "IMAGE=ghcr.io/${{ github.repository_owner }}/northstar-backend:${{ github.sha }}"
+
+      - name: Deploy frontend to production
+        run: |
+          # replace with your deploy command
+          echo "Deploying frontend to production..."
+          echo "IMAGE=ghcr.io/${{ github.repository_owner }}/northstar-frontend:${{ github.sha }}"
+
+      - name: Smoke test — health check
+        run: |
+          echo "Running smoke test against production health endpoint..."
+          # replace the URL below with your real production base URL, e.g.:
+          # BASE_URL="${{ vars.PRODUCTION_URL }}"
+          BASE_URL="http://localhost:8080"
+          for i in $(seq 1 5); do
+            STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" "${BASE_URL}/api/v1/health" || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "Health check passed (HTTP $STATUS)"
+              exit 0
+            fi
+            echo "Attempt $i: got HTTP $STATUS, retrying in 5s..."
+            sleep 5
+          done
+          echo "Smoke test failed after 5 attempts"
+          exit 1
