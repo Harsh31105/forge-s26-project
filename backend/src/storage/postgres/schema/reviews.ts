@@ -5,6 +5,7 @@ import type {
   Review,
   ReviewPatchInputType,
 } from "../../../models/review";
+import { courseTags, professorTags } from "../../../models/review";
 
 import { PaginationType, getOffset } from "../../../utils/pagination";
 
@@ -165,25 +166,42 @@ export class ReviewRepositorySchema implements ReviewRepository {
 
     if (Object.keys(updates).length === 0) return this.getReviewByID(id);
 
-    // Try course review first
-    const [updatedCourse] = await this.db
-      .update(courseReview)
-      .set(updates as any)
+    // Determine which table owns this review before updating
+    const [isCourse] = await this.db
+      .select({ reviewId: courseReview.reviewId })
+      .from(courseReview)
       .where(eq(courseReview.reviewId, id))
-      .returning();
+      .limit(1);
 
-    if (updatedCourse) return this.getReviewByID(id);
+    if (isCourse) {
+      if (updates.tags && !(updates.tags as string[]).every((t: string) => (courseTags as readonly string[]).includes(t))) {
+        throw new Error("invalid tags for course review");
+      }
+      await this.db
+        .update(courseReview)
+        .set(updates as any)
+        .where(eq(courseReview.reviewId, id));
+      return this.getReviewByID(id);
+    }
 
-    // Try professor review
-    const [updatedProf] = await this.db
-      .update(profReview)
-      .set(updates as any)
+    const [isProf] = await this.db
+      .select({ reviewId: profReview.reviewId })
+      .from(profReview)
       .where(eq(profReview.reviewId, id))
-      .returning();
+      .limit(1);
 
-    if (updatedProf) return this.getReviewByID(id);
+    if (isProf) {
+      if (updates.tags && !(updates.tags as string[]).every((t: string) => (professorTags as readonly string[]).includes(t))) {
+        throw new Error("invalid tags for professor review");
+      }
+      await this.db
+        .update(profReview)
+        .set(updates as any)
+        .where(eq(profReview.reviewId, id));
+      return this.getReviewByID(id);
+    }
 
-    throw new Error("review with given ID not found");
+    throw new NotFoundError("review with given ID not found");
   }
 
   async deleteReview(id: string): Promise<void> {

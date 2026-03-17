@@ -25,7 +25,7 @@ export interface ProfessorReview extends BaseReview {
 
 export type Review = CourseReview | ProfessorReview;
 
-const professorTags = [
+export const professorTags = [
   "clear_lectures", "confusing_lectures", "organized", "disorganized",
   "engaging", "boring", "reads_slides", "fair_grading", "tough_grader",
   "lenient_grader", "unclear_rubrics", "curve_based", "no_curve",
@@ -37,7 +37,7 @@ const professorTags = [
   "extra_credit", "no_extra_credit", "little_to_no_test",
 ] as const;
 
-const courseTags = [
+export const courseTags = [
   "easy_a", "challenging", "fast_paced", "slow_paced", "time_consuming",
   "exam_heavy", "project_heavy", "quiz_heavy", "participation_based",
   "presentation_heavy", "coding_heavy", "math_heavy", "reading_heavy",

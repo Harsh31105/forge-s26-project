@@ -1221,7 +1221,16 @@ paths:
                 code: 500
                 message: "Internal server error"
 
+security:
+  - bearerAuth: []
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     UuidParam:
       type: string
