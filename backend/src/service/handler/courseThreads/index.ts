@@ -7,6 +7,7 @@ import {
   CourseThreadPostInputType,
 } from "../../../models/courseThread";
 import { BadRequest, mapDBError } from "../../../errs/httpError";
+import logger from "../../../utils/logger";
 import type { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
@@ -29,7 +30,7 @@ export class CourseThreadHandler {
       const threads: CourseThread[] = await this.repo.getThreadsByCourseReviewId(courseReviewId, pagination);
       res.status(200).json(threads);
     } catch (err) {
-      console.error("DB error in handleGet (courseThreads):", err);
+      logger.error({ err }, "DB error in handleGet (courseThreads)");
       throw mapDBError(err, "failed to retrieve threads");
     }
   }
@@ -49,7 +50,7 @@ export class CourseThreadHandler {
       const created = await this.repo.createThread(courseReviewId, input);
       res.status(201).json(created);
     } catch (err) {
-      console.error("DB error in handlePost (courseThreads):", err);
+      logger.error({ err }, "DB error in handlePost (courseThreads)");
       throw mapDBError(err, "failed to create thread");
     }
   }
@@ -74,7 +75,7 @@ export class CourseThreadHandler {
       const updated = await this.repo.patchThread(threadId, input);
       res.status(200).json(updated);
     } catch (err) {
-      console.error("DB error in handlePatch (courseThreads):", err);
+      logger.error({ err }, "DB error in handlePatch (courseThreads)");
       throw mapDBError(err, "failed to patch thread");
     }
   }
@@ -90,7 +91,7 @@ export class CourseThreadHandler {
       await this.repo.deleteThread(threadId);
       res.sendStatus(204);
     } catch (err) {
-      console.error("DB error in handleDelete (courseThreads):", err);
+      logger.error({ err }, "DB error in handleDelete (courseThreads)");
       throw mapDBError(err, "failed to delete thread");
     }
   }

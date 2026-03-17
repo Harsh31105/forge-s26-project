@@ -2,14 +2,12 @@ import { Pool, type PoolConfig } from "pg";
 import { Repository } from "../storage";
 import {type DB, getConnectionString} from "../../config/db";
 import { setTimeout } from "node:timers/promises";
+import logger from "../../utils/logger";
 
 
 
 export async function connectDatabase(dbConfig: DB): Promise<Pool> {
-    console.log(`Pool Config - MaxConns: ${dbConfig.maxOpenConns},
-                                        MinConns: ${dbConfig.maxIdleConns},
-                                        MaxLifetime: ${dbConfig.connMaxLifetime}`
-    );
+    logger.debug({ maxConns: dbConfig.maxOpenConns, minConns: dbConfig.maxIdleConns, maxLifetime: dbConfig.connMaxLifetime }, "Pool config");
 
     const poolConfig: PoolConfig = {
         connectionString: getConnectionString(dbConfig),
@@ -31,6 +29,6 @@ export async function connectDatabase(dbConfig: DB): Promise<Pool> {
         throw err;
     }
 
-    console.log("Connected to database!");
+    logger.info("Connected to database");
     return pool;
 }

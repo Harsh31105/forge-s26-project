@@ -1,4 +1,5 @@
 import type { Request, Response, NextFunction } from "express";
+import logger from "../utils/logger";
 
 export class HTTPError extends Error {
     public code: number;
@@ -54,14 +55,16 @@ export const InvalidJSON = (msg?: string) => {
     throw new HTTPError(400, msg || "invalid json");
 }
 
-export const errorHandler = (err: any, req: Request, res: Response, next: NextFunction) => {
+export const errorHandler = (err: any, req: Request, res: Response, _next: NextFunction) => {
     let httperror: HTTPError;
 
     if (err instanceof HTTPError) {
         httperror = err;
+        const level = httperror.code >= 500 ? "error" : "warn";
+        logger[level]({ code: httperror.code, method: req.method, path: req.path }, httperror.message);
     } else {
-        httperror = InternalServerError();
-        console.error("Unexpected Error: ", err);
+        logger.error({ err, method: req.method, path: req.path }, "Unhandled error");
+        httperror = new HTTPError(500, "internal server error");
     }
 
     return res.status(httperror.code).json({

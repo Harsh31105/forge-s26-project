@@ -13,6 +13,7 @@ import {
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
+import logger from "../../../utils/logger";
 
 export class ProfessorHandler {
     constructor(private readonly repo: ProfessorRepository) {}
@@ -28,7 +29,7 @@ export class ProfessorHandler {
         try {
             professors = await this.repo.getProfessors(pagination);
         } catch (err) {
-            console.log("Failed to get professors: ", err);
+            logger.error({ err }, "Failed to get professors");
             throw mapDBError(err, "failed to retrieve professors");
         }
 
@@ -43,7 +44,7 @@ export class ProfessorHandler {
         try {
             professor = await this.repo.getProfessorByID(id);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             if (err instanceof NotFoundError) throw NotFound("professor not found");
             throw mapDBError(err, "failed to retrieve professor");
         }
@@ -62,7 +63,7 @@ export class ProfessorHandler {
         try {
             newProfessor = await this.repo.createProfessor(postProfessor);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             throw mapDBError(err, "failed to post professor");
         }
 
@@ -88,7 +89,7 @@ export class ProfessorHandler {
         try {
             updatedProfessor = await this.repo.patchProfessor(id, patchProfessor);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             if (err instanceof NotFoundError) throw NotFound("professor not found");
             throw mapDBError(err, "failed to patch professor");
         }
@@ -103,7 +104,7 @@ export class ProfessorHandler {
         try {
             await this.repo.deleteProfessor(id);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             if (err instanceof NotFoundError) throw NotFound("professor not found");
             throw mapDBError(err, "failed to delete professor");
         }

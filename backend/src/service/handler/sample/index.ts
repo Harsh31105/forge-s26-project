@@ -13,6 +13,8 @@ import {
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { getOffset, PaginationSchema } from "../../../utils/pagination";
+import logger from "../../../utils/logger";
+
 
 export class SampleHandler {
     constructor(private readonly repo: SampleRepository) {}
@@ -29,7 +31,7 @@ export class SampleHandler {
         try {
             samples = await this.repo.getSamples(pagination);
         } catch (err) {
-            console.log("Failed to get samples: ", err);
+            logger.error({ err }, "Failed to get samples");
             throw mapDBError(err, "failed to retrieve samples");
         }
 
@@ -44,7 +46,7 @@ export class SampleHandler {
         try {
             sample = await this.repo.getSampleByID(id);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             if (err instanceof NotFoundError) NotFound("sample not found");
 
             throw mapDBError(err, "failed to retrieve sample");
@@ -64,7 +66,7 @@ export class SampleHandler {
         try {
             newSample = await this.repo.createSample(postSample);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             throw mapDBError(err, "failed to post sample");
         }
 
@@ -85,7 +87,7 @@ export class SampleHandler {
         try {
             updatedSample = await this.repo.patchSample(id, patchSample);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             throw mapDBError(err, "failed to patch sample");
         }
 
@@ -99,7 +101,7 @@ export class SampleHandler {
         try {
             await this.repo.deleteSample(id);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             throw mapDBError(err, "failed to delete sample");
         }
 

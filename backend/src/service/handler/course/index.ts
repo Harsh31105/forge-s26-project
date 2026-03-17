@@ -13,6 +13,7 @@ import {
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { getOffset, PaginationSchema } from "../../../utils/pagination";
+import logger from "../../../utils/logger";
 
 export class CourseHandler {
     constructor(private readonly repo: CourseRepository) {}
@@ -29,7 +30,7 @@ export class CourseHandler {
         try {
             courses = await this.repo.getCourses(pagination);
         } catch (err) {
-            console.log("Failed to get courses: ", err);
+            logger.error({ err }, "Failed to get courses");
             throw mapDBError(err, "failed to retrieve courses");
         }
 
@@ -44,7 +45,7 @@ export class CourseHandler {
         try {
             course = await this.repo.getCourseByID(id);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             if (err instanceof NotFoundError) throw NotFound("course not found");
 
             throw mapDBError(err, "failed to retrieve course");
@@ -64,7 +65,7 @@ export class CourseHandler {
         try {
             newCourse = await this.repo.createCourse(postCourse);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             throw mapDBError(err, "failed to post course");
         }
 
@@ -85,7 +86,7 @@ export class CourseHandler {
         try {
             updatedCourse = await this.repo.patchCourse(id, patchCourse);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             throw mapDBError(err, "failed to patch course");
         }
 
@@ -99,7 +100,7 @@ export class CourseHandler {
         try {
             await this.repo.deleteCourse(id);
         } catch (err) {
-            console.log(err);
+            logger.error({ err });
             throw mapDBError(err, "failed to delete course");
         }
 

@@ -9,8 +9,9 @@ import {SampleHandler} from "./handler/sample";
 import {sampleRoutes} from "./handler/sample/routes";
 import {ProfessorHandler} from "./handler/professor";
 import {professorRoutes} from "./handler/professor/routes";
-import morgan from "morgan";
+import pinoHttp from "pino-http";
 import compression from "compression";
+import logger from "../utils/logger";
 import cors from "cors";
 import {errorHandler} from "../errs/httpError";
 import YAML from "yamljs";
@@ -41,7 +42,7 @@ class App {
 
         this.server.use(express.json());
         this.server.use(express.urlencoded({ extended: true }));
-        this.server.use(morgan("dev"));
+        this.server.use(pinoHttp({ logger }));
         this.server.use(compression());
         this.server.use(cors({
             origin: [
@@ -77,7 +78,7 @@ class App {
 
     listen(port: string) {
         this.server.listen(port, () => {
-            console.log(`Server running on http://localhost:${port}`);
+            logger.info(`Server running on http://localhost:${port}`);
         });
     }
 }
