@@ -21,6 +21,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
     "@jest/globals": "^30.2.0",
+    "@types/pdf-parse": "^1.1.5",
     "compression": "^1.8.1",
     "cors": "^2.8.6",
     "dotenv": "^17.2.3",
@@ -31,6 +32,7 @@
     "jsonwebtoken": "^9.0.3",
     "leo-profanity": "^1.9.0",
     "morgan": "^1.10.1",
+    "pdf-parse": "^2.4.5",
     "pg": "^8.17.2",
     "serve-favicon": "^2.5.1",
     "swagger-ui-express": "^5.0.1",

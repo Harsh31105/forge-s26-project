@@ -22,7 +22,6 @@ export class ReviewHandler {
   constructor(private readonly repo: ReviewRepository) {}
 
   async handleGet(req: Request, res: Response): Promise<void> {
-    console.log("[ReviewHandler] GET /reviews", req.query);
     const pagination = PaginationSchema.safeParse(req.query);
     if (!pagination.success) throw BadRequest("invalid pagination parameters");
 
@@ -39,7 +38,6 @@ export class ReviewHandler {
   }
 
   async handleGetByID(req: Request, res: Response): Promise<void> {
-    console.log("[ReviewHandler] GET /reviews/:id", req.params.id);
     const id = req.params.id as string;
     if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
@@ -55,8 +53,6 @@ export class ReviewHandler {
   }
 
   async handlePost(req: Request, res: Response): Promise<void> {
-    console.log("[ReviewHandler] POST /reviews", req.body);
-
     const result = ReviewPostInputSchema.safeParse(req.body);
     if (!result.success) {
       throw InvalidRequestData(
@@ -93,7 +89,6 @@ export class ReviewHandler {
   }
 
   async handlePatch(req: Request, res: Response): Promise<void> {
-    console.log("[ReviewHandler] PATCH /reviews/:id", req.params.id, req.body);
     const id = req.params.id as string;
     if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
@@ -120,7 +115,6 @@ export class ReviewHandler {
   }
 
   async handleDelete(req: Request, res: Response): Promise<void> {
-    console.log("[ReviewHandler] DELETE /reviews/:id", req.params.id);
     const id = req.params.id as string;
     if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
