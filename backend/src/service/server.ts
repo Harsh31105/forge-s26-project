@@ -26,6 +26,7 @@ import { authRoutes } from "./handler/auth/routes";
 import { authMiddleware } from "../auth/middleware";
 import { ProfThreadHandler } from "./handler/professorThreads";
 import { professorThreadRoutes } from "./handler/professorThreads/routes";
+import cookieParser from "cookie-parser";
 
 class App {
     public server: Express;
@@ -57,6 +58,7 @@ class App {
             credentials: true,
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));
+        this.server.use(cookieParser())
 
         const apiV1 = Router();
         this.server.use("/api/v1", apiV1);
