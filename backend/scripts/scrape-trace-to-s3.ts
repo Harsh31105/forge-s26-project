@@ -699,6 +699,19 @@ async function appendManifest(manifestPath: string, entry: TraceManifestEntry): 
     await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
 }
 
+async function readManifestEntries(manifestPath: string): Promise<TraceManifestEntry[]> {
+    try {
+        const raw = await readFile(manifestPath, "utf8");
+        const parsed = JSON.parse(raw) as unknown;
+        if (!Array.isArray(parsed)) return [];
+        return parsed as TraceManifestEntry[];
+    } catch (err: unknown) {
+        const code = (err as NodeJS.ErrnoException).code;
+        if (code === "ENOENT") return [];
+        throw err;
+    }
+}
+
 async function main(): Promise<void> {
     const options = parseOptions(process.argv.slice(2));
     const traceCredentials = getTraceCredentials();
@@ -746,8 +759,23 @@ async function main(): Promise<void> {
 
         console.log(`Found ${reportUrls.length} report URL(s) to process.`);
 
+        const existingManifestEntries = await readManifestEntries(options.manifestPath);
+        const processedReportUrls = !options.dryRun
+            ? new Set(
+                existingManifestEntries
+                    .filter((entry) => !entry.s3Key.startsWith("dry-run:"))
+                    .map((entry) => entry.reportUrl)
+            )
+            : new Set<string>();
+        if (processedReportUrls.size > 0) {
+            console.log(`Resume mode: ${processedReportUrls.size} report URL(s) already uploaded; they will be skipped.`);
+        }
+
         for (let idx = 0; idx < reportUrls.length; idx += 1) {
             const reportUrl = reportUrls[idx]!;
+            if (processedReportUrls.has(reportUrl)) {
+                continue;
+            }
             const isFirstSingleReport = options.reportUrl && idx === 0;
             const reportPage = isFirstSingleReport ? page : await context.newPage();
             try {
@@ -794,6 +822,7 @@ async function main(): Promise<void> {
                 }
 
                 await appendManifest(options.manifestPath, manifestEntry);
+                processedReportUrls.add(reportUrl);
                 console.log(`Uploaded ${metadata.termLabel} report for ${metadata.instructor || "unknown instructor"} -> ${s3Key}`);
             } finally {
                 if (!isFirstSingleReport) {
