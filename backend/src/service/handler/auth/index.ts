@@ -69,10 +69,13 @@ export class AuthHandler {
                 { expiresIn: "24h" }
             );
 
-            res.status(201).json({ 
-                message: "Signup successful",
-                token,
-             });
+            res.cookie("token", token, {
+               httpOnly: true,
+               secure: false,
+               sameSite: "lax",
+            });
+
+            res.status(201).json({ message: "Signup successful" });
             return;
 
         } catch (error) {
@@ -86,11 +89,14 @@ export class AuthHandler {
                 config.google.jwtSecret,
                 { expiresIn: "24h" }
                 );
-                
-                res.status(200).json({ 
-                    message: "Login successful",
-                    token,
+
+                res.cookie("token", token, {
+                    httpOnly: true,
+                    secure: false,
+                    sameSite: "lax",
                 });
+                
+                res.status(200).json({ message: "Login successful" });
                 return;
 
                 } else {

@@ -10,14 +10,17 @@ export interface UserPayload {
 }
 
 export function authMiddleware(req: Request, res: Response, next: NextFunction): void {
+    let token = req.cookies?.token;
     const authHeader = req.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
+    if (!token && authHeader?.startsWith("Bearer ")) {
+        token = authHeader.replace("Bearer ", "");
+    }
+
+    if (!token) {
         res.status(401).json({ error: "No token provided" });
         return;
     }
-
-    const token = authHeader.replace('Bearer ', '');
 
     try {
         const decodedToken = jwt.verify(token, config.google.jwtSecret) as UserPayload;
