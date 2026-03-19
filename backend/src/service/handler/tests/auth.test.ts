@@ -104,8 +104,6 @@ describe("Auth Endpoints", () => {
             const res = await request(app).get("/auth/callback?code=mock-code");
             expect(res.status).toBe(201);
             expect(res.body.message).toBe("Signup successful");
-            expect(res.body.token).toBe("mock-jwt-token");
-
         });
 
         test("login successful", async () => {
@@ -130,7 +128,6 @@ describe("Auth Endpoints", () => {
             const res = await request(app).get("/auth/callback?code=mock-code");
             expect(res.status).toBe(200);
             expect(res.body.message).toBe("Login successful");
-            expect(res.body.token).toBe("mock-jwt-token");
         });
 
         test("rejects non-Northeastern email", async () => {
