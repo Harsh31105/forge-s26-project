@@ -1,19 +1,34 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type { Professor, ProfessorPatchInputType, ProfessorPostInputType } from "../../../models/professor";
+import type { Professor, ProfessorFilterType, ProfessorPatchInputType, ProfessorPostInputType } from "../../../models/professor";
 import { ProfessorRepository } from "../../storage";
 import { professor } from "../../tables/professor";
-import { eq } from "drizzle-orm";
 import { NotFoundError } from "../../../errs/httpError";
-import { PaginationType, getOffset } from "../../../utils/pagination";
 import { LocationTag } from "../../tables/professor";
+import { and, asc, desc, eq } from "drizzle-orm";
+import { getOffset } from "../../../utils/pagination";
 
 export class ProfessorRepositorySchema implements ProfessorRepository {
     constructor(private readonly db: NodePgDatabase) {
         this.db = db;
     }
 
-    async getProfessors(pagination: PaginationType): Promise<Professor[]> {
-    return this.db.select().from(professor).limit(pagination.limit).offset(getOffset(pagination));
+    async getProfessors(filters: ProfessorFilterType): Promise<Professor[]> {
+        const conditions = [];
+        if (filters.firstName) conditions.push(eq(professor.firstName, filters.firstName));
+        if (filters.lastName) conditions.push(eq(professor.lastName, filters.lastName));
+
+        const orderCol = filters.sortBy === "lastName" ? professor.lastName
+            : filters.sortBy === "createdAt" ? professor.createdAt
+            : professor.firstName;
+        const order = filters.sortOrder === "desc" ? desc(orderCol) : asc(orderCol);
+
+        return this.db.select()
+        .from(professor)
+        .where(conditions.length > 0 ? and(...conditions) : undefined)
+        .orderBy(order)
+        .limit(filters.limit)
+        .offset(getOffset(filters));
+        
     }
 
     async getProfessorByID(id: string): Promise<Professor> {

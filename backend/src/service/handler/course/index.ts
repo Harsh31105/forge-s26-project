@@ -1,6 +1,6 @@
 import type { CourseRepository } from "../../../storage/storage";
 import {
-    Course, CoursePatchInputSchema, CoursePatchInputType,
+    Course, CourseFilterSchema, CoursePatchInputSchema, CoursePatchInputType,
     CoursePostInputSchema,
     CoursePostInputType
 } from "../../../models/course";
@@ -12,22 +12,21 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
-import { getOffset, PaginationSchema } from "../../../utils/pagination";
 
 export class CourseHandler {
     constructor(private readonly repo: CourseRepository) {}
 
     async handleGet(req: Request, res: Response) :Promise<void> {
-        const result = PaginationSchema.safeParse(req.query);
+        const result = CourseFilterSchema.safeParse(req.query);
         if (!result.success) {
-            throw BadRequest("Invalid pagination parameters");
+            throw BadRequest("Invalid filter parameters");
         }
-        const pagination = result.data;
+        const filters = result.data;
 
         let courses: Course[];
 
         try {
-            courses = await this.repo.getCourses(pagination);
+            courses = await this.repo.getCourses(filters);
         } catch (err) {
             console.log("Failed to get courses: ", err);
             throw mapDBError(err, "failed to retrieve courses");

@@ -48,7 +48,8 @@ describe("ProfessorRepositorySchema DB Integration", () => {
         test("empty and populated DB", async () => {
             await repo.deleteProfessor(testProfessorID);
 
-            let results = await repo.getProfessors(newPagination());
+            let results = await repo.getProfessors({ page: 1, limit: 10, sortOrder: "asc" }); // fit the filtering w/ object that matches the filter type
+
             expect(results).toEqual([]);
 
             await db.insert(professor).values({
@@ -60,7 +61,7 @@ describe("ProfessorRepositorySchema DB Integration", () => {
                 updatedAt: new Date()
             });
 
-            results = await repo.getProfessors(newPagination());
+            results = await repo.getProfessors({ page: 1, limit: 10, sortOrder: "asc" });
             expect(results).toHaveLength(1);
             expect(results[0]!.id).toBe(testProfessorID);
         });
