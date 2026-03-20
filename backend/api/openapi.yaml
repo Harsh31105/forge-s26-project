@@ -802,13 +802,13 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  /favorites: 
+  /favorites:
     get:
       summary: List favorites
-      description:  Returns a paginated list of favorietes
+      description: Returns a paginated list of favorites
       tags: [Favorites]
-      parameters: 
-        - in: query 
+      parameters:
+        - in: query
           name: limit
           required: false
           schema:
@@ -824,88 +824,96 @@ paths:
             type: integer
             minimum: 0
             default: 0
-          description: number of items to skip
+          description: Number of items to skip
       responses:
-        "200" :
-          description: paginated favorites
+        "200":
+          description: Paginated favorites
           content:
             application/json:
               schema:
                 $ref: "#/components/schemas/FavoritesListResponse"
+        "400":
+          description: Invalid query params
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
-          "400" :
-            description: invalid query perms
-            content: 
-              application/json: 
-                schema: 
-                  $ref: "#/components/schemas/Error"
-
-    post: 
-      summary: Create Favorite
-      description: create a new favorite
+    post:
+      summary: Create favorite
+      description: Create a new favorite
       tags: [Favorites]
       requestBody:
         required: true
-        content: 
-          application/json: 
-            schema: 
+        content:
+          application/json:
+            schema:
               $ref: "#/components/schemas/FavoriteCreate"
-      responses: 
-        "201" : 
-          description: created favorite
-          content: 
+      responses:
+        "201":
+          description: Created favorite
+          content:
             application/json:
-              schema: 
-                $ref: "#/components/schemas/Favorite" 
-
-        "400" :
-          description: invalid request body
-          content: 
-            application/json:
-              schema: 
-                $ref: "#/components/schemas/Error" 
-              
-        "500": 
-          description: internal server error
-          content: 
-            application/json:
-              schema: 
-                $ref: "#/components/schemas/Error" 
-
-  /favorites/{id}: 
-    delete: 
-      summary: Delete Favorite
-      description: delete favorite by id
-      tags: [Favorites]
-      parameters: 
-        - in: path
-          name: id
-          required: true
-          schema: 
-            type: string
-            format: uuid
-      responses: 
-        "204": 
-          description: Deleted successfully 
-        "404":
-          description: Favorite not found
-          content: 
-            application/json: 
-              schema: 
-                $ref: "#/components/schemas/Error"
+              schema:
+                $ref: "#/components/schemas/Favorite"
         "400":
-          description: Invalid UUID
-          content: 
-            application/json: 
-              schema: 
+          description: Invalid request body
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/Error"
         "500":
-          description: internal server error
-          content: 
-            application/json: 
-              schema: 
+          description: Internal server error
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/Error"
-    
+
+  /favorites/{student_id}/{course_id}:
+    delete:
+      summary: Delete favorite
+      description: Delete favorite by student_id and course_id
+      tags: [Favorites]
+      parameters:
+        - in: path
+          name: student_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+        - in: path
+          name: course_id
+          required: true
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "204":
+          description: Deleted successfully
+        "400":
+          description: Invalid UUID
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "404":
+          description: Favorite not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
 
 components:
   schemas:
@@ -1623,44 +1631,49 @@ components:
             type: string
             enum: [boston, oakland, london]
           example: ["boston"]
-    Favorite: 
+    Favorite:
       type: object
-      required: [id, name, createdAt, updatedAt]
-      properties: 
-        id : 
-          type: string 
+      required: [student_id, course_id, created_at, updated_at]
+      properties:
+        student_id:
+          type: string
           format: uuid
-        name: 
+        course_id:
           type: string
-          minLength: 1
-        createdAt: 
-          type: string
-          format: date-time
-        updatedAt: 
+          format: uuid
+        created_at:
           type: string
           format: date-time
-    FavoriteCreate: 
+        updated_at:
+          type: string
+          format: date-time
+
+    FavoriteCreate:
       type: object
-      required: [name]
-      properties: 
-        name: 
+      required: [student_id, course_id]
+      properties:
+        student_id:
           type: string
-          minLength: 1
-    FavoritesListResponse: 
+          format: uuid
+        course_id:
+          type: string
+          format: uuid
+
+    FavoritesListResponse:
       type: object
       required: [items, total, limit, offset]
-      properties: 
-        items: 
+      properties:
+        items:
           type: array
-          items: 
+          items:
             $ref: "#/components/schemas/Favorite"
-        total: 
+        total:
           type: integer
           minimum: 0
-        limit: 
+        limit:
           type: integer
           minimum: 1
           maximum: 100
-        offset: 
+        offset:
           type: integer
           minimum: 0

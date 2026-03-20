@@ -105,4 +105,7 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const professorHandler = new ProfessorHandler(repo.professors);
     router.use("/professors", professorRoutes(professorHandler));
+
+    const favoriteHandler = new FavoriteHandler(repo.favorites);
+    router.use("/favorites", favoritesRoutes(favoriteHandler));
 }
