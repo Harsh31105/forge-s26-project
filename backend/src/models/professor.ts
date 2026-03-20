@@ -47,3 +47,4 @@ export type ProfessorPostInputType = z.infer<typeof ProfessorPostInputSchema>;
 
 export const ProfessorPatchInputSchema = ProfessorPostInputSchema.partial();
 export type ProfessorPatchInputType = z.infer<typeof ProfessorPatchInputSchema>;
+

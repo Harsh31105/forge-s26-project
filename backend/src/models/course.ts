@@ -32,3 +32,4 @@ export type CoursePostInputType = z.infer<typeof CoursePostInputSchema>;
 
 export const CoursePatchInputSchema = CoursePostInputSchema.partial();
 export type CoursePatchInputType = z.infer<typeof CoursePatchInputSchema>
+
