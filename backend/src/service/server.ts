@@ -1,34 +1,47 @@
-import express, {Express, Router} from "express";
+import express, { Express, Router } from "express";
 import { Repository } from "../storage/storage";
-import {Pool} from "pg";
-import {configurePool, getConnectionString} from "../config/db";
+import { Pool } from "pg";
+import { configurePool, getConnectionString } from "../config/db";
 import { config } from "../config/config";
-import { drizzle } from "drizzle-orm/node-postgres";
-import {SampleHandler} from "./handler/sample";
-import {sampleRoutes} from "./handler/sample/routes";
-import {ProfessorHandler} from "./handler/professor";
-import {professorRoutes} from "./handler/professor/routes";
+import { drizzle, NodePgDatabase } from "drizzle-orm/node-postgres";
+import { SampleHandler } from "./handler/sample";
+import { sampleRoutes } from "./handler/sample/routes";
+import { ReviewHandler } from "./handler/reviews";
+import { reviewRoutes } from "./handler/reviews/routes";
+import { ProfessorHandler } from "./handler/professor";
+import { professorRoutes } from "./handler/professor/routes";
 import morgan from "morgan";
 import compression from "compression";
 import cors from "cors";
-import {errorHandler} from "../errs/httpError";
+import { errorHandler } from "../errs/httpError";
 import YAML from "yamljs";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
-import {CourseHandler} from "./handler/course";
-import {courseRoutes} from "./handler/course/routes";
+import { CourseHandler } from "./handler/course";
+import { courseRoutes } from "./handler/course/routes";
 import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
+import { AuthHandler } from "./handler/auth";
+import { authRoutes } from "./handler/auth/routes";
+import { authMiddleware } from "../auth/middleware";
+import { ProfThreadHandler } from "./handler/professorThreads";
+import { professorThreadRoutes } from "./handler/professorThreads/routes";
+import cookieParser from "cookie-parser";
 import {StudentHandler} from "./handler/student";
 import {studentRoutes} from "./handler/student/routes";
 
 class App {
     public server: Express;
     public repo: Repository;
+    // Delete entirity of line 30
+    public db : NodePgDatabase
 
-    constructor(repo: Repository) {
+    // Delete db parameter
+    constructor(repo: Repository, db: NodePgDatabase) {
         this.server = express();
         this.repo = repo;
+        // Delete entirity of line 35
+        this.db = db;
 
         this.server.use(express.json());
         this.server.use(express.urlencoded({ extended: true }));
@@ -47,6 +60,7 @@ class App {
             credentials: true,
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));
+        this.server.use(cookieParser())
 
         const apiV1 = Router();
         this.server.use("/api/v1", apiV1);
@@ -59,7 +73,8 @@ class App {
         const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
         this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-        registerRoutes(apiV1, this.repo);
+        // Delete DB parameter
+        registerRoutes(apiV1, this.repo, db);
 
         this.server.use(errorHandler);
         this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
@@ -73,28 +88,41 @@ class App {
 }
 
 export function initApp(): App {
-    const pool = new Pool({
-        connectionString: getConnectionString(config.db),
-        ssl: { rejectUnauthorized: false },
-    })
-    configurePool(pool, config.db);
+  const pool = new Pool({
+    connectionString: getConnectionString(config.db),
+    ssl: { rejectUnauthorized: false },
+  });
+  configurePool(pool, config.db);
 
-    const db = drizzle(pool);
-    const repo = new Repository(pool, db, config.s3);
+  const db = drizzle(pool);
+  const repo = new Repository(pool, db, config.s3);
 
-    return new App(repo);
+    // DELETE THE DB PARAMATER, so only new App(repo)
+    return new App(repo, db);
 }
 
-function registerRoutes(router: Router, repo: Repository) {
+// DELETE THE DB PARAMAETER, so header is registerRoutes(router: Router, repo: Repository)
+function registerRoutes(router: Router, repo: Repository, db : NodePgDatabase) {
+    // change db to be repo.students in new AuthHandler(db)
+    const authHandler = new AuthHandler(db);
+    router.use("/auth", authRoutes(authHandler));
+
+    router.use(authMiddleware);
+
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
 
-    const courseHandler = new CourseHandler(repo.courses);
-    router.use("/courses", courseRoutes(courseHandler));
+  const reviewHandler = new ReviewHandler(repo.reviews);
+  router.use("/reviews", reviewRoutes(reviewHandler));
 
-    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
-    router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
+  const courseHandler = new CourseHandler(repo.courses);
+  router.use("/courses", courseRoutes(courseHandler));
 
+  const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
+  router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
+
+  const professorHandler = new ProfessorHandler(repo.professors);
+  router.use("/professors", professorRoutes(professorHandler));
     const professorHandler = new ProfessorHandler(repo.professors);
     router.use("/professors", professorRoutes(professorHandler));
 

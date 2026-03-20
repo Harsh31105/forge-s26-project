@@ -137,6 +137,7 @@ describe("StudentHandler Endpoints", () => {
                 firstName: "John",
                 lastName: "Doe",
                 email: "john@test.com",
+                graduationYear: 2026,
                 preferences: []
             };
 
