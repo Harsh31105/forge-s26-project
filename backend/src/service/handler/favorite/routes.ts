@@ -7,7 +7,7 @@ export function favoritesRoutes(handler: FavoriteHandler): Router {
 
     router.get("/", handler.handleGet.bind(handler));
     router.post("/", handler.handlePost.bind(handler));
-    router.delete("/:id", handler.handleDelete.bind(handler));
+    router.delete("/:student_id/:course_id", handler.handleDelete.bind(handler));
 
     return router;
 }
