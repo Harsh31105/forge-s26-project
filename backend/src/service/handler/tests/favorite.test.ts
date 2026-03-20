@@ -81,8 +81,8 @@ describe("FavoriteHandler Endpoints", () => {
             const updatedAt = new Date();
 
             const createdFavorite: Favorite = { 
-                student_id: "payload.student_id", 
-                course_id: "payload.course_id",
+                student_id: payload.student_id, 
+                course_id: payload.course_id,
                 created_at: createdAt, 
                 updated_at: updatedAt };
             repo.createFavorite.mockResolvedValue(createdFavorite);
