@@ -1,0 +1,53 @@
+---
+# Lighthouse CI workflow — audits frontend performance, accessibility,
+# and best-practices on every pull request targeting main.
+name: Lighthouse CI
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  lighthouse:
+    name: Lighthouse Audit
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Cache frontend node_modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-frontend-node-modules-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-frontend-node-modules-
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install --legacy-peer-deps
+
+      - name: Build frontend (Next.js)
+        working-directory: frontend
+        run: npm run build
+        env:
+          # Suppress Next.js telemetry in CI
+          NEXT_TELEMETRY_DISABLED: '1'
+
+      - name: Install Lighthouse CI
+        run: npm install -g @lhci/cli@0.14.x
+
+      # Run LHCI using the budget defined in .lighthouserc.json at the repo root.
+      # The `autorun` command collects, asserts, and uploads results.
+      - name: Run Lighthouse CI
+        run: lhci autorun
+        env:
+          LHCI_GITHUB_APP_TOKEN: ${{ secrets.LHCI_GITHUB_APP_TOKEN }}

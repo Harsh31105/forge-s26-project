@@ -1,0 +1,93 @@
+---
+# End-to-end test workflow — spins up the full stack with Docker Compose
+# and runs Playwright tests on every pull request targeting main.
+name: E2E Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  e2e:
+    name: Playwright E2E
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Cache frontend node_modules
+        uses: actions/cache@v4
+        with:
+          path: frontend/node_modules
+          key: ${{ runner.os }}-frontend-node-modules-${{ hashFiles('frontend/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-frontend-node-modules-
+
+      - name: Install frontend dependencies
+        working-directory: frontend
+        run: npm install --legacy-peer-deps
+
+      - name: Install Playwright browsers
+        working-directory: frontend
+        run: npx playwright install --with-deps
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      # Start the full application stack in the background
+      - name: Start application with Docker Compose
+        run: |
+          docker compose up -d backend frontend
+          echo "Waiting for services to be healthy..."
+          # Wait for backend health endpoint
+          for i in $(seq 1 20); do
+            STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" http://localhost:8080/api/v1/health || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "Backend ready (HTTP $STATUS)"
+              break
+            fi
+            echo "Attempt $i: backend HTTP $STATUS — retrying in 5s..."
+            sleep 5
+          done
+          # Wait for frontend to respond
+          for i in $(seq 1 20); do
+            STATUS=$(curl --silent --output /dev/null --write-out "%{http_code}" http://localhost:3000 || true)
+            if [ "$STATUS" = "200" ]; then
+              echo "Frontend ready (HTTP $STATUS)"
+              break
+            fi
+            echo "Attempt $i: frontend HTTP $STATUS — retrying in 5s..."
+            sleep 5
+          done
+
+      - name: Run Playwright tests
+        working-directory: frontend
+        run: npx playwright test
+        env:
+          # Base URLs used inside Playwright tests (override via playwright.config.ts)
+          BASE_URL: 'http://localhost:3000'
+          API_URL: 'http://localhost:8080'
+
+      - name: Stop Docker Compose services
+        if: always()
+        run: docker compose down
+
+      # Upload screenshots and traces whenever tests fail so failures can be debugged
+      - name: Upload Playwright artifacts on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: playwright-artifacts
+          path: |
+            frontend/test-results/
+            frontend/playwright-report/
+          retention-days: 7
