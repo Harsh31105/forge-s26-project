@@ -1,9 +1,14 @@
-import {pgTable, uuid, timestamp, varchar} from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { pgTable, uuid, timestamp, primaryKey } from "drizzle-orm/pg-core";
 
-export const favorite = pgTable("favorite", {
-    student_id: uuid("student id").primaryKey().default(sql`gen_random_uuid()`),
-    course_id: uuid("course id").primaryKey().default(sql`gen_random_uuid()`),
-    created_at: timestamp("created_at", { mode: 'date', withTimezone: true }).defaultNow().notNull(),
-    updated_at: timestamp("updated_at", { mode: 'date', withTimezone: true }).defaultNow().notNull(),
-});
+export const favorite = pgTable(
+    "favorite",
+    {
+        studentId: uuid("student_id").notNull(),
+        courseId: uuid("course_id").notNull(),
+        createdAt: timestamp("created_at", { mode: "date", withTimezone: true }).defaultNow().notNull(),
+        updatedAt: timestamp("updated_at", { mode: "date", withTimezone: true }).defaultNow().notNull(),
+    },
+    (table) => ({
+        pk: primaryKey({ columns: [table.studentId, table.courseId] }),
+    })
+);

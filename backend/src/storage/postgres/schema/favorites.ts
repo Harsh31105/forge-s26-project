@@ -8,32 +8,49 @@ import {favorite} from "../../tables/favorite";
 import { eq, and } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
 import { getOffset, PaginationType } from "../../../utils/pagination";
+import { student } from "storage/tables/student";
+import { course } from "storage/tables/course";
+import { create } from "node:domain";
 
 export class FavoritesRepositorySchema implements FavoriteRepository {
     constructor(private readonly db: NodePgDatabase) {
-        this.db = db;
     }
 
     async getFavorites(pagination: PaginationType): Promise<Favorite[]> {
-        return this.db
+        const rows = await this.db
         .select()
         .from(favorite)
         .limit(pagination.limit)
         .offset(getOffset(pagination))
-        }
+        
+
+        return rows.map((row) => ({
+            student_id: row.studentId,
+            course_id: row.courseId,
+            created_at: row.createdAt,
+            updated_at: row.updatedAt,
+        })); 
+    }
+    
 
     async createFavorite(input: FavoritePostInputType): Promise<Favorite> {
         const [row] = await this.db
         .insert(favorite)
         .values({ 
-            student_id: input.student_id, 
-            course_id: input.course_id })
+            studentId: input.student_id, 
+            courseId: input.course_id, 
+          })
         .returning();
     
         if (!row) {
             throw new Error("failed to create favorite");
         }
-        return row as Favorite;
+        return {
+            student_id: row.studentId,
+            course_id: row.courseId,
+            created_at: row.createdAt,
+            updated_at: row.updatedAt,
+        };
     }
 
     async deleteFavorite(student_id: string, course_id: string): Promise<void> {
@@ -41,8 +58,8 @@ export class FavoritesRepositorySchema implements FavoriteRepository {
         .delete(favorite)
         .where(
             and(
-                eq(favorite.student_id, student_id),
-                eq(favorite.course_id, course_id)))
+                eq(favorite.studentId, student_id),
+                eq(favorite.courseId, course_id)))
             .returning();
         if (!row) {
             throw new Error("failed to find favorite");

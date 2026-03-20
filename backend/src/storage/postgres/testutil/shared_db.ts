@@ -165,7 +165,7 @@ async function createAllTables(db: NodePgDatabase) {
           'strict_deadlines',
           'flexible_deadlines',
           'extra_credit',
-          'little_to_no_test'
+          'little_to_no_test',
           'fast_paced',
           'slow_paced'
         );
@@ -301,8 +301,9 @@ async function createAllTables(db: NodePgDatabase) {
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             PRIMARY KEY (student_id, course_id),
-            FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE,
+            FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE, 
             FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
+            
         );
 
         CREATE TYPE semester_enum AS ENUM (
