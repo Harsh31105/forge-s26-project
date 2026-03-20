@@ -2,8 +2,9 @@ import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type { RMP, RMPPostInputType } from "../../../models/rmp";
 import { RMPRepository } from "../../storage";
 import { rmp } from "../../tables/rmp";
-import { eq } from "drizzle-orm";
 import { NotFoundError } from "../../../errs/httpError";
+import { eq, sql } from "drizzle-orm";
+
 
 export class RMPRepositorySchema implements RMPRepository {
     constructor(private readonly db: NodePgDatabase) {
@@ -23,10 +24,17 @@ export class RMPRepositorySchema implements RMPRepository {
             input.map(d => ({
                 professorId: d.professorId,
                 ratingAvg: d.ratingAvg?.toString() ?? null,
-                ratingWta: d.ratingWta ?? null,
+                ratingWta: d.ratingWta != null ? Math.round(d.ratingWta * 100) : null, // round when mapping
                 avgDifficulty: d.avgDifficulty.toString(),
             }))
-        ).returning();
+        ).onConflictDoUpdate({
+            target: rmp.professorId,
+            set: {
+                ratingAvg: sql`EXCLUDED.rating_avg`,
+                ratingWta: sql`EXCLUDED.rating_wta`,
+                avgDifficulty: sql`EXCLUDED.avg_difficulty`,
+            }
+        }).returning();
 
         return rows;
     }
