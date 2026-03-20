@@ -54,7 +54,7 @@ export class FavoriteHandler {
                 newFavorite = await this.repo.createFavorite(postSample);
             } catch (err) {
                 console.log(err);
-                throw mapDBError(err, "failed to post sample");
+                throw mapDBError(err, "failed to create favorite");
             }
     
             res.status(201).json(newFavorite);
