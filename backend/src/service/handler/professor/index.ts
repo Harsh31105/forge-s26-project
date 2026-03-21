@@ -16,7 +16,6 @@ import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
 
 export class ProfessorHandler {
-    // constructor(private readonly repo: ProfessorRepository) {}
     constructor(
         private readonly repo: ProfessorRepository,
         private readonly rmpRepo: RMPRepository
@@ -126,7 +125,15 @@ export class ProfessorHandler {
             rmpData = await this.rmpRepo.getRMPByProfessorID(id); // use rmpRepo here
         } catch (err) {
             console.log(err);
-            if (err instanceof NotFoundError) throw NotFound("RMP data not found for given professor");
+            if (err instanceof NotFoundError) {
+                res.status(200).json({
+                    professorId: id,
+                    ratingAvg: null,
+                    ratingWta: null,
+                    avgDifficulty: null,
+                });
+                return;
+            }
             throw mapDBError(err, "failed to retrieve RMP data");
         }
 

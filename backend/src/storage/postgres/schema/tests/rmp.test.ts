@@ -3,7 +3,8 @@ import {
     setupTestWithCleanup,
     shutdownSharedTestDB
 } from "../../testutil/shared_db";
-import { ProfessorRepositorySchema } from "../professor";
+// import { ProfessorRepositorySchema } from "../professor";
+import { RMPRepositorySchema } from "../rmp";
 import { rmp } from "../../../tables/rmp";
 import { professor } from "../../../tables/professor";
 import { v4 as uuid } from "uuid";
@@ -12,12 +13,12 @@ import { NotFoundError } from "../../../../errs/httpError";
 
 describe("RMPRepositorySchema DB Integration", () => {
     let db!: NodePgDatabase;
-    let repo!: ProfessorRepositorySchema;
+    let repo!: RMPRepositorySchema;
     let testProfessorID: string;
 
     beforeAll(async () => {
         db = await setupTestWithCleanup();
-        repo = new ProfessorRepositorySchema(db);
+        repo = new RMPRepositorySchema(db);
     }, 30000);
 
     beforeEach(async () => {
@@ -64,10 +65,11 @@ describe("RMPRepositorySchema DB Integration", () => {
     });
 
     describe("postRMP", () => {
-    test("returns empty array when no professors have RMP data", async () => {
-        const result = await repo.postRMP();
-        // TODO: will test actual bulk insert once RMP API helper is implemented
-        expect(result).toBeInstanceOf(Array);
-    });
+        // requires input: RMPPostInputType[] now, so update to fix failing tests?
+        test("returns empty array when no input given", async () => {
+            const result = await repo.postRMP([]);
+            expect(result).toBeInstanceOf(Array);
+            expect(result).toHaveLength(0);
+        });
     });
 });
