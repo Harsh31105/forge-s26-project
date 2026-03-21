@@ -104,7 +104,7 @@ export function initApp(): App {
 // DELETE THE DB PARAMAETER, so header is registerRoutes(router: Router, repo: Repository)
 function registerRoutes(router: Router, repo: Repository, db : NodePgDatabase) {
     // change db to be repo.students in new AuthHandler(db)
-    const authHandler = new AuthHandler(db);
+    const authHandler = new AuthHandler(repo.students);
     router.use("/auth", authRoutes(authHandler));
 
     router.use(authMiddleware);
@@ -123,8 +123,6 @@ function registerRoutes(router: Router, repo: Repository, db : NodePgDatabase) {
 
   const professorHandler = new ProfessorHandler(repo.professors);
   router.use("/professors", professorRoutes(professorHandler));
-    const professorHandler = new ProfessorHandler(repo.professors);
-    router.use("/professors", professorRoutes(professorHandler));
 
     const studentHandler = new StudentHandler(repo.students);
     router.use("/students", studentRoutes(studentHandler));
