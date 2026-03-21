@@ -32,20 +32,18 @@ import type {
   ProfessorPatchInputType,
   ProfessorPostInputType,
 } from "../models/professor";
-import {TraceRepositorySchema} from "./postgres/schema/samples";
-import type { Professor, ProfessorPatchInputType, ProfessorPostInputType } from "../models/professor";
 import { ProfessorRepositorySchema } from "./postgres/schema/professor";
-import type { TraceDocumentRepository } from "./s3/traceDocuments";
-import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
-import type { S3 as S3Config } from "../config/s3";
-import {Trace, TracePatchInputType, TracePostInputType} from "../models/trace";
-
 import type {
   ProfThread,
-  ProfessorThreadPostInputType,
   ProfessorThreadPatchInputType,
+  ProfessorThreadPostInputType,
 } from "../models/profThreads";
 import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
+import type { Trace, TracePatchInputType, TracePostInputType } from "../models/trace";
+import { TraceRepositorySchema } from "./postgres/schema/trace";
+import type { S3 as S3Config } from "../config/s3";
+import { TraceDocumentRepository, TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
+import { StudentRepositorySchema } from "./postgres/schema/students";
 
 export class Repository {
     public readonly samples: SampleRepository;
@@ -53,6 +51,7 @@ export class Repository {
     public readonly courses: CourseRepository;
     public readonly courseThreads: CourseThreadRepository;
     public readonly traceDocuments: TraceDocumentRepository;
+    public readonly students: StudentRepository;
     public readonly traces: TraceRepository;
     private readonly pool: Pool;
     private readonly db: NodePgDatabase;
@@ -65,16 +64,17 @@ export class Repository {
         this.courseThreads = new CourseThreadRepositorySchema(db);
         this.professors = new ProfessorRepositorySchema(db);
         this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+        this.students = new StudentRepositorySchema(db);
         this.traces = new TraceRepositorySchema(db);
     }
 
-  async getDB(): Promise<NodePgDatabase> {
-    return this.db;
-  }
+    async getDB(): Promise<NodePgDatabase> {
+        return this.db;
+    }
 
-  async close(): Promise<void> {
-    await this.pool.end();
-  }
+    async close(): Promise<void> {
+        await this.pool.end();
+    }
 }
 
 export interface SampleRepository {
@@ -87,13 +87,6 @@ export interface SampleRepository {
 
 export interface CourseReviewChildInput {
   courseId: string;
-  rating: number;
-  reviewText: string;
-  tags?: string[];
-}
-
-export interface ProfessorReviewChildInput {
-  professorId: string;
   rating: number;
   reviewText: string;
   tags?: string[];

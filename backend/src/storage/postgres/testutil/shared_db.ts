@@ -165,7 +165,7 @@ async function createAllTables(db: NodePgDatabase) {
           'strict_deadlines',
           'flexible_deadlines',
           'extra_credit',
-          'little_to_no_test'
+          'little_to_no_test',
           'fast_paced',
           'slow_paced'
         );
@@ -335,23 +335,14 @@ async function createAllTables(db: NodePgDatabase) {
         );
 
         CREATE TABLE trace (
-            id SERIAL PRIMARY KEY,
-            course_id UUID NOT NULL,
-            professor_id UUID NOT NULL,
-            course_name VARCHAR(255) NOT NULL,
-            department_id INT NOT NULL,
-            course_code INT NOT NULL CHECK (course_code BETWEEN 1000 AND 10000),
-            semester semester_enum NOT NULL,
-            lecture_year INT NOT NULL CHECK (lecture_year >= 2000 AND lecture_year <= 10000),
-            lecture_type lecture_type_enum,
-            how_often_percentage INT NOT NULL CHECK (how_often_percentage BETWEEN 0 AND 100),
-            hours_devoted INT NOT NULL CHECK (hours_devoted >= 0),
-            professor_efficiency DECIMAL(3,2) NOT NULL CHECK (professor_efficiency BETWEEN 1.00 AND 5.00),
-            eval TEXT,
+            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+            course_id UUID,
+            professor_id UUID,
+            department_id INT,
+            action VARCHAR(255) NOT NULL,
+            timestamp TIMESTAMPTZ NOT NULL,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-            FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
+            updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
     `);
 

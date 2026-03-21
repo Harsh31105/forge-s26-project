@@ -27,18 +27,19 @@ import { authMiddleware } from "../auth/middleware";
 import { ProfThreadHandler } from "./handler/professorThreads";
 import { professorThreadRoutes } from "./handler/professorThreads/routes";
 import cookieParser from "cookie-parser";
+import { StudentHandler } from "./handler/student";
+import { studentRoutes } from "./handler/student/routes";
+import { TraceHandler } from "./handler/trace";
+import { traceRoutes } from "./handler/trace/routes";
 
 class App {
     public server: Express;
     public repo: Repository;
-    // Delete entirity of line 30
     public db : NodePgDatabase
 
-    // Delete db parameter
     constructor(repo: Repository, db: NodePgDatabase) {
         this.server = express();
         this.repo = repo;
-        // Delete entirity of line 35
         this.db = db;
 
         this.server.use(express.json());
@@ -71,8 +72,7 @@ class App {
         const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
         this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-        // Delete DB parameter
-        registerRoutes(apiV1, this.repo, db);
+        registerRoutes(apiV1, this.repo);
 
         this.server.use(errorHandler);
         this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
@@ -95,14 +95,11 @@ export function initApp(): App {
   const db = drizzle(pool);
   const repo = new Repository(pool, db, config.s3);
 
-    // DELETE THE DB PARAMATER, so only new App(repo)
     return new App(repo, db);
 }
 
-// DELETE THE DB PARAMAETER, so header is registerRoutes(router: Router, repo: Repository)
-function registerRoutes(router: Router, repo: Repository, db : NodePgDatabase) {
-    // change db to be repo.students in new AuthHandler(db)
-    const authHandler = new AuthHandler(db);
+function registerRoutes(router: Router, repo: Repository) {
+    const authHandler = new AuthHandler(repo.students);
     router.use("/auth", authRoutes(authHandler));
 
     router.use(authMiddleware);
@@ -110,15 +107,21 @@ function registerRoutes(router: Router, repo: Repository, db : NodePgDatabase) {
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
 
-  const reviewHandler = new ReviewHandler(repo.reviews);
-  router.use("/reviews", reviewRoutes(reviewHandler));
+    const reviewHandler = new ReviewHandler(repo.reviews);
+    router.use("/reviews", reviewRoutes(reviewHandler));
 
-  const courseHandler = new CourseHandler(repo.courses);
-  router.use("/courses", courseRoutes(courseHandler));
+    const courseHandler = new CourseHandler(repo.courses);
+    router.use("/courses", courseRoutes(courseHandler));
 
-  const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
-  router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
+    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
+    router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 
-  const professorHandler = new ProfessorHandler(repo.professors);
-  router.use("/professors", professorRoutes(professorHandler));
+    const professorHandler = new ProfessorHandler(repo.professors);
+    router.use("/professors", professorRoutes(professorHandler));
+
+    const studentHandler = new StudentHandler(repo.students);
+    router.use("/students", studentRoutes(studentHandler));
+
+    const traceHandler = new TraceHandler(repo.traces);
+    router.use("/traces", traceRoutes(traceHandler));
 }

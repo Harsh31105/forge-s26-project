@@ -1,30 +1,56 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type { Trace, TracePostInputType, TracePatchInputType } from "../../../models/trace";
+import { eq } from "drizzle-orm";
+import { v4 as uuid } from "uuid";
+import type { Trace, TracePatchInputType, TracePostInputType } from "../../../models/trace";
+import { TraceRepository } from "../../storage";
 import { trace } from "../../tables/trace";
-import { and, eq, sql } from "drizzle-orm";
+import { type PaginationType, getOffset } from "../../../utils/pagination";
 import { NotFoundError } from "../../../errs/httpError";
-import { PaginationType, getOffset } from "../../../utils/pagination";
 
-export class TraceRepositorySchema {
+export class TraceRepositorySchema implements TraceRepository {
     constructor(private readonly db: NodePgDatabase) {}
 
-    async getTraces(
-        filters: { course_id?: string; professor_id?: string; department_id?: string },
-        pagination: PaginationType
-    ): Promise<Trace[]> {
-        const conditions = [];
+    async getTraces(pagination: PaginationType): Promise<Trace[]> {
+        return this.db.select().from(trace).limit(pagination.limit).offset(getOffset(pagination));
+    }
 
-        if (filters.course_id) conditions.push(eq(trace.courseID, filters.course_id));
-        if (filters.professor_id) conditions.push(eq(trace.professorID, filters.professor_id));
-        if (filters.department_id) conditions.push(eq(trace.departmentID, filters.department_id));
+    async getTraceByID(id: string): Promise<Trace> {
+        const [row] = await this.db.select().from(trace).where(eq(trace.id, id));
+        if (!row) throw new NotFoundError("trace with given ID not found");
+        return row;
+    }
 
-        const rows = this.db
-            .select()
-            .from(trace)
-            .where(conditions.length ? and(...conditions) : undefined)
-            .limit(pagination.limit)
-            .offset(getOffset(pagination));
+    async createTrace(input: TracePostInputType): Promise<Trace> {
+        const [row] = await this.db.insert(trace).values({
+            id: uuid(),
+            courseId: input.courseId ?? null,
+            professorId: input.professorId ?? null,
+            departmentId: input.departmentId ?? null,
+            action: input.action,
+            timestamp: input.timestamp,
+        }).returning();
 
-        return rows;
+        if (!row) throw new Error("Failed to create trace");
+        return row;
+    }
+
+    async patchTrace(id: string, input: TracePatchInputType): Promise<Trace> {
+        const updates = Object.fromEntries(
+            Object.entries(input).filter(([_, value]) => value !== undefined)
+        );
+
+        const [row] = await this.db
+            .update(trace)
+            .set({ ...updates })
+            .where(eq(trace.id, id))
+            .returning();
+
+        if (!row) throw new NotFoundError("trace with given ID not found");
+        return row;
+    }
+
+    async deleteTrace(id: string): Promise<void> {
+        const [row] = await this.db.delete(trace).where(eq(trace.id, id)).returning();
+        if (!row) throw new NotFoundError("trace with given ID not found");
     }
 }

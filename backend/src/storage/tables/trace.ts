@@ -1,11 +1,12 @@
-import { pgTable, uuid, integer, varchar, timestamp } from "drizzle-orm/pg-core";
-import { sql } from "drizzle-orm";
+import { pgTable, uuid, varchar, integer, timestamp } from "drizzle-orm/pg-core";
 
 export const trace = pgTable("trace", {
-    id: uuid("id").primaryKey().default(sql`gen_random_uuid()`),
-    courseID: uuid("course_id").notNull(),
-    professorID: uuid("professor_id").notNull(),
-    departmentID: integer("department_id").notNull(),
+    id: uuid("id").defaultRandom().primaryKey(),
+    courseId: uuid("course_id"),
+    professorId: uuid("professor_id"),
+    departmentId: integer("department_id"),
     action: varchar("action", { length: 255 }).notNull(),
-    timestamp: timestamp("timestamp", { mode: "date", withTimezone: true }).defaultNow().notNull(),
+    timestamp: timestamp("timestamp", { withTimezone: true }).notNull(),
+    createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
+    updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 });

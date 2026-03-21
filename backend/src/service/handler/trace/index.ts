@@ -1,17 +1,17 @@
-import type { TraceRepository } from "../../../storage/storage";
-import {
-    Trace,
-    TracePostInputSchema,
-    TracePostInputType,
-    TracePatchInputSchema,
-    TracePatchInputType,
-} from "../../../models/trace";
-import {
-    BadRequest
-} from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
-import { getOffset, PaginationSchema } from "../../../utils/pagination";
+import type { TraceRepository } from "../../../storage/storage";
+import {
+    BadRequest,
+    mapDBError,
+    NotFound,
+    NotFoundError
+} from "../../../errs/httpError";
+import { PaginationSchema } from "../../../utils/pagination";
+import {
+    TracePatchInputSchema,
+    TracePostInputSchema,
+} from "../../../models/trace";
 
 export class TraceHandler {
     constructor(private readonly repo: TraceRepository) {}
@@ -20,15 +20,65 @@ export class TraceHandler {
         const result = PaginationSchema.safeParse(req.query);
         if (!result.success) throw BadRequest("Invalid pagination parameters");
 
-        const pagination = result.data;
+        try {
+            const traces = await this.repo.getTraces(result.data);
+            res.status(200).json(traces);
+        } catch (err) {
+            throw mapDBError(err, "Failed to retrieve traces");
+        }
+    }
 
-        const filters = {
-            course_id: req.query.course_id as string | undefined,
-            professor_id: req.query.professor_id as string | undefined,
-            department_id: req.query.department_id as string | undefined,
-        };
+    async handleGetByID(req: Request, res: Response): Promise<void> {
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("Invalid trace ID");
 
-        const traces = await this.repo.getTraces(filters, pagination);
-        res.status(200).json(traces);
+        try {
+            const trace = await this.repo.getTraceByID(id);
+            res.status(200).json(trace);
+        } catch (err) {
+            if (err instanceof NotFoundError) throw NotFound("Trace not found");
+            throw mapDBError(err, "Failed to retrieve trace");
+        }
+    }
+
+    async handlePost(req: Request, res: Response): Promise<void> {
+        const result = TracePostInputSchema.safeParse(req.body);
+        if (!result.success) throw BadRequest("Unable to parse input for trace POST");
+
+        try {
+            const newTrace = await this.repo.createTrace(result.data);
+            res.status(201).json(newTrace);
+        } catch (err) {
+            throw mapDBError(err, "Failed to create trace");
+        }
+    }
+
+    async handlePatch(req: Request, res: Response): Promise<void> {
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("Invalid trace ID");
+
+        const result = TracePatchInputSchema.safeParse(req.body);
+        if (!result.success) throw BadRequest("Unable to parse input for trace PATCH");
+
+        try {
+            const updatedTrace = await this.repo.patchTrace(id, result.data);
+            res.status(200).json(updatedTrace);
+        } catch (err) {
+            if (err instanceof NotFoundError) throw NotFound("Trace not found");
+            throw mapDBError(err, "Failed to patch trace");
+        }
+    }
+
+    async handleDelete(req: Request, res: Response): Promise<void> {
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("Invalid trace ID");
+
+        try {
+            await this.repo.deleteTrace(id);
+            res.sendStatus(204);
+        } catch (err) {
+            if (err instanceof NotFoundError) throw NotFound("Trace not found");
+            throw mapDBError(err, "Failed to delete trace");
+        }
     }
 }

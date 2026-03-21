@@ -1,6 +1,5 @@
 import { Router } from "express";
 import { TraceHandler } from "./index";
-import {ProfessorHandler} from "../professor/index";
 
 export function traceRoutes(handler: TraceHandler): Router {
     const router = Router();
@@ -12,4 +11,4 @@ export function traceRoutes(handler: TraceHandler): Router {
     router.delete("/:id", handler.handleDelete.bind(handler));
 
     return router;
-};
+}
