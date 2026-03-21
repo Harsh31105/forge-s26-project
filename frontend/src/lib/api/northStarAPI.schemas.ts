@@ -6,8 +6,6 @@
  */
 export type UuidParam = string;
 
-export type ErrorMessageAnyOf = { [key: string]: unknown };
-
 /**
  * Error message or validation errors
  */
@@ -31,17 +29,6 @@ export interface Sample {
   name: string;
   created_at: string;
   updated_at: string;
-}
-
-export interface SamplePostInput {
-  /** @minLength 1 */
-  name: string;
-}
-
-export interface SamplePatchInput {
-  /** @minLength 1 */
-  name?: string;
-  updated_at?: string;
 }
 
 /**
@@ -88,8 +75,8 @@ export interface Course {
  * The type of lecture format for the course
  */
 export type CoursePostInputLectureType =
-  | (typeof CoursePostInputLectureType)[keyof typeof CoursePostInputLectureType]
-  | null;
+    | (typeof CoursePostInputLectureType)[keyof typeof CoursePostInputLectureType]
+    | null;
 
 export const CoursePostInputLectureType = {
   lecture: "lecture",
@@ -124,9 +111,8 @@ export interface CoursePostInput {
  * The type of lecture format for the course
  */
 export type CoursePatchInputLectureType =
-  (typeof CoursePatchInputLectureType)[keyof typeof CoursePatchInputLectureType];
+    (typeof CoursePatchInputLectureType)[keyof typeof CoursePatchInputLectureType];
 
-// eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePatchInputLectureType = {
   lecture: "lecture",
   lab: "lab",
@@ -183,64 +169,12 @@ export interface CourseThreadPatchInput {
   content: string;
 }
 
-export type ProfessorTagsItem = typeof ProfessorTagsItem[keyof typeof ProfessorTagsItem];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ProfessorTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
-} as const;
-
-export interface Professor {
-  /** the unique id of the professor */
-  id: string;
-  /** the first name of the professor */
-  firstName: string;
-  /** the last name of the professor */
-  lastName: string;
-  /**
-   * location tags for the professor
-   * @nullable
-   */
-  tags?: ProfessorTagsItem[] | null;
-  createdAt: string;
-  updatedAt: string;
+export interface SamplePostInput {
+  /** @minLength 1 */
+  name: string;
 }
 
-export type ProfessorPostInputTagsItem = typeof ProfessorPostInputTagsItem[keyof typeof ProfessorPostInputTagsItem];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ProfessorPostInputTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
-} as const;
-
-export interface ProfessorPostInput {
-  /** @minLength 1 */
-  firstName: string;
-  /** @minLength 1 */
-  lastName: string;
-  /** @nullable */
-  tags?: ProfessorPostInputTagsItem[] | null;
-}
-
-export type ProfessorPatchInputTagsItem = typeof ProfessorPatchInputTagsItem[keyof typeof ProfessorPatchInputTagsItem];
-
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const ProfessorPatchInputTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
-} as const;
-
-export interface ProfessorPatchInput {
-  /** @minLength 1 */
-  firstName?: string;
+export interface SamplePatchInput {
   /** @minLength 1 */
   name?: string;
   updated_at?: string;
@@ -271,8 +205,9 @@ export interface Professor {
   updatedAt: string;
 }
 
+
 export type ProfessorPostInputTagsItem =
-  (typeof ProfessorPostInputTagsItem)[keyof typeof ProfessorPostInputTagsItem];
+    (typeof ProfessorPostInputTagsItem)[keyof typeof ProfessorPostInputTagsItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ProfessorPostInputTagsItem = {
@@ -399,61 +334,19 @@ export interface ProfThreadPatchInput {
    * @maxLength 2000
    */
   content?: string;
-  lastName?: string;
-  /** @nullable */
-  tags?: ProfessorPatchInputTagsItem[] | null;
-}
-
-export type StudentPreferences = { [key: string]: unknown };
-
-export interface Student {
-  id: string;
-  firstName: string;
-  lastName: string;
-  email: string;
-  graduationYear: number;
-  preferences: StudentPreferences;
-  createdAt: string;
-  updatedAt: string;
-}
-
-export type StudentPostInputPreferences = { [key: string]: unknown };
-
-/**
- * Fields required to create a new student.
- */
-export interface StudentPostInput {
-  firstName: string;
-  lastName: string;
-  email: string;
-  graduationYear: number;
-  preferences?: StudentPostInputPreferences;
-}
-
-export type StudentPatchInputPreferences = { [key: string]: unknown };
-
-/**
- * Fields allowed when updating a student.
- */
-export interface StudentPatchInput {
-  firstName?: string;
-  lastName?: string;
-  email?: string;
-  graduationYear?: number;
-  preferences?: StudentPatchInputPreferences;
 }
 
 export type GetCourseReviewsIdThreadsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetProfessorReviewsIdThreadsParams = {
@@ -470,54 +363,29 @@ export type GetProfessorReviewsIdThreadsParams = {
 };
 
 export type GetSamplesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetCoursesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
-};
-
-export type GetProfessorsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
-};
-
-export type GetStudentsParams = {
-/**
- * @minimum 1
- */
-page?: number;
-/**
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetReviewsParams = {
@@ -565,4 +433,3 @@ export type GetAuthCallback201 = {
   /** JWT access token */
   token?: string;
 };
-
