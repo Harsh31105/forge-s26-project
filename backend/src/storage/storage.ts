@@ -36,6 +36,8 @@ import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
+import {Student, StudentPatchInputType, StudentPostInputType} from "../models/student";
+import { StudentRepositorySchema } from "./postgres/schema/students";
 
 import type {
   ProfThread,
@@ -52,6 +54,7 @@ export class Repository {
   public readonly profThreads: ProfThreadRepository;
   public readonly traceDocuments: TraceDocumentRepository;
   public readonly reviews: ReviewRepository;
+  public readonly students: StudentRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
 
@@ -65,6 +68,8 @@ export class Repository {
     this.profThreads = new ProfThreadRepositorySchema(db);
     this.reviews = new ReviewRepositorySchema(db);
     this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+    this.students = new StudentRepositorySchema(db);
+
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -115,11 +120,11 @@ export interface ReviewRepository {
 }
 
 export interface CourseRepository {
-  getCourses(pagination: PaginationType): Promise<Course[]>;
-  getCourseByID(id: string): Promise<Course>;
-  createCourse(input: CoursePostInputType): Promise<Course>;
-  patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
-  deleteCourse(id: string): Promise<void>;
+    getCourses(pagination: PaginationType): Promise<Course[]>;
+    getCourseByID(id: string): Promise<Course>;
+    createCourse(input: CoursePostInputType): Promise<Course>;
+    patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
+    deleteCourse(id: string): Promise<void>;
 }
 
 export interface CourseThreadRepository {
@@ -162,4 +167,12 @@ export interface ProfessorRepository {
     input: ProfessorPatchInputType,
   ): Promise<Professor>;
   deleteProfessor(id: string): Promise<void>;
+}
+
+export interface StudentRepository {
+    getStudents(pagination: PaginationType): Promise<Student[]>;
+    getStudentByID(id: string): Promise<Student>;
+    createStudent(input: StudentPostInputType): Promise<Student>;
+    patchStudent(id: string, input: StudentPatchInputType): Promise<Student>;
+    deleteStudent(id: string): Promise<void>;
 }
