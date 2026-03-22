@@ -1390,6 +1390,7 @@ paths:
                 code: 500
                 message: "Internal server error"
 
+
 components:
   securitySchemes:
     bearerAuth:
@@ -1986,3 +1987,43 @@ components:
             enum:
               [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
                 flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
+
+    ProfThread:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UuidParam"
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        profReviewId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProfThreadPostInput:
+      type: object
+      required:
+        - studentId
+        - content
+      properties:
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    ProfThreadPatchInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
