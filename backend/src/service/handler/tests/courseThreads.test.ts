@@ -49,16 +49,18 @@ describe("CourseThreadHandler Endpoints", () => {
 
     // Register routes with full paths (like sample.test.ts) so req.params.id / course_id / thread_id are set
     app.get("/course-reviews/:id/threads", (req, res, next) =>
-      handler.handleGet(req, res).catch(next)
+      handler.handleGet(req, res).catch(next),
     );
     app.post("/course-reviews/:id/threads", (req, res, next) =>
-      handler.handlePost(req, res).catch(next)
+      handler.handlePost(req, res).catch(next),
     );
-    app.patch("/course-reviews/:course_review_id/threads/:thread_id", (req, res, next) =>
-      handler.handlePatch(req, res).catch(next)
+    app.patch(
+      "/course-reviews/:course_review_id/threads/:thread_id",
+      (req, res, next) => handler.handlePatch(req, res).catch(next),
     );
-    app.delete("/course-reviews/:course_review_id/threads/:thread_id", (req, res, next) =>
-      handler.handleDelete(req, res).catch(next)
+    app.delete(
+      "/course-reviews/:course_review_id/threads/:thread_id",
+      (req, res, next) => handler.handleDelete(req, res).catch(next),
     );
 
     app.use(errorHandler);
@@ -88,14 +90,14 @@ describe("CourseThreadHandler Endpoints", () => {
       repo.getThreadsByCourseReviewId.mockResolvedValue(data);
 
       const res = await request(app).get(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads"
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads",
       );
 
       expect(res.status).toBe(200);
       expect(res.body).toEqual(data.map((t) => toJsonDates(t)));
       expect(repo.getThreadsByCourseReviewId).toHaveBeenCalledWith(
         "33333333-3333-3333-3333-333333333333",
-        { page: 1, limit: 10 }
+        { page: 1, limit: 10 },
       );
     });
 
@@ -104,13 +106,13 @@ describe("CourseThreadHandler Endpoints", () => {
       repo.getThreadsByCourseReviewId.mockResolvedValue([]);
 
       const res = await request(app).get(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads?page=2&limit=5"
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads?page=2&limit=5",
       );
 
       expect(res.status).toBe(200);
       expect(repo.getThreadsByCourseReviewId).toHaveBeenCalledWith(
         "33333333-3333-3333-3333-333333333333",
-        { page: 2, limit: 5 }
+        { page: 2, limit: 5 },
       );
     });
 
@@ -118,7 +120,7 @@ describe("CourseThreadHandler Endpoints", () => {
       mockValidate.mockReturnValue(true);
 
       const res = await request(app).get(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads?page=-1"
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads?page=-1",
       );
 
       expect(res.status).toBe(400);
@@ -136,7 +138,7 @@ describe("CourseThreadHandler Endpoints", () => {
       repo.getThreadsByCourseReviewId.mockRejectedValue(new Error("DB error"));
 
       const res = await request(app).get(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads"
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads",
       );
 
       expect(res.status).toBe(500);
@@ -172,7 +174,7 @@ describe("CourseThreadHandler Endpoints", () => {
         {
           studentId: "550e8400-e29b-41d4-a716-446655440000",
           content: "Great course!",
-        }
+        },
       );
     });
 
@@ -233,7 +235,7 @@ describe("CourseThreadHandler Endpoints", () => {
 
       const res = await request(app)
         .patch(
-          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111",
         )
         .send(patchBody);
 
@@ -242,7 +244,7 @@ describe("CourseThreadHandler Endpoints", () => {
 
       expect(repo.patchThread).toHaveBeenCalledWith(
         "11111111-1111-1111-1111-111111111111",
-        patchBody
+        patchBody,
       );
     });
 
@@ -250,7 +252,9 @@ describe("CourseThreadHandler Endpoints", () => {
       mockValidate.mockReturnValue(false);
 
       const res = await request(app)
-        .patch("/course-reviews/not-a-uuid/threads/11111111-1111-1111-1111-111111111111")
+        .patch(
+          "/course-reviews/not-a-uuid/threads/11111111-1111-1111-1111-111111111111",
+        )
         .send({ content: "x" });
 
       expect(res.status).toBe(400);
@@ -260,7 +264,9 @@ describe("CourseThreadHandler Endpoints", () => {
       mockValidate.mockReturnValueOnce(true).mockReturnValueOnce(false);
 
       const res = await request(app)
-        .patch("/course-reviews/33333333-3333-3333-3333-333333333333/threads/not-a-uuid")
+        .patch(
+          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/not-a-uuid",
+        )
         .send({ content: "x" });
 
       expect(res.status).toBe(400);
@@ -271,7 +277,7 @@ describe("CourseThreadHandler Endpoints", () => {
 
       const res = await request(app)
         .patch(
-          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111",
         )
         .send({ nope: true });
 
@@ -284,7 +290,7 @@ describe("CourseThreadHandler Endpoints", () => {
 
       const res = await request(app)
         .patch(
-          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+          "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111",
         )
         .send({ content: "x" });
 
@@ -298,12 +304,12 @@ describe("CourseThreadHandler Endpoints", () => {
       repo.deleteThread.mockResolvedValue(undefined);
 
       const res = await request(app).delete(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111",
       );
 
       expect(res.status).toBe(204);
       expect(repo.deleteThread).toHaveBeenCalledWith(
-        "11111111-1111-1111-1111-111111111111"
+        "11111111-1111-1111-1111-111111111111",
       );
     });
 
@@ -311,7 +317,7 @@ describe("CourseThreadHandler Endpoints", () => {
       mockValidate.mockReturnValue(false);
 
       const res = await request(app).delete(
-        "/course-reviews/not-a-uuid/threads/11111111-1111-1111-1111-111111111111"
+        "/course-reviews/not-a-uuid/threads/11111111-1111-1111-1111-111111111111",
       );
 
       expect(res.status).toBe(400);
@@ -321,7 +327,7 @@ describe("CourseThreadHandler Endpoints", () => {
       mockValidate.mockReturnValueOnce(true).mockReturnValueOnce(false);
 
       const res = await request(app).delete(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/not-a-uuid"
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/not-a-uuid",
       );
 
       expect(res.status).toBe(400);
@@ -332,7 +338,7 @@ describe("CourseThreadHandler Endpoints", () => {
       repo.deleteThread.mockRejectedValue(new Error("DB error"));
 
       const res = await request(app).delete(
-        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111"
+        "/course-reviews/33333333-3333-3333-3333-333333333333/threads/11111111-1111-1111-1111-111111111111",
       );
 
       expect(res.status).toBe(500);

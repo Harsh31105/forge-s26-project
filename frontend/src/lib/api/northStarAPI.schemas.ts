@@ -47,13 +47,14 @@ export type CourseDepartment = {
  * The type of lecture format for the course
  * @nullable
  */
-export type CourseLectureType = (typeof CourseLectureType)[keyof typeof CourseLectureType] | null;
+export type CourseLectureType = typeof CourseLectureType[keyof typeof CourseLectureType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CourseLectureType = {
-  lecture: "lecture",
-  lab: "lab",
-  online: "online",
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
 } as const;
 
 export interface Course {
@@ -82,15 +83,14 @@ export interface Course {
  * The type of lecture format for the course
  * @nullable
  */
-export type CoursePostInputLectureType =
-  | (typeof CoursePostInputLectureType)[keyof typeof CoursePostInputLectureType]
-  | null;
+export type CoursePostInputLectureType = typeof CoursePostInputLectureType[keyof typeof CoursePostInputLectureType] | null;
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePostInputLectureType = {
-  lecture: "lecture",
-  lab: "lab",
-  online: "online",
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
 } as const;
 
 export interface CoursePostInput {
@@ -122,14 +122,14 @@ export interface CoursePostInput {
 /**
  * The type of lecture format for the course
  */
-export type CoursePatchInputLectureType =
-  (typeof CoursePatchInputLectureType)[keyof typeof CoursePatchInputLectureType];
+export type CoursePatchInputLectureType = typeof CoursePatchInputLectureType[keyof typeof CoursePatchInputLectureType];
+
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePatchInputLectureType = {
-  lecture: "lecture",
-  lab: "lab",
-  online: "online",
+  lecture: 'lecture',
+  lab: 'lab',
+  online: 'online',
 } as const;
 
 export interface CoursePatchInput {
@@ -190,43 +190,379 @@ export interface SamplePostInput {
 export interface SamplePatchInput {
   /** @minLength 1 */
   name?: string;
+  updated_at?: string;
+}
+
+export interface ProfThread {
+  id?: UuidParam;
+  studentId?: UuidParam;
+  profReviewId?: UuidParam;
+  content?: string;
+  createdAt?: string;
+  updatedAt?: string;
+}
+
+export interface ProfThreadPostInput {
+  studentId: UuidParam;
+  content: string;
+}
+
+export interface ProfThreadPatchInput {
+  content?: string;
+}
+
+export type ProfessorTagsItem = typeof ProfessorTagsItem[keyof typeof ProfessorTagsItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorTagsItem = {
+  boston: 'boston',
+  oakland: 'oakland',
+  london: 'london',
+} as const;
+
+export interface Professor {
+  /** the unique id of the professor */
+  id: string;
+  /** the first name of the professor */
+  firstName: string;
+  /** the last name of the professor */
+  lastName: string;
+  /**
+   * location tags for the professor
+   * @nullable
+   */
+  tags?: ProfessorTagsItem[] | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type ProfessorPostInputTagsItem = typeof ProfessorPostInputTagsItem[keyof typeof ProfessorPostInputTagsItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorPostInputTagsItem = {
+  boston: 'boston',
+  oakland: 'oakland',
+  london: 'london',
+} as const;
+
+export interface ProfessorPostInput {
+  /** @minLength 1 */
+  firstName: string;
+  /** @minLength 1 */
+  lastName: string;
+  /** @nullable */
+  tags?: ProfessorPostInputTagsItem[] | null;
+}
+
+export type ProfessorPatchInputTagsItem = typeof ProfessorPatchInputTagsItem[keyof typeof ProfessorPatchInputTagsItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ProfessorPatchInputTagsItem = {
+  boston: 'boston',
+  oakland: 'oakland',
+  london: 'london',
+} as const;
+
+export interface ProfessorPatchInput {
+  /** @minLength 1 */
+  firstName?: string;
+  /** @minLength 1 */
+  lastName?: string;
+  /** @nullable */
+  tags?: ProfessorPatchInputTagsItem[] | null;
+}
+
+export interface BaseReview {
+  /** The unique ID of the review */
+  id: string;
+  /**
+   * The ID of the student who wrote the review (null if anonymous)
+   * @nullable
+   */
+  studentId?: string | null;
+  /**
+   * Rating from 1 (worst) to 5 (best)
+   * @minimum 1
+   * @maximum 5
+   */
+  rating?: number;
+  /**
+   * The review content (profanity is censored automatically)
+   * @minLength 1
+   * @maxLength 2000
+   */
+  reviewText?: string;
+  /**
+   * Optional tags attached to the review
+   * @nullable
+   */
+  tags?: unknown[] | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type CourseReviewAllOf = {
+  /** The ID of the course being reviewed */
+  courseId: string;
+};
+
+export type CourseReview = BaseReview & CourseReviewAllOf;
+
+export type ProfessorReviewAllOf = {
+  /** The ID of the professor being reviewed */
+  professorId: string;
+};
+
+export type ProfessorReview = BaseReview & ProfessorReviewAllOf;
+
+export type Review = CourseReview | ProfessorReview;
+
+export interface ReviewPostInput {
+  /**
+   * The ID of the student submitting the review (omit for anonymous)
+   * @nullable
+   */
+  studentId?: string | null;
+  /**
+   * Rating from 1 (worst) to 5 (best)
+   * @minimum 1
+   * @maximum 5
+   */
+  rating: number;
+  /**
+   * The review content
+   * @minLength 1
+   * @maxLength 2000
+   */
+  reviewText: string;
+  /**
+   * The ID of the course to review (mutually exclusive with professorId)
+   * @nullable
+   */
+  courseId?: string | null;
+  /**
+   * The ID of the professor to review (mutually exclusive with courseId)
+   * @nullable
+   */
+  professorId?: string | null;
+  /** Optional tags for the review */
+  tags?: string[];
+}
+
+export interface ReviewPatchInput {
+  /**
+   * Updated rating
+   * @minimum 1
+   * @maximum 5
+   */
+  rating?: number;
+  /**
+   * Updated review content (profanity will be censored)
+   * @minLength 1
+   * @maxLength 2000
+   */
+  reviewText?: string;
+  /**
+   * Updated tags (null clears all tags)
+   * @nullable
+   */
+  tags?: unknown[] | null;
+}
+
+export type StudentPreferencesItem = typeof StudentPreferencesItem[keyof typeof StudentPreferencesItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const StudentPreferencesItem = {
+  'exam-heavy': 'exam-heavy',
+  'project-heavy': 'project-heavy',
+  'group-work': 'group-work',
+  'attendance-required': 'attendance-required',
+  strict_deadlines: 'strict_deadlines',
+  flexible_deadlines: 'flexible_deadlines',
+  extra_credit: 'extra_credit',
+  little_to_no_test: 'little_to_no_test',
+  fast_paced: 'fast_paced',
+  slow_paced: 'slow_paced',
+} as const;
+
+export interface Student {
+  id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  graduationYear: number;
+  preferences: StudentPreferencesItem[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type StudentPostInputPreferencesItem = typeof StudentPostInputPreferencesItem[keyof typeof StudentPostInputPreferencesItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const StudentPostInputPreferencesItem = {
+  'exam-heavy': 'exam-heavy',
+  'project-heavy': 'project-heavy',
+  'group-work': 'group-work',
+  'attendance-required': 'attendance-required',
+  strict_deadlines: 'strict_deadlines',
+  flexible_deadlines: 'flexible_deadlines',
+  extra_credit: 'extra_credit',
+  little_to_no_test: 'little_to_no_test',
+  fast_paced: 'fast_paced',
+  slow_paced: 'slow_paced',
+} as const;
+
+/**
+ * Fields required to create a new student.
+ */
+export interface StudentPostInput {
+  firstName: string;
+  lastName: string;
+  email: string;
+  graduationYear?: number;
+  preferences?: StudentPostInputPreferencesItem[];
+}
+
+export type StudentPatchInputPreferencesItem = typeof StudentPatchInputPreferencesItem[keyof typeof StudentPatchInputPreferencesItem];
+
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const StudentPatchInputPreferencesItem = {
+  'exam-heavy': 'exam-heavy',
+  'project-heavy': 'project-heavy',
+  'group-work': 'group-work',
+  'attendance-required': 'attendance-required',
+  strict_deadlines: 'strict_deadlines',
+  flexible_deadlines: 'flexible_deadlines',
+  extra_credit: 'extra_credit',
+  little_to_no_test: 'little_to_no_test',
+  fast_paced: 'fast_paced',
+  slow_paced: 'slow_paced',
+} as const;
+
+/**
+ * Fields allowed when updating a student.
+ */
+export interface StudentPatchInput {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  graduationYear?: number;
+  preferences?: StudentPatchInputPreferencesItem[];
 }
 
 export type GetCourseReviewsIdThreadsParams = {
-  /**
-   * Page number of pagination
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Number of items per page in pagination
-   * @minimum 1
-   */
-  limit?: number;
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
+};
+
+export type GetProfessorReviewsIdThreadsParams = {
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
 };
 
 export type GetSamplesParams = {
-  /**
-   * Page number of pagination
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Number of items per page in pagination
-   * @minimum 1
-   */
-  limit?: number;
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
 };
 
 export type GetCoursesParams = {
-  /**
-   * Page number of pagination
-   * @minimum 1
-   */
-  page?: number;
-  /**
-   * Number of items per page in pagination
-   * @minimum 1
-   */
-  limit?: number;
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
 };
+
+export type GetReviewsParams = {
+/**
+ * Number of items to return (1–100)
+ * @minimum 1
+ * @maximum 100
+ */
+limit?: number;
+/**
+ * Number of items to skip
+ * @minimum 0
+ */
+offset?: number;
+};
+
+export type GetProfessorsParams = {
+/**
+ * Page number of pagination
+ * @minimum 1
+ */
+page?: number;
+/**
+ * Number of items per page in pagination
+ * @minimum 1
+ */
+limit?: number;
+};
+
+export type GetStudentsParams = {
+/**
+ * @minimum 1
+ */
+page?: number;
+/**
+ * @minimum 1
+ * @maximum 100
+ */
+limit?: number;
+};
+
+export type GetAuthCallbackParams = {
+/**
+ * Authorization code from Google OAuth 2.0
+ */
+code: string;
+};
+
+export type GetAuthCallback200 = {
+  message?: string;
+  /** JWT access token */
+  token?: string;
+};
+
+export type GetAuthCallback201 = {
+  message?: string;
+  /** JWT access token */
+  token?: string;
+};
+

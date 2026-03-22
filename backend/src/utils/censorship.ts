@@ -40,8 +40,8 @@ const LEET_MAP: Record<string, string> = {
 function normalizeChar(value: string): string {
   const folded = value.normalize("NFKD").replace(COMBINING_MARKS, "").toLowerCase();
   return [...folded]
-    .map((char) => LEET_MAP[char] ?? char)
-    .join("");
+      .map((char) => LEET_MAP[char] ?? char)
+      .join("");
 }
 
 function buildNormalizedText(input: string): { text: string; map: number[] } {
@@ -63,8 +63,8 @@ function buildNormalizedText(input: string): { text: string; map: number[] } {
 
 function sanitizeTerms(terms: readonly string[]): string[] {
   return terms
-    .map((term) => normalizeChar(term).replace(/[^a-z0-9]/g, ""))
-    .filter((term) => term.length > 0);
+      .map((term) => normalizeChar(term).replace(/[^a-z0-9]/g, ""))
+      .filter((term) => term.length > 0);
 }
 
 function termPattern(term: string): RegExp {
@@ -128,9 +128,9 @@ export function assessCensorship(text: string, options: CensorshipOptions = {}):
       const endIndex = map[end - 1];
 
       if (
-        originalStart !== undefined &&
-        endIndex !== undefined &&
-        endIndex + 1 > originalStart
+          originalStart !== undefined &&
+          endIndex !== undefined &&
+          endIndex + 1 > originalStart
       ) {
         ranges.push({ start: originalStart, end: endIndex + 1 });
         if (!seen.has(term)) {
