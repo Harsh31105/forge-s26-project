@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Libre_Baskerville, Merriweather } from "next/font/google";
 import "./globals.css";
+import ReactQueryProvider from "@/src/lib/ReactQueryProvider";
 
 const libreBaskerville = Libre_Baskerville({
   variable: "--font-heading",
@@ -29,7 +30,9 @@ export default function RootLayout({
       <body
         className={`${libreBaskerville.variable} ${merriweather.variable} antialiased`}
       >
-        {children}
+        <ReactQueryProvider>
+          {children}
+        </ReactQueryProvider>
       </body>
     </html>
   );
