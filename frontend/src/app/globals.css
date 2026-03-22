@@ -1,26 +1,105 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --color-primary-navy:             #203A8A;
+  --color-primary-navy-rgb:         32, 58, 138;
+
+  --color-accent-copper:            #B45309;
+  --color-accent-copper-rgb:        180, 83, 9;
+
+  /* backgound */
+  --color-background-cream:         #FEF4C7; /* Main page background */
+  --color-background-cream-rgb:     254, 244, 199;
+
+  --color-surface-light-cream:      #FEF9E7; /* Navbar, lighter sections */
+  --color-surface-light-cream-rgb:  254, 249, 231;
+
+  --color-surface-extra-light:      #FFFBEB; /* Hover states, card backgrounds */
+  --color-surface-extra-light-rgb:  255, 251, 235;
+
+  --color-white:                    #FFFFFF; /* Cards, sidebar, input fields */
+  --color-white-rgb:                255, 255, 255;
+
+  /* tex color */
+  --color-text-primary:             #1C1917; /* Headings, body text, labels */
+  --color-text-primary-rgb:         28, 25, 23;
+
+  --color-text-secondary:           #57534E; /* Supporting text, metadata, placeholders */
+  --color-text-secondary-rgb:       87, 83, 78;
+
+  /* borders */
+  --color-border-tan:               #D4A574; /* All borders, dividers, decorative lines */
+  --color-border-tan-rgb:           212, 165, 116;
+
+  --color-success:                  #10B981;
+  --color-warning:                  #F59E0B;
+  --color-error:                    #DC2626;
+
+  /* Libre Baskerville */
+  --font-heading:                   'Libre Baskerville', Georgia, serif;
+
+  /* Merriweather */
+  --font-body:                      'Merriweather', Georgia, serif;
+
+  /* Yarndings 20 the decorative symbols only */
+  --font-symbols:                   'Yarndings 20', serif;
+
+  /*font sizes */
+  --font-size-xs:                   14px; /* description tags (engaging, etc...) */
+  --font-size-sm:                   16px; /* Body text, review text, search placeholder */
+  --font-size-base:                 20px; /* nav links, Overall Rating */
+  --font-size-lg:                   24px; /* sourse titles in list (CS 2500...) */
+  --font-size-xl:                   32px; /* section headings (Courses Taught, Reviews) */
+  --font-size-2xl:                  40px; /* professor name (Professor Jane Smith) */
+  --font-size-display:              36px; /* large rating numbers (4.2, etc...) */
+
+  /* line heights */
+  --line-height-tight:              30px; /* for text elements */
+  --line-height-loose:              48px; /* heading */
+
+  /* Typography */
+  --font-weight-light:              300;
+  --font-weight-regular:            400;
+  --font-weight-semibold:           600;
+  --font-weight-bold:               700;
+
+  /* Border & Radius */
+  --border-radius-sm:               6px;  /* rating tags */
+  --border-radius-md:               10px; /* cards */
+  --border-radius-full:             9999px; /* Avatar circle */
+
+  --border-width:                   1px;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+  --color-background:               var(--color-background-cream);
+  --color-foreground:               var(--color-text-primary);
+  --color-primary:                  var(--color-primary-navy);
+  --color-accent:                   var(--color-accent-copper);
+  --color-surface:                  var(--color-surface-light-cream);
+  --color-surface-light:            var(--color-surface-extra-light);
+  --color-white:                    var(--color-white);
+  --color-text-secondary:           var(--color-text-secondary);
+  --color-border:                   var(--color-border-tan);
+  --color-success:                  var(--color-success);
+  --color-warning:                  var(--color-warning);
+  --color-error:                    var(--color-error);
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-heading:                   var(--font-heading);
+  --font-body:                      var(--font-body);
+  --font-symbols:                   var(--font-symbols);
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background-cream);
+  color: var(--color-text-primary);
+  font-family: var(--font-body);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-tight);
+}
+
+h1,
+h2 {
+  font-family: var(--font-heading);
+  color: var(--color-text-primary);
 }

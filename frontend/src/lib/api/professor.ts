@@ -8,14 +8,10 @@ import type {
   GetProfessorsParams,
   Professor,
   ProfessorPatchInput,
-  ProfessorPostInput,
-  Rmp
-} from './northStarAPI.schemas';
+  ProfessorPostInput
+} from './forgeS26ProjectAPI.schemas';
 
-import { customAxios } from './apiClient';
-
-
-
+import { customAxios } from "./apiClient";
 
   export const getProfessor = () => {
 /**
@@ -23,55 +19,44 @@ import { customAxios } from './apiClient';
  * @summary Get all professors
  */
 const getProfessors = (
-    params?: GetProfessorsParams,
+    
  ) => {
       return customAxios<Professor[]>(
-      {url: `/professors`, method: 'GET',
-        params
+      {url: `/professors`, method: 'GET'
     },
       );
     }
   /**
- * Creates a new professor
- * @summary Create a professor
- */
-const postProfessors = (
-    professorPostInput: ProfessorPostInput,
- ) => {
-      return customAxios<Professor>(
-      {url: `/professors`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: professorPostInput
-    },
-      );
-    }
+   * Creates a new professor
+   * @summary Create a professor
+   */
+  const postProfessors = (professorPostInput: ProfessorPostInput) => {
+    return customAxios<Professor>({
+      url: `/professors`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: professorPostInput,
+    });
+  };
   /**
- * Returns a single professor by their UUID
- * @summary Get professor by ID
- */
-const getProfessorsId = (
-    id: string,
- ) => {
-      return customAxios<Professor>(
-      {url: `/professors/${id}`, method: 'GET'
-    },
-      );
-    }
+   * Returns a single professor by their UUID
+   * @summary Get professor by ID
+   */
+  const getProfessorsId = (id: string) => {
+    return customAxios<Professor>({ url: `/professors/${id}`, method: "GET" });
+  };
   /**
- * Partially updates a professor by their UUID
- * @summary Update a professor
- */
-const patchProfessorsId = (
-    id: string,
-    professorPatchInput: ProfessorPatchInput,
- ) => {
-      return customAxios<Professor>(
-      {url: `/professors/${id}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: professorPatchInput
-    },
-      );
-    }
+   * Partially updates a professor by their UUID
+   * @summary Update a professor
+   */
+  const patchProfessorsId = (id: string, professorPatchInput: ProfessorPatchInput) => {
+    return customAxios<Professor>({
+      url: `/professors/${id}`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: professorPatchInput,
+    });
+  };
   /**
  * Deletes a professor by their UUID
  * @summary Delete a professor
@@ -84,35 +69,9 @@ const deleteProfessorsId = (
     },
       );
     }
-  /**
- * Returns the Rate My Professor data stored in our DB for a given professor
- * @summary Get RMP data for a professor
- */
-const getProfessorsIdRmp = (
-    id: string,
- ) => {
-      return customAxios<Rmp>(
-      {url: `/professors/${id}/rmp`, method: 'GET'
-    },
-      );
-    }
-  /**
- * Pings the external RMP API, matches data to professors in our DB, and bulk inserts
- * @summary Fetch and save RMP data for all professors
- */
-const postRmp = (
-    
- ) => {
-      return customAxios<Rmp>(
-      {url: `/rmp`, method: 'POST'
-    },
-      );
-    }
-  return {getProfessors,postProfessors,getProfessorsId,patchProfessorsId,deleteProfessorsId,getProfessorsIdRmp,postRmp}};
+  return {getProfessors,postProfessors,getProfessorsId,patchProfessorsId,deleteProfessorsId}};
 export type GetProfessorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['getProfessors']>>>
 export type PostProfessorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['postProfessors']>>>
 export type GetProfessorsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['getProfessorsId']>>>
 export type PatchProfessorsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['patchProfessorsId']>>>
 export type DeleteProfessorsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['deleteProfessorsId']>>>
-export type GetProfessorsIdRmpResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['getProfessorsIdRmp']>>>
-export type PostRmpResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessor>['postRmp']>>>
