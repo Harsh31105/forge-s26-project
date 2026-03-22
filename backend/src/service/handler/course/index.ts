@@ -12,28 +12,34 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
+import { getOffset, PaginationSchema, PaginationType } from "../../../utils/pagination";
 
 export class CourseHandler {
     constructor(private readonly repo: CourseRepository) {}
 
-    async handleGet(req: Request, res: Response) :Promise<void> {
-        const result = CourseFilterSchema.safeParse(req.query);
-        if (!result.success) {
+    async handleGet(req: Request, res: Response): Promise<void> {
+        const paginationResult = PaginationSchema.safeParse(req.query);
+        if (!paginationResult.success) {
+            throw BadRequest("Invalid pagination parameters");
+        }
+        const pagination = paginationResult.data;
+
+        const filterResult = CourseFilterSchema.safeParse(req.query);
+        if (!filterResult.success) {
             throw BadRequest("Invalid filter parameters");
         }
-        const filters = result.data;
+        const filters = filterResult.data;
 
         let courses: Course[];
-
         try {
-            courses = await this.repo.getCourses(filters);
+            courses = await this.repo.getCourses(pagination, filters);
         } catch (err) {
             console.log("Failed to get courses: ", err);
             throw mapDBError(err, "failed to retrieve courses");
         }
 
         res.status(200).json(courses);
-    }
+    }   
 
     async handleGetByID(req: Request, res: Response): Promise<void> {
         let course: Course;

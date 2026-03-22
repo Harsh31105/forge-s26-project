@@ -56,10 +56,7 @@ describe("CourseRepositorySchema DB Integration", () => {
         test("empty and populated DB", async () => {
             await repo.deleteCourse(testCourseID);
 
-            // const pagination = newPagination();
-            // let results = await repo.getCourses(pagination);
-
-            let results = await repo.getCourses({ page: 1, limit: 10, sortOrder: "asc" });
+            let results = await repo.getCourses({ page: 1, limit: 10 }, { sortOrder: "asc" });
 
             expect(results).toEqual([]);
 
@@ -75,7 +72,8 @@ describe("CourseRepositorySchema DB Integration", () => {
                 updatedAt: new Date()
             });
 
-            results = await repo.getCourses({ page: 1, limit: 10, sortOrder: "asc" });
+            results = await repo.getCourses({ page: 1, limit: 10 }, { sortOrder: "asc" });
+
             expect(results).toHaveLength(1);
             expect(results[0]!.id).toBe(testCourseID);
             expect(results[0]!.name).toBe("Algorithms & Data Structures");
@@ -123,13 +121,13 @@ describe("CourseRepositorySchema DB Integration", () => {
             // const page3 = await repo.getCourses({ page: 3, limit: 2 });
             // expect(page3).toHaveLength(0);
 
-            const page1 = await repo.getCourses({ page: 1, limit: 2, sortOrder: "asc" });
+            const page1 = await repo.getCourses({ page: 1, limit: 2 }, { sortOrder: "asc" });
             expect(page1).toHaveLength(2);
 
-            const page2 = await repo.getCourses({ page: 2, limit: 2, sortOrder: "asc" });
+            const page2 = await repo.getCourses({ page: 2, limit: 2 }, { sortOrder: "asc" });
             expect(page2).toHaveLength(1);
 
-            const page3 = await repo.getCourses({ page: 3, limit: 2, sortOrder: "asc" });
+            const page3 = await repo.getCourses({ page: 3, limit: 2 }, { sortOrder: "asc" });
             expect(page3).toHaveLength(0);
                 
         });

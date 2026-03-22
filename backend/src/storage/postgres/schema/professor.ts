@@ -5,14 +5,14 @@ import { professor } from "../../tables/professor";
 import { NotFoundError } from "../../../errs/httpError";
 import { LocationTag } from "../../tables/professor";
 import { and, asc, desc, eq } from "drizzle-orm";
-import { getOffset } from "../../../utils/pagination";
+import { getOffset, PaginationType } from "../../../utils/pagination";
 
 export class ProfessorRepositorySchema implements ProfessorRepository {
     constructor(private readonly db: NodePgDatabase) {
         this.db = db;
     }
 
-    async getProfessors(filters: ProfessorFilterType): Promise<Professor[]> {
+    async getProfessors(pagination: PaginationType, filters: ProfessorFilterType): Promise<Professor[]> {
         const conditions = [];
         if (filters.firstName) conditions.push(eq(professor.firstName, filters.firstName));
         if (filters.lastName) conditions.push(eq(professor.lastName, filters.lastName));
@@ -26,8 +26,8 @@ export class ProfessorRepositorySchema implements ProfessorRepository {
         .from(professor)
         .where(conditions.length > 0 ? and(...conditions) : undefined)
         .orderBy(order)
-        .limit(filters.limit)
-        .offset(getOffset(filters));
+        .limit(pagination.limit)
+        .offset(getOffset(pagination))
         
     }
 

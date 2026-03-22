@@ -18,6 +18,8 @@ tags:
     description: API Endpoint for Specific Course Operations
   - name: Professor
     description: Professor CRUD operations
+  - name: Student
+    description: Student CRUD operations
   - name: Review
     description: Course and professor review CRUD operations
   - name: Auth
@@ -40,6 +42,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
+
 
   /course-reviews/{id}/threads:
     get:
@@ -129,6 +132,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
+
 
   /course-reviews/{course_review_id}/threads/{thread_id}:
     patch:
@@ -403,7 +407,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Sample"
+                  $ref:
+                    "#/components/schemas/Sample"
         "400":
           description: bad request
           content:
@@ -435,7 +440,7 @@ paths:
     post:
       summary: Create a New Sample
       description: This endpoint creates a new sample with the provided details
-      tags: [Sample]
+      tags: [ Sample ]
       requestBody:
         required: true
         content:
@@ -490,7 +495,7 @@ paths:
     get:
       summary: Get Sample by ID
       description: This endpoint retrieves a specific sample by its ID
-      tags: [Sample]
+      tags: [ Sample ]
       responses:
         "200":
           description: Successfully retrieved the sample details
@@ -520,7 +525,7 @@ paths:
     patch:
       summary: Update Sample by ID
       description: This endpoint updates the details of a specific sample by its ID
-      tags: [Sample]
+      tags: [ Sample ]
       requestBody:
         required: true
         content:
@@ -555,7 +560,7 @@ paths:
     delete:
       summary: Delete Sample by ID
       description: This endpoint deletes a specific sample by its ID
-      tags: [Sample]
+      tags: [ Sample ]
       responses:
         "204":
           description: Successfully deleted the sample (no content)
@@ -779,6 +784,7 @@ paths:
               example:
                 code: 500
                 message: "Internal server error"
+
     delete:
       summary: Delete Course by ID
       description: This endpoint deletes a specific course by its ID
@@ -1201,6 +1207,169 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  /students:
+    get:
+      summary: Get all students
+      description: Returns a list of all students with ID, first name, last name, email, graduation year, and preferences.
+      tags: [Student]
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          example: 10
+      responses:
+        "200":
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Create a student
+      description: Create a new student with the provided information.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentPostInput"
+      responses:
+        "201":
+          description: Student created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Get student by ID
+      description: Returns a single student by their UUID.
+      tags: [Student]
+      responses:
+        "200":
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    patch:
+      summary: Update a student
+      description: Update a student's information using their UUID.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentPatchInput"
+      responses:
+        "200":
+          description: Student updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID or bad input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    delete:
+      summary: Delete a student
+      description: Deletes a student by their UUID.
+      tags: [Student]
+      responses:
+        "204":
+          description: Student deleted successfully
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
   /auth/signin:
     get:
       summary: Signin Feature with Google
@@ -1288,8 +1457,6 @@ paths:
                 code: 500
                 message: "Internal server error"
 
-security:
-  - bearerAuth: []
 
 components:
   securitySchemes:
@@ -1361,8 +1528,8 @@ components:
           example: "2024-01-15T10:35:00Z"
 
     Course:
-      type: object
-      required:
+     type: object
+     required:
         - id
         - name
         - department
@@ -1371,7 +1538,7 @@ components:
         - num_credits
         - created_at
         - updated_at
-      properties:
+     properties:
         id:
           type: string
           format: uuid
@@ -1801,3 +1968,129 @@ components:
             type: enum
           description: Updated tags (null clears all tags)
           example: ["rewarding"]
+
+
+    #student
+    Student:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - graduationYear
+        - preferences
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    StudentPostInput:
+      type: object
+      description: Fields required to create a new student.
+      required:
+        - firstName
+        - lastName
+        - email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
+
+    StudentPatchInput:
+      type: object
+      description: Fields allowed when updating a student.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
+
+    ProfThread:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UuidParam"
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        profReviewId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProfThreadPostInput:
+      type: object
+      required:
+        - studentId
+        - content
+      properties:
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    ProfThreadPatchInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000

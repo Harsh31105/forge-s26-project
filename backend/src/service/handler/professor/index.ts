@@ -12,20 +12,27 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
+import { PaginationSchema } from "../../../utils/pagination";
 
 export class ProfessorHandler {
     constructor(private readonly repo: ProfessorRepository) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
-        const result = ProfessorFilterSchema.safeParse(req.query);
-        if (!result.success) {
+        const paginationResult = PaginationSchema.safeParse(req.query);
+        if (!paginationResult.success) {
+            throw BadRequest("Invalid pagination parameters");
+        }
+        const pagination = paginationResult.data;
+
+        const filterResult = ProfessorFilterSchema.safeParse(req.query);
+        if (!filterResult.success) {
             throw BadRequest("Invalid filter parameters");
         }
-        const filters = result.data;
+        const filters = filterResult.data;
 
         let professors: Professor[];
         try {
-            professors = await this.repo.getProfessors(filters);
+            professors = await this.repo.getProfessors(pagination, filters);
         } catch (err) {
             console.log("Failed to get professors: ", err);
             throw mapDBError(err, "failed to retrieve professors");

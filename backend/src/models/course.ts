@@ -34,8 +34,6 @@ export const CoursePatchInputSchema = CoursePostInputSchema.partial();
 export type CoursePatchInputType = z.infer<typeof CoursePatchInputSchema>
 
 export const CourseFilterSchema = z.object({
-    page: z.coerce.number().min(1).default(1),
-    limit: z.coerce.number().min(1).default(10),
     department_id: z.coerce.number().optional(),
     course_code: z.coerce.number().optional(),
     num_credits: z.coerce.number().optional(),

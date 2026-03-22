@@ -5,14 +5,14 @@ import {course} from "../../tables/course";
 import { and, asc, desc, eq } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
 import { department } from "../../tables/department";
-import { getOffset } from "../../../utils/pagination";
+import { getOffset, PaginationType } from "../../../utils/pagination";
 
 export class CourseRepositorySchema implements CourseRepository {
     constructor(private readonly db: NodePgDatabase) {
         this.db = db;
     }
 
-    async getCourses(filters: CourseFilterType): Promise<Course[]> {
+    async getCourses(pagination: PaginationType, filters: CourseFilterType): Promise<Course[]> {
         const conditions = [];
         if (filters.department_id) conditions.push(eq(course.departmentId, filters.department_id));
         if (filters.course_code) conditions.push(eq(course.courseCode, filters.course_code));
@@ -30,8 +30,8 @@ export class CourseRepositorySchema implements CourseRepository {
             .innerJoin(department, eq(course.departmentId, department.id))
             .where(conditions.length > 0 ? and(...conditions) : undefined)
             .orderBy(order)
-            .limit(filters.limit)
-            .offset(getOffset(filters));
+            .limit(pagination.limit)
+            .offset(getOffset(pagination));
 
         return rows.map((row) => ({
             id: row.course.id,
