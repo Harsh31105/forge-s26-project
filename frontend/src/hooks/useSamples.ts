@@ -29,7 +29,7 @@ export function useSample(sampleID: string) {
     } = useQuery({
         queryKey: ["samples", sampleID],
         queryFn: () => sampleAPI.getSamplesId(sampleID),
-        enabled: !!sampleID // TODO: Why?
+        enabled: !!sampleID
     })
 
     return { sample, isLoading, error: error?.message || null, refetch };
