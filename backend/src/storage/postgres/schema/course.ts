@@ -14,15 +14,18 @@ export class CourseRepositorySchema implements CourseRepository {
 
     async getCourses(pagination: PaginationType, filters: CourseFilterType): Promise<Course[]> {
         const conditions = [];
-        if (filters.department_id) conditions.push(eq(course.departmentId, filters.department_id));
-        if (filters.course_code) conditions.push(eq(course.courseCode, filters.course_code));
-        if (filters.num_credits) conditions.push(eq(course.numCredits, filters.num_credits));
-        if (filters.lecture_type) conditions.push(eq(course.lectureType, filters.lecture_type));
+        if (filters.department_id !== undefined) conditions.push(eq(course.departmentId, filters.department_id));
+        if (filters.course_code !== undefined) conditions.push(eq(course.courseCode, filters.course_code));
+        if (filters.num_credits !== undefined) conditions.push(eq(course.numCredits, filters.num_credits));
+        if (filters.lecture_type !== undefined) conditions.push(eq(course.lectureType, filters.lecture_type));
 
-        const orderCol = filters.sortBy === "course_code" ? course.courseCode
-            : filters.sortBy === "num_credits" ? course.numCredits
-            : filters.sortBy === "created_at" ? course.createdAt
-            : course.name;
+        const orderColMap = {
+            course_code: course.courseCode,
+            num_credits: course.numCredits,
+            created_at: course.createdAt,
+            name: course.name,
+        };
+        const orderCol = orderColMap[filters.sortBy ?? "name"] ?? course.name;
         const order = filters.sortOrder === "desc" ? desc(orderCol) : asc(orderCol);
 
         const rows = await this.db.select()

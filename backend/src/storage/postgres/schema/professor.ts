@@ -14,21 +14,23 @@ export class ProfessorRepositorySchema implements ProfessorRepository {
 
     async getProfessors(pagination: PaginationType, filters: ProfessorFilterType): Promise<Professor[]> {
         const conditions = [];
-        if (filters.firstName) conditions.push(eq(professor.firstName, filters.firstName));
-        if (filters.lastName) conditions.push(eq(professor.lastName, filters.lastName));
+        if (filters.firstName !== undefined) conditions.push(eq(professor.firstName, filters.firstName));
+        if (filters.lastName !== undefined) conditions.push(eq(professor.lastName, filters.lastName));
 
-        const orderCol = filters.sortBy === "lastName" ? professor.lastName
-            : filters.sortBy === "createdAt" ? professor.createdAt
-            : professor.firstName;
+        const orderColMap = {
+            firstName: professor.firstName,
+            lastName: professor.lastName,
+            createdAt: professor.createdAt,
+        };
+        const orderCol = orderColMap[filters.sortBy ?? "firstName"] ?? professor.firstName;
         const order = filters.sortOrder === "desc" ? desc(orderCol) : asc(orderCol);
 
         return this.db.select()
-        .from(professor)
-        .where(conditions.length > 0 ? and(...conditions) : undefined)
-        .orderBy(order)
-        .limit(pagination.limit)
-        .offset(getOffset(pagination))
-        
+            .from(professor)
+            .where(conditions.length > 0 ? and(...conditions) : undefined)
+            .orderBy(order)
+            .limit(pagination.limit)
+            .offset(getOffset(pagination));
     }
 
     async getProfessorByID(id: string): Promise<Professor> {
