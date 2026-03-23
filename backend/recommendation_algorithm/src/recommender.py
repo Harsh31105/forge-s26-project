@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-from src.features import build_course_feature_record, semester_strength
-from src.models import (
+from backend.recommendation_algorithm.src.features import build_course_feature_record, semester_strength
+from backend.recommendation_algorithm.src.models import (
     Course,
     CourseFeatureRecord,
     CourseReview,
@@ -11,7 +11,7 @@ from src.models import (
     Trace,
     UserProfileRecord,
 )
-from src.user_profile import build_user_profile
+from backend.recommendation_algorithm.src.user_profile import build_user_profile
 
 
 def compute_tag_match_score(

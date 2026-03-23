@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from typing import Any, cast
 
-from src.models import Course, CourseReview, Department, Favorite, Student, Trace
+from backend.recommendation_algorithm.src.models import Course, CourseReview, Department, Favorite, Student, Trace
 
 
 def load_json_file(file_path: str) -> Any:

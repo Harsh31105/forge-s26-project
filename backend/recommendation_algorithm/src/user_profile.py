@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from collections import Counter
 
-from recommendation_algorithm.src.models import Course, CourseFeatureRecord, CourseReview, Department, Trace
+from backend.recommendation_algorithm.src.models import Course, CourseFeatureRecord, CourseReview, Department, Trace
 
 
 def get_department_name(department_id: int, departments: list[Department]) -> str:

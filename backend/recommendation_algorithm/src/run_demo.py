@@ -1,13 +1,13 @@
 from __future__ import annotations
 
-from src.repository import (
+from backend.recommendation_algorithm.src.repository import (
     load_courses,
     load_departments,
     load_favorites,
     load_reviews,
     load_trace,
 )
-from src.recommender import recommend_courses
+from backend.recommendation_algorithm.src.recommender import recommend_courses
 
 
 def main() -> None:
