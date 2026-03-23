@@ -65,6 +65,42 @@ describe("ProfessorRepositorySchema DB Integration", () => {
             expect(results).toHaveLength(1);
             expect(results[0]!.id).toBe(testProfessorID);
         });
+        
+        // filtering tests
+        
+        test("filter by firstName", async () => {
+            const results = await repo.getProfessors(
+                { page: 1, limit: 10 },
+                { sortOrder: "asc", firstName: "John" }
+            );
+            expect(results).toHaveLength(1);
+            expect(results[0]!.firstName).toBe("John");
+        });
+
+        test("filter by lastName", async () => {
+            const results = await repo.getProfessors(
+                { page: 1, limit: 10 },
+                { sortOrder: "asc", lastName: "Doe" }
+            );
+            expect(results).toHaveLength(1);
+            expect(results[0]!.lastName).toBe("Doe");
+        });
+
+        test("sort by lastName desc", async () => {
+            await db.insert(professor).values({
+                id: uuid(),
+                firstName: "Alice",
+                lastName: "Zzz",
+                tags: null,
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+            const results = await repo.getProfessors(
+                { page: 1, limit: 10 },
+                { sortOrder: "desc", sortBy: "lastName" }
+            );
+            expect(results[0]!.lastName).toBe("Zzz");
+        });
     });
 
     describe("getProfessorByID", () => {

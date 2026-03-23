@@ -132,6 +132,44 @@ describe("CourseRepositorySchema DB Integration", () => {
                 
         });
 
+        // filtering tests
+
+        test("filter by department_id", async () => {
+            const results = await repo.getCourses(
+                { page: 1, limit: 10 },
+                { sortOrder: "asc", department_id: testDepartmentID }
+            );
+            expect(results).toHaveLength(1);
+            expect(results[0]!.department.id).toBe(testDepartmentID);
+        });
+
+        test("filter by lecture_type", async () => {
+            const results = await repo.getCourses(
+                { page: 1, limit: 10 },
+                { sortOrder: "asc", lecture_type: "lecture" }
+            );
+            expect(results).toHaveLength(1);
+            expect(results[0]!.lecture_type).toBe("lecture");
+        });
+
+        test("sort by name desc", async () => {
+            await db.insert(course).values({
+                id: uuid(),
+                name: "Zzz Course",
+                departmentId: testDepartmentID,
+                courseCode: 9999,
+                description: "A course.",
+                numCredits: 4,
+                lectureType: "lecture",
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+            const results = await repo.getCourses(
+                { page: 1, limit: 10 },
+                { sortOrder: "desc", sortBy: "name" }
+            );
+            expect(results[0]!.name).toBe("Zzz Course");
+        });
     });
 
 
