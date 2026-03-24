@@ -5,12 +5,10 @@
 import request from "supertest";
 import express, { type Express } from "express";
 import { ProfessorHandler } from "../professor";
-import type { ProfessorRepository } from "../../../storage/storage";
+import type { ProfessorRepository, RMPRepository } from "../../../storage/storage";
 import type { Professor } from "../../../models/professor";
-import { ProfessorPostInputType, ProfessorPatchInputType } from "../../../models/professor";
-import { errorHandler } from "../../../errs/httpError";
+// import { ProfessorPostInputType, ProfessorPatchInputType } from "../../../models/professor";
 import type { RMP } from "../../../models/rmp";
-import { errorHandler } from "../../../errs/httpError";
 import { errorHandler, NotFoundError } from "../../../errs/httpError";
 
 jest.mock("uuid", () => ({
@@ -41,6 +39,7 @@ const mockRMP: RMP = {
 describe("ProfessorHandler Endpoints", () => {
   let app: Express;
   let repo: jest.Mocked<ProfessorRepository>;
+  let rmpRepo: jest.Mocked<RMPRepository>;
   let handler: ProfessorHandler;
 
   beforeEach(() => {
@@ -53,11 +52,14 @@ describe("ProfessorHandler Endpoints", () => {
       createProfessor: jest.fn(),
       patchProfessor: jest.fn(),
       deleteProfessor: jest.fn(),
-      getRMPByProfessorID: jest.fn(),
-      postRMP: jest.fn(),
     } as unknown as jest.Mocked<ProfessorRepository>;
 
-    handler = new ProfessorHandler(repo);
+    rmpRepo = {
+        getRMPByProfessorID: jest.fn(),
+        postRMP: jest.fn(),
+    } as unknown as jest.Mocked<RMPRepository>;
+
+    handler = new ProfessorHandler(repo, rmpRepo);
 
     app = express();
     app.use(express.json());
@@ -172,7 +174,7 @@ describe("ProfessorHandler Endpoints", () => {
 
   describe("GET /professors/:id/rmp", () => {
     test("returns RMP data for a professor", async () => {
-      repo.getRMPByProfessorID.mockResolvedValue(mockRMP);
+      rmpRepo.getRMPByProfessorID.mockResolvedValue(mockRMP);
 
       const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
       expect(res.status).toBe(200);
@@ -183,7 +185,7 @@ describe("ProfessorHandler Endpoints", () => {
         ratingWta: 85,
         avgDifficulty: "3.20",
       });
-      expect(repo.getRMPByProfessorID).toHaveBeenCalledWith(
+      expect(rmpRepo.getRMPByProfessorID).toHaveBeenCalledWith(
         "11111111-1111-1111-1111-111111111111"
       );
     });
@@ -195,16 +197,15 @@ describe("ProfessorHandler Endpoints", () => {
     });
 
     test("professor has no RMP data returns 404", async () => {
-      repo.getRMPByProfessorID.mockRejectedValue(
-        new NotFoundError("RMP data not found for given professor ID")
+      rmpRepo.getRMPByProfessorID.mockRejectedValue(
+          new NotFoundError("RMP data not found for given professor ID")
       );
-
       const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
       expect(res.status).toBe(404);
-    });
+  });
 
     test("repo error returns 500", async () => {
-      repo.getRMPByProfessorID.mockRejectedValue(new Error("DB error"));
+      rmpRepo.getRMPByProfessorID.mockRejectedValue(new Error("DB error"));
       const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
       expect(res.status).toBe(500);
     });

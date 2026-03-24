@@ -122,18 +122,10 @@ export class ProfessorHandler {
 
         let rmpData: RMP;
         try {
-            rmpData = await this.rmpRepo.getRMPByProfessorID(id); // use rmpRepo here
+            rmpData = await this.rmpRepo.getRMPByProfessorID(id);
         } catch (err) {
             console.log(err);
-            if (err instanceof NotFoundError) {
-                res.status(200).json({
-                    professorId: id,
-                    ratingAvg: null,
-                    ratingWta: null,
-                    avgDifficulty: null,
-                });
-                return;
-            }
+            if (err instanceof NotFoundError) throw NotFound("RMP data not found for given professor");
             throw mapDBError(err, "failed to retrieve RMP data");
         }
 
