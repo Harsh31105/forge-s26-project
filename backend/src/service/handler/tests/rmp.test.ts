@@ -1,34 +1,37 @@
 import request from "supertest";
 import express, { Express } from "express";
 import { RMPHandler } from "../rmp";
-import type { ProfessorRepository } from "../../../storage/storage";
+import type { ProfessorRepository, RMPRepository } from "../../../storage/storage";
 import { RMP } from "../../../models/rmp";
 import { errorHandler } from "../../../errs/httpError";
 
 describe("RMPHandler Endpoints", () => {
     let app: Express;
-    let repo: jest.Mocked<ProfessorRepository>;
+    let rmpRepo: jest.Mocked<RMPRepository>;
+    let professorRepo: jest.Mocked<ProfessorRepository>;
     let handler: RMPHandler;
 
     beforeEach(() => {
         jest.spyOn(console, "error").mockImplementation(() => {});
 
-        repo = {
+        rmpRepo = {
+            getRMPByProfessorID: jest.fn(),
+            postRMP: jest.fn(),
+        } as unknown as jest.Mocked<RMPRepository>;
+
+        professorRepo = {
             getProfessors: jest.fn(),
             getProfessorByID: jest.fn(),
             createProfessor: jest.fn(),
             patchProfessor: jest.fn(),
             deleteProfessor: jest.fn(),
-            getRMPByProfessorID: jest.fn(),
-            postRMP: jest.fn(),
         } as unknown as jest.Mocked<ProfessorRepository>;
 
-        handler = new RMPHandler(repo);
+        handler = new RMPHandler(rmpRepo, professorRepo);
 
         app = express();
         app.use(express.json());
 
-        // POST /rmp
         app.post("/rmp", (req, res, next) =>
             handler.handlePost(req, res).catch(next)
         );
@@ -58,7 +61,8 @@ describe("RMPHandler Endpoints", () => {
                     updatedAt: new Date("2026-01-15T10:30:00Z"),
                 }
             ];
-            repo.postRMP.mockResolvedValue(mockRMPData);
+            professorRepo.getProfessors.mockResolvedValue([]);
+            rmpRepo.postRMP.mockResolvedValue(mockRMPData);
 
             const res = await request(app).post("/rmp");
             expect(res.status).toBe(201);
@@ -67,7 +71,8 @@ describe("RMPHandler Endpoints", () => {
         });
 
         test("repo error returns 500", async () => {
-            repo.postRMP.mockRejectedValue(new Error("DB error"));
+            professorRepo.getProfessors.mockResolvedValue([]);
+            rmpRepo.postRMP.mockRejectedValue(new Error("DB error"));
             const res = await request(app).post("/rmp");
             expect(res.status).toBe(500);
         });
