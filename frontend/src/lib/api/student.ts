@@ -8,71 +8,84 @@ import type {
   GetStudentsParams,
   Student,
   StudentPatchInput,
-  StudentPostInput,
-} from "./northStarAPI.schemas";
+  StudentPostInput
+} from './northStarAPI.schemas';
 
-import { customAxios } from "./apiClient";
+import { customAxios } from './apiClient';
 
-export const getStudent = () => {
+
+
+
+  export const getStudent = () => {
+/**
+ * Returns a list of all students with ID, first name, last name, email, graduation year, and preferences.
+ * @summary Get all students
+ */
+const getStudents = (
+    params?: GetStudentsParams,
+ ) => {
+      return customAxios<Student[]>(
+      {url: `/students`, method: 'GET',
+        params
+    },
+      );
+    }
   /**
-   * Returns a list of all students with ID, first name, last name, email, graduation year, and preferences.
-   * @summary Get all students
-   */
-  const getStudents = (params?: GetStudentsParams) => {
-    return customAxios<Student[]>({ url: `/students`, method: "GET", params });
-  };
+ * Create a new student with the provided information.
+ * @summary Create a student
+ */
+const postStudents = (
+    studentPostInput: StudentPostInput,
+ ) => {
+      return customAxios<Student>(
+      {url: `/students`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: studentPostInput
+    },
+      );
+    }
   /**
-   * Create a new student with the provided information.
-   * @summary Create a student
-   */
-  const postStudents = (studentPostInput: StudentPostInput) => {
-    return customAxios<Student>({
-      url: `/students`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: studentPostInput,
-    });
-  };
+ * Returns a single student by their UUID.
+ * @summary Get student by ID
+ */
+const getStudentsId = (
+    id: string,
+ ) => {
+      return customAxios<Student>(
+      {url: `/students/${id}`, method: 'GET'
+    },
+      );
+    }
   /**
-   * Returns a single student by their UUID.
-   * @summary Get student by ID
-   */
-  const getStudentsId = (id: string) => {
-    return customAxios<Student>({ url: `/students/${id}`, method: "GET" });
-  };
+ * Update a student's information using their UUID.
+ * @summary Update a student
+ */
+const patchStudentsId = (
+    id: string,
+    studentPatchInput: StudentPatchInput,
+ ) => {
+      return customAxios<Student>(
+      {url: `/students/${id}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: studentPatchInput
+    },
+      );
+    }
   /**
-   * Update a student's information using their UUID.
-   * @summary Update a student
-   */
-  const patchStudentsId = (id: string, studentPatchInput: StudentPatchInput) => {
-    return customAxios<Student>({
-      url: `/students/${id}`,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      data: studentPatchInput,
-    });
-  };
-  /**
-   * Deletes a student by their UUID.
-   * @summary Delete a student
-   */
-  const deleteStudentsId = (id: string) => {
-    return customAxios<void>({ url: `/students/${id}`, method: "DELETE" });
-  };
-  return { getStudents, postStudents, getStudentsId, patchStudentsId, deleteStudentsId };
-};
-export type GetStudentsResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof getStudent>["getStudents"]>>
->;
-export type PostStudentsResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof getStudent>["postStudents"]>>
->;
-export type GetStudentsIdResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof getStudent>["getStudentsId"]>>
->;
-export type PatchStudentsIdResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof getStudent>["patchStudentsId"]>>
->;
-export type DeleteStudentsIdResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof getStudent>["deleteStudentsId"]>>
->;
+ * Deletes a student by their UUID.
+ * @summary Delete a student
+ */
+const deleteStudentsId = (
+    id: string,
+ ) => {
+      return customAxios<void>(
+      {url: `/students/${id}`, method: 'DELETE'
+    },
+      );
+    }
+  return {getStudents,postStudents,getStudentsId,patchStudentsId,deleteStudentsId}};
+export type GetStudentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getStudent>['getStudents']>>>
+export type PostStudentsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getStudent>['postStudents']>>>
+export type GetStudentsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getStudent>['getStudentsId']>>>
+export type PatchStudentsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getStudent>['patchStudentsId']>>>
+export type DeleteStudentsIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getStudent>['deleteStudentsId']>>>
