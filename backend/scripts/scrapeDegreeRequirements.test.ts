@@ -84,6 +84,14 @@ describe("isChooseSection", () => {
         expect(isChooseSection("Security Required Course")).toBe(false);
     });
 
+    test("returns true for 'Complete any two courses'", () => {
+        expect(isChooseSection("Complete any two courses")).toBe(true);
+    });
+
+    test("returns true for 'Complete any one course'", () => {
+        expect(isChooseSection("Complete any one course")).toBe(true);
+    });
+
 });
 
 function sectionsFrom(html: string) {

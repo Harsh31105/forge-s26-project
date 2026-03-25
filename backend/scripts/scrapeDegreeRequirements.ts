@@ -37,6 +37,7 @@ export function isChooseSection(headerText: string): boolean {
         lower.includes("elective") ||
         lower.includes("of the following") ||   // "one of", "two of", "any of", etc.
         lower.includes("from the following") ||
+        lower.includes("complete any") ||       // "complete any two courses", etc.
         /complete\s+\d+/.test(lower)            // "complete 1", "complete 2", etc.
     );
 }
@@ -88,7 +89,12 @@ export function buildSections($: cheerio.CheerioAPI, table: AnyNode): TableSecti
             flush();
             const commentText = commentSpan.text().trim();
             const hoursText = $(row).find("td.hourscol").text().trim();
-            currentIsChoice = isChooseSection(commentText);
+            if (isChooseSection(commentText)) {
+                currentIsChoice = true;
+            } else if (commentText.toLowerCase().includes("complete all")) {
+                currentIsChoice = false;
+            }
+            // neutral labels (e.g. "Biology", "Mathematics") inherit current isChoice
             currentHoursRequired = hoursText ? parseInt(hoursText, 10) : null;
             return;
         }
