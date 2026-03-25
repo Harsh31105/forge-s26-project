@@ -1,6 +1,7 @@
 "use client";
 import Image from "next/image";
 import {useStudents} from "@/src/hooks/useStudents";
+import {ProfilePage} from "@/src/components/profile/ProfilePage";
 
 export default function Home() {
   const { students } = useStudents();
@@ -69,6 +70,7 @@ export default function Home() {
           </p>
         </div>
       </main>
+      <ProfilePage />
     </div>
   );
 }
