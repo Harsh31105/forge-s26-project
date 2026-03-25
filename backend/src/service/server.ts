@@ -24,8 +24,6 @@ import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { AuthHandler } from "./handler/auth";
 import { authRoutes } from "./handler/auth/routes";
 import { authMiddleware } from "../auth/middleware";
-import { ProfThreadHandler } from "./handler/professorThreads";
-import { professorThreadRoutes } from "./handler/professorThreads/routes";
 import cookieParser from "cookie-parser";
 import { StudentHandler } from "./handler/student";
 import { studentRoutes } from "./handler/student/routes";
@@ -109,6 +107,7 @@ function registerRoutes(router: Router, repo: Repository) {
     const courseHandler = new CourseHandler(repo.courses);
     router.use("/courses", courseRoutes(courseHandler));
 
+    // Handling Course-Threads - Starting with CourseReviews.
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 
