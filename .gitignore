@@ -45,3 +45,6 @@ terraform/*.tfstate
 terraform/*.tfstate.backup
 terraform/*.tfvars
 terraform/.terraform.lock.hcl
+
+# output
+backend/scripts/output/trace-scrape-manifest.json
