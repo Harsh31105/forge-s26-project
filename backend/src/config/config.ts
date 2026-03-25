@@ -4,7 +4,7 @@ import type { DB } from "./db";
 import { dbConfig } from "./db";
 import type { S3 } from "./s3";
 import { s3Config } from "./s3";
-import type { Supabase } from "./supabase"
+import type { Supabase } from "./supabase";
 import { supabaseConfig } from "./supabase";
 import { googleConfig } from "./google";
 import type { Google } from "./google";
@@ -25,6 +25,8 @@ export const config = Object.freeze({
     supabase: supabaseConfig,
     google: googleConfig
 });
+
+//Test
 
 export function validateConfig() {
     const missing: string[] = [];
@@ -53,4 +55,3 @@ export function validateConfig() {
         throw new Error(`Missing required environment variables: \n${missing.join("\n")}`);
     }
 }
-

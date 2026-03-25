@@ -21,7 +21,10 @@ export const student = pgTable("student", {
   lastName: varchar("last_name", { length: 100 }).notNull(),
   email: varchar("email", { length: 255 }).notNull().unique(),
   graduationYear: integer("graduation_year"),
-  preferences: prefEnum("preferences").array(),
+  preferences: prefEnum("preferences")
+      .array()
+      .default(sql`ARRAY[]::pref_enum[]`)
+      .notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [

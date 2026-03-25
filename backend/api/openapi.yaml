@@ -18,8 +18,14 @@ tags:
     description: API Endpoint for Specific Course Operations
   - name: Professor
     description: Professor CRUD operations
+  - name: Student
+    description: Student CRUD operations
+  - name: Review
+    description: Course and professor review CRUD operations
   - name: Auth
     description: Authentication Management Operations for Google OAuth 2.0
+  - name: ProfessorReview
+    description: API Endpoint for Specific Professor Review
 
 paths:
   /health:
@@ -209,6 +215,169 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
 
+
+# ------
+
+  /professor-reviews/{id}/threads:
+    get:
+      summary: List threads for a professor review
+      description: |
+        Returns all thread messages associated with a single professor review.
+      tags: [ProfessorReview]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Professor review ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+        - name: limit
+          in: query
+          description: Number of items per page in pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+      responses:
+        "200":
+          description: List of professor review threads
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/ProfThread"
+        "400":
+          description: Invalid professor review id
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Create a thread on a professor review
+      description: |
+        Creates a new thread message under a professor review.
+      tags: [ProfessorReview]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: Professor review ID (UUID)
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfThreadPostInput"
+      responses:
+        "201":
+          description: Created thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfThread"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+
+  /professor-reviews/{professor_review_id}/threads/{thread_id}:
+    patch:
+      summary: Update a professor review thread
+      tags: [ProfessorReview]
+      parameters:
+        - name: professor_review_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ProfThreadPatchInput"
+      responses:
+        "200":
+          description: Updated thread
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ProfThread"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    delete:
+      summary: Delete a professor review thread
+      tags: [ProfessorReview]
+      parameters:
+        - name: professor_review_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+        - name: thread_id
+          in: path
+          required: true
+          schema:
+            $ref: "#/components/schemas/UuidParam"
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+# ------
 
   /samples:
     get:
@@ -580,6 +749,7 @@ paths:
               example:
                 code: 500
                 message: "Internal server error"
+
     delete:
       summary: Delete Course by ID
       description: This endpoint deletes a specific course by its ID
@@ -605,6 +775,173 @@ paths:
               example:
                 code: 500
                 message: "Internal server error"
+
+  /reviews:
+    get:
+      summary: Get all reviews
+      description: Returns a paginated list of all course and professor reviews.
+      tags: [Review]
+      parameters:
+        - name: limit
+          in: query
+          description: Number of items to return (1–100)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+            default: 10
+        - name: offset
+          in: query
+          description: Number of items to skip
+          schema:
+            type: integer
+            minimum: 0
+            default: 0
+      responses:
+        "200":
+          description: List of reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Review"
+        "400":
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Create a review
+      description: |
+        Creates a new course or professor review.
+        Exactly one of `courseId` or `professorId` must be provided.
+      tags: [Review]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewPostInput"
+      responses:
+        "201":
+          description: Created review
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Review"
+        "400":
+          description: Invalid input (missing fields, both/neither courseId and professorId, out-of-range rating, foreign key violation)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /reviews/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          $ref: "#/components/schemas/UuidParam"
+        description: Review ID (UUID)
+
+    get:
+      summary: Get review by ID
+      description: Returns a single course or professor review by its UUID.
+      tags: [Review]
+      responses:
+        "200":
+          description: Review found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Review"
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "404":
+          description: Review not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 404
+                message: "review not found"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    patch:
+      summary: Update a review
+      description: Partially updates an existing review. Review text is automatically censored for profanity.
+      tags: [Review]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/ReviewPatchInput"
+      responses:
+        "200":
+          description: Updated review
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Review"
+        "400":
+          description: Invalid UUID or input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    delete:
+      summary: Delete a review
+      description: Deletes a review by its UUID.
+      tags: [Review]
+      responses:
+        "204":
+          description: Review deleted (no content)
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
 
   # top-level resource, no nesting needed
   /professors:
@@ -802,31 +1139,194 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/Error"
-  
-  /auth/signin: 
-    get: 
+
+  /students:
+    get:
+      summary: Get all students
+      description: Returns a list of all students with ID, first name, last name, email, graduation year, and preferences.
+      tags: [Student]
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          example: 10
+      responses:
+        "200":
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Create a student
+      description: Create a new student with the provided information.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentPostInput"
+      responses:
+        "201":
+          description: Student created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Get student by ID
+      description: Returns a single student by their UUID.
+      tags: [Student]
+      responses:
+        "200":
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    patch:
+      summary: Update a student
+      description: Update a student's information using their UUID.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentPatchInput"
+      responses:
+        "200":
+          description: Student updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID or bad input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    delete:
+      summary: Delete a student
+      description: Deletes a student by their UUID.
+      tags: [Student]
+      responses:
+        "204":
+          description: Student deleted successfully
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /auth/signin:
+    get:
       summary: Signin Feature with Google
       description: Redirects the user to Google's OAuth consent screen for authentication
       tags: [ Auth ]
-      responses: 
+      responses:
         "302":
           description: Redirect to Google OAuth consent screen
         "500":
           description: Internal server error
-          content: 
-            application/json: 
-              schema: 
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/Error"
               example:
                 code: 500
                 message: "Internal server error"
-  
+
   /auth/callback:
-    get: 
+    get:
       summary: Google OAuth callback
       description: Handles redirect from Google after authentication, validating Northeastern email, and creating or finding student
       tags: [ Auth ]
-      parameters: 
+      parameters:
         - name: code
           in: query
           required: true
@@ -836,29 +1336,29 @@ paths:
       responses:
         "200":
           description: Existing student logged in successfully
-          content: 
-            application/json: 
-              schema: 
-                type: object 
-                properties: 
-                  message: 
-                    type: string
-                    example: "Login successful"
-                  token: 
-                    type: string 
-                    description: JWT access token
-                    example: "eyJhbGciOi..."
-        "201": 
-          description: New student created successfully
           content:
-            application/json: 
-              schema: 
+            application/json:
+              schema:
                 type: object
                 properties:
-                  message: 
+                  message:
+                    type: string
+                    example: "Login successful"
+                  token:
+                    type: string
+                    description: JWT access token
+                    example: "eyJhbGciOi..."
+        "201":
+          description: New student created successfully
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  message:
                     type: string
                     example: "Signup successful"
-                  token: 
+                  token:
                     type: string
                     description: JWT access token
                     example: "eyJhbGciOi..."
@@ -873,9 +1373,9 @@ paths:
                 message: "Missing authorization code"
         "403":
           description: Email is not a Northeastern email
-          content: 
-            application/json: 
-              schema: 
+          content:
+            application/json:
+              schema:
                 $ref: "#/components/schemas/Error"
               example:
                 code: 403
@@ -889,8 +1389,15 @@ paths:
               example:
                 code: 500
                 message: "Internal server error"
-    
+
+
 components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+
   schemas:
     UuidParam:
       type: string
@@ -1245,3 +1752,278 @@ components:
             type: string
             enum: [boston, oakland, london]
           example: ["boston"]
+
+    # base fields shared by all reviews
+    BaseReview:
+      type: object
+      required:
+        - id
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: The unique ID of the review
+          example: "57166e68-57ee-4fd4-a08f-2b3ea3bcd1bb"
+        studentId:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the student who wrote the review (null if anonymous)
+          example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Rating from 1 (worst) to 5 (best)
+          example: 4
+        reviewText:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: The review content (profanity is censored automatically)
+          example: "Great course, highly recommend!"
+        tags:
+          type: array
+          nullable: true
+          items:
+            type: enum
+          description: Optional tags attached to the review
+          example: ["challenging", "rewarding"]
+        createdAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2026-01-15T10:30:00Z"
+
+    # course review — has courseId, no professorId
+    CourseReview:
+      allOf:
+        - $ref: "#/components/schemas/BaseReview"
+        - type: object
+          required:
+            - courseId
+          properties:
+            courseId:
+              type: string
+              format: uuid
+              description: The ID of the course being reviewed
+              example: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d"
+
+    # professor review — has professorId, no courseId
+    ProfessorReview:
+      allOf:
+        - $ref: "#/components/schemas/BaseReview"
+        - type: object
+          required:
+            - professorId
+          properties:
+            professorId:
+              type: string
+              format: uuid
+              description: The ID of the professor being reviewed
+              example: "c3d4e5f6-a7b8-9012-cdef-123456789012"
+
+    # discriminated union: exactly one of courseId or professorId will be present
+    Review:
+      oneOf:
+        - $ref: "#/components/schemas/CourseReview"
+        - $ref: "#/components/schemas/ProfessorReview"
+
+    # input for POST /reviews — exactly one of courseId or professorId must be provided
+    ReviewPostInput:
+      type: object
+      required:
+        - rating
+        - reviewText
+      properties:
+        studentId:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the student submitting the review (omit for anonymous)
+          example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Rating from 1 (worst) to 5 (best)
+          example: 4
+        reviewText:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: The review content
+          example: "Great course, highly recommend!"
+        courseId:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the course to review (mutually exclusive with professorId)
+          example: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d"
+        professorId:
+          type: string
+          format: uuid
+          nullable: true
+          description: The ID of the professor to review (mutually exclusive with courseId)
+          example: "c3d4e5f6-a7b8-9012-cdef-123456789012"
+        tags:
+          type: array
+          items:
+            type: string
+          description: Optional tags for the review
+          example: ["challenging", "rewarding"]
+
+    # input for PATCH /reviews/{id} — all fields optional
+    ReviewPatchInput:
+      type: object
+      properties:
+        rating:
+          type: integer
+          minimum: 1
+          maximum: 5
+          description: Updated rating
+          example: 5
+        reviewText:
+          type: string
+          minLength: 1
+          maxLength: 2000
+          description: Updated review content (profanity will be censored)
+          example: "Changed my mind, this course is excellent!"
+        tags:
+          type: array
+          nullable: true
+          items:
+            type: enum
+          description: Updated tags (null clears all tags)
+          example: ["rewarding"]
+
+
+    #student
+    Student:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - graduationYear
+        - preferences
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    StudentPostInput:
+      type: object
+      description: Fields required to create a new student.
+      required:
+        - firstName
+        - lastName
+        - email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
+
+    StudentPatchInput:
+      type: object
+      description: Fields allowed when updating a student.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [ exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced  ]
+
+    ProfThread:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UuidParam"
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        profReviewId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProfThreadPostInput:
+      type: object
+      required:
+        - studentId
+        - content
+      properties:
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    ProfThreadPatchInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000

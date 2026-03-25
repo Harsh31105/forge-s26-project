@@ -9,7 +9,7 @@ export interface Sample {
 
 export const SamplePostInputSchema = z.object({
     name: z.string().min(1, "Name cannot be empty")
-           .refine((s) => s === s.trim(), "Name cannot have leading/trailing spaces"),
+        .refine((s) => s === s.trim(), "Name cannot have leading/trailing spaces"),
 })
 export type SamplePostInputType = z.infer<typeof SamplePostInputSchema>;
 
