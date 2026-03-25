@@ -14,7 +14,7 @@ interface DegreeRequirement {
     required: boolean;
 }
 
-function parseCourseCode(text: string): { department: string; courseCode: number } | null {
+export function parseCourseCode(text: string): { department: string; courseCode: number } | null {
     const match = text.trim().match(/^([A-Z]+)\s+(\d{4,5})$/);
     if (!match) {
         return null;
@@ -25,7 +25,7 @@ function parseCourseCode(text: string): { department: string; courseCode: number
     };
 }
 
-function isChooseSection(headerText: string): boolean {
+export function isChooseSection(headerText: string): boolean {
     const lower = headerText.toLowerCase();
 
     // "Complete all of the following" is never a choose section
@@ -48,7 +48,7 @@ interface TableSection {
 
 
 // split table into sections delimited by areaheader rows, choice section if it is a "complete/choose one of the following":
-function buildSections($: cheerio.CheerioAPI, table: AnyNode): TableSection[] {
+export function buildSections($: cheerio.CheerioAPI, table: AnyNode): TableSection[] {
     const sections: TableSection[] = [];
     let currentIsChoice = false;
     let currentHoursRequired: number | null = null;
@@ -242,7 +242,10 @@ async function main() {
     }
 }
 
-main().catch((err) => {
-    console.error(err);
-    process.exit(1);
-});
+// Only run when executed directly, not when imported by tests
+if (process.env.NODE_ENV !== "test") {
+    main().catch((err) => {
+        console.error(err);
+        process.exit(1);
+    });
+}
