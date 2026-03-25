@@ -33,15 +33,10 @@ import { studentRoutes } from "./handler/student/routes";
 class App {
     public server: Express;
     public repo: Repository;
-    // Delete entirity of line 30
-    public db : NodePgDatabase
 
-    // Delete db parameter
-    constructor(repo: Repository, db: NodePgDatabase) {
+    constructor(repo: Repository) {
         this.server = express();
         this.repo = repo;
-        // Delete entirity of line 35
-        this.db = db;
 
         this.server.use(express.json());
         this.server.use(express.urlencoded({ extended: true }));
@@ -73,8 +68,7 @@ class App {
         const swaggerDocument = YAML.load(path.join(__dirname, "../../api/openapi.yaml"));
         this.server.use("/swagger/index.html", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-        // Delete DB parameter
-        registerRoutes(apiV1, this.repo, db);
+        registerRoutes(apiV1, this.repo);
 
         this.server.use(errorHandler);
         this.server.use((_req, res) => res.status(404).json({ error: "Route not found" }));
@@ -97,8 +91,7 @@ export function initApp(): App {
     const db = drizzle(pool);
     const repo = new Repository(pool, db, config.s3);
 
-    // DELETE THE DB PARAMATER, so only new App(repo)
-    return new App(repo, db);
+    return new App(repo);
 }
 
 function registerRoutes(router: Router, repo: Repository) {
