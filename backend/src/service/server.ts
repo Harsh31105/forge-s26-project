@@ -24,13 +24,15 @@ import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { AuthHandler } from "./handler/auth";
 import { authRoutes } from "./handler/auth/routes";
 import { authMiddleware } from "../auth/middleware";
-import { ProfThreadHandler } from "./handler/professorThreads";
-import { professorThreadRoutes } from "./handler/professorThreads/routes";
 import cookieParser from "cookie-parser";
 import { StudentHandler } from "./handler/student";
 import { studentRoutes } from "./handler/student/routes";
+import {FavouriteHandler} from "./handler/favourite";
+import {favouriteRoutes} from "./handler/favourite/routes";
 import { RMPHandler } from "./handler/rmp";
 import { rmpRoutes } from "./handler/rmp/routes";
+import { ProfThreadHandler } from "./handler/professorThreads";
+import { professorThreadRoutes } from "./handler/professorThreads/routes";
 
 class App {
     public server: Express;
@@ -108,9 +110,10 @@ function registerRoutes(router: Router, repo: Repository) {
     const reviewHandler = new ReviewHandler(repo.reviews);
     router.use("/reviews", reviewRoutes(reviewHandler));
 
-    const courseHandler = new CourseHandler(repo.courses);
+    const courseHandler = new CourseHandler(repo.courses, repo.favourites);
     router.use("/courses", courseRoutes(courseHandler));
 
+    // Handling Course-Threads - Starting with CourseReviews.
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 
@@ -122,4 +125,10 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const profThreadHandler = new ProfThreadHandler(repo.profThreads);
     router.use("/professor-reviews", professorThreadRoutes(profThreadHandler));
+
+    const studentHandler = new StudentHandler(repo.students);
+    router.use("/students", studentRoutes(studentHandler));
+
+    const favouritesHandler = new FavouriteHandler(repo.favourites);
+    router.use("/favourites", favouriteRoutes(favouritesHandler));
 }

@@ -8,6 +8,7 @@ import type {
   Course,
   CoursePatchInput,
   CoursePostInput,
+  Favourite,
   GetCoursesParams,
 } from "./northStarAPI.schemas";
 
@@ -59,7 +60,21 @@ export const getCourse = () => {
   const deleteCoursesId = (id: string) => {
     return customAxios<void>({ url: `/courses/${id}`, method: "DELETE" });
   };
-  return { getCourses, postCourses, getCoursesId, patchCoursesId, deleteCoursesId };
+  /**
+   * Returns a list of all Favourites corresponding to this Course.
+   * @summary Getting Favourites for this Course
+   */
+  const getCoursesIdFavourites = (id: string) => {
+    return customAxios<Favourite[]>({ url: `/courses/${id}/favourites`, method: "GET" });
+  };
+  return {
+    getCourses,
+    postCourses,
+    getCoursesId,
+    patchCoursesId,
+    deleteCoursesId,
+    getCoursesIdFavourites,
+  };
 };
 export type GetCoursesResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getCourse>["getCourses"]>>
@@ -75,4 +90,7 @@ export type PatchCoursesIdResult = NonNullable<
 >;
 export type DeleteCoursesIdResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getCourse>["deleteCoursesId"]>>
+>;
+export type GetCoursesIdFavouritesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["getCoursesIdFavourites"]>>
 >;

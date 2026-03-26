@@ -28,6 +28,8 @@ tags:
     description: Authentication Management Operations for Google OAuth 2.0
   - name: ProfessorReview
     description: API Endpoint for Specific Professor Review
+  - name: Favourite
+    description: Favourite CRUD Operations
 
 paths:
   /health:
@@ -597,6 +599,41 @@ paths:
             type: integer
             minimum: 1
             default: 10
+        # add below filtering params 
+        - name: department_id
+          in: query
+          description: Filter by department ID
+          schema:
+            type: integer
+        - name: course_code
+          in: query
+          description: Filter by course code
+          schema:
+            type: integer
+        - name: num_credits
+          in: query
+          description: Filter by number of credits
+          schema:
+            type: integer
+        - name: lecture_type
+          in: query
+          description: Filter by lecture type
+          schema:
+            type: string
+            enum: [lecture, lab, online]
+        - name: sortBy
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+            enum: [name, course_code, num_credits, created_at]
+        - name: sortOrder
+          in: query
+          description: Sort direction
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
       responses:
         "200":
           description: Successfully retrieved list of courses
@@ -768,6 +805,43 @@ paths:
               example:
                 code: 500
                 message: "Internal server error"
+
+  /courses/{id}/favourites:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the course to retrieve
+        example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+
+    get:
+      summary: Getting Favourites for this Course
+      description: Returns a list of all Favourites corresponding to this Course.
+      tags: [ Course ]
+      responses:
+        "200":
+          description: List of favourites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Favourite"
+        "400":
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
 
   /reviews:
     get:
@@ -958,6 +1032,38 @@ paths:
             type: integer
             minimum: 1
             default: 10
+        # add below filtering params
+        - name: firstName
+          in: query
+          description: Filter by first name
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          description: Filter by last name
+          schema:
+            type: string
+        - name: tags
+          in: query
+          description: Filter by location tags
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [boston, oakland, london]
+        - name: sortBy
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+            enum: [firstName, lastName, createdAt]
+        - name: sortOrder
+          in: query
+          description: Sort direction
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
       responses:
         "200":
           description: list of professors retrieved successfully
@@ -1272,6 +1378,46 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
 
+  /students/email/{email}:
+    parameters:
+      - name: email
+        in: path
+        required: true
+        description: Email
+        schema:
+          type: string
+          format: email
+
+    get:
+      summary: Get student by their Email
+      description: Returns a single student by their unique email-ID.
+      tags: [ Student ]
+      responses:
+        "200":
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
   /students/{id}:
     parameters:
       - name: id
@@ -1351,6 +1497,93 @@ paths:
           description: Student deleted successfully
         "400":
           description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /favourites:
+    get:
+      summary: Gets all the favourites for this student
+      description: Returns all the favourites for this particular student
+      tags: [ Favourite ]
+      responses:
+        "200":
+          description: List of favourites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Favourite"
+        "400":
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Adds a favourite to your list
+      description: Returns the favourite that was created.
+      tags: [ Favourite ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FavoritePostInput"
+      responses:
+        "201":
+          description: Created Favourite
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Favourite"
+        "400":
+          description: Bad request (validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /favourites/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Course UUID
+        schema:
+          type: string
+          format: uuid
+
+    delete:
+      summary: Deletes the favourite.
+      description: Removes a favourited course by a student.
+      tags: [ Favourite ]
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad request (invalid id)
           content:
             application/json:
               schema:
@@ -1451,7 +1684,6 @@ paths:
 
 security:
   - bearerAuth: []
-
 components:
   securitySchemes:
     bearerAuth:
@@ -2143,3 +2375,30 @@ components:
           type: string
           minLength: 1
           maxLength: 2000
+
+    Favourite:
+      type: object
+      required:
+        - studentId
+        - courseId
+        - createdAt
+        - updatedAt
+      properties:
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        courseId:
+          $ref: "#/components/schemas/UuidParam"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    FavoritePostInput:
+      type: object
+      required:
+        - course_id
+      properties:
+        course_id:
+          $ref: "#/components/schemas/UuidParam"

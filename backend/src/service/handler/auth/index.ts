@@ -4,6 +4,7 @@ import { config } from "../../../config/config";
 import { mapDBError } from "../../../errs/httpError";
 import type { StudentRepository } from "../../../storage/storage";
 import jwt from "jsonwebtoken";
+import {Student} from "../../../models/student";
 
 export class AuthHandler {
     constructor(
@@ -42,14 +43,14 @@ export class AuthHandler {
         }
 
         try {
-            await this.studentRepo.createStudent({
+            const student: Student = await this.studentRepo.createStudent({
                 firstName: payload.given_name!,
                 lastName: payload.family_name!,
                 email: payload.email,
             });
 
             const token = jwt.sign(
-                { email: payload.email, name: payload.name },
+                { id: student.id, email: payload.email, name: payload.name },
                 config.google.jwtSecret,
                 { expiresIn: "24h" }
             );
@@ -68,8 +69,10 @@ export class AuthHandler {
                     String(error.cause).includes("duplicate key") ||
                     String(error.cause).includes("unique constraint")
                 ) {
+                    const student: Student = await this.studentRepo.getStudentByEmail(payload.email);
+
                     const token = jwt.sign(
-                        { email: payload.email, name: payload.name },
+                        { id: student.id, email: payload.email, name: payload.name },
                         config.google.jwtSecret,
                         { expiresIn: "24h" }
                     );

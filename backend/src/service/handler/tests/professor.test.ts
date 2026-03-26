@@ -134,6 +134,60 @@ describe("ProfessorHandler Endpoints", () => {
       const res = await request(app).get("/professors?page=-1");
       expect(res.status).toBe(400);
     });
+
+    // filtering tests
+
+    test("filter by firstName", async () => {
+    const data: Professor[] = [{
+        id: "11111111-1111-1111-1111-111111111111",
+        firstName: "John",
+        lastName: "Doe",
+        tags: null,
+        createdAt: new Date(),
+        updatedAt: new Date(),
+    } as Professor];
+    repo.getProfessors.mockResolvedValue(data);
+    const res = await request(app).get("/professors?firstName=John");
+    expect(res.status).toBe(200);
+    expect(res.body.length).toBe(1);
+    expect(res.body[0].firstName).toBe("John");
+});
+
+    test("filter by lastName", async () => {
+        const data: Professor[] = [{
+            id: "11111111-1111-1111-1111-111111111111",
+            firstName: "John",
+            lastName: "Doe",
+            tags: null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        } as Professor];
+        repo.getProfessors.mockResolvedValue(data);
+        const res = await request(app).get("/professors?lastName=Doe");
+        expect(res.status).toBe(200);
+        expect(res.body.length).toBe(1);
+        expect(res.body[0].lastName).toBe("Doe");
+    });
+
+    test("sort by firstName desc", async () => {
+        const data: Professor[] = [{
+            id: "11111111-1111-1111-1111-111111111111",
+            firstName: "Zach",
+            lastName: "Smith",
+            tags: null,
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        } as Professor];
+        repo.getProfessors.mockResolvedValue(data);
+        const res = await request(app).get("/professors?sortBy=firstName&sortOrder=desc");
+        expect(res.status).toBe(200);
+        expect(res.body[0].firstName).toBe("Zach");
+    });
+
+    test("invalid sortOrder returns 400", async () => {
+        const res = await request(app).get("/professors?sortOrder=invalid");
+        expect(res.status).toBe(400);
+    });
   });
 
   // get professors id

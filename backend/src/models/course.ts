@@ -33,3 +33,14 @@ export type CoursePostInputType = z.infer<typeof CoursePostInputSchema>;
 export const CoursePatchInputSchema = CoursePostInputSchema.partial();
 export type CoursePatchInputType = z.infer<typeof CoursePatchInputSchema>
 
+
+
+export const CourseFilterSchema = z.object({
+    department_id: z.coerce.number().optional(),
+    course_code: z.coerce.number().optional(),
+    num_credits: z.coerce.number().optional(),
+    lecture_type: z.enum(["lecture", "lab", "online"]).optional(),
+    sortBy: z.enum(["name", "course_code", "num_credits", "created_at"]).optional(),
+    sortOrder: z.enum(["asc", "desc"]).default("asc"),
+});
+export type CourseFilterType = z.infer<typeof CourseFilterSchema>;

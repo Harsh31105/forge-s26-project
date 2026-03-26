@@ -8,7 +8,7 @@ import {
     Student
 } from "../../../models/student";
 import { validate as isUUID } from "uuid";
-import { errorHandler } from "../../../errs/httpError";
+import {errorHandler, NotFoundError} from "../../../errs/httpError";
 jest.setTimeout(30000);
 
 jest.mock("uuid", () => ({
@@ -30,12 +30,14 @@ describe("StudentHandler Endpoints", () => {
             createStudent: jest.fn(),
             patchStudent: jest.fn(),
             deleteStudent: jest.fn(),
+            getStudentByEmail: jest.fn()
         } as unknown as jest.Mocked<StudentRepository>;
 
         handler = new StudentHandler(repo);
 
         app = express();
         app.use(express.json());
+        app.use(errorHandler);
 
         app.get("/students", handler.handleGet.bind(handler));
         app.get("/students/:id", handler.handleGetByID.bind(handler));
@@ -102,6 +104,98 @@ describe("StudentHandler Endpoints", () => {
         test("repository error returns 500", async () => {
             repo.getStudents.mockRejectedValue(new Error());
             const res = await request(app).get("/students");
+            expect(res.status).toBe(500);
+        });
+    });
+
+    describe("GET /students/email/:email", () => {
+        let app: Express;
+        let repo: jest.Mocked<StudentRepository>;
+        let handler: StudentHandler;
+
+        const baseStudent: Student = {
+            id: "550e8400-e29b-41d4-a716-446655440000",
+            firstName: "John",
+            lastName: "Doe",
+            email: "john@test.com",
+            graduationYear: null,
+            preferences: [],
+            createdAt: new Date(),
+            updatedAt: new Date(),
+        };
+
+        const makeStudent = (overrides?: Partial<Student>): Student => ({
+            ...baseStudent,
+            ...overrides,
+        });
+
+        beforeEach(() => {
+            repo = {
+                getStudents: jest.fn(),
+                getStudentByID: jest.fn(),
+                createStudent: jest.fn(),
+                patchStudent: jest.fn(),
+                deleteStudent: jest.fn(),
+                getStudentByEmail: jest.fn(),
+            } as unknown as jest.Mocked<StudentRepository>;
+
+            handler = new StudentHandler(repo);
+
+            app = express();
+            app.use(express.json());
+
+            // Add route under test
+            app.get("/students/email/:email", handler.handleGetByEmail.bind(handler));
+
+            // Error handler must come after routes
+            app.use(errorHandler);
+
+            mockValidate.mockReturnValue(true);
+        });
+
+        afterEach(() => {
+            jest.clearAllMocks();
+        });
+
+        test("returns student by email", async () => {
+            repo.getStudentByEmail.mockResolvedValue(makeStudent());
+
+            const res = await request(app).get("/students/email/john@test.com");
+
+            expect(res.status).toBe(200);
+            expect(res.body).toMatchObject({
+                id: baseStudent.id,
+                firstName: baseStudent.firstName,
+                lastName: baseStudent.lastName,
+                email: baseStudent.email,
+                graduationYear: baseStudent.graduationYear,
+                preferences: baseStudent.preferences,
+            });
+        });
+
+        test("invalid email format returns 400", async () => {
+            const res = await request(app).get("/students/email/not-an-email");
+
+            expect(res.status).toBe(400);
+            expect(repo.getStudentByEmail).not.toHaveBeenCalled();
+        });
+
+        test("student not found returns 404", async () => {
+            repo.getStudentByEmail.mockRejectedValue(
+                new NotFoundError("Student not found")
+            );
+
+            const res = await request(app).get("/students/email/jane@test.com");
+
+            expect(res.status).toBe(404);
+            expect(res.body.message).toBe("Student not found");
+        });
+
+        test("repository error returns 500", async () => {
+            repo.getStudentByEmail.mockRejectedValue(new Error("DB failure"));
+
+            const res = await request(app).get("/students/email/john@test.com");
+
             expect(res.status).toBe(500);
         });
     });

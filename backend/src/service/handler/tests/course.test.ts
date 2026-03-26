@@ -1,7 +1,7 @@
 import request from "supertest";
 import express, { Express } from "express";
 import { CourseHandler } from "../course";
-import type { CourseRepository } from "../../../storage/storage";
+import type {CourseRepository, FavouriteRepository} from "../../../storage/storage";
 import { CoursePostInputType, CoursePatchInputType, Course } from "../../../models/course";
 import { validate as isUUID } from "uuid";
 import {errorHandler, NotFoundError} from "../../../errs/httpError";
@@ -60,6 +60,7 @@ const mockCourse3: Course = {
 describe("CourseHandler Endpoints", () => {
     let app: Express;
     let repo: jest.Mocked<CourseRepository>;
+    let favRepo: jest.Mocked<FavouriteRepository>;
     let handler: CourseHandler;
 
     beforeEach(() => {
@@ -69,9 +70,17 @@ describe("CourseHandler Endpoints", () => {
             createCourse: jest.fn(),
             patchCourse: jest.fn(),
             deleteCourse: jest.fn(),
+            handleGetStudentIDsWhoFavourited: jest.fn()
         } as unknown as jest.Mocked<CourseRepository>;
 
-        handler = new CourseHandler(repo);
+        favRepo = {
+            getStudentIDsWhoFavourited: jest.fn(),
+            getFavourites: jest.fn(),
+            postFavourite: jest.fn(),
+            deleteFavourite: jest.fn(),
+        } as unknown as jest.Mocked<FavouriteRepository>;
+
+        handler = new CourseHandler(repo, favRepo);
 
         app = express();
         app.use(express.json());
@@ -156,6 +165,35 @@ describe("CourseHandler Endpoints", () => {
             repo.getCourses.mockRejectedValue(new Error("DB error"));
             const res = await request(app).get("/courses");
             expect(res.status).toBe(500);
+        });
+
+        // filtering handler tests
+
+        test("filter by lecture_type", async () => {
+            repo.getCourses.mockResolvedValue([mockCourse1]);
+            const res = await request(app).get("/courses?lecture_type=lecture");
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(1);
+            expect(res.body[0].lecture_type).toBe("lecture");
+        });
+
+        test("filter by department_id", async () => {
+            repo.getCourses.mockResolvedValue([mockCourse1, mockCourse3]);
+            const res = await request(app).get("/courses?department_id=1");
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(2);
+        });
+
+        test("sort by name", async () => {
+            repo.getCourses.mockResolvedValue([mockCourse3, mockCourse2, mockCourse1]);
+            const res = await request(app).get("/courses?sortBy=name&sortOrder=asc");
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(3);
+        });
+
+        test("invalid lecture_type returns 400", async () => {
+            const res = await request(app).get("/courses?lecture_type=invalid");
+            expect(res.status).toBe(400);
         });
     });
 
@@ -468,5 +506,21 @@ describe("CourseHandler Endpoints", () => {
             const res = await request(app).delete(`/courses/${mockCourse1.id}`);
             expect(res.status).toBe(500);
         });
-    }); 
+    });
+
+    describe("GET /courses/:id/favourites", () => {
+        test("returns student IDs who favourited course", async () => {
+            const mockFavs = [{ student_id: "stu1" }, { student_id: "stu2" }];
+            const favRepo = { getStudentIDsWhoFavourited: jest.fn().mockResolvedValue(mockFavs) };
+            const handlerWithFav = new CourseHandler(repo, favRepo as any);
+            const appWithFav = express();
+            appWithFav.use(express.json());
+            appWithFav.get("/courses/:id/favourites", handlerWithFav.handleGetStudentIDsWhoFavourited.bind(handlerWithFav));
+            appWithFav.use(errorHandler);
+
+            const res = await request(appWithFav).get(`/courses/${mockCourse1.id}/favourites`);
+            expect(res.status).toBe(200);
+            expect(res.body).toEqual(mockFavs);
+        });
+    });
 });

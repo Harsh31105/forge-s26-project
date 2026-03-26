@@ -3,6 +3,7 @@ import jwt from "jsonwebtoken";
 import { config } from "../config/config";
 
 export interface UserPayload {
+    id: string;
     email: string;
     name: string;
     iat?: number;
@@ -24,7 +25,7 @@ export function authMiddleware(req: Request, res: Response, next: NextFunction):
 
     try {
         const decodedToken = jwt.verify(token, config.google.jwtSecret) as UserPayload;
-        (req as any).user = decodedToken;
+        req.user = decodedToken;
         next();
     } catch (err) {
         res.status(401).json({ error: "Invalid or expired token" });
