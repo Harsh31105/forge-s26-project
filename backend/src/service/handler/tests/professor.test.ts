@@ -196,13 +196,19 @@ describe("ProfessorHandler Endpoints", () => {
       expect(res.status).toBe(400);
     });
 
-    test("professor has no RMP data returns 404", async () => {
+    test("professor has no RMP data returns 200 with null values", async () => {
       rmpRepo.getRMPByProfessorID.mockRejectedValue(
           new NotFoundError("RMP data not found for given professor ID")
       );
       const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
-      expect(res.status).toBe(404);
-  });
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({
+          professorId: "11111111-1111-1111-1111-111111111111",
+          ratingAvg: null,
+          ratingWta: null,
+          avgDifficulty: null,
+      });
+    });
 
     test("repo error returns 500", async () => {
       rmpRepo.getRMPByProfessorID.mockRejectedValue(new Error("DB error"));

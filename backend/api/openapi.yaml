@@ -1164,15 +1164,6 @@ paths:
               example:
                 code: 400
                 message: "invalid professor id was given"
-        "404":
-          description: RMP data not found for professor
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/Error"
-              example:
-                code: 404
-                message: "RMP data not found for given professor"
         "500":
           description: internal server error
           content:
