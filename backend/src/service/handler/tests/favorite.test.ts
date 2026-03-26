@@ -39,7 +39,7 @@ describe("FavouriteHandler Endpoints", () => {
         app.use(express.json());
         // mock authentication middleware for req.user
         app.use((req, _res, next) => {
-            req.user = { id: baseFavourite.studentId };
+            req.user = { id: baseFavourite.studentId, email: "meow@husky.neu.edu", name: "Meow" };
             next();
         });
 

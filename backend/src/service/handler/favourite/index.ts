@@ -12,7 +12,7 @@ export class FavouriteHandler {
 
     async handleGet(req: Request, res: Response): Promise<void> {
         const studentID = req.user?.id;
-        console.log("STUDENT ID: ", studentID);
+        if(!studentID) throw BadRequest("Student ID not found");
 
         let favourites: Favourite[]
         try {
@@ -27,7 +27,7 @@ export class FavouriteHandler {
 
     async handlePost(req: Request, res: Response): Promise<void> {
         const studentID = req.user?.id;
-        console.log("STUDENT ID: ", studentID);
+        if(!studentID) throw BadRequest("Student ID not found");
 
         const result = FavouritePostInputSchema.safeParse(req.body);
         if (!result.success) throw BadRequest("unable to parse input for post-favourite");
@@ -46,7 +46,7 @@ export class FavouriteHandler {
 
     async handleDelete(req: Request, res: Response): Promise<void> {
         const studentID = req.user?.id;
-        console.log("STUDENT ID: ", studentID);
+        if(!studentID) throw BadRequest("Student ID not found");
         const courseID = req.params.id as string;
 
         try {
