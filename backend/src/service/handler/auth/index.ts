@@ -69,10 +69,10 @@ export class AuthHandler {
                     String(error.cause).includes("duplicate key") ||
                     String(error.cause).includes("unique constraint")
                 ) {
-                    // TODO: Get Student by Email.
+                    const student: Student = await this.studentRepo.getStudentByEmail(payload.email);
 
                     const token = jwt.sign(
-                        { email: payload.email, name: payload.name },
+                        { id: student.id, email: payload.email, name: payload.name },
                         config.google.jwtSecret,
                         { expiresIn: "24h" }
                     );

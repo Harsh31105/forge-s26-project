@@ -1446,7 +1446,7 @@ paths:
         required: true
         description: Course UUID
         schema:
-          type: course
+          type: string
           format: uuid
 
     delete:

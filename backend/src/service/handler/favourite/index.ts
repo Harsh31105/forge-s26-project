@@ -1,4 +1,3 @@
-import { AuthenticatedRequest } from "../../../types/express";
 import {
     Favourite,
     FavouritePostInputSchema,
@@ -12,7 +11,7 @@ export class FavouriteHandler {
     constructor(private readonly repo: FavouriteRepository) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
-        const studentID = (req as AuthenticatedRequest).user.id;
+        const studentID = req.user?.id;
         console.log("STUDENT ID: ", studentID);
 
         let favourites: Favourite[]
@@ -27,7 +26,7 @@ export class FavouriteHandler {
     }
 
     async handlePost(req: Request, res: Response): Promise<void> {
-        const studentID = (req as AuthenticatedRequest).user.id;
+        const studentID = req.user?.id;
         console.log("STUDENT ID: ", studentID);
 
         const result = FavouritePostInputSchema.safeParse(req.body);
@@ -46,7 +45,7 @@ export class FavouriteHandler {
     }
 
     async handleDelete(req: Request, res: Response): Promise<void> {
-        const studentID = (req as AuthenticatedRequest).user.id;
+        const studentID = req.user?.id;
         console.log("STUDENT ID: ", studentID);
         const courseID = req.params.id as string;
 
