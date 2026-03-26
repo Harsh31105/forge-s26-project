@@ -19,7 +19,7 @@ export class RMPHandler {
         const schoolId = await getNortheasternSchoolId();
 
         // get all professors from DB and fetch+match RMP data
-        const professors = await this.professorRepo.getProfessors({ page: 1, limit: 1000 }); // 1 param before query ticket is in
+        const professors = await this.professorRepo.getProfessors({ page: 1, limit: 1000 }, { sortOrder: "asc" }); // 1 param before query ticket is in
         const matched = await fetchAndMatchRMPData(professors, schoolId);
 
         // bulk insert
