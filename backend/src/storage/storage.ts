@@ -36,7 +36,11 @@ import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
-import {Student, StudentPatchInputType, StudentPostInputType} from "../models/student";
+import {
+  Student,
+  StudentPatchInputType,
+  StudentPostInputType
+} from "../models/student";
 import { StudentRepositorySchema } from "./postgres/schema/students";
 
 import type {
@@ -174,6 +178,7 @@ export interface ProfessorRepository {
 
 export interface StudentRepository {
     getStudents(pagination: PaginationType): Promise<Student[]>;
+    getStudentByEmail(email: string): Promise<Student>;
     getStudentByID(id: string): Promise<Student>;
     createStudent(input: StudentPostInputType): Promise<Student>;
     patchStudent(id: string, input: StudentPatchInputType): Promise<Student>;
