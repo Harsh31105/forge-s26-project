@@ -1,4 +1,4 @@
-import type { CourseRepository } from "../../../storage/storage";
+import type {CourseRepository, StudentRepository} from "../../../storage/storage";
 import {
     Course, CoursePatchInputSchema, CoursePatchInputType,
     CoursePostInputSchema,
@@ -13,9 +13,11 @@ import {
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
+import {Student} from "../../../models/student";
 
 export class CourseHandler {
-    constructor(private readonly repo: CourseRepository) {}
+    constructor(private readonly courseRepo: CourseRepository,
+                private readonly favRepo: FavouriteRepository) {}
 
     async handleGet(req: Request, res: Response) :Promise<void> {
         const result = PaginationSchema.safeParse(req.query);
@@ -27,7 +29,7 @@ export class CourseHandler {
         let courses: Course[];
 
         try {
-            courses = await this.repo.getCourses(pagination);
+            courses = await this.courseRepo.getCourses(pagination);
         } catch (err) {
             console.log("Failed to get courses: ", err);
             throw mapDBError(err, "failed to retrieve courses");
@@ -42,7 +44,7 @@ export class CourseHandler {
         if (!isUUID(id)) throw BadRequest("Empty ID cannot be given")
 
         try {
-            course = await this.repo.getCourseByID(id);
+            course = await this.courseRepo.getCourseByID(id);
         } catch (err) {
             console.log(err);
             if (err instanceof NotFoundError) throw NotFound("course not found");
@@ -62,7 +64,7 @@ export class CourseHandler {
 
         let newCourse: Course;
         try {
-            newCourse = await this.repo.createCourse(postCourse);
+            newCourse = await this.courseRepo.createCourse(postCourse);
         } catch (err) {
             console.log(err);
             throw mapDBError(err, "failed to post course");
@@ -83,7 +85,7 @@ export class CourseHandler {
 
         let updatedCourse: Course;
         try {
-            updatedCourse = await this.repo.patchCourse(id, patchCourse);
+            updatedCourse = await this.courseRepo.patchCourse(id, patchCourse);
         } catch (err) {
             console.log(err);
             throw mapDBError(err, "failed to patch course");
@@ -97,12 +99,27 @@ export class CourseHandler {
         if (!isUUID(id)) throw BadRequest("invalid ID was given");
 
         try {
-            await this.repo.deleteCourse(id);
+            await this.courseRepo.deleteCourse(id);
         } catch (err) {
             console.log(err);
             throw mapDBError(err, "failed to delete course");
         }
 
         res.sendStatus(204);
+    }
+
+    async handleGetStudentIDsWhoFavourited(req: Request, res: Response): Promise<void> {
+        const courseID = req.params.id as string;
+        if (!isUUID(courseID)) throw BadRequest("Empty ID cannot be given");
+
+        let students: Student[];
+        try {
+            students = await this.favRepo.getStudentIDsWhoFavourited(courseID);
+        } catch (err) {
+            console.log(err);
+            throw mapDBError(err, "failed to retrive students");
+        }
+
+        res.status(200).json(students)
     }
 }
