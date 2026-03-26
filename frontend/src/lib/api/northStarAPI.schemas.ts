@@ -256,6 +256,18 @@ export interface ProfessorPatchInput {
   tags?: ProfessorPatchInputTagsItem[] | null;
 }
 
+export interface Rmp {
+  id: number;
+  professorId: string;
+  /** @nullable */
+  ratingAvg?: string | null;
+  /** @nullable */
+  ratingWta?: number | null;
+  avgDifficulty: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface BaseReview {
   /** The unique ID of the review */
   id: string;
@@ -280,7 +292,7 @@ export interface BaseReview {
    * Optional tags attached to the review
    * @nullable
    */
-  tags?: unknown[] | null;
+  tags?: string[] | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -350,7 +362,7 @@ export interface ReviewPatchInput {
    * Updated tags (null clears all tags)
    * @nullable
    */
-  tags?: unknown[] | null;
+  tags?: string[] | null;
 }
 
 export type StudentPreferencesItem =
