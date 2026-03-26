@@ -9,83 +9,99 @@ import type {
   CourseThreadPatchInput,
   CourseThreadPostInput,
   GetCourseReviewsIdThreadsParams,
-  UuidParam
-} from './northStarAPI.schemas';
+  UuidParam,
+} from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getCourseReview = () => {
-/**
+export const getCourseReview = () => {
+  /**
  * Returns all thread messages associated with a single course review (identified by the course review UUID).
 This is used to display the discussion/comments under a course review in the UI.
 
  * @summary List threads for a course review
  */
-const getCourseReviewsIdThreads = (
-    id: UuidParam,
-    params?: GetCourseReviewsIdThreadsParams,
- ) => {
-      return customAxios<CourseThread[]>(
-      {url: `/course-reviews/${id}/threads`, method: 'GET',
-        params
-    },
-      );
-    }
+  const getCourseReviewsIdThreads = (id: UuidParam, params?: GetCourseReviewsIdThreadsParams) => {
+    return customAxios<CourseThread[]>({
+      url: `/course-reviews/${id}/threads`,
+      method: "GET",
+      params,
+    });
+  };
   /**
  * Creates a new thread message under a specific course review.
 The course review ID comes from the path, and the request body provides the studentId and message content.
 
  * @summary Create a thread on a course review
  */
-const postCourseReviewsIdThreads = (
+  const postCourseReviewsIdThreads = (
     id: UuidParam,
     courseThreadPostInput: CourseThreadPostInput,
- ) => {
-      return customAxios<CourseThread>(
-      {url: `/course-reviews/${id}/threads`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: courseThreadPostInput
-    },
-      );
-    }
+  ) => {
+    return customAxios<CourseThread>({
+      url: `/course-reviews/${id}/threads`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: courseThreadPostInput,
+    });
+  };
   /**
  * Updates an existing thread message under a course review.
 The course review ID and thread ID are provided in the path; the request body includes the updated content.
 
  * @summary Update a thread
  */
-const patchCourseReviewsCourseReviewIdThreadsThreadId = (
+  const patchCourseReviewsCourseReviewIdThreadsThreadId = (
     courseReviewId: UuidParam,
     threadId: UuidParam,
     courseThreadPatchInput: CourseThreadPatchInput,
- ) => {
-      return customAxios<CourseThread>(
-      {url: `/course-reviews/${courseReviewId}/threads/${threadId}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: courseThreadPatchInput
-    },
-      );
-    }
+  ) => {
+    return customAxios<CourseThread>({
+      url: `/course-reviews/${courseReviewId}/threads/${threadId}`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: courseThreadPatchInput,
+    });
+  };
   /**
  * Deletes a thread message under a course review.
 The course review ID and thread ID are provided in the path.
 
  * @summary Delete a thread
  */
-const deleteCourseReviewsCourseReviewIdThreadsThreadId = (
+  const deleteCourseReviewsCourseReviewIdThreadsThreadId = (
     courseReviewId: UuidParam,
     threadId: UuidParam,
- ) => {
-      return customAxios<void>(
-      {url: `/course-reviews/${courseReviewId}/threads/${threadId}`, method: 'DELETE'
-    },
-      );
-    }
-  return {getCourseReviewsIdThreads,postCourseReviewsIdThreads,patchCourseReviewsCourseReviewIdThreadsThreadId,deleteCourseReviewsCourseReviewIdThreadsThreadId}};
-export type GetCourseReviewsIdThreadsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourseReview>['getCourseReviewsIdThreads']>>>
-export type PostCourseReviewsIdThreadsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourseReview>['postCourseReviewsIdThreads']>>>
-export type PatchCourseReviewsCourseReviewIdThreadsThreadIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourseReview>['patchCourseReviewsCourseReviewIdThreadsThreadId']>>>
-export type DeleteCourseReviewsCourseReviewIdThreadsThreadIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourseReview>['deleteCourseReviewsCourseReviewIdThreadsThreadId']>>>
+  ) => {
+    return customAxios<void>({
+      url: `/course-reviews/${courseReviewId}/threads/${threadId}`,
+      method: "DELETE",
+    });
+  };
+  return {
+    getCourseReviewsIdThreads,
+    postCourseReviewsIdThreads,
+    patchCourseReviewsCourseReviewIdThreadsThreadId,
+    deleteCourseReviewsCourseReviewIdThreadsThreadId,
+  };
+};
+export type GetCourseReviewsIdThreadsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourseReview>["getCourseReviewsIdThreads"]>>
+>;
+export type PostCourseReviewsIdThreadsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourseReview>["postCourseReviewsIdThreads"]>>
+>;
+export type PatchCourseReviewsCourseReviewIdThreadsThreadIdResult = NonNullable<
+  Awaited<
+    ReturnType<
+      ReturnType<typeof getCourseReview>["patchCourseReviewsCourseReviewIdThreadsThreadId"]
+    >
+  >
+>;
+export type DeleteCourseReviewsCourseReviewIdThreadsThreadIdResult = NonNullable<
+  Awaited<
+    ReturnType<
+      ReturnType<typeof getCourseReview>["deleteCourseReviewsCourseReviewIdThreadsThreadId"]
+    >
+  >
+>;

@@ -91,12 +91,15 @@ describe("isChooseSection", () => {
     test("returns true for 'Complete any one course'", () => {
         expect(isChooseSection("Complete any one course")).toBe(true);
     });
-
 });
 
 function sectionsFrom(html: string) {
-    const $ = cheerio.load(html);
-    const table = $("table.sc_courselist")[0]!;
+    const $ = cheerio.load(html); // $ is now automatically typed
+    const table = $("table.sc_courselist").get(0);
+
+    if (!table) throw new Error("No course list table found");
+
+    // @ts-ignore
     return { sections: buildSections($, table), $ };
 }
 

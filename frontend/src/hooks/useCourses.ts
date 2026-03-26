@@ -35,6 +35,23 @@ export function useCourse(courseId: string) {
     return { course, isLoading, error: error?.message || null, refetch };
 }
 
+export function useCourseFavourites(courseId: string) {
+    const courseAPI = getCourse();
+
+    const {
+        data: favouritesData,
+        isLoading,
+        error,
+        refetch,
+    } = useQuery({
+        queryKey: ["courses", courseId, "favourites"],
+        queryFn: () => courseAPI.getCoursesIdFavourites(courseId),
+        enabled: !!courseId,
+    });
+
+    return { favourites: favouritesData || [], isLoading, error: error?.message || null, refetch };
+}
+
 export function useCourseMutations() {
     const queryClient = useQueryClient();
     const courseAPI = getCourse();

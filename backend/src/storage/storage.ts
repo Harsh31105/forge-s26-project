@@ -38,7 +38,11 @@ import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
-import {Student, StudentPatchInputType, StudentPostInputType} from "../models/student";
+import {
+  Student,
+  StudentPatchInputType,
+  StudentPostInputType
+} from "../models/student";
 import { StudentRepositorySchema } from "./postgres/schema/students";
 
 import type {
@@ -47,6 +51,8 @@ import type {
   ProfessorThreadPatchInputType,
 } from "../models/profThreads";
 import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
+import {Favourite, FavouritePostInputType} from "../models/favourite";
+import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 
 export class Repository {
   public readonly samples: SampleRepository;
@@ -57,8 +63,9 @@ export class Repository {
   public readonly traceDocuments: TraceDocumentRepository;
   public readonly reviews: ReviewRepository;
   public readonly students: StudentRepository;
+  public readonly favourites: FavouriteRepository;
   private readonly pool: Pool;
-  private readonly db: NodePgDatabase; 
+  private readonly db: NodePgDatabase;
 
   constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
     this.pool = pool;
@@ -71,7 +78,7 @@ export class Repository {
     this.reviews = new ReviewRepositorySchema(db);
     this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
     this.students = new StudentRepositorySchema(db);
-
+    this.favourites = new FavouriteRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -173,8 +180,17 @@ export interface ProfessorRepository {
 
 export interface StudentRepository {
     getStudents(pagination: PaginationType): Promise<Student[]>;
+    getStudentByEmail(email: string): Promise<Student>;
     getStudentByID(id: string): Promise<Student>;
     createStudent(input: StudentPostInputType): Promise<Student>;
     patchStudent(id: string, input: StudentPatchInputType): Promise<Student>;
     deleteStudent(id: string): Promise<void>;
+}
+
+export interface FavouriteRepository {
+  getFavourites(studentID: string): Promise<Favourite[]>;
+  postFavourite(studentID: string, input: FavouritePostInputType): Promise<Favourite>;
+  deleteFavourite(studentID: string, courseID: string): Promise<void>;
+
+  getStudentIDsWhoFavourited(courseID: string): Promise<Favourite[]>;
 }
