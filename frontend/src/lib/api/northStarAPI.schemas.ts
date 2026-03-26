@@ -464,6 +464,17 @@ export interface ProfThreadPatchInput {
   content?: string;
 }
 
+export interface Favourite {
+  studentId: UuidParam;
+  courseId: UuidParam;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface FavoritePostInput {
+  course_id: UuidParam;
+}
+
 export type GetCourseReviewsIdThreadsParams = {
   /**
    * Page number of pagination
