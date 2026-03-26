@@ -6,6 +6,7 @@ import {
 } from "../../../models/favourite";
 import {BadRequest, mapDBError} from "../../../errs/httpError";
 import { Request, Response } from "express";
+import { FavouriteRepository } from "../../../storage/storage";
 
 export class FavouriteHandler {
     constructor(private readonly repo: FavouriteRepository) {}
@@ -44,10 +45,10 @@ export class FavouriteHandler {
 
     async handleDelete(req: Request, res: Response): Promise<void> {
         const studentID = (req as AuthenticatedRequest).user.id;
-        const courseID = req.params.id;
+        const courseID = req.params.id as string;
 
         try {
-            await this.repo.deleteFavourites(studentID, courseID);
+            await this.repo.deleteFavourite(studentID, courseID);
         } catch (err) {
             console.log(err);
             throw mapDBError(err, "failed to delete favourite");

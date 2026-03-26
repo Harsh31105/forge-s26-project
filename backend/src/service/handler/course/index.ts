@@ -1,4 +1,4 @@
-import type {CourseRepository, StudentRepository} from "../../../storage/storage";
+import type { CourseRepository, FavouriteRepository } from "../../../storage/storage";
 import {
     Course, CoursePatchInputSchema, CoursePatchInputType,
     CoursePostInputSchema,
@@ -13,8 +13,7 @@ import {
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
-import {Student} from "../../../models/student";
-import {Favourite} from "../../../models/favourite";
+import { Favourite } from "../../../models/favourite";
 
 export class CourseHandler {
     constructor(private readonly courseRepo: CourseRepository,
