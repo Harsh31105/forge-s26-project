@@ -9,96 +9,75 @@ import type {
   ProfThread,
   ProfThreadPatchInput,
   ProfThreadPostInput,
-  UuidParam,
-} from "./northStarAPI.schemas";
+  UuidParam
+} from './northStarAPI.schemas';
 
-import { customAxios } from "./apiClient";
+import { customAxios } from './apiClient';
 
-export const getProfessorReview = () => {
-  /**
+
+
+
+  export const getProfessorReview = () => {
+/**
  * Returns all thread messages associated with a single professor review.
 
  * @summary List threads for a professor review
  */
-  const getProfessorReviewsIdThreads = (
+const getProfessorReviewsIdThreads = (
     id: UuidParam,
     params?: GetProfessorReviewsIdThreadsParams,
-  ) => {
-    return customAxios<ProfThread[]>({
-      url: `/professor-reviews/${id}/threads`,
-      method: "GET",
-      params,
-    });
-  };
+ ) => {
+      return customAxios<ProfThread[]>(
+      {url: `/professor-reviews/${id}/threads`, method: 'GET',
+        params
+    },
+      );
+    }
   /**
  * Creates a new thread message under a professor review.
 
  * @summary Create a thread on a professor review
  */
-  const postProfessorReviewsIdThreads = (
+const postProfessorReviewsIdThreads = (
     id: UuidParam,
     profThreadPostInput: ProfThreadPostInput,
-  ) => {
-    return customAxios<ProfThread>({
-      url: `/professor-reviews/${id}/threads`,
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      data: profThreadPostInput,
-    });
-  };
+ ) => {
+      return customAxios<ProfThread>(
+      {url: `/professor-reviews/${id}/threads`, method: 'POST',
+      headers: {'Content-Type': 'application/json', },
+      data: profThreadPostInput
+    },
+      );
+    }
   /**
-   * @summary Update a professor review thread
-   */
-  const patchProfessorReviewsProfessorReviewIdThreadsThreadId = (
+ * @summary Update a professor review thread
+ */
+const patchProfessorReviewsProfessorReviewIdThreadsThreadId = (
     professorReviewId: UuidParam,
     threadId: UuidParam,
     profThreadPatchInput: ProfThreadPatchInput,
-  ) => {
-    return customAxios<ProfThread>({
-      url: `/professor-reviews/${professorReviewId}/threads/${threadId}`,
-      method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      data: profThreadPatchInput,
-    });
-  };
+ ) => {
+      return customAxios<ProfThread>(
+      {url: `/professor-reviews/${professorReviewId}/threads/${threadId}`, method: 'PATCH',
+      headers: {'Content-Type': 'application/json', },
+      data: profThreadPatchInput
+    },
+      );
+    }
   /**
-   * @summary Delete a professor review thread
-   */
-  const deleteProfessorReviewsProfessorReviewIdThreadsThreadId = (
+ * @summary Delete a professor review thread
+ */
+const deleteProfessorReviewsProfessorReviewIdThreadsThreadId = (
     professorReviewId: UuidParam,
     threadId: UuidParam,
-  ) => {
-    return customAxios<void>({
-      url: `/professor-reviews/${professorReviewId}/threads/${threadId}`,
-      method: "DELETE",
-    });
-  };
-  return {
-    getProfessorReviewsIdThreads,
-    postProfessorReviewsIdThreads,
-    patchProfessorReviewsProfessorReviewIdThreadsThreadId,
-    deleteProfessorReviewsProfessorReviewIdThreadsThreadId,
-  };
-};
-export type GetProfessorReviewsIdThreadsResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof getProfessorReview>["getProfessorReviewsIdThreads"]>>
->;
-export type PostProfessorReviewsIdThreadsResult = NonNullable<
-  Awaited<ReturnType<ReturnType<typeof getProfessorReview>["postProfessorReviewsIdThreads"]>>
->;
-export type PatchProfessorReviewsProfessorReviewIdThreadsThreadIdResult = NonNullable<
-  Awaited<
-    ReturnType<
-      ReturnType<typeof getProfessorReview>["patchProfessorReviewsProfessorReviewIdThreadsThreadId"]
-    >
-  >
->;
-export type DeleteProfessorReviewsProfessorReviewIdThreadsThreadIdResult = NonNullable<
-  Awaited<
-    ReturnType<
-      ReturnType<
-        typeof getProfessorReview
-      >["deleteProfessorReviewsProfessorReviewIdThreadsThreadId"]
-    >
-  >
->;
+ ) => {
+      return customAxios<void>(
+      {url: `/professor-reviews/${professorReviewId}/threads/${threadId}`, method: 'DELETE'
+    },
+      );
+    }
+  return {getProfessorReviewsIdThreads,postProfessorReviewsIdThreads,patchProfessorReviewsProfessorReviewIdThreadsThreadId,deleteProfessorReviewsProfessorReviewIdThreadsThreadId}};
+export type GetProfessorReviewsIdThreadsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessorReview>['getProfessorReviewsIdThreads']>>>
+export type PostProfessorReviewsIdThreadsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessorReview>['postProfessorReviewsIdThreads']>>>
+export type PatchProfessorReviewsProfessorReviewIdThreadsThreadIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessorReview>['patchProfessorReviewsProfessorReviewIdThreadsThreadId']>>>
+export type DeleteProfessorReviewsProfessorReviewIdThreadsThreadIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getProfessorReview>['deleteProfessorReviewsProfessorReviewIdThreadsThreadId']>>>

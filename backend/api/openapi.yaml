@@ -603,6 +603,41 @@ paths:
             type: integer
             minimum: 1
             default: 10
+        # add below filtering params 
+        - name: department_id
+          in: query
+          description: Filter by department ID
+          schema:
+            type: integer
+        - name: course_code
+          in: query
+          description: Filter by course code
+          schema:
+            type: integer
+        - name: num_credits
+          in: query
+          description: Filter by number of credits
+          schema:
+            type: integer
+        - name: lecture_type
+          in: query
+          description: Filter by lecture type
+          schema:
+            type: string
+            enum: [lecture, lab, online]
+        - name: sortBy
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+            enum: [name, course_code, num_credits, created_at]
+        - name: sortOrder
+          in: query
+          description: Sort direction
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
       responses:
         "200":
           description: Successfully retrieved list of courses
@@ -965,6 +1000,38 @@ paths:
             type: integer
             minimum: 1
             default: 10
+        # add below filtering params
+        - name: firstName
+          in: query
+          description: Filter by first name
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          description: Filter by last name
+          schema:
+            type: string
+        - name: tags
+          in: query
+          description: Filter by location tags
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [boston, oakland, london]
+        - name: sortBy
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+            enum: [firstName, lastName, createdAt]
+        - name: sortOrder
+          in: query
+          description: Sort direction
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
       responses:
         "200":
           description: list of professors retrieved successfully
