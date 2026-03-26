@@ -166,6 +166,35 @@ describe("CourseHandler Endpoints", () => {
             const res = await request(app).get("/courses");
             expect(res.status).toBe(500);
         });
+
+        // filtering handler tests
+
+        test("filter by lecture_type", async () => {
+            repo.getCourses.mockResolvedValue([mockCourse1]);
+            const res = await request(app).get("/courses?lecture_type=lecture");
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(1);
+            expect(res.body[0].lecture_type).toBe("lecture");
+        });
+
+        test("filter by department_id", async () => {
+            repo.getCourses.mockResolvedValue([mockCourse1, mockCourse3]);
+            const res = await request(app).get("/courses?department_id=1");
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(2);
+        });
+
+        test("sort by name", async () => {
+            repo.getCourses.mockResolvedValue([mockCourse3, mockCourse2, mockCourse1]);
+            const res = await request(app).get("/courses?sortBy=name&sortOrder=asc");
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(3);
+        });
+
+        test("invalid lecture_type returns 400", async () => {
+            const res = await request(app).get("/courses?lecture_type=invalid");
+            expect(res.status).toBe(400);
+        });
     });
 
     describe("GET /courses/:id", () => {

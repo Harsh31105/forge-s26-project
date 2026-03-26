@@ -11,11 +11,12 @@ import type {
   Review,
   ReviewPatchInputType,
 } from "../models/review";
-import {SampleRepositorySchema } from "./postgres/schema/samples";
+import { SampleRepositorySchema } from "./postgres/schema/samples";
 import { ReviewRepositorySchema } from "./postgres/schema/reviews";
 
 import type {
   Course,
+  CourseFilterType,
   CoursePatchInputType,
   CoursePostInputType,
 } from "../models/course";
@@ -29,6 +30,7 @@ import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
 import { PaginationType } from "utils/pagination";
 import type {
   Professor,
+  ProfessorFilterType,
   ProfessorPatchInputType,
   ProfessorPostInputType,
 } from "../models/professor";
@@ -127,7 +129,7 @@ export interface ReviewRepository {
 }
 
 export interface CourseRepository {
-    getCourses(pagination: PaginationType): Promise<Course[]>;
+    getCourses(pagination: PaginationType, filters: CourseFilterType): Promise<Course[]>;
     getCourseByID(id: string): Promise<Course>;
     createCourse(input: CoursePostInputType): Promise<Course>;
     patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
@@ -166,7 +168,7 @@ export interface ProfThreadRepository {
 }
 
 export interface ProfessorRepository {
-  getProfessors(pagination: PaginationType): Promise<Professor[]>;
+  getProfessors(pagination: PaginationType, filters: ProfessorFilterType): Promise<Professor[]>;
   getProfessorByID(id: string): Promise<Professor>;
   createProfessor(input: ProfessorPostInputType): Promise<Professor>;
   patchProfessor(

@@ -525,7 +525,59 @@ export type GetCoursesParams = {
    * @minimum 1
    */
   limit?: number;
+  /**
+   * Filter by department ID
+   */
+  department_id?: number;
+  /**
+   * Filter by course code
+   */
+  course_code?: number;
+  /**
+   * Filter by number of credits
+   */
+  num_credits?: number;
+  /**
+   * Filter by lecture type
+   */
+  lecture_type?: GetCoursesLectureType;
+  /**
+   * Field to sort by
+   */
+  sortBy?: GetCoursesSortBy;
+  /**
+   * Sort direction
+   */
+  sortOrder?: GetCoursesSortOrder;
 };
+
+export type GetCoursesLectureType =
+  (typeof GetCoursesLectureType)[keyof typeof GetCoursesLectureType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetCoursesLectureType = {
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
+} as const;
+
+export type GetCoursesSortBy = (typeof GetCoursesSortBy)[keyof typeof GetCoursesSortBy];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetCoursesSortBy = {
+  name: "name",
+  course_code: "course_code",
+  num_credits: "num_credits",
+  created_at: "created_at",
+} as const;
+
+export type GetCoursesSortOrder = (typeof GetCoursesSortOrder)[keyof typeof GetCoursesSortOrder];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetCoursesSortOrder = {
+  asc: "asc",
+  desc: "desc",
+} as const;
 
 export type GetReviewsParams = {
   /**
@@ -552,7 +604,55 @@ export type GetProfessorsParams = {
    * @minimum 1
    */
   limit?: number;
+  /**
+   * Filter by first name
+   */
+  firstName?: string;
+  /**
+   * Filter by last name
+   */
+  lastName?: string;
+  /**
+   * Filter by location tags
+   */
+  tags?: GetProfessorsTagsItem[];
+  /**
+   * Field to sort by
+   */
+  sortBy?: GetProfessorsSortBy;
+  /**
+   * Sort direction
+   */
+  sortOrder?: GetProfessorsSortOrder;
 };
+
+export type GetProfessorsTagsItem =
+  (typeof GetProfessorsTagsItem)[keyof typeof GetProfessorsTagsItem];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetProfessorsTagsItem = {
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
+} as const;
+
+export type GetProfessorsSortBy = (typeof GetProfessorsSortBy)[keyof typeof GetProfessorsSortBy];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetProfessorsSortBy = {
+  firstName: "firstName",
+  lastName: "lastName",
+  createdAt: "createdAt",
+} as const;
+
+export type GetProfessorsSortOrder =
+  (typeof GetProfessorsSortOrder)[keyof typeof GetProfessorsSortOrder];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetProfessorsSortOrder = {
+  asc: "asc",
+  desc: "desc",
+} as const;
 
 export type GetStudentsParams = {
   /**

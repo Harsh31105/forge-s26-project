@@ -1,6 +1,6 @@
 import type { ProfessorRepository } from "../../../storage/storage";
 import {
-    Professor, ProfessorPatchInputSchema, ProfessorPatchInputType,
+    Professor, ProfessorFilterSchema, ProfessorPatchInputSchema, ProfessorPatchInputType,
     ProfessorPostInputSchema,
     ProfessorPostInputType
 } from "../../../models/professor";
@@ -18,15 +18,21 @@ export class ProfessorHandler {
     constructor(private readonly repo: ProfessorRepository) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
-        const result = PaginationSchema.safeParse(req.query);
-        if (!result.success) {
+        const paginationResult = PaginationSchema.safeParse(req.query);
+        if (!paginationResult.success) {
             throw BadRequest("Invalid pagination parameters");
         }
-        const pagination = result.data;
+        const pagination = paginationResult.data;
+
+        const filterResult = ProfessorFilterSchema.safeParse(req.query);
+        if (!filterResult.success) {
+            throw BadRequest("Invalid filter parameters");
+        }
+        const filters = filterResult.data;
 
         let professors: Professor[];
         try {
-            professors = await this.repo.getProfessors(pagination);
+            professors = await this.repo.getProfessors(pagination, filters);
         } catch (err) {
             console.log("Failed to get professors: ", err);
             throw mapDBError(err, "failed to retrieve professors");

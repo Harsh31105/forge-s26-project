@@ -8,7 +8,6 @@ import { course } from "../../../tables/course";
 import { v4 as uuid } from "uuid";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import {NotFoundError} from "../../../../errs/httpError";
-import { newPagination} from "../../../../utils/pagination";
 import { department } from "../../../tables/department";
 
 describe("CourseRepositorySchema DB Integration", () => {
@@ -57,8 +56,8 @@ describe("CourseRepositorySchema DB Integration", () => {
         test("empty and populated DB", async () => {
             await repo.deleteCourse(testCourseID);
 
-            const pagination = newPagination();
-            let results = await repo.getCourses(pagination);
+            let results = await repo.getCourses({ page: 1, limit: 10 }, { sortOrder: "asc" });
+
             expect(results).toEqual([]);
 
             await db.insert(course).values({
@@ -73,7 +72,8 @@ describe("CourseRepositorySchema DB Integration", () => {
                 updatedAt: new Date()
             });
 
-            results = await repo.getCourses(pagination);
+            results = await repo.getCourses({ page: 1, limit: 10 }, { sortOrder: "asc" });
+
             expect(results).toHaveLength(1);
             expect(results[0]!.id).toBe(testCourseID);
             expect(results[0]!.name).toBe("Algorithms & Data Structures");
@@ -112,17 +112,64 @@ describe("CourseRepositorySchema DB Integration", () => {
             });
 
             // 3 total courses now, test pagination with limit 2
-            const page1 = await repo.getCourses({ page: 1, limit: 2 });
+            // const page1 = await repo.getCourses({ page: 1, limit: 2 });
+            // expect(page1).toHaveLength(2);
+
+            // const page2 = await repo.getCourses({ page: 2, limit: 2 });
+            // expect(page2).toHaveLength(1);
+
+            // const page3 = await repo.getCourses({ page: 3, limit: 2 });
+            // expect(page3).toHaveLength(0);
+
+            const page1 = await repo.getCourses({ page: 1, limit: 2 }, { sortOrder: "asc" });
             expect(page1).toHaveLength(2);
 
-            const page2 = await repo.getCourses({ page: 2, limit: 2 });
+            const page2 = await repo.getCourses({ page: 2, limit: 2 }, { sortOrder: "asc" });
             expect(page2).toHaveLength(1);
 
-            const page3 = await repo.getCourses({ page: 3, limit: 2 });
+            const page3 = await repo.getCourses({ page: 3, limit: 2 }, { sortOrder: "asc" });
             expect(page3).toHaveLength(0);
                 
         });
 
+        // filtering tests
+
+        test("filter by department_id", async () => {
+            const results = await repo.getCourses(
+                { page: 1, limit: 10 },
+                { sortOrder: "asc", department_id: testDepartmentID }
+            );
+            expect(results).toHaveLength(1);
+            expect(results[0]!.department.id).toBe(testDepartmentID);
+        });
+
+        test("filter by lecture_type", async () => {
+            const results = await repo.getCourses(
+                { page: 1, limit: 10 },
+                { sortOrder: "asc", lecture_type: "lecture" }
+            );
+            expect(results).toHaveLength(1);
+            expect(results[0]!.lecture_type).toBe("lecture");
+        });
+
+        test("sort by name desc", async () => {
+            await db.insert(course).values({
+                id: uuid(),
+                name: "Zzz Course",
+                departmentId: testDepartmentID,
+                courseCode: 9999,
+                description: "A course.",
+                numCredits: 4,
+                lectureType: "lecture",
+                createdAt: new Date(),
+                updatedAt: new Date()
+            });
+            const results = await repo.getCourses(
+                { page: 1, limit: 10 },
+                { sortOrder: "desc", sortBy: "name" }
+            );
+            expect(results[0]!.name).toBe("Zzz Course");
+        });
     });
 
 

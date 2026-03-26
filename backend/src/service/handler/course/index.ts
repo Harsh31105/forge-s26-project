@@ -1,6 +1,6 @@
 import type { CourseRepository, FavouriteRepository } from "../../../storage/storage";
 import {
-    Course, CoursePatchInputSchema, CoursePatchInputType,
+    Course, CourseFilterSchema, CoursePatchInputSchema, CoursePatchInputType,
     CoursePostInputSchema,
     CoursePostInputType
 } from "../../../models/course";
@@ -12,24 +12,29 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
-import { PaginationSchema } from "../../../utils/pagination";
+import { getOffset, PaginationSchema, PaginationType } from "../../../utils/pagination";
 import { Favourite } from "../../../models/favourite";
 
 export class CourseHandler {
     constructor(private readonly courseRepo: CourseRepository,
                 private readonly favRepo: FavouriteRepository) {}
 
-    async handleGet(req: Request, res: Response) :Promise<void> {
-        const result = PaginationSchema.safeParse(req.query);
-        if (!result.success) {
+    async handleGet(req: Request, res: Response): Promise<void> {
+        const paginationResult = PaginationSchema.safeParse(req.query);
+        if (!paginationResult.success) {
             throw BadRequest("Invalid pagination parameters");
         }
-        const pagination = result.data;
+        const pagination = paginationResult.data;
+
+        const filterResult = CourseFilterSchema.safeParse(req.query);
+        if (!filterResult.success) {
+            throw BadRequest("Invalid filter parameters");
+        }
+        const filters = filterResult.data;
 
         let courses: Course[];
-
         try {
-            courses = await this.courseRepo.getCourses(pagination);
+            courses = await this.courseRepo.getCourses(pagination, filters);
         } catch (err) {
             console.log("Failed to get courses: ", err);
             throw mapDBError(err, "failed to retrieve courses");
