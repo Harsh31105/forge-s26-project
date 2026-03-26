@@ -27,6 +27,8 @@ import { authMiddleware } from "../auth/middleware";
 import cookieParser from "cookie-parser";
 import { StudentHandler } from "./handler/student";
 import { studentRoutes } from "./handler/student/routes";
+import {FavouriteHandler} from "./handler/favourite";
+import {favouriteRoutes} from "./handler/favourite/routes";
 
 class App {
     public server: Express;
@@ -104,7 +106,7 @@ function registerRoutes(router: Router, repo: Repository) {
     const reviewHandler = new ReviewHandler(repo.reviews);
     router.use("/reviews", reviewRoutes(reviewHandler));
 
-    const courseHandler = new CourseHandler(repo.courses);
+    const courseHandler = new CourseHandler(repo.courses, repo.favourites);
     router.use("/courses", courseRoutes(courseHandler));
 
     // Handling Course-Threads - Starting with CourseReviews.
@@ -116,4 +118,7 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const studentHandler = new StudentHandler(repo.students);
     router.use("/students", studentRoutes(studentHandler));
+
+    const favouritesHandler = new FavouriteHandler(repo.favourites);
+    router.use("/favourites", favouriteRoutes(favouritesHandler));
 }
