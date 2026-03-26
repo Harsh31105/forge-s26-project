@@ -10,8 +10,8 @@ import { Request, Response } from "express";
 export class FavouriteHandler {
     constructor(private readonly repo: FavouriteRepository) {}
 
-    async handleGet(req: AuthenticatedRequest, res: Response): Promise<void> {
-        const studentID = req.user.id;
+    async handleGet(req: Request, res: Response): Promise<void> {
+        const studentID = (req as AuthenticatedRequest).user.id;
 
         let favourites: Favourite[]
         try {
@@ -25,13 +25,15 @@ export class FavouriteHandler {
     }
 
     async handlePost(req: Request, res: Response): Promise<void> {
+        const studentID = (req as AuthenticatedRequest).user.id;
+
         const result = FavouritePostInputSchema.safeParse(req.body);
         if (!result.success) throw BadRequest("unable to parse input for post-favourite");
         const postFavourite: FavouritePostInputType = result.data;
 
         let newFavourite: Favourite;
         try {
-            newFavourite = await this.repo.postFavourite(postFavourite);
+            newFavourite = await this.repo.postFavourite(studentID, postFavourite);
         } catch (err) {
             console.log(err);
             throw mapDBError(err, "failed to post favourite");
@@ -40,8 +42,8 @@ export class FavouriteHandler {
         res.status(201).json(newFavourite);
     }
 
-    async handleDelete(req: AuthenticatedRequest, res: Response): Promise<void> {
-        const studentID = req.user.id;
+    async handleDelete(req: Request, res: Response): Promise<void> {
+        const studentID = (req as AuthenticatedRequest).user.id;
         const courseID = req.params.id;
 
         try {
