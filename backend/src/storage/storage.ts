@@ -11,7 +11,7 @@ import type {
   Review,
   ReviewPatchInputType,
 } from "../models/review";
-import { SampleRepositorySchema } from "./postgres/schema/samples";
+import {SampleRepositorySchema } from "./postgres/schema/samples";
 import { ReviewRepositorySchema } from "./postgres/schema/reviews";
 
 import type {
@@ -46,6 +46,7 @@ import type {
 } from "../models/profThreads";
 import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
+import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 
 export class Repository {
   public readonly samples: SampleRepository;
@@ -71,7 +72,7 @@ export class Repository {
     this.reviews = new ReviewRepositorySchema(db);
     this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
     this.students = new StudentRepositorySchema(db);
-    this.favourites = new FavouriteRepository(db);
+    this.favourites = new FavouriteRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -127,7 +128,6 @@ export interface CourseRepository {
     createCourse(input: CoursePostInputType): Promise<Course>;
     patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
     deleteCourse(id: string): Promise<void>;
-    getStudentIDsWhoFavourited(courseID: string): Promise<Student[]>;
 }
 
 export interface CourseThreadRepository {
@@ -184,4 +184,6 @@ export interface FavouriteRepository {
   getFavourites(studentID: string): Promise<Favourite[]>;
   postFavourite(studentID: string, input: FavouritePostInputType): Promise<Favourite>;
   deleteFavourite(studentID: string, courseID: string): Promise<void>;
+
+  getStudentIDsWhoFavourited(courseID: string): Promise<Favourite[]>;
 }

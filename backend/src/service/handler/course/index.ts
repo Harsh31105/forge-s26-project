@@ -14,6 +14,7 @@ import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
 import {Student} from "../../../models/student";
+import {Favourite} from "../../../models/favourite";
 
 export class CourseHandler {
     constructor(private readonly courseRepo: CourseRepository,
@@ -112,14 +113,14 @@ export class CourseHandler {
         const courseID = req.params.id as string;
         if (!isUUID(courseID)) throw BadRequest("Empty ID cannot be given");
 
-        let students: Student[];
+        let favourites: Favourite[];
         try {
-            students = await this.favRepo.getStudentIDsWhoFavourited(courseID);
+            favourites = await this.favRepo.getStudentIDsWhoFavourited(courseID);
         } catch (err) {
             console.log(err);
             throw mapDBError(err, "failed to retrive students");
         }
 
-        res.status(200).json(students)
+        res.status(200).json(favourites)
     }
 }

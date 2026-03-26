@@ -1,10 +1,10 @@
 import { z } from "zod";
 
 export interface Favourite {
-    student_id: string;
-    course_id: string;
-    created_at: Date;
-    updated_at: Date;
+    studentId: string;
+    courseId: string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export const FavouritePostInputSchema = z.object({
