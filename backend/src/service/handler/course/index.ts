@@ -12,7 +12,7 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
-import { getOffset, PaginationSchema } from "../../../utils/pagination";
+import { PaginationSchema } from "../../../utils/pagination";
 
 export class CourseHandler {
     constructor(private readonly repo: CourseRepository) {}
