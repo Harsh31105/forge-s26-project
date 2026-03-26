@@ -1391,11 +1391,31 @@ paths:
                 code: 500
                 message: "Internal server error"
 
-  /traces:
+  /trace:
     get:
-      summary: Get all traces
-      description: Returns a paginated list of trace records.
-      tags: [ Trace ]
+      summary: Get trace records
+      description: Returns trace records filtered by course, professor, or department with pagination.
+      tags: [Trace]
+      parameters:
+        - name: course_id
+          in: query
+          required: false
+          description: Filter traces by course UUID
+          schema:
+            type: string
+            format: uuid
+
+        - name: professor_id
+          in: query
+          required: false
+          description: Filter traces by professor UUID
+          schema:
+            type: string
+            format: uuid
+
+        - name: department_id
+          in: query
+          required: false
       parameters:
         - name: page
           in: query
@@ -2204,3 +2224,82 @@ components:
           type: string
           minLength: 1
           maxLength: 2000
+
+    Trace:
+      type: object
+      required:
+        - id
+        - action
+        - timestamp
+      properties:
+        id:
+          type: string
+          format: uuid
+        courseId:
+          type: string
+          format: uuid
+          nullable: true
+        professorId:
+          type: string
+          format: uuid
+          nullable: true
+        departmentId:
+          type: integer
+          nullable: true
+        action:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+          nullable: true
+        updatedAt:
+          type: string
+          format: date-time
+          nullable: true
+
+    TracePostInput:
+      type: object
+      required:
+        - action
+        - timestamp
+      properties:
+        courseId:
+          type: string
+          format: uuid
+          nullable: true
+        professorId:
+          type: string
+          format: uuid
+          nullable: true
+        departmentId:
+          type: integer
+          nullable: true
+        action:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+
+    TraceQueryParams:
+      type: object
+      properties:
+        course_id:
+          type: string
+          format: uuid
+        professor_id:
+          type: string
+          format: uuid
+        department_id:
+          type: integer
+        page:
+          type: integer
+          minimum: 1
+          default: 1
+        limit:
+          type: integer
+          minimum: 1
+          maximum: 100
+          default: 10
