@@ -4,7 +4,7 @@ import {
     shutdownSharedTestDB
 } from "../../testutil/shared_db";
 import {StudentRepositorySchema} from "../students";
-import {prefEnum, student} from "../../../tables/student";
+import { student } from "../../../tables/student";
 import { v4 as uuid } from "uuid";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import { newPagination } from "../../../../utils/pagination";
@@ -81,6 +81,24 @@ describe("StudentRepositorySchema DB Integration", () => {
             const studentResult = await repo.getStudentByID(testStudentID);
 
             expect(studentResult.id).toBe(testStudentID);
+        });
+    });
+
+    describe("getStudentByEmail", () => {
+        test("non-existent email first, valid email next", async () => {
+            const invalidEmail = "nonexistent@test.com";
+
+            await expect(
+                repo.getStudentByEmail(invalidEmail)
+            ).rejects.toThrow("student not found");
+
+            const validEmail = `${testStudentID}@test.com`;
+            const studentResult = await repo.getStudentByEmail(validEmail);
+
+            expect(studentResult.email).toBe(validEmail);
+            expect(studentResult.id).toBe(testStudentID);
+            expect(studentResult.firstName).toBe("Test");
+            expect(studentResult.lastName).toBe("Student");
         });
     });
 

@@ -50,8 +50,7 @@ export class StudentHandler {
         } catch (err) {
             console.error(err);
 
-            if (err instanceof NotFoundError)
-                throw NotFound("Student not found");
+            if (err instanceof NotFoundError) throw NotFound("Student not found");
 
             throw mapDBError(err, "Failed to retrieve student");
         }

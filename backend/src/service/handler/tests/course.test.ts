@@ -1,7 +1,7 @@
 import request from "supertest";
 import express, { Express } from "express";
 import { CourseHandler } from "../course";
-import type { CourseRepository } from "../../../storage/storage";
+import type {CourseRepository, FavouriteRepository} from "../../../storage/storage";
 import { CoursePostInputType, CoursePatchInputType, Course } from "../../../models/course";
 import { validate as isUUID } from "uuid";
 import {errorHandler, NotFoundError} from "../../../errs/httpError";
@@ -60,6 +60,7 @@ const mockCourse3: Course = {
 describe("CourseHandler Endpoints", () => {
     let app: Express;
     let repo: jest.Mocked<CourseRepository>;
+    let favRepo: jest.Mocked<FavouriteRepository>;
     let handler: CourseHandler;
 
     beforeEach(() => {
@@ -69,9 +70,17 @@ describe("CourseHandler Endpoints", () => {
             createCourse: jest.fn(),
             patchCourse: jest.fn(),
             deleteCourse: jest.fn(),
+            handleGetStudentIDsWhoFavourited: jest.fn()
         } as unknown as jest.Mocked<CourseRepository>;
 
-        handler = new CourseHandler(repo);
+        favRepo = {
+            getStudentIDsWhoFavourited: jest.fn(),
+            getFavourites: jest.fn(),
+            postFavourite: jest.fn(),
+            deleteFavourite: jest.fn(),
+        } as unknown as jest.Mocked<FavouriteRepository>;
+
+        handler = new CourseHandler(repo, favRepo);
 
         app = express();
         app.use(express.json());
@@ -468,5 +477,21 @@ describe("CourseHandler Endpoints", () => {
             const res = await request(app).delete(`/courses/${mockCourse1.id}`);
             expect(res.status).toBe(500);
         });
-    }); 
+    });
+
+    describe("GET /courses/:id/favourites", () => {
+        test("returns student IDs who favourited course", async () => {
+            const mockFavs = [{ student_id: "stu1" }, { student_id: "stu2" }];
+            const favRepo = { getStudentIDsWhoFavourited: jest.fn().mockResolvedValue(mockFavs) };
+            const handlerWithFav = new CourseHandler(repo, favRepo as any);
+            const appWithFav = express();
+            appWithFav.use(express.json());
+            appWithFav.get("/courses/:id/favourites", handlerWithFav.handleGetStudentIDsWhoFavourited.bind(handlerWithFav));
+            appWithFav.use(errorHandler);
+
+            const res = await request(appWithFav).get(`/courses/${mockCourse1.id}/favourites`);
+            expect(res.status).toBe(200);
+            expect(res.body).toEqual(mockFavs);
+        });
+    });
 });
