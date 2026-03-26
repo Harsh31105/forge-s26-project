@@ -33,48 +33,56 @@ import type {
   ProfessorPostInputType,
 } from "../models/professor";
 import { ProfessorRepositorySchema } from "./postgres/schema/professor";
+import type { TraceDocumentRepository } from "./s3/traceDocuments";
+import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
+import type { S3 as S3Config } from "../config/s3";
+import {Student, StudentPatchInputType, StudentPostInputType} from "../models/student";
+import { StudentRepositorySchema } from "./postgres/schema/students";
+
 import type {
   ProfThread,
-  ProfessorThreadPatchInputType,
   ProfessorThreadPostInputType,
+  ProfessorThreadPatchInputType,
 } from "../models/profThreads";
 import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
 import type { Trace, TracePatchInputType, TracePostInputType } from "../models/trace";
 import { TraceRepositorySchema } from "./postgres/schema/trace";
-import type { S3 as S3Config } from "../config/s3";
-import { TraceDocumentRepository, TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
-import { StudentRepositorySchema } from "./postgres/schema/students";
 
 export class Repository {
-    public readonly samples: SampleRepository;
-    public readonly professors: ProfessorRepository;
-    public readonly courses: CourseRepository;
-    public readonly courseThreads: CourseThreadRepository;
-    public readonly traceDocuments: TraceDocumentRepository;
-    public readonly students: StudentRepository;
-    public readonly traces: TraceRepository;
-    private readonly pool: Pool;
-    private readonly db: NodePgDatabase;
+  public readonly samples: SampleRepository;
+  public readonly professors: ProfessorRepository;
+  public readonly courses: CourseRepository;
+  public readonly courseThreads: CourseThreadRepository;
+  public readonly profThreads: ProfThreadRepository;
+  public readonly traceDocuments: TraceDocumentRepository;
+  public readonly reviews: ReviewRepository;
+  public readonly students: StudentRepository;
+  public readonly traces: TraceRepository;
+  private readonly pool: Pool;
+  private readonly db: NodePgDatabase;
 
-    constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
-        this.pool = pool;
-        this.db = db;
-        this.samples = new SampleRepositorySchema(db);
-        this.courses = new CourseRepositorySchema(db);
-        this.courseThreads = new CourseThreadRepositorySchema(db);
-        this.professors = new ProfessorRepositorySchema(db);
-        this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
-        this.students = new StudentRepositorySchema(db);
-        this.traces = new TraceRepositorySchema(db);
-    }
+  constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
+    this.pool = pool;
+    this.db = db;
+    this.samples = new SampleRepositorySchema(db);
+    this.courses = new CourseRepositorySchema(db);
+    this.courseThreads = new CourseThreadRepositorySchema(db);
+    this.professors = new ProfessorRepositorySchema(db);
+    this.profThreads = new ProfThreadRepositorySchema(db);
+    this.reviews = new ReviewRepositorySchema(db);
+    this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+    this.students = new StudentRepositorySchema(db);
+    this.traces = new TraceRepositorySchema(db);
 
-    async getDB(): Promise<NodePgDatabase> {
-        return this.db;
-    }
+  }
 
-    async close(): Promise<void> {
-        await this.pool.end();
-    }
+  async getDB(): Promise<NodePgDatabase> {
+    return this.db;
+  }
+
+  async close(): Promise<void> {
+    await this.pool.end();
+  }
 }
 
 export interface SampleRepository {
@@ -87,6 +95,13 @@ export interface SampleRepository {
 
 export interface CourseReviewChildInput {
   courseId: string;
+  rating: number;
+  reviewText: string;
+  tags?: string[];
+}
+
+export interface ProfessorReviewChildInput {
+  professorId: string;
   rating: number;
   reviewText: string;
   tags?: string[];
@@ -109,11 +124,11 @@ export interface ReviewRepository {
 }
 
 export interface CourseRepository {
-  getCourses(pagination: PaginationType): Promise<Course[]>;
-  getCourseByID(id: string): Promise<Course>;
-  createCourse(input: CoursePostInputType): Promise<Course>;
-  patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
-  deleteCourse(id: string): Promise<void>;
+    getCourses(pagination: PaginationType): Promise<Course[]>;
+    getCourseByID(id: string): Promise<Course>;
+    createCourse(input: CoursePostInputType): Promise<Course>;
+    patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
+    deleteCourse(id: string): Promise<void>;
 }
 
 export interface CourseThreadRepository {
@@ -156,6 +171,14 @@ export interface ProfessorRepository {
     input: ProfessorPatchInputType,
   ): Promise<Professor>;
   deleteProfessor(id: string): Promise<void>;
+}
+
+export interface StudentRepository {
+    getStudents(pagination: PaginationType): Promise<Student[]>;
+    getStudentByID(id: string): Promise<Student>;
+    createStudent(input: StudentPostInputType): Promise<Student>;
+    patchStudent(id: string, input: StudentPatchInputType): Promise<Student>;
+    deleteStudent(id: string): Promise<void>;
 }
 
 export interface TraceRepository {

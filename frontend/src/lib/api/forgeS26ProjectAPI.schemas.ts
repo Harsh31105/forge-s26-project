@@ -27,8 +27,8 @@ export interface Sample {
   updated_at: string;
 }
 
-export type ProfessorTagsItem = typeof ProfessorTagsItem[keyof typeof ProfessorTagsItem];
-
+export type ProfessorTagsItem =
+  typeof ProfessorTagsItem[keyof typeof ProfessorTagsItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ProfessorTagsItem = {
@@ -90,4 +90,3 @@ export interface ProfessorPatchInput {
   /** @nullable */
   tags?: ProfessorPatchInputTagsItem[] | null;
 }
-

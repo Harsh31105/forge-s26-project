@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "main": "index.js",
   "scripts": {
-    "dev": "ts-node-dev --respawn cmd/main.ts",
+    "dev": "tsx watch cmd/main.ts",
     "build": "tsc",
     "start": "node dist/index.js",
     "test": "jest",
@@ -12,7 +12,8 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "clean": "rm -rf dist coverage",
-    "verify-s3": "ts-node scripts/verify-s3.ts"
+    "verify-s3": "ts-node scripts/verify-s3.ts",
+    "scrape:degree-requirements": "tsx scripts/scrapeDegreeRequirements.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
     "@jest/globals": "^30.2.0",
+    "cheerio": "^1.2.0",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -42,6 +44,7 @@
   },
   "devDependencies": {
     "@apidevtools/swagger-cli": "^4.0.4",
+    "@types/cheerio": "^0.22.35",
     "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",
@@ -59,7 +62,7 @@
     "jest": "^30.2.0",
     "supertest": "^7.2.2",
     "ts-jest": "^29.4.6",
-    "ts-node-dev": "^2.0.0",
+    "tsx": "^4.21.0",
     "typescript": "^5.9.3"
   }
 }

@@ -35,12 +35,10 @@ import { traceRoutes } from "./handler/trace/routes";
 class App {
     public server: Express;
     public repo: Repository;
-    public db : NodePgDatabase
 
-    constructor(repo: Repository, db: NodePgDatabase) {
+    constructor(repo: Repository) {
         this.server = express();
         this.repo = repo;
-        this.db = db;
 
         this.server.use(express.json());
         this.server.use(express.urlencoded({ extended: true }));
@@ -59,13 +57,13 @@ class App {
             credentials: true,
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));
-        this.server.use(cookieParser())
+        this.server.use(cookieParser());
 
         const apiV1 = Router();
         this.server.use("/api/v1", apiV1);
 
         this.server.get("/health", (_req, res) => res.sendStatus(200));
-        this.server.get("/", (req, res) => {
+        this.server.get("/", (_req, res) => {
             res.send("API is running!");
         });
 
@@ -86,16 +84,16 @@ class App {
 }
 
 export function initApp(): App {
-  const pool = new Pool({
-    connectionString: getConnectionString(config.db),
-    ssl: { rejectUnauthorized: false },
-  });
-  configurePool(pool, config.db);
+    const pool = new Pool({
+        connectionString: getConnectionString(config.db),
+        ssl: { rejectUnauthorized: false },
+    });
+    configurePool(pool, config.db);
 
-  const db = drizzle(pool);
-  const repo = new Repository(pool, db, config.s3);
+    const db = drizzle(pool);
+    const repo = new Repository(pool, db, config.s3);
 
-    return new App(repo, db);
+    return new App(repo);
 }
 
 function registerRoutes(router: Router, repo: Repository) {
