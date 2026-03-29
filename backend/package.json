@@ -12,7 +12,8 @@
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "clean": "rm -rf dist coverage",
-    "verify-s3": "ts-node scripts/verify-s3.ts"
+    "verify-s3": "ts-node scripts/verify-s3.ts",
+    "scrape:degree-requirements": "tsx scripts/scrapeDegreeRequirements.ts"
   },
   "keywords": [],
   "author": "",
@@ -21,6 +22,7 @@
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
     "@jest/globals": "^30.2.0",
+    "cheerio": "^1.2.0",
     "compression": "^1.8.1",
     "cookie-parser": "^1.4.7",
     "cors": "^2.8.6",
@@ -33,6 +35,7 @@
     "leo-profanity": "^1.9.0",
     "morgan": "^1.10.1",
     "pg": "^8.17.2",
+    "ratemyprofessor-api": "^1.0.1",
     "serve-favicon": "^2.5.1",
     "swagger-ui-express": "^5.0.1",
     "testcontainers": "^11.11.0",
@@ -42,6 +45,7 @@
   },
   "devDependencies": {
     "@apidevtools/swagger-cli": "^4.0.4",
+    "@types/cheerio": "^0.22.35",
     "@types/compression": "^1.8.1",
     "@types/cookie-parser": "^1.4.10",
     "@types/cors": "^2.8.19",

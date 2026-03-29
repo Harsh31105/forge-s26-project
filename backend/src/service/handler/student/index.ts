@@ -3,7 +3,7 @@ import {
     StudentPostInputSchema,
     StudentPatchInputSchema,
     StudentPatchInputType,
-    StudentPostInputType
+    StudentPostInputType, Student
 } from "../../../models/student";
 import {
     BadRequest,
@@ -14,6 +14,7 @@ import {
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
+import {isEmail} from "../../../utils/email";
 
 export class StudentHandler {
     constructor(private readonly repo: StudentRepository) {}
@@ -23,7 +24,6 @@ export class StudentHandler {
 
         // Pagination
         const result = PaginationSchema.safeParse(req.query);
-
         if (!result.success) {
             throw BadRequest("Invalid pagination parameters");
         }
@@ -38,6 +38,24 @@ export class StudentHandler {
             throw mapDBError(err, "Failed to retrieve students");
         }
         res.status(200).json(students);
+    }
+
+    async handleGetByEmail(req: Request, res: Response): Promise<void> {
+        const email = req.params.email as string;
+        if (!isEmail(email)) throw BadRequest("failed to parse email properly");
+
+        let student: Student;
+        try {
+            student = await this.repo.getStudentByEmail(email);
+        } catch (err) {
+            console.error(err);
+
+            if (err instanceof NotFoundError) throw NotFound("Student not found");
+
+            throw mapDBError(err, "Failed to retrieve student");
+        }
+
+        res.status(200).json(student);
     }
 
     // GET/students/{id}
@@ -69,7 +87,6 @@ export class StudentHandler {
         const result = StudentPostInputSchema.safeParse(req.body);
 
         if (!result.success) {
-            console.log(result.error);
             throw BadRequest("Unable to parse input for student POST")
         }
 

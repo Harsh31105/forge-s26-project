@@ -47,3 +47,13 @@ export type ProfessorPostInputType = z.infer<typeof ProfessorPostInputSchema>;
 
 export const ProfessorPatchInputSchema = ProfessorPostInputSchema.partial();
 export type ProfessorPatchInputType = z.infer<typeof ProfessorPatchInputSchema>;
+
+export const ProfessorFilterSchema = z.object({
+    firstName: z.string().optional(),
+    lastName: z.string().optional(),
+    tags: z.array(z.string()).optional(),
+    sortBy: z.enum(["firstName", "lastName", "createdAt"]).optional(),
+    sortOrder: z.enum(["asc", "desc"]).default("asc"),
+});
+export type ProfessorFilterType = z.infer<typeof ProfessorFilterSchema>;
+
