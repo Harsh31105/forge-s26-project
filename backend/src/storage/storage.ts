@@ -1,12 +1,12 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
-  Sample,
+   Sample,
   SamplePatchInputType,
   SamplePostInputType,
-} from "../models/sample";
+ } from "../models/sample";
 import type {
-  CourseReview,
+   CourseReview,
   ProfessorReview,
   Review,
   ReviewPatchInputType,
@@ -19,7 +19,7 @@ import type {
   CourseFilterType,
   CoursePatchInputType,
   CoursePostInputType,
-} from "../models/course";
+ } from "../models/course";
 import { CourseRepositorySchema } from "./postgres/schema/course";
 import type {
   CourseThread,
@@ -51,6 +51,8 @@ import type {
   ProfessorThreadPatchInputType,
 } from "../models/profThreads";
 import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
+import type { RMP, RMPPostInputType } from "../models/rmp";
+import { RMPRepositorySchema } from "./postgres/schema/rmp";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 
@@ -61,11 +63,13 @@ export class Repository {
   public readonly courseThreads: CourseThreadRepository;
   public readonly profThreads: ProfThreadRepository;
   public readonly traceDocuments: TraceDocumentRepository;
+  public readonly rmp: RMPRepository;
   public readonly reviews: ReviewRepository;
   public readonly students: StudentRepository;
   public readonly favourites: FavouriteRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
+  
 
   constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
     this.pool = pool;
@@ -79,6 +83,7 @@ export class Repository {
     this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
     this.students = new StudentRepositorySchema(db);
     this.favourites = new FavouriteRepositorySchema(db);
+    this.rmp = new RMPRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -193,4 +198,9 @@ export interface FavouriteRepository {
   deleteFavourite(studentID: string, courseID: string): Promise<void>;
 
   getStudentIDsWhoFavourited(courseID: string): Promise<Favourite[]>;
+}
+
+export interface RMPRepository {
+    getRMPByProfessorID(professorId: string): Promise<RMP>;
+    postRMP(input: RMPPostInputType[]): Promise<RMP[]>;
 }

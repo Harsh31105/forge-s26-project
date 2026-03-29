@@ -9,6 +9,7 @@ import type {
   Professor,
   ProfessorPatchInput,
   ProfessorPostInput,
+  Rmp,
 } from "./northStarAPI.schemas";
 
 import { customAxios } from "./apiClient";
@@ -59,7 +60,21 @@ export const getProfessor = () => {
   const deleteProfessorsId = (id: string) => {
     return customAxios<void>({ url: `/professors/${id}`, method: "DELETE" });
   };
-  return { getProfessors, postProfessors, getProfessorsId, patchProfessorsId, deleteProfessorsId };
+  /**
+   * Returns the Rate My Professor data stored in our DB for a given professor
+   * @summary Get RMP data for a professor
+   */
+  const getProfessorsIdRmp = (id: string) => {
+    return customAxios<Rmp>({ url: `/professors/${id}/rmp`, method: "GET" });
+  };
+  return {
+    getProfessors,
+    postProfessors,
+    getProfessorsId,
+    patchProfessorsId,
+    deleteProfessorsId,
+    getProfessorsIdRmp,
+  };
 };
 export type GetProfessorsResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getProfessor>["getProfessors"]>>
@@ -75,4 +90,7 @@ export type PatchProfessorsIdResult = NonNullable<
 >;
 export type DeleteProfessorsIdResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getProfessor>["deleteProfessorsId"]>>
+>;
+export type GetProfessorsIdRmpResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getProfessor>["getProfessorsIdRmp"]>>
 >;

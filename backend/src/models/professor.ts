@@ -56,3 +56,4 @@ export const ProfessorFilterSchema = z.object({
     sortOrder: z.enum(["asc", "desc"]).default("asc"),
 });
 export type ProfessorFilterType = z.infer<typeof ProfessorFilterSchema>;
+
