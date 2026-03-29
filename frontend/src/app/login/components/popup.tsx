@@ -1,0 +1,145 @@
+"use client";
+
+import { useEffect, useRef } from "react";
+import GoogleAuth from "@/src/app/login/googleAuth";
+
+const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+
+export default function SignUpPopup({ onClose }: { onClose: () => void }) {
+  const dialogRef   = useRef<HTMLDivElement>(null);
+  const headingId   = "signup-dialog-title";
+
+  // Focus the dialog on mount; restore focus to trigger on unmount
+  useEffect(() => {
+    const previouslyFocused = document.activeElement as HTMLElement | null;
+    dialogRef.current?.focus();
+    return () => { previouslyFocused?.focus(); };
+  }, []);
+
+  // Trap focus inside modal + close on Escape
+  useEffect(() => {
+    const FOCUSABLE = 'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])';
+
+    const handleKeyDown = (e: KeyboardEvent) => {
+      if (e.key === "Escape") { onClose(); return; }
+      if (e.key !== "Tab") return;
+
+      const focusable = Array.from(
+        dialogRef.current?.querySelectorAll<HTMLElement>(FOCUSABLE) ?? []
+      ).filter((el) => !el.hasAttribute("disabled"));
+
+      if (focusable.length === 0) { e.preventDefault(); return; }
+
+      const first = focusable[0];
+      const last  = focusable[focusable.length - 1];
+
+      if (e.shiftKey) {
+        if (document.activeElement === first) { e.preventDefault(); last.focus(); }
+      } else {
+        if (document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [onClose]);
+
+  return (
+    // Backdrop
+    <div
+      onClick={onClose}
+      style={{
+        position: "fixed",
+        inset: 0,
+        backgroundColor: "rgba(0,0,0,0.45)",
+        zIndex: 200,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        padding: "16px",
+      }}
+    >
+      {/* Dialog card */}
+      <div
+        ref={dialogRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={headingId}
+        tabIndex={-1}
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          backgroundColor: "#ffffff",
+          borderRadius: "6px",
+          border: "1px solid #e0e0e0",
+          boxShadow: "0 8px 24px rgba(0,0,0,0.14)",
+          width: "100%",
+          maxWidth: "400px",
+          padding: "32px",
+          position: "relative",
+          outline: "none",
+        }}
+      >
+        {/* Close button */}
+        <button
+          onClick={onClose}
+          aria-label="Close sign-up dialog"
+          style={{
+            position: "absolute",
+            top: "14px",
+            right: "14px",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            color: "#888",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            width: "32px",
+            height: "32px",
+            borderRadius: "4px",
+            fontSize: "18px",
+            lineHeight: 1,
+            fontFamily: FONT,
+            outline: "none",
+          }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#f5f5f5"; (e.currentTarget as HTMLButtonElement).style.color = "#333"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#888"; }}
+          onFocus={(e) => { e.currentTarget.style.outline = "2px solid #cc0000"; e.currentTarget.style.outlineOffset = "2px"; }}
+          onBlur={(e) => { e.currentTarget.style.outline = "none"; }}
+        >
+          ×
+        </button>
+
+        <h2
+          id={headingId}
+          style={{
+            fontFamily: FONT,
+            fontSize: "20px",
+            fontWeight: 600,
+            color: "#1a1a1a",
+            margin: "0 0 10px 0",
+          }}
+        >
+          Create an account
+        </h2>
+
+        <p
+          style={{
+            fontFamily: FONT,
+            fontSize: "15px",
+            color: "#555555",
+            lineHeight: 1.6,
+            margin: "0 0 24px 0",
+          }}
+        >
+          Sign up to find course reviews and share your own experiences with the NEU community.
+          Only <strong>@husky.neu.edu</strong> accounts are supported.
+        </p>
+
+        <hr style={{ border: "none", borderTop: "1px solid #eeeeee", margin: "0 0 20px 0" }} />
+
+        <GoogleAuth buttonText="Sign up with Google" />
+      </div>
+    </div>
+  );
+}
