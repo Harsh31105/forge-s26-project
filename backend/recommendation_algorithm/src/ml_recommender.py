@@ -22,19 +22,43 @@ from backend.recommendation_algorithm.src.user_profile import build_user_profile
 def categorize_ml_courses(
     ranked_courses: list[MLPredictionResult],
 ) -> dict[str, list[MLPredictionResult]]:
-    n = len(ranked_courses)
+    if not ranked_courses:
+        return {"high": [], "medium": [], "low": []}
 
-    if n <= 3:
+    scores = [item["probability"] for item in ranked_courses]
+
+    max_score = max(scores)
+    min_score = min(scores)
+
+    # avoid divide-by-zero if all scores equal
+    if max_score == min_score:
         return {
             "high": ranked_courses,
             "medium": [],
             "low": [],
         }
 
+    def normalize(score: float) -> float:
+        return (score - min_score) / (max_score - min_score)
+
+    high = []
+    medium = []
+    low = []
+
+    for item in ranked_courses:
+        norm_score = normalize(item["probability"])
+
+        if norm_score >= 0.66:
+            high.append(item)
+        elif norm_score >= 0.33:
+            medium.append(item)
+        else:
+            low.append(item)
+
     return {
-        "high": ranked_courses[:3],
-        "medium": ranked_courses[3:min(5, n)],
-        "low": ranked_courses[min(5, n):min(8, n)],
+        "high": high,
+        "medium": medium,
+        "low": low,
     }
 
 
