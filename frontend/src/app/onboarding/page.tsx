@@ -94,24 +94,26 @@ const MOCK_COURSES = [
 // ── Design tokens ─────────────────────────────────────────
 
 const C = {
-  red: "#cc0000",
-  redDark: "#aa0000",
-  textHeading: "#1a1a1a",
-  textBody: "#333333",
-  textSecondary: "#555555",
-  textMuted: "#777777",
-  textPlaceholder: "#888888",
-  borderInput: "#cccccc",
-  borderCard: "#e0e0e0",
-  borderSeparator: "#eeeeee",
-  bgPage: "#f7f7f8",
-  bgCard: "#ffffff",
-  bgHover: "#f5f5f5",
-  bgSelectedRow: "#fef2f2",
-  white: "#ffffff",
+  navy:          "var(--color-primary-navy)",
+  navyDark:      "#162b6a",
+  error:         "var(--color-error)",
+  textHeading:   "var(--color-text-primary)",
+  textBody:      "var(--color-text-primary)",
+  textSecondary: "var(--color-text-secondary)",
+  textMuted:     "var(--color-text-secondary)",
+  textPlaceholder: "var(--color-text-secondary)",
+  borderInput:   "var(--color-border-tan)",
+  borderCard:    "var(--color-border-tan)",
+  borderSeparator: "var(--color-border-tan)",
+  bgPage:        "var(--color-background-cream)",
+  bgCard:        "var(--color-white)",
+  bgHover:       "var(--color-surface-extra-light)",
+  bgSelectedRow: "var(--color-surface-light-cream)",
+  white:         "var(--color-white)",
 };
 
-const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+const FONT         = "var(--font-body)";
+const FONT_HEADING = "var(--font-heading)";
 
 // ── Reusable styles ───────────────────────────────────────
 
@@ -119,7 +121,7 @@ const fieldInput: React.CSSProperties = {
   width: "100%",
   padding: "10px 14px",
   border: `1px solid ${C.borderInput}`,
-  borderRadius: "4px",
+  borderRadius: "var(--border-radius-sm)",
   fontSize: "15px",
   fontFamily: FONT,
   color: C.textBody,
@@ -140,7 +142,7 @@ const fieldLabel: React.CSSProperties = {
 
 const focusRing = {
   onFocus: (e: React.FocusEvent<HTMLElement>) => {
-    e.currentTarget.style.outline = `2px solid ${C.red}`;
+    e.currentTarget.style.outline = `2px solid ${C.navy}`;
     e.currentTarget.style.outlineOffset = "2px";
   },
   onBlur: (e: React.FocusEvent<HTMLElement>) => {
@@ -204,14 +206,14 @@ function SkipLink() {
         top: focused ? "8px" : "-100px",
         zIndex: 999,
         backgroundColor: C.bgCard,
-        color: C.red,
+        color: C.navy,
         padding: "8px 16px",
-        borderRadius: "4px",
+        borderRadius: "var(--border-radius-sm)",
         fontFamily: FONT,
         fontWeight: 600,
         fontSize: "14px",
         textDecoration: "none",
-        border: `2px solid ${C.red}`,
+        border: `2px solid ${C.navy}`,
         transition: "top 0.1s",
       }}
     >
@@ -233,7 +235,7 @@ function Nav() {
         justifyContent: "space-between",
         padding: "0 32px",
         height: "56px",
-        backgroundColor: C.red,
+        backgroundColor: C.navy,
         position: "sticky",
         top: 0,
         zIndex: 100,
@@ -241,7 +243,7 @@ function Nav() {
     >
       <span
         style={{
-          fontFamily: FONT,
+          fontFamily: FONT_HEADING,
           fontWeight: 700,
           fontSize: "18px",
           color: C.white,
@@ -473,7 +475,7 @@ function CourseSelector({
           minHeight: "44px",
           padding: "8px 12px 8px 14px",
           border: `1px solid ${C.borderInput}`,
-          borderRadius: "4px",
+          borderRadius: "var(--border-radius-sm)",
           backgroundColor: C.bgCard,
           cursor: "pointer",
           display: "flex",
@@ -502,7 +504,7 @@ function CourseSelector({
                     display: "inline-flex",
                     alignItems: "center",
                     gap: "2px",
-                    backgroundColor: C.red,
+                    backgroundColor: C.navy,
                     color: C.white,
                     fontSize: "13px",
                     fontWeight: 500,
@@ -563,8 +565,8 @@ function CourseSelector({
             left: 0,
             right: 0,
             backgroundColor: C.bgCard,
-            border: "1px solid #d5d5d5",
-            borderRadius: "4px",
+            border: `1px solid ${C.borderCard}`,
+            borderRadius: "var(--border-radius-sm)",
             boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
             zIndex: 50,
           }}
@@ -645,7 +647,7 @@ function CourseSelector({
                     onClick={() => onToggle(course.id)}
                     onKeyDown={(e) => handleOptionKeyDown(e, idx, course.id)}
                     onFocus={(e) => {
-                      e.currentTarget.style.outline = `2px solid ${C.red}`;
+                      e.currentTarget.style.outline = `2px solid ${C.navy}`;
                       e.currentTarget.style.outlineOffset = "-2px";
                       setFocusedIdx(idx);
                     }}
@@ -684,8 +686,8 @@ function CourseSelector({
                         width: "18px",
                         height: "18px",
                         borderRadius: "3px",
-                        border: checked ? "none" : "2px solid #aaa",
-                        backgroundColor: checked ? C.red : C.bgCard,
+                        border: checked ? "none" : `2px solid ${C.borderInput}`,
+                        backgroundColor: checked ? C.navy : C.bgCard,
                         flexShrink: 0,
                       }}
                     >
@@ -821,7 +823,7 @@ export default function OnboardingPage() {
 
   // ── Single return ──────────────────────────────────────────
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", position: "relative" }}>
+    <div style={{ minHeight: "100vh", backgroundColor: "var(--color-background-cream)", position: "relative" }}>
       {/* Ambient review boxes floating in the background */}
       <AmbientReviews />
 
@@ -866,7 +868,7 @@ export default function OnboardingPage() {
           >
             {/* ── Loading / error ── */}
             {loadError ? (
-              <p style={{ fontSize: "15px", color: C.red, textAlign: "center", fontFamily: FONT }}>
+              <p style={{ fontSize: "15px", color: C.error, textAlign: "center", fontFamily: FONT }}>
                 {loadError}
               </p>
             ) : !student ? (
@@ -885,7 +887,7 @@ export default function OnboardingPage() {
               <>
                 <h2
                   style={{
-                    fontFamily: FONT,
+                    fontFamily: FONT_HEADING,
                     fontSize: "22px",
                     fontWeight: 600,
                     color: C.textHeading,
@@ -910,7 +912,7 @@ export default function OnboardingPage() {
                   {/* Graduation Year */}
                   <div>
                     <label htmlFor="grad-year" style={fieldLabel}>
-                      Graduation Year <span style={{ color: C.red }}>*</span>
+                      Graduation Year <span style={{ color: C.error }}>*</span>
                     </label>
                     <select
                       id="grad-year"
@@ -921,7 +923,7 @@ export default function OnboardingPage() {
                       }}
                       aria-describedby={step1Errors.year ? "grad-year-error" : undefined}
                       aria-invalid={!!step1Errors.year}
-                      style={{ ...fieldInput, borderColor: step1Errors.year ? C.red : "#cccccc" }}
+                      style={{ ...fieldInput, borderColor: step1Errors.year ? C.error : C.borderInput }}
                       {...focusRing}
                     >
                       <option value="">Select a year</option>
@@ -938,7 +940,7 @@ export default function OnboardingPage() {
                         style={{
                           margin: "4px 0 0 0",
                           fontSize: "13px",
-                          color: C.red,
+                          color: C.error,
                           fontFamily: FONT,
                         }}
                       >
@@ -950,7 +952,7 @@ export default function OnboardingPage() {
                   {/* Major */}
                   <div>
                     <label htmlFor="major" style={fieldLabel}>
-                      Major <span style={{ color: C.red }}>*</span>
+                      Major <span style={{ color: C.error }}>*</span>
                     </label>
                     <select
                       id="major"
@@ -962,7 +964,7 @@ export default function OnboardingPage() {
                       }}
                       aria-describedby={step1Errors.major ? "major-error" : undefined}
                       aria-invalid={!!step1Errors.major}
-                      style={{ ...fieldInput, borderColor: step1Errors.major ? C.red : "#cccccc" }}
+                      style={{ ...fieldInput, borderColor: step1Errors.major ? C.error : C.borderInput }}
                       {...focusRing}
                     >
                       <option value="">Select a major</option>
@@ -979,7 +981,7 @@ export default function OnboardingPage() {
                         style={{
                           margin: "4px 0 0 0",
                           fontSize: "13px",
-                          color: C.red,
+                          color: C.error,
                           fontFamily: FONT,
                         }}
                       >
@@ -1025,10 +1027,10 @@ export default function OnboardingPage() {
                     style={{
                       marginTop: "8px",
                       padding: "12px 24px",
-                      backgroundColor: C.red,
+                      backgroundColor: C.navy,
                       color: C.white,
                       border: "none",
-                      borderRadius: "4px",
+                      borderRadius: "var(--border-radius-sm)",
                       fontSize: "15px",
                       fontFamily: FONT,
                       fontWeight: 600,
@@ -1037,10 +1039,10 @@ export default function OnboardingPage() {
                       outline: "none",
                     }}
                     onMouseEnter={(e) => {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.redDark;
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.navyDark;
                     }}
                     onMouseLeave={(e) => {
-                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.red;
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.navy;
                     }}
                     {...focusRing}
                   >
@@ -1053,7 +1055,7 @@ export default function OnboardingPage() {
               <>
                 <h2
                   style={{
-                    fontFamily: FONT,
+                    fontFamily: FONT_HEADING,
                     fontSize: "22px",
                     fontWeight: 600,
                     color: C.textHeading,
@@ -1140,9 +1142,9 @@ export default function OnboardingPage() {
                                       fontSize: "13px",
                                       fontFamily: FONT,
                                       fontWeight: isSelected ? 600 : 400,
-                                      border: `1px solid ${isSelected ? C.red : C.borderInput}`,
+                                      border: `1px solid ${isSelected ? C.navy : C.borderInput}`,
                                       backgroundColor: isSelected ? C.bgSelectedRow : C.bgCard,
-                                      color: isSelected ? C.red : C.textSecondary,
+                                      color: isSelected ? C.navy : C.textSecondary,
                                       cursor: "pointer",
                                       minHeight: "32px",
                                       outline: "none",
@@ -1175,10 +1177,10 @@ export default function OnboardingPage() {
                       role="alert"
                       style={{
                         fontSize: "14px",
-                        color: C.red,
+                        color: C.error,
                         backgroundColor: C.bgSelectedRow,
-                        border: "1px solid #fecaca",
-                        borderRadius: "4px",
+                        border: `1px solid ${C.error}`,
+                        borderRadius: "var(--border-radius-sm)",
                         padding: "10px 14px",
                         fontFamily: FONT,
                         margin: 0,
@@ -1194,7 +1196,7 @@ export default function OnboardingPage() {
                       style={{
                         padding: "12px 20px",
                         border: `1px solid ${C.borderInput}`,
-                        borderRadius: "4px",
+                        borderRadius: "var(--border-radius-sm)",
                         backgroundColor: C.bgCard,
                         color: C.textSecondary,
                         fontFamily: FONT,
@@ -1220,10 +1222,10 @@ export default function OnboardingPage() {
                       style={{
                         flex: 1,
                         padding: "12px 24px",
-                        backgroundColor: saving ? "#999" : C.red,
+                        backgroundColor: saving ? "#999" : C.navy,
                         color: C.white,
                         border: "none",
-                        borderRadius: "4px",
+                        borderRadius: "var(--border-radius-sm)",
                         fontSize: "15px",
                         fontFamily: FONT,
                         fontWeight: 600,
@@ -1234,11 +1236,11 @@ export default function OnboardingPage() {
                       }}
                       onMouseEnter={(e) => {
                         if (!saving)
-                          (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.redDark;
+                          (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.navyDark;
                       }}
                       onMouseLeave={(e) => {
                         if (!saving)
-                          (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.red;
+                          (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.navy;
                       }}
                       {...focusRing}
                     >

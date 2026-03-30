@@ -168,12 +168,12 @@ function ReviewBubble({ card, dark, showCursorBlink }: ReviewBubbleProps) {
   const typing   = cardState === "typing" && charCount < fullText.length;
   const showMeta = charCount > fullText.length * 0.45;
 
-  const courseColor  = dark ? "#ff7070" : "#cc0000";
-  const textColor    = dark ? "rgba(230,230,230,0.92)" : "rgba(25,25,25,0.88)";
-  const mutedColor   = dark ? "rgba(160,160,160,0.75)" : "rgba(100,100,100,0.72)";
+  const courseColor  = dark ? "#ff7070" : "var(--color-primary-navy)";
+  const textColor    = dark ? "rgba(230,230,230,0.92)" : "rgba(28,25,23,0.88)";
+  const mutedColor   = dark ? "rgba(160,160,160,0.75)" : "rgba(87,83,78,0.72)";
   const borderColor  = dark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.07)";
   const bgColor      = dark ? "rgba(18,18,18,0.82)" : "rgba(255,255,255,0.72)";
-  const cursorColor  = dark ? "#ff7070" : "#cc0000";
+  const cursorColor  = dark ? "#ff7070" : "var(--color-primary-navy)";
 
   return (
     <div
@@ -241,8 +241,8 @@ interface LogoProps {
 }
 function CenterLogo({ logoOpacity, mottoCount, dark }: LogoProps) {
   const mottoVisible = MOTTO.slice(0, mottoCount);
-  const wordColor    = dark ? "#ffffff" : "#1a1a1a";
-  const accentColor  = dark ? "#ff5555" : "#cc0000";
+  const wordColor    = dark ? "#ffffff" : "var(--color-text-primary)";
+  const accentColor  = dark ? "#ff5555" : "var(--color-primary-navy)";
   const mottoColor   = dark ? "rgba(200,200,200,0.85)" : "rgba(80,80,80,0.85)";
 
   return (

@@ -1,7 +1,5 @@
 "use client";
 
-const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
-
 const GOOGLE_SVG = (
   <svg width="18" height="18" viewBox="0 0 18 18" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
     <path d="M17.64 9.2c0-.637-.057-1.251-.164-1.84H9v3.481h4.844c-.209 1.125-.843 2.078-1.796 2.717v2.258h2.908c1.702-1.567 2.684-3.875 2.684-6.615z" fill="#4285F4" />
@@ -27,19 +25,19 @@ export default function GoogleAuth({ buttonText }: { buttonText: string }) {
         gap: "10px",
         padding: "11px 16px",
         minHeight: "44px",
-        backgroundColor: "#ffffff",
-        border: "1px solid #cccccc",
-        borderRadius: "4px",
-        fontSize: "15px",
-        fontFamily: FONT,
+        backgroundColor: "var(--color-white)",
+        border: "1px solid var(--color-border-tan)",
+        borderRadius: "var(--border-radius-sm)",
+        fontSize: "var(--font-size-sm)",
+        fontFamily: "var(--font-body)",
         fontWeight: 500,
-        color: "#333333",
+        color: "var(--color-text-primary)",
         cursor: "pointer",
         outline: "none",
       }}
-      onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#f5f5f5"; }}
-      onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#ffffff"; }}
-      onFocus={(e) => { e.currentTarget.style.outline = "2px solid #cc0000"; e.currentTarget.style.outlineOffset = "2px"; }}
+      onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "var(--color-surface-extra-light)"; }}
+      onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "var(--color-white)"; }}
+      onFocus={(e) => { e.currentTarget.style.outline = "2px solid var(--color-primary-navy)"; e.currentTarget.style.outlineOffset = "2px"; }}
       onBlur={(e) => { e.currentTarget.style.outline = "none"; }}
     >
       {GOOGLE_SVG}

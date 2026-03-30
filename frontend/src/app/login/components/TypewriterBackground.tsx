@@ -18,7 +18,8 @@ import { REVIEWS } from "@/src/app/onboarding/data/reviews";
 
 type Phase = "TYPING" | "BLUR" | "LOGO" | "CLEAR";
 
-const FONT   = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+const FONT         = "var(--font-body)";
+const FONT_HEADING = "var(--font-heading)";
 const MOTTO  = "Know everything about your courses.";
 const CHAR_MS = 26; // ms per character
 
@@ -232,14 +233,14 @@ export default function TypewriterBackground() {
               fontFamily:    FONT,
               fontSize:      "10px",
               fontWeight:    600,
-              color:         "#cc0000",
+              color:         "var(--color-primary-navy)",
               letterSpacing: "0.06em",
               opacity:       0.75,
               marginBottom:  "5px",
               lineHeight:    1,
             }}>
               {s.courseCode}
-              <span style={{ fontWeight: 400, color: "#aaa", marginLeft: "5px" }}>
+              <span style={{ fontWeight: 400, color: "var(--color-text-secondary)", marginLeft: "5px" }}>
                 {s.courseName}
               </span>
             </div>
@@ -248,7 +249,7 @@ export default function TypewriterBackground() {
             <div style={{
               fontFamily:  FONT,
               fontSize:    `${s.size}px`,
-              color:       "#0d0d0d",
+              color:       "var(--color-text-primary)",
               lineHeight:  1.58,
               whiteSpace:  "pre-wrap",
             }}>
@@ -259,7 +260,7 @@ export default function TypewriterBackground() {
                   display:         "inline-block",
                   width:           "2px",
                   height:          `${s.size * 0.85}px`,
-                  backgroundColor: blink ? "#cc0000" : "transparent",
+                  backgroundColor: blink ? "var(--color-primary-navy)" : "transparent",
                   marginLeft:      "1px",
                   verticalAlign:   "middle",
                   borderRadius:    "1px",
@@ -287,19 +288,19 @@ export default function TypewriterBackground() {
         }}
       >
         <div style={{
-          fontFamily:    FONT,
+          fontFamily:    FONT_HEADING,
           fontSize:      "clamp(58px, 11vw, 140px)",
           fontWeight:    900,
           letterSpacing: "-0.03em",
           lineHeight:    1,
-          color:         "#0d0d0d",
+          color:         "var(--color-text-primary)",
         }}>
-          North<span style={{ color: "#cc0000" }}>Star</span>
+          North<span style={{ color: "var(--color-primary-navy)" }}>Star</span>
         </div>
         <div style={{
           fontFamily:    FONT,
           fontSize:      "clamp(13px, 1.6vw, 20px)",
-          color:         "#666",
+          color:         "var(--color-text-secondary)",
           marginTop:     "18px",
           letterSpacing: "0.05em",
           fontWeight:    400,

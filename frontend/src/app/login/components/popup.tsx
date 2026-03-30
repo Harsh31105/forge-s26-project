@@ -3,8 +3,6 @@
 import { useEffect, useRef } from "react";
 import GoogleAuth from "@/src/app/login/googleAuth";
 
-const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
-
 export default function SignUpPopup({ onClose }: { onClose: () => void }) {
   const dialogRef   = useRef<HTMLDivElement>(null);
   const headingId   = "signup-dialog-title";
@@ -68,9 +66,9 @@ export default function SignUpPopup({ onClose }: { onClose: () => void }) {
         tabIndex={-1}
         onClick={(e) => e.stopPropagation()}
         style={{
-          backgroundColor: "#ffffff",
-          borderRadius: "6px",
-          border: "1px solid #e0e0e0",
+          backgroundColor: "var(--color-white)",
+          borderRadius: "var(--border-radius-sm)",
+          border: "1px solid var(--color-border-tan)",
           boxShadow: "0 8px 24px rgba(0,0,0,0.14)",
           width: "100%",
           maxWidth: "400px",
@@ -90,21 +88,21 @@ export default function SignUpPopup({ onClose }: { onClose: () => void }) {
             background: "none",
             border: "none",
             cursor: "pointer",
-            color: "#888",
+            color: "var(--color-text-secondary)",
             display: "flex",
             alignItems: "center",
             justifyContent: "center",
             width: "32px",
             height: "32px",
-            borderRadius: "4px",
+            borderRadius: "var(--border-radius-sm)",
             fontSize: "18px",
             lineHeight: 1,
-            fontFamily: FONT,
+            fontFamily: "var(--font-body)",
             outline: "none",
           }}
-          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "#f5f5f5"; (e.currentTarget as HTMLButtonElement).style.color = "#333"; }}
-          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "#888"; }}
-          onFocus={(e) => { e.currentTarget.style.outline = "2px solid #cc0000"; e.currentTarget.style.outlineOffset = "2px"; }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "var(--color-surface-extra-light)"; (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-primary)"; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = "transparent"; (e.currentTarget as HTMLButtonElement).style.color = "var(--color-text-secondary)"; }}
+          onFocus={(e) => { e.currentTarget.style.outline = "2px solid var(--color-primary-navy)"; e.currentTarget.style.outlineOffset = "2px"; }}
           onBlur={(e) => { e.currentTarget.style.outline = "none"; }}
         >
           ×
@@ -113,10 +111,10 @@ export default function SignUpPopup({ onClose }: { onClose: () => void }) {
         <h2
           id={headingId}
           style={{
-            fontFamily: FONT,
-            fontSize: "20px",
+            fontFamily: "var(--font-heading)",
+            fontSize: "var(--font-size-base)",
             fontWeight: 600,
-            color: "#1a1a1a",
+            color: "var(--color-text-primary)",
             margin: "0 0 10px 0",
           }}
         >
@@ -125,9 +123,9 @@ export default function SignUpPopup({ onClose }: { onClose: () => void }) {
 
         <p
           style={{
-            fontFamily: FONT,
-            fontSize: "15px",
-            color: "#555555",
+            fontFamily: "var(--font-body)",
+            fontSize: "var(--font-size-sm)",
+            color: "var(--color-text-secondary)",
             lineHeight: 1.6,
             margin: "0 0 24px 0",
           }}
@@ -136,7 +134,7 @@ export default function SignUpPopup({ onClose }: { onClose: () => void }) {
           Only <strong>@husky.neu.edu</strong> accounts are supported.
         </p>
 
-        <hr style={{ border: "none", borderTop: "1px solid #eeeeee", margin: "0 0 20px 0" }} />
+        <hr style={{ border: "none", borderTop: "1px solid var(--color-border-tan)", margin: "0 0 20px 0" }} />
 
         <GoogleAuth buttonText="Sign in with Google" />
       </div>

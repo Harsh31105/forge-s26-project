@@ -5,8 +5,6 @@ import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 import SignUpPopup from "@/src/app/login/components/popup";
 import TypewriterBackground from "@/src/app/login/components/TypewriterBackground";
 
-const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
-
 export default function LoginPage() {
   const [showSignIn, setShowSignIn] = useState(false);
 
@@ -24,7 +22,7 @@ export default function LoginPage() {
     <div
       style={{
         minHeight:       "100vh",
-        backgroundColor: "#ffffff",
+        backgroundColor: "var(--color-background-cream)",
         position:        "relative",
         overflow:        "hidden",
       }}
@@ -45,16 +43,16 @@ export default function LoginPage() {
           justifyContent:  "space-between",
           padding:         "0 32px",
           zIndex:          20,
-          backgroundColor: "#cc0000",
+          backgroundColor: "var(--color-primary-navy)",
         }}
       >
         <span
           style={{
-            fontFamily:    FONT,
+            fontFamily:    "var(--font-heading)",
             fontWeight:    700,
             fontSize:      "18px",
             letterSpacing: "-0.01em",
-            color:         "#ffffff",
+            color:         "var(--color-white)",
             userSelect:    "none",
           }}
         >
@@ -66,10 +64,10 @@ export default function LoginPage() {
           style={{
             padding:         "7px 16px",
             backgroundColor: "transparent",
-            color:           "#ffffff",
+            color:           "var(--color-white)",
             border:          "1.5px solid rgba(255,255,255,0.7)",
-            borderRadius:    "4px",
-            fontFamily:      FONT,
+            borderRadius:    "var(--border-radius-sm)",
+            fontFamily:      "var(--font-body)",
             fontSize:        "14px",
             fontWeight:      500,
             cursor:          "pointer",

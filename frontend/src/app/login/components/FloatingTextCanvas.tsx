@@ -22,7 +22,7 @@ const SNIPPETS = [
 
 // pretext uses canvas measurement, so it must only run client-side.
 // We import it dynamically inside useEffect to keep SSR clean.
-const FONT_STR = '11px -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif';
+const FONT_STR = "11px 'Merriweather', Georgia, serif";
 const COL_W = 160;
 const LH = 15;
 
@@ -70,7 +70,7 @@ export default function FloatingTextCanvas() {
         if (stopped) return;
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         ctx.font = FONT_STR;
-        ctx.fillStyle = "#1a1a1a";
+        ctx.fillStyle = "#1C1917"; /* --color-text-primary */
 
         for (const b of blocks) {
           ctx.globalAlpha = b.opacity;

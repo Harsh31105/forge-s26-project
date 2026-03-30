@@ -6,7 +6,7 @@ import { REVIEWS, type Review } from "../data/reviews";
 // Light-mode ambient review boxes that immediately float around the screen.
 // No dark overlay, no intro sequence, no logo — just the typing boxes.
 
-const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
+const FONT = "var(--font-body)";
 const ACTIVE_MAX = 14;
 const CHAR_MS    = 36;
 const HOLD_MS    = 2400;
@@ -90,7 +90,7 @@ function Stars({ stars }: { stars: number }) {
   return (
     <div style={{ fontSize: "12px", letterSpacing: "1px", lineHeight: 1 }}>
       {Array.from({ length: 5 }, (_, i) => (
-        <span key={i} style={{ color: i < stars ? "#f59e0b" : "#d1d5db" }}>★</span>
+        <span key={i} style={{ color: i < stars ? "var(--color-warning)" : "#d1d5db" }}>★</span>
       ))}
     </div>
   );
@@ -142,21 +142,21 @@ function ReviewBubble({ card, blink }: BubbleProps) {
     >
       {/* Course header */}
       <div style={{ marginBottom: "5px", lineHeight: 1.2 }}>
-        <span style={{ fontSize: "11px", fontWeight: 700, color: "#cc0000", letterSpacing: "0.04em", fontFamily: FONT }}>
+        <span style={{ fontSize: "11px", fontWeight: 700, color: "var(--color-primary-navy)", letterSpacing: "0.04em", fontFamily: FONT }}>
           {review.courseCode}
         </span>
-        <span style={{ fontSize: "10px", color: "rgba(100,100,100,0.72)", fontFamily: FONT }}>
+        <span style={{ fontSize: "10px", color: "var(--color-text-secondary)", fontFamily: FONT }}>
           {" · "}{review.courseName}
         </span>
       </div>
 
       {/* Typewriter text */}
-      <div style={{ fontSize: "12px", lineHeight: 1.55, color: "rgba(25,25,25,0.88)", minHeight: "38px", marginBottom: "6px", fontFamily: FONT }}>
+      <div style={{ fontSize: "12px", lineHeight: 1.55, color: "var(--color-text-primary)", minHeight: "38px", marginBottom: "6px", fontFamily: FONT }}>
         {visible}
         {typing && blink && (
           <span style={{
             display: "inline-block", width: "1.5px", height: "13px",
-            background: "#cc0000", marginLeft: "1px",
+            background: "var(--color-primary-navy)", marginLeft: "1px",
             verticalAlign: "middle", borderRadius: "1px",
           }} />
         )}
