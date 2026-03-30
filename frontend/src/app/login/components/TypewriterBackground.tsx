@@ -6,7 +6,7 @@
 //  Cinematic loop for the login page:
 //   TYPING  →  10 large review texts type across the full viewport
 //   BLUR    →  all text blurs out  (CSS filter transition)
-//   LOGO    →  NorthStar + motto fades in as the centre of attention
+//   LOGO    →  logo.png + motto fades in as the centre of attention
 //   CLEAR   →  logo fades, blur clears, text fades to 0
 //   (repeat with fresh random reviews)
 //
@@ -19,7 +19,6 @@ import { REVIEWS } from "@/src/app/onboarding/data/reviews";
 type Phase = "TYPING" | "BLUR" | "LOGO" | "CLEAR";
 
 const FONT         = "var(--font-body)";
-const FONT_HEADING = "var(--font-heading)";
 const MOTTO  = "Know everything about your courses.";
 const CHAR_MS = 26; // ms per character
 
@@ -287,16 +286,15 @@ export default function TypewriterBackground() {
           zIndex:         8,
         }}
       >
-        <div style={{
-          fontFamily:    FONT_HEADING,
-          fontSize:      "clamp(58px, 11vw, 140px)",
-          fontWeight:    900,
-          letterSpacing: "-0.03em",
-          lineHeight:    1,
-          color:         "var(--color-text-primary)",
-        }}>
-          North<span style={{ color: "var(--color-primary-navy)" }}>Star</span>
-        </div>
+        <img
+          src="/images/Logo.png"
+          alt="Logo"
+          style={{
+            height:    "clamp(58px, 11vw, 140px)",
+            width:     "auto",
+            objectFit: "contain",
+          }}
+        />
         <div style={{
           fontFamily:    FONT,
           fontSize:      "clamp(13px, 1.6vw, 20px)",
