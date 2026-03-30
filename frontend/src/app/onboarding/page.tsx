@@ -6,6 +6,7 @@ import { getStudent } from "@/src/lib/api/student";
 import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 import type { Student, StudentPatchInputPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import { StudentPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
+import AmbientReviews from "@/src/app/onboarding/components/AmbientReviews";
 
 // ── Static data ───────────────────────────────────────────
 
@@ -27,35 +28,55 @@ const GRAD_YEARS = Array.from({ length: 7 }, (_, i) => CURRENT_YEAR + i);
 
 // Mock data — replace with API calls when available
 const MAJORS_WITH_CONCENTRATIONS: Record<string, string[]> = {
-  "Architecture": [],
-  "Biology": ["Biochemistry", "Cell & Molecular Biology", "Ecology & Evolutionary Biology", "Marine Biology"],
-  "Business Administration": ["Accounting", "Entrepreneurship", "Finance", "Management", "Marketing", "Supply Chain Management"],
-  "Chemistry": ["Biochemistry", "Medicinal Chemistry", "Organic Chemistry"],
+  Architecture: [],
+  Biology: [
+    "Biochemistry",
+    "Cell & Molecular Biology",
+    "Ecology & Evolutionary Biology",
+    "Marine Biology",
+  ],
+  "Business Administration": [
+    "Accounting",
+    "Entrepreneurship",
+    "Finance",
+    "Management",
+    "Marketing",
+    "Supply Chain Management",
+  ],
+  Chemistry: ["Biochemistry", "Medicinal Chemistry", "Organic Chemistry"],
   "Communication Studies": ["Advertising", "Digital Media", "Journalism", "Public Relations"],
-  "Computer Science": ["Artificial Intelligence", "Cybersecurity", "Data Science", "Game Development", "Human-Computer Interaction", "Software", "Systems"],
+  "Computer Science": [
+    "Artificial Intelligence",
+    "Cybersecurity",
+    "Data Science",
+    "Game Development",
+    "Human-Computer Interaction",
+    "Software",
+    "Systems",
+  ],
   "Criminal Justice": ["Corrections", "Law Enforcement", "Policy & Planning"],
   "Data Science": ["Business Analytics", "Machine Learning", "Statistics"],
   "Electrical & Computer Engineering": ["Computer Engineering", "Electrical Engineering"],
   "Environmental Science": ["Climate Science", "Ecology", "Environmental Policy"],
   "International Business": ["Finance", "Management", "Marketing"],
-  "Mathematics": ["Applied Mathematics", "Pure Mathematics", "Statistics"],
+  Mathematics: ["Applied Mathematics", "Pure Mathematics", "Statistics"],
   "Mechanical Engineering": ["Manufacturing & Design", "Robotics & Control"],
-  "Nursing": [],
-  "Physics": ["Astrophysics", "Condensed Matter"],
+  Nursing: [],
+  Physics: ["Astrophysics", "Condensed Matter"],
   "Political Science": ["American Politics", "International Relations", "Law & Politics"],
-  "Psychology": ["Clinical", "Cognitive", "Experimental", "Health Psychology"],
+  Psychology: ["Clinical", "Cognitive", "Experimental", "Health Psychology"],
 };
 
 const MAJORS = Object.keys(MAJORS_WITH_CONCENTRATIONS);
 
 // Mock courses — replace with API call when available
 const MOCK_COURSES = [
-  { id: "cs2500",   code: "CS 2500",   name: "Fundamentals of Computer Science 1" },
-  { id: "cs2510",   code: "CS 2510",   name: "Fundamentals of Computer Science 2" },
-  { id: "cs3000",   code: "CS 3000",   name: "Algorithms & Data" },
-  { id: "cs3500",   code: "CS 3500",   name: "Object-Oriented Design" },
-  { id: "cs4400",   code: "CS 4400",   name: "Programming Languages" },
-  { id: "cs4500",   code: "CS 4500",   name: "Software Development" },
+  { id: "cs2500", code: "CS 2500", name: "Fundamentals of Computer Science 1" },
+  { id: "cs2510", code: "CS 2510", name: "Fundamentals of Computer Science 2" },
+  { id: "cs3000", code: "CS 3000", name: "Algorithms & Data" },
+  { id: "cs3500", code: "CS 3500", name: "Object-Oriented Design" },
+  { id: "cs4400", code: "CS 4400", name: "Programming Languages" },
+  { id: "cs4500", code: "CS 4500", name: "Software Development" },
   { id: "math1341", code: "MATH 1341", name: "Calculus 1 for Science & Engineering" },
   { id: "math1342", code: "MATH 1342", name: "Calculus 2 for Science & Engineering" },
   { id: "math2321", code: "MATH 2321", name: "Calculus 3 for Science & Engineering" },
@@ -65,29 +86,29 @@ const MOCK_COURSES = [
   { id: "econ1115", code: "ECON 1115", name: "Principles of Microeconomics" },
   { id: "econ1116", code: "ECON 1116", name: "Principles of Macroeconomics" },
   { id: "engl1111", code: "ENGL 1111", name: "First-Year Writing" },
-  { id: "ds2000",   code: "DS 2000",   name: "Programming with Data" },
-  { id: "ds3000",   code: "DS 3000",   name: "Foundations of Data Science" },
+  { id: "ds2000", code: "DS 2000", name: "Programming with Data" },
+  { id: "ds3000", code: "DS 3000", name: "Foundations of Data Science" },
   { id: "mgmt1000", code: "MGMT 1000", name: "Management & Organizational Analysis" },
 ];
 
 // ── Design tokens ─────────────────────────────────────────
 
 const C = {
-  red:             "#cc0000",
-  redDark:         "#aa0000",
-  textHeading:     "#1a1a1a",
-  textBody:        "#333333",
-  textSecondary:   "#555555",
-  textMuted:       "#777777",
+  red: "#cc0000",
+  redDark: "#aa0000",
+  textHeading: "#1a1a1a",
+  textBody: "#333333",
+  textSecondary: "#555555",
+  textMuted: "#777777",
   textPlaceholder: "#888888",
-  borderInput:     "#cccccc",
-  borderCard:      "#e0e0e0",
+  borderInput: "#cccccc",
+  borderCard: "#e0e0e0",
   borderSeparator: "#eeeeee",
-  bgPage:          "#f7f7f8",
-  bgCard:          "#ffffff",
-  bgHover:         "#f5f5f5",
-  bgSelectedRow:   "#fef2f2",
-  white:           "#ffffff",
+  bgPage: "#f7f7f8",
+  bgCard: "#ffffff",
+  bgHover: "#f5f5f5",
+  bgSelectedRow: "#fef2f2",
+  white: "#ffffff",
 };
 
 const FONT = `-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif`;
@@ -132,7 +153,13 @@ const focusRing = {
 function Checkmark() {
   return (
     <svg width="11" height="8" viewBox="0 0 11 8" fill="none" aria-hidden="true">
-      <path d="M1 3.5L4 6.5L10 1" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M1 3.5L4 6.5L10 1"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -140,10 +167,24 @@ function Checkmark() {
 function Chevron({ open }: { open: boolean }) {
   return (
     <svg
-      width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"
-      style={{ transform: open ? "rotate(180deg)" : "none", transition: "transform 0.12s", flexShrink: 0 }}
+      width="16"
+      height="16"
+      viewBox="0 0 16 16"
+      fill="none"
+      aria-hidden="true"
+      style={{
+        transform: open ? "rotate(180deg)" : "none",
+        transition: "transform 0.12s",
+        flexShrink: 0,
+      }}
     >
-      <path d="M3 6L8 11L13 6" stroke={C.textSecondary} strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
+      <path
+        d="M3 6L8 11L13 6"
+        stroke={C.textSecondary}
+        strokeWidth="1.5"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
     </svg>
   );
 }
@@ -198,7 +239,15 @@ function Nav() {
         zIndex: 100,
       }}
     >
-      <span style={{ fontFamily: FONT, fontWeight: 700, fontSize: "18px", color: C.white, letterSpacing: "-0.01em" }}>
+      <span
+        style={{
+          fontFamily: FONT,
+          fontWeight: 700,
+          fontSize: "18px",
+          color: C.white,
+          letterSpacing: "-0.01em",
+        }}
+      >
         NorthStar
       </span>
       <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
@@ -206,11 +255,27 @@ function Nav() {
           <a
             key={label}
             href="#"
-            style={{ color: C.white, textDecoration: "none", fontFamily: FONT, fontSize: "15px", fontWeight: 500, outline: "none" }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLAnchorElement).style.textDecoration = "underline"; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLAnchorElement).style.textDecoration = "none"; }}
-            onFocus={(e) => { e.currentTarget.style.outline = "2px solid white"; e.currentTarget.style.outlineOffset = "2px"; }}
-            onBlur={(e) => { e.currentTarget.style.outline = "none"; }}
+            style={{
+              color: C.white,
+              textDecoration: "none",
+              fontFamily: FONT,
+              fontSize: "15px",
+              fontWeight: 500,
+              outline: "none",
+            }}
+            onMouseEnter={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.textDecoration = "underline";
+            }}
+            onMouseLeave={(e) => {
+              (e.currentTarget as HTMLAnchorElement).style.textDecoration = "none";
+            }}
+            onFocus={(e) => {
+              e.currentTarget.style.outline = "2px solid white";
+              e.currentTarget.style.outlineOffset = "2px";
+            }}
+            onBlur={(e) => {
+              e.currentTarget.style.outline = "none";
+            }}
           >
             {label}
           </a>
@@ -224,29 +289,20 @@ function Nav() {
 
 function PageShell({ children }: { children: React.ReactNode }) {
   return (
-    <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", backgroundColor: C.bgPage, position: "relative" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        display: "flex",
+        flexDirection: "column",
+        backgroundColor: C.bgPage,
+        position: "relative",
+      }}
+    >
       <SkipLink />
       <Nav />
 
       {/* Single husky logomark — bottom-right, barely visible */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
-      <img
-        src="/images/husky.png"
-        alt=""
-        aria-hidden="true"
-        style={{
-          position: "fixed",
-          bottom: "-40px",
-          right: "-40px",
-          width: "400px",
-          height: "400px",
-          objectFit: "contain",
-          opacity: 0.04,
-          pointerEvents: "none",
-          zIndex: 0,
-          userSelect: "none",
-        }}
-      />
 
       <main
         id="main-content"
@@ -294,11 +350,11 @@ function CourseSelector({
   const [announcement, setAnnouncement] = useState("");
 
   const containerRef = useRef<HTMLDivElement>(null);
-  const triggerRef   = useRef<HTMLDivElement>(null);
-  const searchRef    = useRef<HTMLInputElement>(null);
-  const optionRefs   = useRef<(HTMLDivElement | null)[]>([]);
+  const triggerRef = useRef<HTMLDivElement>(null);
+  const searchRef = useRef<HTMLInputElement>(null);
+  const optionRefs = useRef<(HTMLDivElement | null)[]>([]);
 
-  const showResults    = query.length >= 3;
+  const showResults = query.length >= 3;
   const filteredCourses = showResults
     ? MOCK_COURSES.filter((c) => {
         const q = query.toLowerCase();
@@ -309,7 +365,9 @@ function CourseSelector({
   // Announce filtered count to screen readers
   useEffect(() => {
     if (showResults) {
-      setAnnouncement(`${filteredCourses.length} course${filteredCourses.length !== 1 ? "s" : ""} found`);
+      setAnnouncement(
+        `${filteredCourses.length} course${filteredCourses.length !== 1 ? "s" : ""} found`,
+      );
     } else {
       setAnnouncement("");
     }
@@ -344,15 +402,30 @@ function CourseSelector({
   }, []);
 
   const handleSearchKeyDown = (e: React.KeyboardEvent) => {
-    if (e.key === "Escape") { closeDropdown(); }
-    else if (e.key === "ArrowDown" && filteredCourses.length > 0) { e.preventDefault(); setFocusedIdx(0); }
+    if (e.key === "Escape") {
+      closeDropdown();
+    } else if (e.key === "ArrowDown" && filteredCourses.length > 0) {
+      e.preventDefault();
+      setFocusedIdx(0);
+    }
   };
 
   const handleOptionKeyDown = (e: React.KeyboardEvent, idx: number, id: string) => {
-    if (e.key === "ArrowDown")        { e.preventDefault(); if (idx < filteredCourses.length - 1) setFocusedIdx(idx + 1); }
-    else if (e.key === "ArrowUp")     { e.preventDefault(); if (idx === 0) { setFocusedIdx(-1); searchRef.current?.focus(); } else setFocusedIdx(idx - 1); }
-    else if (e.key === "Enter" || e.key === " ") { e.preventDefault(); onToggle(id); }
-    else if (e.key === "Escape")      { closeDropdown(); }
+    if (e.key === "ArrowDown") {
+      e.preventDefault();
+      if (idx < filteredCourses.length - 1) setFocusedIdx(idx + 1);
+    } else if (e.key === "ArrowUp") {
+      e.preventDefault();
+      if (idx === 0) {
+        setFocusedIdx(-1);
+        searchRef.current?.focus();
+      } else setFocusedIdx(idx - 1);
+    } else if (e.key === "Enter" || e.key === " ") {
+      e.preventDefault();
+      onToggle(id);
+    } else if (e.key === "Escape") {
+      closeDropdown();
+    }
   };
 
   return (
@@ -361,14 +434,22 @@ function CourseSelector({
       <span
         role="status"
         aria-live="polite"
-        style={{ position: "absolute", left: "-9999px", width: "1px", height: "1px", overflow: "hidden" }}
+        style={{
+          position: "absolute",
+          left: "-9999px",
+          width: "1px",
+          height: "1px",
+          overflow: "hidden",
+        }}
       >
         {announcement}
       </span>
 
       <label htmlFor="course-trigger" style={fieldLabel}>
         Courses{" "}
-        <span style={{ fontWeight: 400, color: C.textPlaceholder, fontSize: "13px" }}>— optional</span>
+        <span style={{ fontWeight: 400, color: C.textPlaceholder, fontSize: "13px" }}>
+          — optional
+        </span>
       </label>
 
       {/* Trigger — div with role="button" to avoid nested <button> inside chips */}
@@ -381,7 +462,12 @@ function CourseSelector({
         aria-expanded={open}
         aria-controls="course-listbox"
         onClick={() => setOpen((o) => !o)}
-        onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setOpen((o) => !o); } }}
+        onKeyDown={(e) => {
+          if (e.key === "Enter" || e.key === " ") {
+            e.preventDefault();
+            setOpen((o) => !o);
+          }
+        }}
         style={{
           width: "100%",
           minHeight: "44px",
@@ -429,9 +515,17 @@ function CourseSelector({
                   <button
                     type="button"
                     aria-label={`Remove ${course.code}`}
-                    onClick={(e) => { e.stopPropagation(); onToggle(id); }}
-                    onFocus={(e) => { e.currentTarget.style.outline = "2px solid white"; e.currentTarget.style.outlineOffset = "1px"; }}
-                    onBlur={(e) => { e.currentTarget.style.outline = "none"; }}
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      onToggle(id);
+                    }}
+                    onFocus={(e) => {
+                      e.currentTarget.style.outline = "2px solid white";
+                      e.currentTarget.style.outlineOffset = "1px";
+                    }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.outline = "none";
+                    }}
                     style={{
                       background: "none",
                       border: "none",
@@ -484,7 +578,10 @@ function CourseSelector({
               aria-controls="course-listbox"
               placeholder="Search by code or name…"
               value={query}
-              onChange={(e) => { setQuery(e.target.value); setFocusedIdx(-1); }}
+              onChange={(e) => {
+                setQuery(e.target.value);
+                setFocusedIdx(-1);
+              }}
               onKeyDown={handleSearchKeyDown}
               style={{
                 width: "100%",
@@ -509,11 +606,27 @@ function CourseSelector({
             style={{ maxHeight: "240px", overflowY: "auto" }}
           >
             {!showResults ? (
-              <p style={{ padding: "12px 14px", margin: 0, fontSize: "14px", color: C.textMuted, fontFamily: FONT }}>
+              <p
+                style={{
+                  padding: "12px 14px",
+                  margin: 0,
+                  fontSize: "14px",
+                  color: C.textMuted,
+                  fontFamily: FONT,
+                }}
+              >
                 Type at least 3 letters to search…
               </p>
             ) : filteredCourses.length === 0 ? (
-              <p style={{ padding: "12px 14px", margin: 0, fontSize: "14px", color: C.textMuted, fontFamily: FONT }}>
+              <p
+                style={{
+                  padding: "12px 14px",
+                  margin: 0,
+                  fontSize: "14px",
+                  color: C.textMuted,
+                  fontFamily: FONT,
+                }}
+              >
                 No courses found
               </p>
             ) : (
@@ -522,7 +635,9 @@ function CourseSelector({
                 return (
                   <div
                     key={course.id}
-                    ref={(el) => { optionRefs.current[idx] = el; }}
+                    ref={(el) => {
+                      optionRefs.current[idx] = el;
+                    }}
                     role="option"
                     id={`course-option-${course.id}`}
                     aria-selected={checked}
@@ -534,9 +649,17 @@ function CourseSelector({
                       e.currentTarget.style.outlineOffset = "-2px";
                       setFocusedIdx(idx);
                     }}
-                    onBlur={(e) => { e.currentTarget.style.outline = "none"; }}
-                    onMouseEnter={(e) => { if (!checked) e.currentTarget.style.backgroundColor = C.bgHover; }}
-                    onMouseLeave={(e) => { e.currentTarget.style.backgroundColor = checked ? C.bgSelectedRow : "transparent"; }}
+                    onBlur={(e) => {
+                      e.currentTarget.style.outline = "none";
+                    }}
+                    onMouseEnter={(e) => {
+                      if (!checked) e.currentTarget.style.backgroundColor = C.bgHover;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.backgroundColor = checked
+                        ? C.bgSelectedRow
+                        : "transparent";
+                    }}
                     style={{
                       display: "flex",
                       alignItems: "center",
@@ -568,12 +691,17 @@ function CourseSelector({
                     >
                       {checked && <Checkmark />}
                     </span>
-                    <span style={{ fontSize: "14px", fontWeight: 600, color: C.textBody, flexShrink: 0 }}>
+                    <span
+                      style={{
+                        fontSize: "14px",
+                        fontWeight: 600,
+                        color: C.textBody,
+                        flexShrink: 0,
+                      }}
+                    >
                       {course.code}
                     </span>
-                    <span style={{ fontSize: "14px", color: C.textSecondary }}>
-                      {course.name}
-                    </span>
+                    <span style={{ fontSize: "14px", color: C.textSecondary }}>{course.name}</span>
                   </div>
                 );
               })
@@ -588,23 +716,25 @@ function CourseSelector({
 // ── Main page ─────────────────────────────────────────────
 
 export default function OnboardingPage() {
-  const router     = useRouter();
+  const router = useRouter();
   const studentAPI = getStudent();
 
-  const [student,   setStudent]   = useState<Student | null>(null);
+  const [student, setStudent] = useState<Student | null>(null);
   const [loadError, setLoadError] = useState<string | null>(null);
-  const [step,      setStep]      = useState<1 | 2>(1);
+  const [step, setStep] = useState<1 | 2>(1);
 
   // Step 1 state
   const [graduationYear, setGraduationYear] = useState<number | "">("");
-  const [major,          setMajor]          = useState("");
-  const [concentration,  setConcentration]  = useState("");
-  const [step1Errors,    setStep1Errors]    = useState<{ year?: string; major?: string }>({});
+  const [major, setMajor] = useState("");
+  const [concentration, setConcentration] = useState("");
+  const [step1Errors, setStep1Errors] = useState<{ year?: string; major?: string }>({});
 
   // Step 2 state
-  const [selectedCourses,  setSelectedCourses]  = useState<string[]>([]);
-  const [coursePreferences, setCoursePreferences] = useState<Record<string, StudentPatchInputPreferencesItem[]>>({});
-  const [saving,    setSaving]    = useState(false);
+  const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
+  const [coursePreferences, setCoursePreferences] = useState<
+    Record<string, StudentPatchInputPreferencesItem[]>
+  >({});
+  const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
   const concentrations = major ? (MAJORS_WITH_CONCENTRATIONS[major] ?? []) : [];
@@ -613,19 +743,31 @@ export default function OnboardingPage() {
     // DEV_PREVIEW: set to true to bypass auth and view the page locally
     const DEV_PREVIEW = true;
     if (DEV_PREVIEW) {
-      setStudent({ id: "dev", firstName: "Dev", lastName: "User", email: "dev@husky.neu.edu", graduationYear: 2026, preferences: [], createdAt: "", updatedAt: "" });
+      setStudent({
+        id: "dev",
+        firstName: "Dev",
+        lastName: "User",
+        email: "dev@husky.neu.edu",
+        graduationYear: 2026,
+        preferences: [],
+        createdAt: "",
+        updatedAt: "",
+      });
       return;
     }
 
     const params = new URLSearchParams(window.location.search);
-    const token  = params.get("token");
+    const token = params.get("token");
     if (token) {
       localStorage.setItem(TOKEN_KEY, token);
       window.history.replaceState({}, "", "/onboarding");
     }
 
     const storedToken = token || localStorage.getItem(TOKEN_KEY);
-    if (!storedToken) { router.push("/login"); return; }
+    if (!storedToken) {
+      router.push("/login");
+      return;
+    }
 
     try {
       const payload = JSON.parse(atob(storedToken.split(".")[1]));
@@ -640,7 +782,7 @@ export default function OnboardingPage() {
 
   const toggleCourse = (id: string) => {
     setSelectedCourses((prev) =>
-      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id]
+      prev.includes(id) ? prev.filter((c) => c !== id) : [...prev, id],
     );
   };
 
@@ -661,7 +803,7 @@ export default function OnboardingPage() {
 
     // Flatten all preferences from all selected courses (deduplicated)
     const allPreferences = Array.from(
-      new Set(Object.values(coursePreferences).flat())
+      new Set(Object.values(coursePreferences).flat()),
     ) as StudentPatchInputPreferencesItem[];
 
     try {
@@ -677,270 +819,438 @@ export default function OnboardingPage() {
     }
   };
 
-  if (loadError) {
-    return (
-      <PageShell>
-        <p style={{ fontSize: "15px", color: C.red, textAlign: "center", fontFamily: FONT }}>
-          {loadError}
-        </p>
-      </PageShell>
-    );
-  }
-
-  if (!student) {
-    return (
-      <PageShell>
-        <p style={{ fontSize: "15px", color: C.textSecondary, textAlign: "center", fontFamily: FONT }}>
-          Loading…
-        </p>
-      </PageShell>
-    );
-  }
-
-  // ── Step 1 ────────────────────────────────────────────────
-  if (step === 1) {
-    return (
-      <PageShell>
-        <h2 style={{ fontFamily: FONT, fontSize: "22px", fontWeight: 600, color: C.textHeading, margin: "0 0 6px 0" }}>
-          Welcome, {student.firstName}!
-        </h2>
-        <p style={{ fontFamily: FONT, fontSize: "15px", color: C.textSecondary, lineHeight: 1.6, margin: "0 0 28px 0" }}>
-          Tell us a bit about yourself to personalize your experience.
-        </p>
-
-        <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-          {/* Graduation Year */}
-          <div>
-            <label htmlFor="grad-year" style={fieldLabel}>
-              Graduation Year <span style={{ color: C.red }}>*</span>
-            </label>
-            <select
-              id="grad-year"
-              value={graduationYear}
-              onChange={(e) => { setGraduationYear(e.target.value ? Number(e.target.value) : ""); setStep1Errors((p) => ({ ...p, year: undefined })); }}
-              aria-describedby={step1Errors.year ? "grad-year-error" : undefined}
-              aria-invalid={!!step1Errors.year}
-              style={{ ...fieldInput, borderColor: step1Errors.year ? C.red : "#cccccc" }}
-              {...focusRing}
-            >
-              <option value="">Select a year</option>
-              {GRAD_YEARS.map((year) => <option key={year} value={year}>{year}</option>)}
-            </select>
-            {step1Errors.year && (
-              <p id="grad-year-error" role="alert" style={{ margin: "4px 0 0 0", fontSize: "13px", color: C.red, fontFamily: FONT }}>
-                {step1Errors.year}
-              </p>
-            )}
-          </div>
-
-          {/* Major */}
-          <div>
-            <label htmlFor="major" style={fieldLabel}>
-              Major <span style={{ color: C.red }}>*</span>
-            </label>
-            <select
-              id="major"
-              value={major}
-              onChange={(e) => { setMajor(e.target.value); setConcentration(""); setStep1Errors((p) => ({ ...p, major: undefined })); }}
-              aria-describedby={step1Errors.major ? "major-error" : undefined}
-              aria-invalid={!!step1Errors.major}
-              style={{ ...fieldInput, borderColor: step1Errors.major ? C.red : "#cccccc" }}
-              {...focusRing}
-            >
-              <option value="">Select a major</option>
-              {MAJORS.map((m) => <option key={m} value={m}>{m}</option>)}
-            </select>
-            {step1Errors.major && (
-              <p id="major-error" role="alert" style={{ margin: "4px 0 0 0", fontSize: "13px", color: C.red, fontFamily: FONT }}>
-                {step1Errors.major}
-              </p>
-            )}
-          </div>
-
-          {/* Concentration — only when major has concentrations */}
-          {concentrations.length > 0 && (
-            <div>
-              <label htmlFor="concentration" style={fieldLabel}>Concentration</label>
-              <select
-                id="concentration"
-                value={concentration}
-                onChange={(e) => setConcentration(e.target.value)}
-                style={fieldInput}
-                {...focusRing}
-              >
-                <option value="">Select a concentration</option>
-                {concentrations.map((c) => <option key={c} value={c}>{c}</option>)}
-              </select>
-            </div>
-          )}
-
-          <button
-            onClick={() => {
-              const errors: { year?: string; major?: string } = {};
-              if (graduationYear === "") errors.year = "Please select a graduation year.";
-              if (!major)               errors.major = "Please select a major.";
-              if (Object.keys(errors).length > 0) { setStep1Errors(errors); return; }
-              setStep(2);
-            }}
-            style={{
-              marginTop: "8px",
-              padding: "12px 24px",
-              backgroundColor: C.red,
-              color: C.white,
-              border: "none",
-              borderRadius: "4px",
-              fontSize: "15px",
-              fontFamily: FONT,
-              fontWeight: 600,
-              cursor: "pointer",
-              minHeight: "44px",
-              outline: "none",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.redDark; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.red; }}
-            {...focusRing}
-          >
-            Get started
-          </button>
-        </div>
-      </PageShell>
-    );
-  }
-
-  // ── Step 2 ────────────────────────────────────────────────
+  // ── Single return ──────────────────────────────────────────
   return (
-    <PageShell>
-      <h2 style={{ fontFamily: FONT, fontSize: "22px", fontWeight: 600, color: C.textHeading, margin: "0 0 6px 0" }}>
-        Courses you&apos;ve enjoyed
-      </h2>
-      <p style={{ fontFamily: FONT, fontSize: "15px", color: C.textSecondary, lineHeight: 1.6, margin: "0 0 28px 0" }}>
-        Select any courses you&apos;ve taken and liked — we&apos;ll use them to tailor your recommendations.
-      </p>
+    <div style={{ minHeight: "100vh", backgroundColor: "#ffffff", position: "relative" }}>
+      {/* Ambient review boxes floating in the background */}
+      <AmbientReviews />
 
-      <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-        <CourseSelector selectedCourses={selectedCourses} onToggle={toggleCourse} />
+      {/* Form layer — always visible */}
+      <div
+        style={{
+          minHeight: "100vh",
+          display: "flex",
+          flexDirection: "column",
+          position: "relative",
+          zIndex: 5,
+        }}
+      >
+        <SkipLink />
+        <Nav />
 
-        {/* Per-course preference tags — appear once at least one course is selected */}
-        {selectedCourses.length > 0 && (
-          <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-            <hr style={{ border: "none", borderTop: `1px solid ${C.borderSeparator}`, margin: 0 }} />
-            {selectedCourses.map((courseId) => {
-              const course  = MOCK_COURSES.find((c) => c.id === courseId);
-              if (!course) return null;
-              const selected = coursePreferences[courseId] ?? [];
-              return (
-                <div key={courseId}>
-                  <p style={{ fontFamily: FONT, fontSize: "14px", fontWeight: 500, color: C.textHeading, margin: "0 0 10px 0" }}>
-                    What was true about <strong>{course.code}</strong>?{" "}
-                    <span style={{ fontWeight: 400, color: C.textPlaceholder, fontSize: "13px" }}>— optional</span>
-                  </p>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }} role="group" aria-label={`Preferences for ${course.code}`}>
-                    {Object.values(StudentPreferencesItem).map((pref) => {
-                      const isSelected = selected.includes(pref as StudentPatchInputPreferencesItem);
-                      return (
-                        <button
-                          key={pref}
-                          type="button"
-                          aria-pressed={isSelected}
-                          onClick={() => toggleCoursePreference(courseId, pref as StudentPatchInputPreferencesItem)}
-                          style={{
-                            padding: "6px 14px",
-                            borderRadius: "20px",
-                            fontSize: "13px",
-                            fontFamily: FONT,
-                            fontWeight: isSelected ? 600 : 400,
-                            border: `1px solid ${isSelected ? C.red : C.borderInput}`,
-                            backgroundColor: isSelected ? C.bgSelectedRow : C.bgCard,
-                            color: isSelected ? C.red : C.textSecondary,
-                            cursor: "pointer",
-                            minHeight: "32px",
-                            outline: "none",
-                          }}
-                          onMouseEnter={(e) => {
-                            if (!isSelected) (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.bgHover;
-                          }}
-                          onMouseLeave={(e) => {
-                            (e.currentTarget as HTMLButtonElement).style.backgroundColor = isSelected ? C.bgSelectedRow : C.bgCard;
-                          }}
-                          {...focusRing}
-                        >
-                          {PREFERENCE_LABELS[pref as StudentPatchInputPreferencesItem]}
-                        </button>
-                      );
-                    })}
+        {/* eslint-disable-next-line @next/next/no-img-element */}
+
+        <main
+          id="main-content"
+          tabIndex={-1}
+          style={{
+            flex: 1,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "48px 16px",
+            position: "relative",
+            zIndex: 1,
+          }}
+        >
+          <div
+            style={{
+              width: "100%",
+              maxWidth: "600px",
+              backgroundColor: C.bgCard,
+              borderRadius: "6px",
+              border: `1px solid ${C.borderCard}`,
+              boxShadow: "0 1px 3px rgba(0,0,0,0.06)",
+              padding: "36px",
+            }}
+          >
+            {/* ── Loading / error ── */}
+            {loadError ? (
+              <p style={{ fontSize: "15px", color: C.red, textAlign: "center", fontFamily: FONT }}>
+                {loadError}
+              </p>
+            ) : !student ? (
+              <p
+                style={{
+                  fontSize: "15px",
+                  color: C.textSecondary,
+                  textAlign: "center",
+                  fontFamily: FONT,
+                }}
+              >
+                Loading…
+              </p>
+            ) : step === 1 ? (
+              /* ── Step 1 ── */
+              <>
+                <h2
+                  style={{
+                    fontFamily: FONT,
+                    fontSize: "22px",
+                    fontWeight: 600,
+                    color: C.textHeading,
+                    margin: "0 0 6px 0",
+                  }}
+                >
+                  Welcome, {student.firstName}!
+                </h2>
+                <p
+                  style={{
+                    fontFamily: FONT,
+                    fontSize: "15px",
+                    color: C.textSecondary,
+                    lineHeight: 1.6,
+                    margin: "0 0 28px 0",
+                  }}
+                >
+                  Tell us a bit about yourself to personalize your experience.
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                  {/* Graduation Year */}
+                  <div>
+                    <label htmlFor="grad-year" style={fieldLabel}>
+                      Graduation Year <span style={{ color: C.red }}>*</span>
+                    </label>
+                    <select
+                      id="grad-year"
+                      value={graduationYear}
+                      onChange={(e) => {
+                        setGraduationYear(e.target.value ? Number(e.target.value) : "");
+                        setStep1Errors((p) => ({ ...p, year: undefined }));
+                      }}
+                      aria-describedby={step1Errors.year ? "grad-year-error" : undefined}
+                      aria-invalid={!!step1Errors.year}
+                      style={{ ...fieldInput, borderColor: step1Errors.year ? C.red : "#cccccc" }}
+                      {...focusRing}
+                    >
+                      <option value="">Select a year</option>
+                      {GRAD_YEARS.map((year) => (
+                        <option key={year} value={year}>
+                          {year}
+                        </option>
+                      ))}
+                    </select>
+                    {step1Errors.year && (
+                      <p
+                        id="grad-year-error"
+                        role="alert"
+                        style={{
+                          margin: "4px 0 0 0",
+                          fontSize: "13px",
+                          color: C.red,
+                          fontFamily: FONT,
+                        }}
+                      >
+                        {step1Errors.year}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Major */}
+                  <div>
+                    <label htmlFor="major" style={fieldLabel}>
+                      Major <span style={{ color: C.red }}>*</span>
+                    </label>
+                    <select
+                      id="major"
+                      value={major}
+                      onChange={(e) => {
+                        setMajor(e.target.value);
+                        setConcentration("");
+                        setStep1Errors((p) => ({ ...p, major: undefined }));
+                      }}
+                      aria-describedby={step1Errors.major ? "major-error" : undefined}
+                      aria-invalid={!!step1Errors.major}
+                      style={{ ...fieldInput, borderColor: step1Errors.major ? C.red : "#cccccc" }}
+                      {...focusRing}
+                    >
+                      <option value="">Select a major</option>
+                      {MAJORS.map((m) => (
+                        <option key={m} value={m}>
+                          {m}
+                        </option>
+                      ))}
+                    </select>
+                    {step1Errors.major && (
+                      <p
+                        id="major-error"
+                        role="alert"
+                        style={{
+                          margin: "4px 0 0 0",
+                          fontSize: "13px",
+                          color: C.red,
+                          fontFamily: FONT,
+                        }}
+                      >
+                        {step1Errors.major}
+                      </p>
+                    )}
+                  </div>
+
+                  {/* Concentration — only when major has concentrations */}
+                  {concentrations.length > 0 && (
+                    <div>
+                      <label htmlFor="concentration" style={fieldLabel}>
+                        Concentration
+                      </label>
+                      <select
+                        id="concentration"
+                        value={concentration}
+                        onChange={(e) => setConcentration(e.target.value)}
+                        style={fieldInput}
+                        {...focusRing}
+                      >
+                        <option value="">Select a concentration</option>
+                        {concentrations.map((c) => (
+                          <option key={c} value={c}>
+                            {c}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={() => {
+                      const errors: { year?: string; major?: string } = {};
+                      if (graduationYear === "") errors.year = "Please select a graduation year.";
+                      if (!major) errors.major = "Please select a major.";
+                      if (Object.keys(errors).length > 0) {
+                        setStep1Errors(errors);
+                        return;
+                      }
+                      setStep(2);
+                    }}
+                    style={{
+                      marginTop: "8px",
+                      padding: "12px 24px",
+                      backgroundColor: C.red,
+                      color: C.white,
+                      border: "none",
+                      borderRadius: "4px",
+                      fontSize: "15px",
+                      fontFamily: FONT,
+                      fontWeight: 600,
+                      cursor: "pointer",
+                      minHeight: "44px",
+                      outline: "none",
+                    }}
+                    onMouseEnter={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.redDark;
+                    }}
+                    onMouseLeave={(e) => {
+                      (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.red;
+                    }}
+                    {...focusRing}
+                  >
+                    Get started
+                  </button>
+                </div>
+              </>
+            ) : (
+              /* ── Step 2 ── */
+              <>
+                <h2
+                  style={{
+                    fontFamily: FONT,
+                    fontSize: "22px",
+                    fontWeight: 600,
+                    color: C.textHeading,
+                    margin: "0 0 6px 0",
+                  }}
+                >
+                  Courses you&apos;ve enjoyed
+                </h2>
+                <p
+                  style={{
+                    fontFamily: FONT,
+                    fontSize: "15px",
+                    color: C.textSecondary,
+                    lineHeight: 1.6,
+                    margin: "0 0 28px 0",
+                  }}
+                >
+                  Select any courses you&apos;ve taken and liked — we&apos;ll use them to tailor
+                  your recommendations.
+                </p>
+
+                <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                  <CourseSelector selectedCourses={selectedCourses} onToggle={toggleCourse} />
+
+                  {/* Per-course preference tags — appear once at least one course is selected */}
+                  {selectedCourses.length > 0 && (
+                    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
+                      <hr
+                        style={{
+                          border: "none",
+                          borderTop: `1px solid ${C.borderSeparator}`,
+                          margin: 0,
+                        }}
+                      />
+                      {selectedCourses.map((courseId) => {
+                        const course = MOCK_COURSES.find((c) => c.id === courseId);
+                        if (!course) return null;
+                        const selected = coursePreferences[courseId] ?? [];
+                        return (
+                          <div key={courseId}>
+                            <p
+                              style={{
+                                fontFamily: FONT,
+                                fontSize: "14px",
+                                fontWeight: 500,
+                                color: C.textHeading,
+                                margin: "0 0 10px 0",
+                              }}
+                            >
+                              What was true about <strong>{course.code}</strong>?{" "}
+                              <span
+                                style={{
+                                  fontWeight: 400,
+                                  color: C.textPlaceholder,
+                                  fontSize: "13px",
+                                }}
+                              >
+                                — optional
+                              </span>
+                            </p>
+                            <div
+                              style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}
+                              role="group"
+                              aria-label={`Preferences for ${course.code}`}
+                            >
+                              {Object.values(StudentPreferencesItem).map((pref) => {
+                                const isSelected = selected.includes(
+                                  pref as StudentPatchInputPreferencesItem,
+                                );
+                                return (
+                                  <button
+                                    key={pref}
+                                    type="button"
+                                    aria-pressed={isSelected}
+                                    onClick={() =>
+                                      toggleCoursePreference(
+                                        courseId,
+                                        pref as StudentPatchInputPreferencesItem,
+                                      )
+                                    }
+                                    style={{
+                                      padding: "6px 14px",
+                                      borderRadius: "20px",
+                                      fontSize: "13px",
+                                      fontFamily: FONT,
+                                      fontWeight: isSelected ? 600 : 400,
+                                      border: `1px solid ${isSelected ? C.red : C.borderInput}`,
+                                      backgroundColor: isSelected ? C.bgSelectedRow : C.bgCard,
+                                      color: isSelected ? C.red : C.textSecondary,
+                                      cursor: "pointer",
+                                      minHeight: "32px",
+                                      outline: "none",
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      if (!isSelected)
+                                        (
+                                          e.currentTarget as HTMLButtonElement
+                                        ).style.backgroundColor = C.bgHover;
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                                        isSelected ? C.bgSelectedRow : C.bgCard;
+                                    }}
+                                    {...focusRing}
+                                  >
+                                    {PREFERENCE_LABELS[pref as StudentPatchInputPreferencesItem]}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+
+                  {saveError && (
+                    <p
+                      role="alert"
+                      style={{
+                        fontSize: "14px",
+                        color: C.red,
+                        backgroundColor: C.bgSelectedRow,
+                        border: "1px solid #fecaca",
+                        borderRadius: "4px",
+                        padding: "10px 14px",
+                        fontFamily: FONT,
+                        margin: 0,
+                      }}
+                    >
+                      {saveError}
+                    </p>
+                  )}
+
+                  <div style={{ display: "flex", gap: "12px" }}>
+                    <button
+                      onClick={() => setStep(1)}
+                      style={{
+                        padding: "12px 20px",
+                        border: `1px solid ${C.borderInput}`,
+                        borderRadius: "4px",
+                        backgroundColor: C.bgCard,
+                        color: C.textSecondary,
+                        fontFamily: FONT,
+                        fontSize: "15px",
+                        fontWeight: 500,
+                        cursor: "pointer",
+                        minHeight: "44px",
+                        outline: "none",
+                      }}
+                      onMouseEnter={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.bgHover;
+                      }}
+                      onMouseLeave={(e) => {
+                        (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.bgCard;
+                      }}
+                      {...focusRing}
+                    >
+                      ← Back
+                    </button>
+                    <button
+                      onClick={handleFinish}
+                      disabled={saving}
+                      style={{
+                        flex: 1,
+                        padding: "12px 24px",
+                        backgroundColor: saving ? "#999" : C.red,
+                        color: C.white,
+                        border: "none",
+                        borderRadius: "4px",
+                        fontSize: "15px",
+                        fontFamily: FONT,
+                        fontWeight: 600,
+                        cursor: saving ? "not-allowed" : "pointer",
+                        minHeight: "44px",
+                        opacity: saving ? 0.7 : 1,
+                        outline: "none",
+                      }}
+                      onMouseEnter={(e) => {
+                        if (!saving)
+                          (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.redDark;
+                      }}
+                      onMouseLeave={(e) => {
+                        if (!saving)
+                          (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.red;
+                      }}
+                      {...focusRing}
+                    >
+                      {saving ? "Saving…" : "Finish →"}
+                    </button>
                   </div>
                 </div>
-              );
-            })}
+              </>
+            )}
           </div>
-        )}
-
-        {saveError && (
-          <p
-            role="alert"
-            style={{
-              fontSize: "14px",
-              color: C.red,
-              backgroundColor: C.bgSelectedRow,
-              border: "1px solid #fecaca",
-              borderRadius: "4px",
-              padding: "10px 14px",
-              fontFamily: FONT,
-              margin: 0,
-            }}
-          >
-            {saveError}
-          </p>
-        )}
-
-        <div style={{ display: "flex", gap: "12px" }}>
-          <button
-            onClick={() => setStep(1)}
-            style={{
-              padding: "12px 20px",
-              border: `1px solid ${C.borderInput}`,
-              borderRadius: "4px",
-              backgroundColor: C.bgCard,
-              color: C.textSecondary,
-              fontFamily: FONT,
-              fontSize: "15px",
-              fontWeight: 500,
-              cursor: "pointer",
-              minHeight: "44px",
-              outline: "none",
-            }}
-            onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.bgHover; }}
-            onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.bgCard; }}
-            {...focusRing}
-          >
-            ← Back
-          </button>
-          <button
-            onClick={handleFinish}
-            disabled={saving}
-            style={{
-              flex: 1,
-              padding: "12px 24px",
-              backgroundColor: saving ? "#999" : C.red,
-              color: C.white,
-              border: "none",
-              borderRadius: "4px",
-              fontSize: "15px",
-              fontFamily: FONT,
-              fontWeight: 600,
-              cursor: saving ? "not-allowed" : "pointer",
-              minHeight: "44px",
-              opacity: saving ? 0.7 : 1,
-              outline: "none",
-            }}
-            onMouseEnter={(e) => { if (!saving) (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.redDark; }}
-            onMouseLeave={(e) => { if (!saving) (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.red; }}
-            {...focusRing}
-          >
-            {saving ? "Saving…" : "Finish →"}
-          </button>
-        </div>
+        </main>
       </div>
-    </PageShell>
+    </div>
   );
 }

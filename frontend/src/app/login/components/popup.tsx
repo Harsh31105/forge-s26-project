@@ -82,7 +82,7 @@ export default function SignUpPopup({ onClose }: { onClose: () => void }) {
         {/* Close button */}
         <button
           onClick={onClose}
-          aria-label="Close sign-up dialog"
+          aria-label="Close sign-in dialog"
           style={{
             position: "absolute",
             top: "14px",
@@ -120,7 +120,7 @@ export default function SignUpPopup({ onClose }: { onClose: () => void }) {
             margin: "0 0 10px 0",
           }}
         >
-          Create an account
+          Sign in to NorthStar
         </h2>
 
         <p
@@ -132,13 +132,13 @@ export default function SignUpPopup({ onClose }: { onClose: () => void }) {
             margin: "0 0 24px 0",
           }}
         >
-          Sign up to find course reviews and share your own experiences with the NEU community.
+          Access course reviews and share your own experiences with the NEU community.
           Only <strong>@husky.neu.edu</strong> accounts are supported.
         </p>
 
         <hr style={{ border: "none", borderTop: "1px solid #eeeeee", margin: "0 0 20px 0" }} />
 
-        <GoogleAuth buttonText="Sign up with Google" />
+        <GoogleAuth buttonText="Sign in with Google" />
       </div>
     </div>
   );
