@@ -84,3 +84,22 @@ class UserProfileRecord(TypedDict):
 class RecommendationResult(TypedDict):
     course: Course
     score: float
+
+class TrainingExample(TypedDict):
+    student_id: str
+    course_id: str
+    department_match: int
+    lecture_type_match: int
+    semester_match: int
+    tag_overlap: float
+    avg_rating: float
+    avg_hours_devoted: float
+    avg_professor_efficiency: float
+    course_code: int
+    num_credits: int
+    label: int
+
+
+class MLPredictionResult(TypedDict):
+    course: Course
+    probability: float

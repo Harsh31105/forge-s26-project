@@ -64,14 +64,28 @@ def aggregate_review_tags(course_id: str, reviews: list[CourseReview]) -> dict[s
 def average_hours_devoted(course_id: str, trace_rows: list[Trace]) -> float:
     """
     Compute the average hours devoted for a course.
+    Supports either:
+    - "hours_devoted": 12.0
+    - "hours_devoted": {"value": 12.0}
     """
     rows = get_trace_for_course(course_id, trace_rows)
 
     if not rows:
         return 0.0
 
-    total_hours = sum(row["hours_devoted"] for row in rows)
-    return float(total_hours / len(rows))
+    values: list[float] = []
+
+    for row in rows:
+        raw_value = row["hours_devoted"]
+
+        if isinstance(raw_value, dict):
+            value = raw_value.get("value", 0.0)
+        else:
+            value = raw_value
+
+        values.append(float(value))
+
+    return sum(values) / len(values)
 
 
 def average_professor_efficiency(course_id: str, trace_rows: list[Trace]) -> float:

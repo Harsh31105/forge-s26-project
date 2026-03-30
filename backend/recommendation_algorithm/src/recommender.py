@@ -1,6 +1,9 @@
 from __future__ import annotations
 
-from backend.recommendation_algorithm.src.features import build_course_feature_record, semester_strength
+from backend.recommendation_algorithm.src.features import (
+    build_course_feature_record,
+    semester_strength,
+)
 from backend.recommendation_algorithm.src.models import (
     Course,
     CourseFeatureRecord,
@@ -31,7 +34,10 @@ def compute_tag_match_score(
     return score
 
 
-def compute_department_bonus(course: Course, preferred_department_ids: list[int]) -> float:
+def compute_department_bonus(
+    course: Course,
+    preferred_department_ids: list[int],
+) -> float:
     """
     Give a bonus if the course belongs to a department the user tends to favorite.
     """
@@ -40,7 +46,10 @@ def compute_department_bonus(course: Course, preferred_department_ids: list[int]
     return 0.0
 
 
-def compute_lecture_type_bonus(course: Course, preferred_lecture_types: list[str]) -> float:
+def compute_lecture_type_bonus(
+    course: Course,
+    preferred_lecture_types: list[str],
+) -> float:
     """
     Give a bonus if the course uses a lecture type the user tends to favorite.
     """
@@ -101,7 +110,6 @@ def compute_score(
     )
 
 
-# Layer 6: diversification / humanization
 def diversify_ranked_courses(
     ranked_courses: list[RecommendationResult],
 ) -> list[RecommendationResult]:
@@ -127,6 +135,19 @@ def diversify_ranked_courses(
     return diversified
 
 
+def categorize_courses(
+    ranked_courses: list[RecommendationResult],
+) -> dict[str, list[RecommendationResult]]:
+    """
+    Split ranked courses into HIGH / MEDIUM / LOW buckets.
+    """
+    return {
+        "high": ranked_courses[:3],
+        "medium": ranked_courses[3:5],
+        "low": ranked_courses[5:8],
+    }
+
+
 def recommend_courses(
     student_id: str,
     preferred_semester: str,
@@ -136,14 +157,18 @@ def recommend_courses(
     trace_rows: list[Trace],
     favorites: list[Favorite],
     top_k: int = 5,
-) -> list[RecommendationResult]:
+) -> dict[str, list[RecommendationResult]]:
     """
-    Generate the top-k recommended courses for a student.
+    Generate categorized course recommendations for a student.
     """
-    profile: UserProfileRecord = build_user_profile(student_id, favorites, reviews, courses)
+    profile: UserProfileRecord = build_user_profile(
+        student_id,
+        favorites,
+        reviews,
+        courses,
+    )
 
     ranked: list[RecommendationResult] = []
-
     favorite_ids = set(profile["favorite_course_ids"])
 
     for course in courses:
@@ -168,5 +193,6 @@ def recommend_courses(
 
     ranked.sort(key=lambda item: item["score"], reverse=True)
     diversified = diversify_ranked_courses(ranked)
+    categorized = categorize_courses(diversified)
 
-    return diversified[:top_k]
+    return categorized
