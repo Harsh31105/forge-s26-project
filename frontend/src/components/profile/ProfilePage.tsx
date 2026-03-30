@@ -1,5 +1,7 @@
 "use client";
 
+import { useFavourites } from "@/src/hooks/useFavourites";
+import { useCourses } from "@/src/hooks/useCourses";
 import { useStudent, useStudents } from "@/src/hooks/useStudents";
 
 type FavoritesCardProps = {
@@ -20,54 +22,82 @@ function FavoritesCard({
         </h3>
 
         <div className="space-y-4">
-        {items.map((item) => (
+        {items.length > 0 ? (
+            items.map((item) => (
             <div
-            key={item}
-            className="flex items-center justify-between rounded-[10px] bg-surface-light px-5 py-4"
+                key={item}
+                className="flex items-center justify-between rounded-[10px] bg-surface-light px-5 py-4"
             >
-            <div className="flex items-center gap-4">
+                <div className="flex items-center gap-4">
                 {showAvatar && <div className="h-8 w-8 rounded-full bg-white" />}
-                <span className="font-body text-[16px] text-foreground">{item}</span>
+                <span className="font-body text-[16px] text-foreground">
+                    {item}
+                </span>
+                </div>
+                <span className="text-[22px] text-foreground">★</span>
             </div>
-            <span className="text-[22px] text-foreground">★</span>
+            ))
+        ) : (
+            <div className="rounded-[10px] bg-surface-light px-5 py-4 font-body text-[16px] text-text-secondary">
+            No favourite courses added yet.
             </div>
-        ))}
+        )}
         </div>
     </section>
     );
 }
 
 export function ProfilePage() {
+    const {
+    students,
+    isLoading: studentsLoading,
+    error: studentsError,
+    } = useStudents({ limit: 1 });
 
-    const { students, isLoading: isStudentsLoading } = useStudents({ limit: 1 });
     const studentId = students?.[0]?.id ?? "";
 
-    const { student, isLoading, error } = useStudent(studentId);
+    const {
+    student,
+    isLoading: studentLoading,
+    error: studentError,
+    } = useStudent(studentId);
 
-    const favoriteCourses = [
-        "CS 2500: Fundamentals of Computer Science",
-        "CS 3000: Algorithms & Data Structures",
-    ];
+    const { favourites, isLoading: favouritesLoading } = useFavourites();
+    const { courses, isLoading: coursesLoading } = useCourses();
 
-    const favoriteProfessors = ["Benjamin Shown", "John Rachelin"];
+    if (studentsLoading) {
+    return (
+        <div className="w-full p-8 font-body text-[16px] text-foreground">
+        Loading student...
+        </div>
+    );
+    }
+
+    if (studentsError) {
+    return (
+        <div className="w-full p-8 font-body text-[16px] text-error">
+        Failed to load students.
+        </div>
+    );
+    }
 
     if (!studentId) {
-        return (
+    return (
         <div className="w-full p-8 font-body text-[16px] text-text-secondary">
         No student selected yet.
         </div>
     );
     }
 
-    if (isLoading) {
-        return (
+    if (studentLoading) {
+    return (
         <div className="w-full p-8 font-body text-[16px] text-foreground">
         Loading profile...
         </div>
     );
     }
 
-    if (error || !student) {
+    if (studentError || !student) {
     return (
         <div className="w-full p-8 font-body text-[16px] text-error">
         Failed to load profile.
@@ -86,6 +116,15 @@ export function ProfilePage() {
     student.firstName?.[0]?.toUpperCase() ||
     student.lastName?.[0]?.toUpperCase() ||
     "H";
+
+    const favoriteCourses: string[] =
+    favourites
+        ?.map(
+        (favourite) =>
+            courses?.find((course) => course.id === favourite.courseId)?.name ??
+            favourite.courseId
+        )
+        .filter(Boolean) ?? [];
 
     return (
     <div className="w-full">
@@ -138,13 +177,13 @@ export function ProfilePage() {
             </button>
             </section>
 
-            <FavoritesCard title="Favorite Courses" items={favoriteCourses} />
-
-            <FavoritesCard
-            title="Favorite Professors"
-            items={favoriteProfessors}
-            showAvatar
-            />
+            {favouritesLoading || coursesLoading ? (
+            <div className="font-body text-[16px] text-foreground">
+                Loading favourites...
+            </div>
+            ) : (
+            <FavoritesCard title="Favourite Courses" items={favoriteCourses} />
+            )}
         </div>
         </div>
     </div>

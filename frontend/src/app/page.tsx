@@ -70,7 +70,7 @@ export default function Home() {
           </p>
         </div>
       </main>
-      <ProfilePage />
+      <ProfilePage />;
     </div>
   );
 }
