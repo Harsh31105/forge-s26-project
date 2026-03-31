@@ -184,7 +184,7 @@ def build_schemas_from_bytes(pdf_bytes, source_key, department, threshold=80):
     best_score = 0
     for name, entry in dept_courses.items():
         sim_score = fuzz.ratio(course_name, name)
-        if sim_score > best_score and sim_score >= threshold:
+        if sim_score >= best_score and sim_score >= threshold:
             best_score = sim_score
             course_entry = entry
 
@@ -298,14 +298,13 @@ def scrape_course_information(department):
         html = r.read().decode("utf-8")
     
     pattern = re.compile(r'([A-Z]+)\s+(\d+)\.\s+(.+?)\.\s+\((\d+)\s+Hours?\)', re.IGNORECASE)
-    
-    
 
     for _, number, name, credits in pattern.findall(html):
-        courses[department][name.strip()] = {
-            "number": number,
-            "credits": int(credits)
-        }
+        if not name.strip() in courses[department]:
+            courses[department][name.strip()] = {
+                "number": number,
+                "credits": int(credits)
+            }
 
 
 if __name__ == "__main__":
@@ -315,7 +314,7 @@ if __name__ == "__main__":
         process_bucket() # To scrape specific bucket, add path fro root trace-evaluations/
     else:
         scrape_course_information("CS")
-        output = build_schemas("data/example2.pdf")
+        output = build_schemas("data/example4.pdf")
         print(json.dumps(output, indent=2))
 
         out_path = "data/schemas.json"
@@ -329,7 +328,7 @@ if __name__ == "__main__":
 # aws s3 ls s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/ali-mona-section-36-course-20426-sp-88737-6513-175-5e39a241bd.json - --profile forge-bucket
 
 
-aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/bayat-akram-section-33-course-21050-sp-89043-7028-175-a32abc1d7b.json - --profile forge-bucket
+# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/bayat-akram-section-33-course-21050-sp-89043-7028-175-a32abc1d7b.json - --profile forge-bucket
 
 
-Processing trace-evaluations/CS/undefined/fall_2023/arunagiri-sara-section-01-course-11549-sp-85576-3424-175-f09c72ecf8.pdf
+# Processing trace-evaluations/CS/undefined/fall_2023/arunagiri-sara-section-01-course-11549-sp-85576-3424-175-f09c72ecf8.pdf
