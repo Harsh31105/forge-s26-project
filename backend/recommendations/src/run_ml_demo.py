@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from pathlib import Path
 
-from backend.recommendation_algorithm.src.ml_recommender import recommend_courses_ml
-from backend.recommendation_algorithm.src.repository import (
+from backend.recommendations.src.ml_recommender import recommend_courses_ml
+from backend.recommendations.src.repository import (
     load_courses,
     load_departments,
     load_favorites,

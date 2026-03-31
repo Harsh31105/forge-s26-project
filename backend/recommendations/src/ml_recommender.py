@@ -4,20 +4,13 @@ from pathlib import Path
 
 import joblib
 
-from backend.recommendation_algorithm.src.models import (
-    Course,
-    CourseReview,
-    Department,
-    Favorite,
-    MLPredictionResult,
-    Trace,
-)
-from backend.recommendation_algorithm.src.training_data import (
+from backend.recommendations.api.schemas.schema import Course, CourseReview, Department, Favorite, Trace
+from backend.recommendations.api.schemas.rec_schemas import MLPredictionResult
+from backend.recommendations.src.training_data import (
     build_student_course_example,
     examples_to_xy,
 )
-from backend.recommendation_algorithm.src.user_profile import build_user_profile
-
+from backend.recommendations.src.user_profile import build_user_profile
 
 def categorize_ml_courses(
     ranked_courses: list[MLPredictionResult],

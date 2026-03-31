@@ -5,7 +5,7 @@ from pathlib import Path
 import joblib
 from sklearn.linear_model import LogisticRegression
 
-from backend.recommendation_algorithm.src.repository import (
+from backend.recommendations.src.repository import (
     load_courses,
     load_departments,
     load_favorites,
@@ -13,7 +13,7 @@ from backend.recommendation_algorithm.src.repository import (
     load_trace,
     load_students,
 )
-from backend.recommendation_algorithm.src.training_data import (
+from backend.recommendations.src.training_data import (
     build_training_examples,
     examples_to_xy,
 )
