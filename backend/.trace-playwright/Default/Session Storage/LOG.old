@@ -1,3 +1,6 @@
-2026/03/25-18:09:45.453 a574f6 Reusing MANIFEST /Users/manang/forge-s26-project/backend/.trace-playwright/Default/Session Storage/MANIFEST-000001
-2026/03/25-18:09:45.455 a574f6 Recovering log #16
-2026/03/25-18:09:45.455 a574f6 Reusing old log /Users/manang/forge-s26-project/backend/.trace-playwright/Default/Session Storage/000016.log 
+2026/03/27-12:58:26.451 89164 Reusing MANIFEST /Users/manang/forge-s26-project/backend/.trace-playwright/Default/Session Storage/MANIFEST-000001
+2026/03/27-12:58:26.451 89164 Recovering log #16
+2026/03/27-12:58:26.453 89164 Reusing old log /Users/manang/forge-s26-project/backend/.trace-playwright/Default/Session Storage/000016.log 
+2026/03/27-12:59:55.873 89167 Level-0 table #21: started
+2026/03/27-12:59:55.877 89167 Level-0 table #21: 15622 bytes OK
+2026/03/27-12:59:55.882 89167 Delete type=0 #16
