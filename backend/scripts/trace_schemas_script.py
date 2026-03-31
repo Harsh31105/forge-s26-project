@@ -36,11 +36,12 @@ def extract_charts_with_claude(pdf_bytes):
 
     reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
     writer = pypdf.PdfWriter()
-    writer.add_page(reader.pages[-1])  # last page only
+    for page in reader.pages[-2:]:  # last two pages only
+        writer.add_page(page)
 
-    last_page_bytes = io.BytesIO()
-    writer.write(last_page_bytes)
-    last_page_bytes = last_page_bytes.getvalue()
+    last_pages_bytes = io.BytesIO()
+    writer.write(last_pages_bytes)
+    last_pages_bytes = last_pages_bytes.getvalue()
     response = claude.messages.create(
         model="claude-haiku-4-5-20251001",
         max_tokens=1000,
@@ -52,7 +53,7 @@ def extract_charts_with_claude(pdf_bytes):
                     "source": {
                         "type": "base64",
                         "media_type": "application/pdf",
-                        "data": base64.standard_b64encode(pdf_bytes).decode("utf-8")
+                        "data": base64.standard_b64encode(last_pages_bytes).decode("utf-8")
                     }
                 },
                 {
@@ -325,7 +326,7 @@ if __name__ == "__main__":
 
 
 
-# aws s3 ls s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/ali-mona-section-36-course-20426-sp-88737-6513-175-5e39a241bd.json - --profile forge-bucket
+# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/bagley-keith-section-05-course-16875-sp-87625-4707-175-66154e0727.json - --profile forge-bucket
 
 
 # aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/bayat-akram-section-33-course-21050-sp-89043-7028-175-a32abc1d7b.json - --profile forge-bucket
