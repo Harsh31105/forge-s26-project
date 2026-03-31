@@ -237,12 +237,14 @@ def build_schemas(pdf_path, department="CS"):
     return build_schemas_from_bytes(pdf_bytes, pdf_path, department)
 
 
-def process_bucket():
+def process_bucket(folder=None):
     """Process all PDFs in S3 bucket and save extracted schemas as JSON."""
     paginator = s3.get_paginator("list_objects_v2")
     stats = {"success": 0, "failed": 0}
 
-    for page in paginator.paginate(Bucket=BUCKET, Prefix="trace-evaluations/"):
+    prefix = "trace-evaluations/"
+    if folder: prefix += folder 
+    for page in paginator.paginate(Bucket=BUCKET, Prefix=prefix):
         for obj in page.get("Contents", []):
             key = obj["Key"]
             if not key.endswith(".pdf"):
@@ -254,13 +256,21 @@ def process_bucket():
             if department and department not in courses:
                 scrape_course_information(department)
 
+            out_key = f"extracted/{key.replace('.pdf', '.json')}"
+            try:
+                s3.head_object(Bucket=BUCKET, Key=out_key)
+                print(f"  ⏭ already scraped, skipping {key}")
+                stats["skipped"] = stats.get("skipped", 0) + 1
+                continue
+            except s3.exceptions.ClientError:
+                pass  # not found, proceed
+
             print(f"Processing {key}...")
             pdf_bytes = s3.get_object(Bucket=BUCKET, Key=key)["Body"].read()
 
             try:
                 result = build_schemas_from_bytes(pdf_bytes, key, department)
 
-                out_key = f"extracted/{key.replace('.pdf', '.json')}"
                 s3.put_object(
                     Bucket=BUCKET,
                     Key=out_key,
@@ -302,7 +312,7 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) > 1 and sys.argv[1] == "--s3":
-        process_bucket()
+        process_bucket() # To scrape specific bucket, add path fro root trace-evaluations/
     else:
         scrape_course_information("CS")
         output = build_schemas("data/example2.pdf")
