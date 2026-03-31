@@ -44,7 +44,7 @@ def extract_charts_with_claude(pdf_bytes):
     last_pages_bytes = last_pages_bytes.getvalue()
     response = claude.messages.create(
         model="claude-haiku-4-5-20251001",
-        max_tokens=1000,
+        max_tokens=250,
         messages=[{
             "role": "user",
             "content": [
@@ -72,8 +72,63 @@ def extract_charts_with_claude(pdf_bytes):
             ]
         }]
     )
-    raw = response.content[0].text.strip().replace("```json", "").replace("```", "")
-    return json.loads(raw)
+    try:
+        raw = response.content[0].text.strip().replace("```json", "").replace("```", "")
+        return json.loads(raw)
+    except Exception:
+        return _extract_charts_from_text(pdf_bytes)
+
+
+def _extract_charts_from_text(pdf_bytes):
+    """Fallback: parse attendance and hours-devoted charts directly from PDF text."""
+    ATTENDANCE_LABELS = ["80-100%", "60-80%", "40-60%", "20-40%", "0-20%"]
+    HOURS_LABELS      = ["More than 10", "8-10", "5-7", "3-4", "0-2"]
+
+    with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
+        last_page = pdf.pages[-1]
+        words     = last_page.extract_words()
+        page_mid  = last_page.width / 2
+
+    left_words  = [w for w in words if float(w["x0"]) < page_mid]
+    right_words = [w for w in words if float(w["x0"]) >= page_mid]
+
+    def words_to_text(word_list):
+        return " ".join(w["text"] for w in sorted(word_list, key=lambda w: (w["top"], w["x0"])))
+
+    def parse_chart(text, labels):
+        tokens = text.split()
+        # find positions of all known labels and all percentages
+        label_positions = {}  # label -> token index where it starts
+        for i in range(len(tokens)):
+            for label in labels:
+                lt = label.split()
+                if tokens[i:i + len(lt)] == lt and label not in label_positions:
+                    label_positions[label] = i
+
+        pct_positions = {}  # token index -> float value
+        for i, tok in enumerate(tokens):
+            m = re.match(r"^(\d+\.?\d*)%$", tok)
+            if m:
+                pct_positions[i] = float(m.group(1))
+
+        # pair each label with the next unused percentage after it
+        used = set()
+        result = {}
+        for label in sorted(label_positions, key=lambda l: label_positions[l]):
+            start = label_positions[label] + len(label.split())
+            for idx in sorted(pct_positions):
+                if idx >= start and idx not in used:
+                    result[label] = pct_positions[idx]
+                    used.add(idx)
+                    break
+        return result
+
+    attendance = parse_chart(words_to_text(left_words),  ATTENDANCE_LABELS)
+    hours      = parse_chart(words_to_text(right_words), HOURS_LABELS)
+    return {"charts": [
+        {"title": "how often attended", "data": attendance},
+        {"title": "hours devoted",      "data": hours},
+    ]}
 
 
 def parse_course_info(text):
@@ -160,7 +215,7 @@ def parse_instructor_ratings(tables):
 def build_schemas_from_bytes(pdf_bytes, source_key, department, threshold=80):
     """Extract professor/course/trace schemas from raw PDF bytes."""
     tables = extract_tables(pdf_bytes)
-    charts_data = extract_charts_with_claude(pdf_bytes)
+    charts_data = _extract_charts_from_text(pdf_bytes)
 
     with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
         first_page_text = pdf.pages[0].extract_text() or ""
@@ -280,7 +335,7 @@ def process_bucket(folder=None):
                 )
 
                 stats["success"] += 1
-                with open("scores.txt", "a"):
+                with open("scores.txt", "a") as f:
                     f.write(f"key:{key}, departmet:{department}, result: {json.dumps(result, indent=2)}")
                 print(f"  ✓ saved to s3://{BUCKET}/{out_key}")
 
@@ -315,7 +370,7 @@ if __name__ == "__main__":
         process_bucket() # To scrape specific bucket, add path fro root trace-evaluations/
     else:
         scrape_course_information("CS")
-        output = build_schemas("data/example4.pdf")
+        output = build_schemas("data/example2.pdf")
         print(json.dumps(output, indent=2))
 
         out_path = "data/schemas.json"
