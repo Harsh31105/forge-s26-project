@@ -14,6 +14,7 @@ s3 = boto3.client("s3")
 claude = anthropic.Anthropic()  # picks up ANTHROPIC_API_KEY from env
 BUCKET = "forge-s26-trace-evaluations"
 courses = defaultdict(dict)
+scrape_claude = True
 
 def extract_tables(pdf_bytes):
     results = []
@@ -36,7 +37,7 @@ def extract_charts_with_claude(pdf_bytes):
 
     reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
     writer = pypdf.PdfWriter()
-    for page in reader.pages[-2:]:  # last two pages only
+    for page in reader.pages[-1:]:  # last two pages only
         writer.add_page(page)
 
     last_pages_bytes = io.BytesIO()
@@ -76,6 +77,7 @@ def extract_charts_with_claude(pdf_bytes):
         raw = response.content[0].text.strip().replace("```json", "").replace("```", "")
         return json.loads(raw)
     except Exception:
+        scrape_claude = False
         return _extract_charts_from_text(pdf_bytes)
 
 
@@ -215,7 +217,10 @@ def parse_instructor_ratings(tables):
 def build_schemas_from_bytes(pdf_bytes, source_key, department, threshold=80):
     """Extract professor/course/trace schemas from raw PDF bytes."""
     tables = extract_tables(pdf_bytes)
-    charts_data = _extract_charts_from_text(pdf_bytes)
+    if scrape_claude:
+        charts_data = extract_charts_with_claude(pdf_bytes)
+    else:
+        charts_data = _extract_charts_from_text(pdf_bytes)
 
     with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
         first_page_text = pdf.pages[0].extract_text() or ""
@@ -381,10 +386,10 @@ if __name__ == "__main__":
 
 
 
-# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/bagley-keith-section-05-course-16875-sp-87625-4707-175-66154e0727.json - --profile forge-bucket
+# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/manolios-pete-section-04-course-16831-sp-87600-2604-175-f6d3f89020.json - --profile forge-bucket
 
 
-# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/bayat-akram-section-33-course-21050-sp-89043-7028-175-a32abc1d7b.json - --profile forge-bucket
+# aws s3 cp s3://forge-s26-trace-evaluations/trace-evaluations/CS/undefined/fall_2023/manolios-pete-section-04-course-16831-sp-87600-2604-175-f6d3f89020.pdf --profile forge-bucket > example5.pdf
 
 
 # Processing trace-evaluations/CS/undefined/fall_2023/arunagiri-sara-section-01-course-11549-sp-85576-3424-175-f09c72ecf8.pdf
