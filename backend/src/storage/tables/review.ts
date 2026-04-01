@@ -1,6 +1,7 @@
-import { pgTable, uuid, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, uuid, integer, timestamp } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { student } from "./student";
+import { semesterEnum } from "./enums";
 
 export const review = pgTable("review", {
   id: uuid("id")
@@ -9,6 +10,8 @@ export const review = pgTable("review", {
   studentId: uuid("student_id")
     .notNull()
     .references(() => student.id, { onDelete: "cascade" }),
+  semester: semesterEnum("semester"),
+  year: integer("year"),
   createdAt: timestamp("created_at", { mode: "date", withTimezone: true })
     .defaultNow()
     .notNull(),

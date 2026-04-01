@@ -4,6 +4,8 @@ import { z } from "zod";
 interface BaseReview {
   reviewId: string;
   studentId: string | null;
+  semester: string | null;
+  year: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -100,6 +102,12 @@ export const ReviewPostInputSchema = z
     courseId: z.uuid().optional().nullable(),
     professorId: z.uuid().optional().nullable(),
     tags: z.array(z.string()).optional(),
+    semester: z
+    // should it be summer A and summer B now?
+      .enum(["fall", "spring", "summer_1", "summer_2"])
+      .optional()
+      .nullable(),
+    year: z.number().int().min(2000).optional().nullable(),
   })
   .refine(
     (data) => !!data.courseId !== !!data.professorId,
@@ -119,13 +127,34 @@ export const ReviewPostInputSchema = z
       return true;
     },
     { message: "Invalid tags for this review type", path: ["tags"] },
+  )
+  .refine(
+    (data) => (data.semester != null) === (data.year != null),
+    {
+      message: "semester and year must both be provided or both omitted",
+      path: ["semester"],
+    },
   );
 
 export type ReviewPostInputType = z.infer<typeof ReviewPostInputSchema>;
 
-export const ReviewPatchInputSchema = z.object({
-  rating: z.number().int().min(1).max(5).optional(),
-  reviewText: z.string().min(1, "Content cannot be empty").max(2000).optional(),
-  tags: z.array(z.string()).optional().nullable(),
-});
+export const ReviewPatchInputSchema = z
+  .object({
+    rating: z.number().int().min(1).max(5).optional(),
+    reviewText: z
+      .string()
+      .min(1, "Content cannot be empty")
+      .max(2000)
+      .optional(),
+    tags: z.array(z.string()).optional().nullable(),
+    semester: z
+      .enum(["fall", "spring", "summer_1", "summer_2"])
+      .optional()
+      .nullable(),
+    year: z.number().int().min(2000).optional().nullable(),
+  })
+  .refine((data) => (data.semester != null) === (data.year != null), {
+    message: "semester and year must both be provided or not",
+    path: ["semester"],
+  });
 export type ReviewPatchInputType = z.infer<typeof ReviewPatchInputSchema>;

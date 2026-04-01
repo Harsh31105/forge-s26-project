@@ -106,7 +106,11 @@ export interface ProfessorReviewChildInput {
 export interface ReviewRepository {
   getReviews(pagination: PaginationType): Promise<Review[]>;
   getReviewByID(id: string): Promise<Review>;
-  createParentReview(studentId?: string | null): Promise<string>;
+  createParentReview(
+    studentId?: string | null,
+    semester?: string | null,
+    year?: number | null,
+  ): Promise<string>;
   createCourseReview(
     parentId: string,
     input: CourseReviewChildInput,

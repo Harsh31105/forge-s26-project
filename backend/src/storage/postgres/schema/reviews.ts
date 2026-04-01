@@ -36,6 +36,8 @@ export class ReviewRepositorySchema implements ReviewRepository {
       .select({
         id: review.id,
         studentId: review.studentId,
+        semester: review.semester,
+        year: review.year,
         createdAt: review.createdAt,
         updatedAt: review.updatedAt,
         reviewId: courseReview.reviewId,
@@ -53,6 +55,8 @@ export class ReviewRepositorySchema implements ReviewRepository {
       .select({
         id: review.id,
         studentId: review.studentId,
+        semester: review.semester,
+        year: review.year,
         createdAt: review.createdAt,
         updatedAt: review.updatedAt,
         reviewId: profReview.reviewId,
@@ -86,6 +90,8 @@ export class ReviewRepositorySchema implements ReviewRepository {
       .select({
         id: review.id,
         studentId: review.studentId,
+        semester: review.semester,
+        year: review.year,
         createdAt: review.createdAt,
         updatedAt: review.updatedAt,
         courseId: courseReview.courseId,
@@ -107,6 +113,8 @@ export class ReviewRepositorySchema implements ReviewRepository {
       .select({
         id: review.id,
         studentId: review.studentId,
+        semester: review.semester,
+        year: review.year,
         createdAt: review.createdAt,
         updatedAt: review.updatedAt,
         reviewId: profReview.reviewId,
@@ -127,10 +135,18 @@ export class ReviewRepositorySchema implements ReviewRepository {
     throw new NotFoundError("review with given ID not found");
   }
 
-  async createParentReview(studentId?: string | null): Promise<string> {
+  async createParentReview(
+    studentId?: string | null,
+    semester?: string | null,
+    year?: number | null,
+  ): Promise<string> {
     const [row] = await this.db
       .insert(review)
-      .values({ studentId: studentId ?? null } as any)
+      .values({
+        studentId: studentId ?? null,
+        ...(semester != null && { semester: semester as any }),
+        ...(year != null && { year }),
+      } as any)
       .returning();
     if (!row) throw new Error("Failed to create parent review");
     return row.id;
@@ -160,13 +176,23 @@ export class ReviewRepositorySchema implements ReviewRepository {
   }
 
   async patchReview(id: string, input: ReviewPatchInputType): Promise<Review> {
-    const updates = Object.fromEntries(
-      Object.entries(input).filter(([_, value]) => value !== undefined),
+    const { semester, year, ...childInput } = input;
+
+    const parentUpdates = Object.fromEntries(
+      Object.entries({ semester, year }).filter(([_, v]) => v !== undefined),
+    );
+    const childUpdates = Object.fromEntries(
+      Object.entries(childInput).filter(([_, v]) => v !== undefined),
     );
 
-    if (Object.keys(updates).length === 0) return this.getReviewByID(id);
+    if (
+      Object.keys(parentUpdates).length === 0 &&
+      Object.keys(childUpdates).length === 0
+    ) {
+      return this.getReviewByID(id);
+    }
 
-    // Determine which table owns this review before updating
+    // Determine which child table owns this review
     const [isCourse] = await this.db
       .select({ reviewId: courseReview.reviewId })
       .from(courseReview)
@@ -174,13 +200,26 @@ export class ReviewRepositorySchema implements ReviewRepository {
       .limit(1);
 
     if (isCourse) {
-      if (updates.tags && !(updates.tags as string[]).every((t: string) => (courseTags as readonly string[]).includes(t))) {
+      if (
+        childUpdates.tags &&
+        !(childUpdates.tags as string[]).every((t: string) =>
+          (courseTags as readonly string[]).includes(t),
+        )
+      ) {
         throw new Error("invalid tags for course review");
       }
-      await this.db
-        .update(courseReview)
-        .set(updates as any)
-        .where(eq(courseReview.reviewId, id));
+      if (Object.keys(parentUpdates).length > 0) {
+        await this.db
+          .update(review)
+          .set(parentUpdates as any)
+          .where(eq(review.id, id));
+      }
+      if (Object.keys(childUpdates).length > 0) {
+        await this.db
+          .update(courseReview)
+          .set(childUpdates as any)
+          .where(eq(courseReview.reviewId, id));
+      }
       return this.getReviewByID(id);
     }
 
@@ -191,13 +230,26 @@ export class ReviewRepositorySchema implements ReviewRepository {
       .limit(1);
 
     if (isProf) {
-      if (updates.tags && !(updates.tags as string[]).every((t: string) => (professorTags as readonly string[]).includes(t))) {
+      if (
+        childUpdates.tags &&
+        !(childUpdates.tags as string[]).every((t: string) =>
+          (professorTags as readonly string[]).includes(t),
+        )
+      ) {
         throw new Error("invalid tags for professor review");
       }
-      await this.db
-        .update(profReview)
-        .set(updates as any)
-        .where(eq(profReview.reviewId, id));
+      if (Object.keys(parentUpdates).length > 0) {
+        await this.db
+          .update(review)
+          .set(parentUpdates as any)
+          .where(eq(review.id, id));
+      }
+      if (Object.keys(childUpdates).length > 0) {
+        await this.db
+          .update(profReview)
+          .set(childUpdates as any)
+          .where(eq(profReview.reviewId, id));
+      }
       return this.getReviewByID(id);
     }
 
