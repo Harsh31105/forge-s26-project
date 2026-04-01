@@ -34,6 +34,8 @@ import { TraceDocumentRepositoryS3, type TraceDocumentKey } from "../src/storage
 const DEFAULT_REPORT_BROWSER_URL = "https://www.applyweb.com/eval/new/reportbrowser";
 const DEFAULT_USER_DATA_DIR = path.resolve(process.cwd(), ".trace-playwright");
 const DEFAULT_MANIFEST_PATH = path.resolve(process.cwd(), "scripts/output/trace-scrape-manifest.json");
+const SAVED_BROWSER_URL_PATH = path.resolve(process.cwd(), ".trace-playwright/saved-browser-url.txt");
+const SAVED_REPORT_URLS_PATH = path.resolve(process.cwd(), ".trace-playwright/saved-report-urls.json");
 
 interface CliOptions {
     department: string;
@@ -215,7 +217,7 @@ function requireEnv(name: string): void {
 
 function getTraceCredentials(): TraceCredentials | undefined {
     const username = process.env.TRACE_USERNAME?.trim();
-    const password = process.env.TRACE_PASSWORD;
+    const password = "pTmT6KUwfaMM$_t";
 
     if (!username || !password) return undefined;
     return { username, password };
@@ -296,548 +298,750 @@ async function isLoggedOutPage(page: Page): Promise<boolean> {
     return /logged out|may close your browser/i.test(bodyText);
 }
 
-async function ensureTraceSession(page: Page, credentials: TraceCredentials | undefined): Promise<void> {
-    const traceHome = process.env.TRACE_LOGIN_URL ?? "https://www.applyweb.com/eval/shibboleth/neu/36892";
-    console.log(`Opening TRACE login entry point: ${traceHome}`);
-    await page.goto(traceHome, { waitUntil: "domcontentloaded" });
-    await page.waitForLoadState("networkidle").catch(() => undefined);
+async function ensureTraceSession(
+  page: Page,
+  credentials: TraceCredentials | undefined,
+  headless: boolean,
+): Promise<void> {
+  const traceHome =
+    process.env.TRACE_LOGIN_URL ??
+    "https://www.applyweb.com/eval/shibboleth/neu/36892";
+  console.log(`Opening TRACE login entry point: ${traceHome}`);
+  await page.goto(traceHome, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle").catch(() => undefined);
 
-    for (let attempts = 0; attempts < 5; attempts += 1) {
-        const loggedIn = await maybeAutoLogin(page, credentials);
-        if (!loggedIn) break;
-        console.log(`Submitted login form (attempt ${attempts + 1}). Now at: ${page.url()}`);
+  for (let attempts = 0; attempts < 5; attempts += 1) {
+    const loggedIn = await maybeAutoLogin(page, credentials);
+    if (!loggedIn) break;
+    console.log(
+      `Submitted login form (attempt ${attempts + 1}). Now at: ${page.url()}`,
+    );
+  }
+
+  const isOnTrace =
+    page.url().includes("applyweb.com/eval") && !(await isLoggedOutPage(page));
+  if (!isOnTrace) {
+    if (headless) {
+      throw new Error(
+        "TRACE session not found in the saved browser profile.\n" +
+          "Run once without --headless to log in and save the session, then re-run with --headless.\n" +
+          `User data dir: ${page.context().browser()?.browserType().executablePath() ?? DEFAULT_USER_DATA_DIR}`,
+      );
     }
 
-    const isOnTrace = page.url().includes("applyweb.com/eval") && !(await isLoggedOutPage(page));
-    if (!isOnTrace) {
-        console.log("");
-        console.log("=== Manual Login Required ===");
-        console.log("In the browser that opened, please:");
-        console.log("  1. Log in through your university SSO (Northeastern, etc.)");
-        console.log("  2. Make sure you can see the TRACE dashboard / reports page");
-        console.log("");
-        console.log("If the browser is showing a blank or logout page, navigate to your");
-        console.log("university's TRACE link manually in the browser's address bar.");
-        console.log("(e.g. search 'Northeastern TRACE evaluations' and log in from there)");
-        console.log("");
-        await promptForEnter("Press Enter here once you are logged into TRACE...");
-
-        if (await isLoggedOutPage(page)) {
-            await page.goto(DEFAULT_REPORT_BROWSER_URL, { waitUntil: "domcontentloaded" });
-            await page.waitForLoadState("networkidle").catch(() => undefined);
-        }
-    }
+    console.log("");
+    console.log("=== Manual Login Required ===");
+    console.log("In the browser that opened, please:");
+    console.log("  1. Log in through your university SSO (Northeastern, etc.)");
+    console.log(
+      "  2. Make sure you can see the TRACE dashboard / reports page",
+    );
+    console.log("");
+    await promptForEnter("Press Enter here once you are logged into TRACE...");
 
     if (await isLoggedOutPage(page)) {
-        throw new Error(
-            "Still not logged into TRACE after manual login.\n" +
-            `Current URL: ${page.url()}\n` +
-            "Make sure you complete the full SSO login in the browser before pressing Enter."
-        );
+      await page.goto(DEFAULT_REPORT_BROWSER_URL, {
+        waitUntil: "domcontentloaded",
+      });
+      await page.waitForLoadState("networkidle").catch(() => undefined);
     }
+  }
 
-    console.log(`TRACE session established. Current URL: ${page.url()}`);
+  if (await isLoggedOutPage(page)) {
+    throw new Error(
+      "Still not logged into TRACE after manual login.\n" +
+        `Current URL: ${page.url()}\n` +
+        "Make sure you complete the full SSO login in the browser before pressing Enter.",
+    );
+  }
+
+  console.log(`TRACE session established. Current URL: ${page.url()}`);
 }
 
-async function gotoWithOptionalLogin(page: Page, targetUrl: string, credentials: TraceCredentials | undefined): Promise<void> {
+async function gotoWithOptionalLogin(
+  page: Page,
+  targetUrl: string,
+  credentials: TraceCredentials | undefined,
+  headless: boolean,
+): Promise<void> {
+  await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
+  await page.waitForLoadState("networkidle").catch(() => undefined);
+
+  for (let attempts = 0; attempts < 3; attempts += 1) {
+    const loggedIn = await maybeAutoLogin(page, credentials);
+    if (!loggedIn) break;
+  }
+
+  if (await isLoggedOutPage(page)) {
+    console.log(
+      "Detected TRACE logout/unauthenticated page. Need to log in first...",
+    );
+    await ensureTraceSession(page, credentials, headless);
+    console.log("Session established. Navigating back to target page...");
     await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
     await page.waitForLoadState("networkidle").catch(() => undefined);
-
-    for (let attempts = 0; attempts < 3; attempts += 1) {
-        const loggedIn = await maybeAutoLogin(page, credentials);
-        if (!loggedIn) break;
-    }
-
-    if (await isLoggedOutPage(page)) {
-        console.log("Detected TRACE logout/unauthenticated page. Need to log in first...");
-        await ensureTraceSession(page, credentials);
-        console.log("Session established. Navigating back to target page...");
-        await page.goto(targetUrl, { waitUntil: "domcontentloaded" });
-        await page.waitForLoadState("networkidle").catch(() => undefined);
-    }
+  }
 }
 
 function parseOptions(argv: string[]): CliOptions {
-    const args = parseArgs(argv);
+  const args = parseArgs(argv);
 
-    if (getBooleanArg(args, "help")) {
-        printUsage();
-        process.exit(0);
+  if (getBooleanArg(args, "help")) {
+    printUsage();
+    process.exit(0);
+  }
+
+  const department = getStringArg(args, "department");
+  const courseCodeValue = getStringArg(args, "course-code");
+
+  if (!department) {
+    printUsage();
+    throw new Error("--department is required.");
+  }
+
+  let courseCode: number | undefined;
+  if (courseCodeValue) {
+    courseCode = Number(courseCodeValue);
+    if (!Number.isInteger(courseCode) || courseCode <= 0) {
+      throw new Error(`Invalid --course-code value: ${courseCodeValue}`);
     }
+  }
 
-    const department = getStringArg(args, "department");
-    const courseCodeValue = getStringArg(args, "course-code");
+  const limitValue = getStringArg(args, "limit");
+  const limit = limitValue ? Number(limitValue) : undefined;
+  if (limitValue && (!Number.isInteger(limit) || limit! <= 0)) {
+    throw new Error(`Invalid --limit value: ${limitValue}`);
+  }
 
-    if (!department) {
-        printUsage();
-        throw new Error("--department is required.");
-    }
+  const reportUrl = getStringArg(args, "report-url");
+  const options: CliOptions = {
+    department: department.trim().toUpperCase(),
+    reportBrowserUrl:
+      getStringArg(args, "report-browser-url") ?? DEFAULT_REPORT_BROWSER_URL,
+    headless: getBooleanArg(args, "headless"),
+    userDataDir: path.resolve(
+      getStringArg(args, "user-data-dir") ?? DEFAULT_USER_DATA_DIR,
+    ),
+    manifestPath: path.resolve(
+      getStringArg(args, "manifest-path") ?? DEFAULT_MANIFEST_PATH,
+    ),
+    allowExcluded2025: getBooleanArg(args, "allow-excluded-2025"),
+    dryRun: getBooleanArg(args, "dry-run"),
+  };
 
-    let courseCode: number | undefined;
-    if (courseCodeValue) {
-        courseCode = Number(courseCodeValue);
-        if (!Number.isInteger(courseCode) || courseCode <= 0) {
-            throw new Error(`Invalid --course-code value: ${courseCodeValue}`);
-        }
-    }
+  if (courseCode !== undefined) {
+    options.courseCode = courseCode;
+  }
 
-    const limitValue = getStringArg(args, "limit");
-    const limit = limitValue ? Number(limitValue) : undefined;
-    if (limitValue && (!Number.isInteger(limit) || limit! <= 0)) {
-        throw new Error(`Invalid --limit value: ${limitValue}`);
-    }
+  if (reportUrl) {
+    options.reportUrl = reportUrl;
+  }
+  if (limit !== undefined) {
+    options.limit = limit;
+  }
 
-    const reportUrl = getStringArg(args, "report-url");
-    const options: CliOptions = {
-        department: department.trim().toUpperCase(),
-        reportBrowserUrl: getStringArg(args, "report-browser-url") ?? DEFAULT_REPORT_BROWSER_URL,
-        headless: getBooleanArg(args, "headless"),
-        userDataDir: path.resolve(getStringArg(args, "user-data-dir") ?? DEFAULT_USER_DATA_DIR),
-        manifestPath: path.resolve(getStringArg(args, "manifest-path") ?? DEFAULT_MANIFEST_PATH),
-        allowExcluded2025: getBooleanArg(args, "allow-excluded-2025"),
-        dryRun: getBooleanArg(args, "dry-run"),
-    };
-
-    if (courseCode !== undefined) {
-        options.courseCode = courseCode;
-    }
-
-    if (reportUrl) {
-        options.reportUrl = reportUrl;
-    }
-    if (limit !== undefined) {
-        options.limit = limit;
-    }
-
-    return options;
+  return options;
 }
 
 async function promptForEnter(message: string): Promise<void> {
-    const rl = createInterface({
-        input: process.stdin,
-        output: process.stdout,
-    });
+  const rl = createInterface({
+    input: process.stdin,
+    output: process.stdout,
+  });
 
-    await rl.question(message);
-    rl.close();
+  await rl.question(message);
+  rl.close();
 }
 
 type ReportContext = Page | Frame;
 
 async function getBodyText(context: ReportContext): Promise<string> {
-    return context.locator("body").innerText();
+  return context.locator("body").innerText();
 }
 
 async function resolveReportContext(page: Page): Promise<ReportContext> {
-    const directPdfLink = page.locator("a:has-text('View as PDF')").first();
+  const directPdfLink = page.locator("a:has-text('View as PDF')").first();
+  if (await directPdfLink.isVisible().catch(() => false)) {
+    return page;
+  }
+
+  const embeddedReportFrame = page
+    .locator("iframe[src*='/eval/new/showreport']")
+    .first();
+  const embeddedSrc = await embeddedReportFrame
+    .getAttribute("src")
+    .catch(() => null);
+  if (embeddedSrc) {
+    const embeddedUrl = new URL(embeddedSrc, page.url()).toString();
+    await page.goto(embeddedUrl, { waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("networkidle").catch(() => undefined);
+
     if (await directPdfLink.isVisible().catch(() => false)) {
-        return page;
+      return page;
+    }
+  }
+
+  const html = await page.content();
+  const showReportMatch = html.match(
+    /(?:src|href)=["']([^"']*\/eval\/new\/showreport\?[^"']+)["']/i,
+  );
+  if (showReportMatch?.[1]) {
+    const embeddedUrl = new URL(showReportMatch[1], page.url()).toString();
+    await page.goto(embeddedUrl, { waitUntil: "domcontentloaded" });
+    await page.waitForLoadState("networkidle").catch(() => undefined);
+
+    if (await directPdfLink.isVisible().catch(() => false)) {
+      return page;
+    }
+  }
+
+  for (let attempt = 0; attempt < 20; attempt += 1) {
+    const showReportFrame = page
+      .frames()
+      .find((frame: { url: () => string }) =>
+        frame.url().includes("/eval/new/showreport"),
+      );
+
+    if (showReportFrame) {
+      const framePdfLink = showReportFrame
+        .locator("a:has-text('View as PDF')")
+        .first();
+      if (await framePdfLink.isVisible().catch(() => false)) {
+        return showReportFrame;
+      }
     }
 
-    const embeddedReportFrame = page.locator("iframe[src*='/eval/new/showreport']").first();
-    const embeddedSrc = await embeddedReportFrame.getAttribute("src").catch(() => null);
-    if (embeddedSrc) {
-        const embeddedUrl = new URL(embeddedSrc, page.url()).toString();
-        await page.goto(embeddedUrl, { waitUntil: "domcontentloaded" });
-        await page.waitForLoadState("networkidle").catch(() => undefined);
+    await page.waitForTimeout(500);
+  }
 
-        if (await directPdfLink.isVisible().catch(() => false)) {
-            return page;
-        }
-    }
-
-    const html = await page.content();
-    const showReportMatch = html.match(/(?:src|href)=["']([^"']*\/eval\/new\/showreport\?[^"']+)["']/i);
-    if (showReportMatch?.[1]) {
-        const embeddedUrl = new URL(showReportMatch[1], page.url()).toString();
-        await page.goto(embeddedUrl, { waitUntil: "domcontentloaded" });
-        await page.waitForLoadState("networkidle").catch(() => undefined);
-
-        if (await directPdfLink.isVisible().catch(() => false)) {
-            return page;
-        }
-    }
-
-    for (let attempt = 0; attempt < 20; attempt += 1) {
-        const showReportFrame = page
-            .frames()
-            .find((frame) => frame.url().includes("/eval/new/showreport"));
-
-        if (showReportFrame) {
-            const framePdfLink = showReportFrame.locator("a:has-text('View as PDF')").first();
-            if (await framePdfLink.isVisible().catch(() => false)) {
-                return showReportFrame;
-            }
-        }
-
-        await page.waitForTimeout(500);
-    }
-
-    const frameUrls = page.frames().map((frame) => frame.url()).filter((url) => url.length > 0);
-    const iframeSrcs = await page
-        .locator("iframe")
-        .evaluateAll((elements) =>
-            elements
-                .map((element) => (element as HTMLIFrameElement).getAttribute("src") ?? "")
-                .filter((src) => src.length > 0)
+  const frameUrls = page
+    .frames()
+    .map((frame: { url: () => string }) => frame.url())
+    .filter((url: string) => url.length > 0);
+  const iframeSrcs = await page
+    .locator("iframe")
+    .evaluateAll((elements: Element[]) =>
+      elements
+        .map(
+          (element) => (element as HTMLIFrameElement).getAttribute("src") ?? "",
         )
-        .catch(() => []);
+        .filter((src: string) => src.length > 0),
+    )
+    .catch(() => []);
 
-    const debugHtml = await page.content().catch(() => "(could not read page content)");
-    const debugPath = path.join(process.cwd(), "trace-debug-page.html");
-    await writeFile(debugPath, debugHtml, "utf8").catch(() => undefined);
-    console.error(`DEBUG: Dumped page HTML (${debugHtml.length} chars) to ${debugPath}`);
-    console.error(`DEBUG: Page title: ${await page.title().catch(() => "unknown")}`);
-    console.error(`DEBUG: Page URL: ${page.url()}`);
+  const debugHtml = await page
+    .content()
+    .catch(() => "(could not read page content)");
+  const debugPath = path.join(process.cwd(), "trace-debug-page.html");
+  await writeFile(debugPath, debugHtml, "utf8").catch(() => undefined);
+  console.error(
+    `DEBUG: Dumped page HTML (${debugHtml.length} chars) to ${debugPath}`,
+  );
+  console.error(
+    `DEBUG: Page title: ${await page.title().catch(() => "unknown")}`,
+  );
+  console.error(`DEBUG: Page URL: ${page.url()}`);
 
-    throw new Error(
-        `Could not find "View as PDF" in the top page or TRACE iframe for ${page.url()}.\nFrames seen:\n${frameUrls.join("\n")}\niframe src values seen:\n${iframeSrcs.join("\n")}`
-    );
+  throw new Error(
+    `Could not find "View as PDF" in the top page or TRACE iframe for ${page.url()}.\nFrames seen:\n${frameUrls.join("\n")}\niframe src values seen:\n${iframeSrcs.join("\n")}`,
+  );
 }
 
 function extractField(bodyText: string, label: string): string {
-    const match = bodyText.match(new RegExp(`${label}:\\s*(.+)`));
-    return match?.[1]?.trim() ?? "";
+  const match = bodyText.match(new RegExp(`${label}:\\s*(.+)`));
+  return match?.[1]?.trim() ?? "";
 }
 
-async function resolvePdfHref(context: ReportContext, reportUrl: string): Promise<string> {
-    const locatorHref = await context.locator("a:has-text('View as PDF')").first().getAttribute("href").catch(() => null);
-    if (locatorHref) return locatorHref;
+async function resolvePdfHref(
+  context: ReportContext,
+  reportUrl: string,
+): Promise<string> {
+  const locatorHref = await context
+    .locator("a:has-text('View as PDF')")
+    .first()
+    .getAttribute("href")
+    .catch(() => null);
+  if (locatorHref) return locatorHref;
 
-    const html = await context.content();
-    const pdfMatch = html.match(/href=["']([^"']*\/eval\/new\/showreport\/pdf\?[^"']+)["']/i);
-    if (pdfMatch?.[1]) {
-        return pdfMatch[1];
-    }
+  const html = await context.content();
+  const pdfMatch = html.match(
+    /href=["']([^"']*\/eval\/new\/showreport\/pdf\?[^"']+)["']/i,
+  );
+  if (pdfMatch?.[1]) {
+    return pdfMatch[1];
+  }
 
-    throw new Error(`Could not find "View as PDF" link on ${reportUrl}`);
+  throw new Error(`Could not find "View as PDF" link on ${reportUrl}`);
 }
 
-async function scrapeReportMetadataFromCurrentPage(page: Page, reportUrl: string): Promise<ScrapedReportMetadata> {
-    const reportContext = await resolveReportContext(page);
-    return extractMetadataFromContext(reportContext, reportUrl);
+async function scrapeReportMetadataFromCurrentPage(
+  page: Page,
+  reportUrl: string,
+): Promise<ScrapedReportMetadata> {
+  const reportContext = await resolveReportContext(page);
+  return extractMetadataFromContext(reportContext, reportUrl);
 }
 
-async function scrapeReportMetadata(page: Page, reportUrl: string): Promise<ScrapedReportMetadata> {
+async function scrapeReportMetadata(
+  page: Page,
+  reportUrl: string,
+  credentials: TraceCredentials | undefined,
+): Promise<ScrapedReportMetadata> {
+  await gotoWithOptionalLogin(page, reportUrl, credentials, true);
+
+  // If the page is a logout page, the session context was lost.
+  // Re-establish it by visiting the report browser first (which sets the
+  // necessary TRACE session cookies), then retry the report URL.
+  if (await isLoggedOutPage(page)) {
+    console.log(`Session lost for ${reportUrl}, re-establishing via report browser...`);
+    await gotoWithOptionalLogin(page, DEFAULT_REPORT_BROWSER_URL, credentials, true);
+    await page.waitForTimeout(2000);
     await page.goto(reportUrl, { waitUntil: "domcontentloaded" });
     await page.waitForLoadState("networkidle").catch(() => undefined);
+  }
 
-    const reportContext = await resolveReportContext(page);
-    return extractMetadataFromContext(reportContext, reportUrl);
+  const reportContext = await resolveReportContext(page);
+  return extractMetadataFromContext(reportContext, reportUrl);
 }
 
-async function extractMetadataFromContext(reportContext: ReportContext, reportUrl: string): Promise<ScrapedReportMetadata> {
-    const pdfHref = await resolvePdfHref(reportContext, reportUrl);
+async function extractMetadataFromContext(
+  reportContext: ReportContext,
+  reportUrl: string,
+): Promise<ScrapedReportMetadata> {
+  const pdfHref = await resolvePdfHref(reportContext, reportUrl);
 
-    const bodyText = await getBodyText(reportContext);
-    const headingText = (await reportContext.locator("h3").first().textContent())?.trim() ?? "";
-    const termMatch = headingText.match(/\(([^)]+)\)/);
-    const termLabel = termMatch?.[1]?.trim() ?? "";
-    if (!termLabel) {
-        throw new Error(`Could not parse term label from report heading: "${headingText}"`);
-    }
+  const bodyText = await getBodyText(reportContext);
+  const headingText =
+    (await reportContext.locator("h3").first().textContent())?.trim() ?? "";
+  const termMatch = headingText.match(/\(([^)]+)\)/);
+  const termLabel = termMatch?.[1]?.trim() ?? "";
+  if (!termLabel) {
+    throw new Error(
+      `Could not parse term label from report heading: "${headingText}"`,
+    );
+  }
 
-    const semester = normalizeSemester(termLabel);
-    const lectureYear = extractLectureYear(termLabel);
-    const instructor = extractField(bodyText, "Instructor");
-    const section = extractField(bodyText, "Section");
-    const courseId = extractField(bodyText, "Course ID");
-    const courseTitle = extractField(bodyText, "Course Title");
+  const semester = normalizeSemester(termLabel);
+  const lectureYear = extractLectureYear(termLabel);
+  const instructor = extractField(bodyText, "Instructor");
+  const section = extractField(bodyText, "Section");
+  const courseId = extractField(bodyText, "Course ID");
+  const courseTitle = extractField(bodyText, "Course Title");
 
-    return {
-        reportUrl,
-        pdfUrl: new URL(pdfHref, reportUrl).toString(),
-        courseTitle,
-        instructor,
-        section,
-        courseId,
-        termLabel,
-        semester,
-        lectureYear,
-        sourceId: buildSourceId(reportUrl, instructor, section, courseId),
-    };
+  return {
+    reportUrl,
+    pdfUrl: new URL(pdfHref, reportUrl).toString(),
+    courseTitle,
+    instructor,
+    section,
+    courseId,
+    termLabel,
+    semester,
+    lectureYear,
+    sourceId: buildSourceId(reportUrl, instructor, section, courseId),
+  };
 }
 
-async function collectReportUrlsFromBrowser(page: Page, limit?: number): Promise<string[]> {
-    const urls = new Set<string>();
-
-    while (true) {
-        await page.waitForLoadState("networkidle");
-        await page.waitForTimeout(2000);
-
-        const iframeLocator = page.frameLocator("#contentFrame");
-
-        let hrefs: string[] = [];
-
-        try {
-            hrefs = await iframeLocator
-                .locator("a")
-                .evaluateAll((elements) =>
-                    elements
-                        .filter((element) => {
-                            const text = element.textContent?.trim().toLowerCase() ?? "";
-                            const href = (element as HTMLAnchorElement).href ?? "";
-                            return text === "view" || href.includes("coursereport");
-                        })
-                        .map((element) => (element as HTMLAnchorElement).href)
-                        .filter((href) => href.length > 0)
-                );
-            console.log(`Found ${hrefs.length} report link(s) in iframe on current page.`);
-        } catch {
-            console.log("DEBUG: Could not access #contentFrame iframe, trying top page...");
-            hrefs = await page
-                .locator("a")
-                .evaluateAll((elements) =>
-                    elements
-                        .filter((element) => {
-                            const text = element.textContent?.trim().toLowerCase() ?? "";
-                            const href = (element as HTMLAnchorElement).href ?? "";
-                            return text === "view" || href.includes("coursereport");
-                        })
-                        .map((element) => (element as HTMLAnchorElement).href)
-                        .filter((href) => href.length > 0)
-                );
-            console.log(`Found ${hrefs.length} report link(s) on top page.`);
-        }
-
-        hrefs.forEach((href) => {
-            if (!limit || urls.size < limit) {
-                urls.add(href);
-            }
-        });
-
-        if (limit && urls.size >= limit) break;
-
-        let hasOldTerms = false;
-        try {
-            const termTexts = await (iframeLocator ?? page)
-                .locator("td")
-                .evaluateAll((cells) =>
-                    cells.map((c) => c.textContent?.trim() ?? "").filter((t) => /\b(19|20)\d{2}\b/.test(t))
-                );
-
-            hasOldTerms = termTexts.some((t) => {
-                const yearMatch = t.match(/\b(20\d{2})\b/);
-                return yearMatch && Number(yearMatch[1]) < MIN_YEAR;
-            });
-        } catch { /* ignore */ }
-
-        if (hasOldTerms) {
-            console.log(`Detected pre-${MIN_YEAR} terms on current page. Stopping URL collection.`);
-            break;
-        }
-
-        let nextLink = iframeLocator.locator("a:has-text('Next')").first();
-        let nextVisible = await nextLink.isVisible().catch(() => false);
-        if (!nextVisible) {
-            nextLink = page.locator("a:has-text('Next')").first();
-            nextVisible = await nextLink.isVisible().catch(() => false);
-        }
-        if (!nextVisible) break;
-
-        const previousUrls = new Set(urls);
-        await nextLink.click();
-        await page.waitForLoadState("networkidle").catch(() => undefined);
-        await page.waitForTimeout(2000);
-
-        // Guard against pagination loops where "Next" is visible but data does not advance.
-        const advancedHrefs = await iframeLocator
-            .locator("a")
-            .evaluateAll((elements) =>
-                elements
-                    .filter((element) => {
-                        const text = element.textContent?.trim().toLowerCase() ?? "";
-                        const href = (element as HTMLAnchorElement).href ?? "";
-                        return text === "view" || href.includes("coursereport");
-                    })
-                    .map((element) => (element as HTMLAnchorElement).href)
-                    .filter((href) => href.length > 0)
-            )
-            .catch(() => []);
-
-        const advanced = advancedHrefs.some((href) => !previousUrls.has(href));
-        if (!advanced) {
-            console.log("No new report links after clicking Next; stopping URL collection.");
-            break;
-        }
-    }
-
-    return [...urls];
+/** Extract {href, subject} pairs from a list of anchor elements and their parent rows. */
+function extractReportLinks(
+  elements: Element[],
+): Array<{ href: string; subject: string }> {
+  return elements
+    .filter((el) => {
+      const text = el.textContent?.trim().toLowerCase() ?? "";
+      const href = (el as HTMLAnchorElement).href ?? "";
+      return text === "view" || href.includes("coursereport");
+    })
+    .map((el) => {
+      const href = (el as HTMLAnchorElement).href;
+      const row = el.closest("tr");
+      const cells = row ? Array.from(row.querySelectorAll("td")) : [];
+      // Subject codes are short ALL-CAPS tokens (2–6 letters) in one of the row cells
+      const subjectCell = cells.find((c) =>
+        /^[A-Z]{2,6}$/.test(c.textContent?.trim() ?? ""),
+      );
+      return { href, subject: subjectCell?.textContent?.trim() ?? "" };
+    })
+    .filter((entry) => entry.href.length > 0);
 }
 
-async function downloadPdf(context: BrowserContext, pdfUrl: string): Promise<Buffer> {
-    const response = await context.request.get(pdfUrl);
-    if (!response.ok()) {
-        throw new Error(`Failed to download PDF (${response.status()} ${response.statusText()}) from ${pdfUrl}`);
-    }
+async function collectReportUrlsFromBrowser(
+  page: Page,
+  limit?: number,
+): Promise<Map<string, string>> {
+  // Map of report URL → subject code extracted from the listing row (e.g. "CS", "ARTF")
+  const urlSubjectMap = new Map<string, string>();
 
-    const buffer = Buffer.from(await response.body());
-    const contentType = response.headers()["content-type"] ?? "";
-    if (!contentType.includes("application/pdf") && !looksLikePdf(buffer)) {
-        throw new Error(`Response from ${pdfUrl} was not a PDF (content-type: ${contentType || "unknown"})`);
-    }
+  while (true) {
+    await page.waitForLoadState("networkidle");
+    await page.waitForTimeout(2000);
 
-    return buffer;
-}
+    const iframeLocator = page.frameLocator("#contentFrame");
 
-async function appendManifest(manifestPath: string, entry: TraceManifestEntry): Promise<void> {
-    await mkdir(path.dirname(manifestPath), { recursive: true });
+    let entries: Array<{ href: string; subject: string }> = [];
 
-    let manifest: TraceManifestEntry[] = [];
     try {
-        const raw = await readFile(manifestPath, "utf8");
-        const parsed = JSON.parse(raw) as unknown;
-        if (Array.isArray(parsed)) {
-            manifest = parsed as TraceManifestEntry[];
-        }
-    } catch (err: unknown) {
-        const code = (err as NodeJS.ErrnoException).code;
-        if (code !== "ENOENT") throw err;
+      entries = await iframeLocator
+        .locator("a")
+        .evaluateAll(extractReportLinks);
+      console.log(
+        `Found ${entries.length} report link(s) in iframe on current page.`,
+      );
+    } catch {
+      console.log(
+        "DEBUG: Could not access #contentFrame iframe, trying top page...",
+      );
+      entries = await page.locator("a").evaluateAll(extractReportLinks);
+      console.log(`Found ${entries.length} report link(s) on top page.`);
     }
 
-    manifest.push(entry);
-    await writeFile(manifestPath, `${JSON.stringify(manifest, null, 2)}\n`, "utf8");
+    for (const { href, subject } of entries) {
+      if (!limit || urlSubjectMap.size < limit) {
+        if (!urlSubjectMap.has(href)) {
+          urlSubjectMap.set(href, subject);
+        }
+      }
+    }
+
+    if (limit && urlSubjectMap.size >= limit) break;
+
+    let hasOldTerms = false;
+    try {
+      const termTexts = await (iframeLocator ?? page)
+        .locator("td")
+        .evaluateAll((cells: Element[]) =>
+          cells
+            .map((c: Element) => c.textContent?.trim() ?? "")
+            .filter((t: string) => /\b(19|20)\d{2}\b/.test(t)),
+        );
+
+      hasOldTerms = termTexts.some((t) => {
+        const yearMatch = t.match(/\b(20\d{2})\b/);
+        return yearMatch && Number(yearMatch[1]) < MIN_YEAR;
+      });
+    } catch {
+      /* ignore */
+    }
+
+    if (hasOldTerms) {
+      console.log(
+        `Detected pre-${MIN_YEAR} terms on current page. Stopping URL collection.`,
+      );
+      break;
+    }
+
+    let nextLink = iframeLocator.locator("a:has-text('Next')").first();
+    let nextVisible = await nextLink.isVisible().catch(() => false);
+    if (!nextVisible) {
+      nextLink = page.locator("a:has-text('Next')").first();
+      nextVisible = await nextLink.isVisible().catch(() => false);
+    }
+    if (!nextVisible) break;
+
+    const previousUrls = new Set(urlSubjectMap.keys());
+    await nextLink.click();
+    await page.waitForLoadState("networkidle").catch(() => undefined);
+    await page.waitForTimeout(2000);
+
+    // Guard against pagination loops where "Next" is visible but data does not advance.
+    const advancedEntries = await iframeLocator
+      .locator("a")
+      .evaluateAll(extractReportLinks)
+      .catch(() => []);
+
+    const advanced = advancedEntries.some(
+      ({ href }: { href: string }) => !previousUrls.has(href),
+    );
+    if (!advanced) {
+      console.log(
+        "No new report links after clicking Next; stopping URL collection.",
+      );
+      break;
+    }
+  }
+
+  return urlSubjectMap;
 }
 
-async function readManifestEntries(manifestPath: string): Promise<TraceManifestEntry[]> {
-    try {
-        const raw = await readFile(manifestPath, "utf8");
-        const parsed = JSON.parse(raw) as unknown;
-        if (!Array.isArray(parsed)) return [];
-        return parsed as TraceManifestEntry[];
-    } catch (err: unknown) {
-        const code = (err as NodeJS.ErrnoException).code;
-        if (code === "ENOENT") return [];
-        throw err;
+async function downloadPdf(
+  context: BrowserContext,
+  pdfUrl: string,
+): Promise<Buffer> {
+  const response = await context.request.get(pdfUrl);
+  if (!response.ok()) {
+    throw new Error(
+      `Failed to download PDF (${response.status()} ${response.statusText()}) from ${pdfUrl}`,
+    );
+  }
+
+  const buffer = Buffer.from(await response.body());
+  const contentType = response.headers()["content-type"] ?? "";
+  if (!contentType.includes("application/pdf") && !looksLikePdf(buffer)) {
+    throw new Error(
+      `Response from ${pdfUrl} was not a PDF (content-type: ${contentType || "unknown"})`,
+    );
+  }
+
+  return buffer;
+}
+
+async function appendManifest(
+  manifestPath: string,
+  entry: TraceManifestEntry,
+): Promise<void> {
+  await mkdir(path.dirname(manifestPath), { recursive: true });
+
+  let manifest: TraceManifestEntry[] = [];
+  try {
+    const raw = await readFile(manifestPath, "utf8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (Array.isArray(parsed)) {
+      manifest = parsed as TraceManifestEntry[];
     }
+  } catch (err: unknown) {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code !== "ENOENT") throw err;
+  }
+
+  manifest.push(entry);
+  await writeFile(
+    manifestPath,
+    `${JSON.stringify(manifest, null, 2)}\n`,
+    "utf8",
+  );
+}
+
+async function readManifestEntries(
+  manifestPath: string,
+): Promise<TraceManifestEntry[]> {
+  try {
+    const raw = await readFile(manifestPath, "utf8");
+    const parsed = JSON.parse(raw) as unknown;
+    if (!Array.isArray(parsed)) return [];
+    return parsed as TraceManifestEntry[];
+  } catch (err: unknown) {
+    const code = (err as NodeJS.ErrnoException).code;
+    if (code === "ENOENT") return [];
+    throw err;
+  }
 }
 
 async function main(): Promise<void> {
-    const options = parseOptions(process.argv.slice(2));
-    const traceCredentials = getTraceCredentials();
+  const options = parseOptions(process.argv.slice(2));
+  const traceCredentials = getTraceCredentials();
 
-    if (!options.dryRun) {
-        requireEnv("AWS_ACCESS_KEY_ID");
-        requireEnv("AWS_SECRET_ACCESS_KEY");
-        requireEnv("AWS_REGION");
-        requireEnv("S3_BUCKET_NAME");
-    }
+  if (!options.dryRun) {
+    requireEnv("AWS_ACCESS_KEY_ID");
+    requireEnv("AWS_SECRET_ACCESS_KEY");
+    requireEnv("AWS_REGION");
+    requireEnv("S3_BUCKET_NAME");
+  }
 
-    const repo = options.dryRun ? undefined : new TraceDocumentRepositoryS3(s3Config);
-    const context = await chromium.launchPersistentContext(options.userDataDir, {
-        headless: options.headless,
-    });
+  const repo = options.dryRun
+    ? undefined
+    : new TraceDocumentRepositoryS3(s3Config);
+  const context = await chromium.launchPersistentContext(options.userDataDir, {
+    headless: options.headless,
+  });
 
-    try {
-        const page = context.pages()[0] ?? await context.newPage();
-        let reportUrls: string[] = [];
+  try {
+    const page = context.pages()[0] ?? (await context.newPage());
+    // Map of report URL → subject code (e.g. "CS", "ARTF") extracted from the browser listing
+    let reportUrlSubjectMap = new Map<string, string>();
 
-        if (options.reportUrl) {
-            await gotoWithOptionalLogin(page, options.reportUrl, traceCredentials);
-            console.log(`Opened report URL: ${options.reportUrl}`);
-            if (!traceCredentials) {
-                console.log("If TRACE redirects you to log in, complete login in the opened browser.");
-                await promptForEnter("Press Enter once the desired report page is visible in the browser...");
-            }
+    if (options.reportUrl) {
+      await gotoWithOptionalLogin(
+        page,
+        options.reportUrl,
+        traceCredentials,
+        options.headless,
+      );
+      console.log(`Opened report URL: ${options.reportUrl}`);
+      if (!traceCredentials) {
+        console.log(
+          "If TRACE redirects you to log in, complete login in the opened browser.",
+        );
+        await promptForEnter(
+          "Press Enter once the desired report page is visible in the browser...",
+        );
+      }
 
-            reportUrls = [page.url()];
+      reportUrlSubjectMap.set(page.url(), options.department);
+    } else {
+      let browserUrl = options.reportBrowserUrl;
+
+      if (options.headless) {
+        // In headless mode, load the report URLs saved from the last interactive run.
+        // We can't restore TRACE filter state from a URL (it's JS/server-side only),
+        // so we save the full URL list after each interactive run and reuse it here.
+        try {
+          const saved = await readFile(SAVED_REPORT_URLS_PATH, "utf8");
+          const parsed = JSON.parse(saved) as Array<{ url: string; subject: string }>;
+          for (const { url, subject } of parsed) {
+            reportUrlSubjectMap.set(url, subject);
+          }
+          console.log(`Headless mode: loaded ${reportUrlSubjectMap.size} saved report URLs.`);
+        } catch {
+          throw new Error(
+            "No saved report URLs found. Run once without --headless to collect and save them first.",
+          );
+        }
+      } else {
+        await gotoWithOptionalLogin(
+          page,
+          browserUrl,
+          traceCredentials,
+          options.headless,
+        );
+        console.log(`Opened TRACE report browser at ${browserUrl}`);
+
+        if (traceCredentials) {
+          console.log(
+            "TRACE credentials detected. Apply your desired filters/search in the opened browser.",
+          );
         } else {
-            await gotoWithOptionalLogin(page, options.reportBrowserUrl, traceCredentials);
-            console.log(`Opened TRACE report browser at ${options.reportBrowserUrl}`);
-            if (traceCredentials) {
-                console.log("TRACE credentials detected. Apply your desired filters/search in the opened browser.");
-            } else {
-                console.log("Log in and apply your desired filters/search in the opened browser.");
-            }
-            await promptForEnter("Press Enter here once the visible results are ready to scrape...");
+          console.log(
+            "Log in and apply your desired filters/search in the opened browser.",
+          );
+        }
+        await promptForEnter(
+          "Press Enter here once the visible results are ready to scrape...",
+        );
 
-            reportUrls = await collectReportUrlsFromBrowser(page, options.limit);
-            if (reportUrls.length === 0) {
-                throw new Error("No report URLs were found from the current TRACE results page.");
-            }
+        reportUrlSubjectMap = await collectReportUrlsFromBrowser(
+          page,
+          options.limit,
+        );
+        if (reportUrlSubjectMap.size === 0) {
+          throw new Error(
+            "No report URLs were found from the current TRACE results page.",
+          );
         }
 
-        console.log(`Found ${reportUrls.length} report URL(s) to process.`);
-
-        const existingManifestEntries = await readManifestEntries(options.manifestPath);
-        const processedReportUrls = !options.dryRun
-            ? new Set(
-                existingManifestEntries
-                    .filter((entry) => !entry.s3Key.startsWith("dry-run:"))
-                    .map((entry) => entry.reportUrl)
-            )
-            : new Set<string>();
-        if (processedReportUrls.size > 0) {
-            console.log(`Resume mode: ${processedReportUrls.size} report URL(s) already uploaded; they will be skipped.`);
-        }
-
-        for (let idx = 0; idx < reportUrls.length; idx += 1) {
-            const reportUrl = reportUrls[idx]!;
-            if (processedReportUrls.has(reportUrl)) {
-                continue;
-            }
-            const isFirstSingleReport = options.reportUrl && idx === 0;
-            const reportPage = isFirstSingleReport ? page : await context.newPage();
-            try {
-                const metadata = isFirstSingleReport
-                    ? await scrapeReportMetadataFromCurrentPage(reportPage, reportUrl)
-                    : await scrapeReportMetadata(reportPage, reportUrl);
-
-                const skipReason = shouldSkipTerm(metadata.semester, metadata.lectureYear, options.allowExcluded2025);
-                if (skipReason === "too-old") {
-                    console.log(`Reached pre-${MIN_YEAR} report (${metadata.termLabel}). Stopping.`);
-                    break;
-                }
-                if (skipReason === "excluded") {
-                    console.log(`Skipping excluded term ${metadata.termLabel}: ${reportUrl}`);
-                    continue;
-                }
-
-                const pdfBuffer = await downloadPdf(context, metadata.pdfUrl);
-                const uploadKeyInput: TraceDocumentKey = {
-                    department: options.department,
-                    semester: metadata.semester,
-                    lectureYear: metadata.lectureYear,
-                    professorId: metadata.sourceId,
-                };
-                if (options.courseCode !== undefined) {
-                    uploadKeyInput.courseCode = options.courseCode;
-                }
-
-                const dryRunParts = [uploadKeyInput.department, uploadKeyInput.courseCode !== undefined ? String(uploadKeyInput.courseCode) : "all-courses"];
-                dryRunParts.push(`${uploadKeyInput.semester}_${uploadKeyInput.lectureYear}`, `${uploadKeyInput.professorId}.pdf`);
-
-                const s3Key = options.dryRun
-                    ? `dry-run:${dryRunParts.join("/")}`
-                    : await repo!.uploadPdf(uploadKeyInput, pdfBuffer);
-
-                const manifestEntry: TraceManifestEntry = {
-                    ...metadata,
-                    department: options.department,
-                    s3Key,
-                    uploadedAt: new Date().toISOString(),
-                };
-                if (options.courseCode !== undefined) {
-                    manifestEntry.courseCode = options.courseCode;
-                }
-
-                await appendManifest(options.manifestPath, manifestEntry);
-                processedReportUrls.add(reportUrl);
-                console.log(`Uploaded ${metadata.termLabel} report for ${metadata.instructor || "unknown instructor"} -> ${s3Key}`);
-            } finally {
-                if (!isFirstSingleReport) {
-                    await reportPage.close();
-                }
-            }
-        }
-
-        console.log(`Done. Manifest written to ${options.manifestPath}`);
-    } finally {
-        await context.close();
+        // Save the collected URLs so --headless runs can reuse them without a browser.
+        const toSave = Array.from(reportUrlSubjectMap.entries()).map(([url, subject]) => ({ url, subject }));
+        await mkdir(path.dirname(SAVED_REPORT_URLS_PATH), { recursive: true });
+        await writeFile(SAVED_REPORT_URLS_PATH, JSON.stringify(toSave, null, 2), "utf8");
+        console.log(`Saved ${toSave.length} report URLs for future headless runs.`);
+      }
     }
+
+    console.log(`Found ${reportUrlSubjectMap.size} report URL(s) to process.`);
+
+    const existingManifestEntries = await readManifestEntries(
+      options.manifestPath,
+    );
+    const processedReportUrls = !options.dryRun
+      ? new Set(
+          existingManifestEntries
+            .filter((entry) => !entry.s3Key.startsWith("dry-run:"))
+            .map((entry) => entry.reportUrl),
+        )
+      : new Set<string>();
+    if (processedReportUrls.size > 0) {
+      console.log(
+        `Resume mode: ${processedReportUrls.size} report URL(s) already uploaded; they will be skipped.`,
+      );
+    }
+
+    const allReportUrls = Array.from(reportUrlSubjectMap.keys());
+    for (let idx = 0; idx < allReportUrls.length; idx += 1) {
+      const reportUrl = allReportUrls[idx]!;
+      if (processedReportUrls.has(reportUrl)) {
+        continue;
+      }
+      const isFirstSingleReport = options.reportUrl && idx === 0;
+      const reportPage = isFirstSingleReport ? page : await context.newPage();
+      try {
+        const metadata = isFirstSingleReport
+          ? await scrapeReportMetadataFromCurrentPage(reportPage, reportUrl)
+          : await scrapeReportMetadata(reportPage, reportUrl, traceCredentials);
+
+        const skipReason = shouldSkipTerm(
+          metadata.semester,
+          metadata.lectureYear,
+          options.allowExcluded2025,
+        );
+        if (skipReason === "too-old") {
+          console.log(
+            `Reached pre-${MIN_YEAR} report (${metadata.termLabel}). Stopping.`,
+          );
+          break;
+        }
+        if (skipReason === "excluded") {
+          console.log(
+            `Skipping excluded term ${metadata.termLabel}: ${reportUrl}`,
+          );
+          continue;
+        }
+
+        // Use the subject extracted from the listing row; fall back to --department
+        const subject =
+          reportUrlSubjectMap.get(reportUrl) || options.department;
+
+        const pdfBuffer = await downloadPdf(context, metadata.pdfUrl);
+        const uploadKeyInput: TraceDocumentKey = {
+          department: subject,
+          semester: metadata.semester,
+          lectureYear: metadata.lectureYear,
+          professorId: metadata.sourceId,
+        };
+        if (options.courseCode !== undefined) {
+          uploadKeyInput.courseCode = options.courseCode;
+        }
+
+        const dryRunParts = [
+          uploadKeyInput.department,
+          uploadKeyInput.courseCode !== undefined
+            ? String(uploadKeyInput.courseCode)
+            : "all-courses",
+        ];
+        dryRunParts.push(
+          `${uploadKeyInput.semester}_${uploadKeyInput.lectureYear}`,
+          `${uploadKeyInput.professorId}.pdf`,
+        );
+
+        const s3Key = options.dryRun
+          ? `dry-run:${dryRunParts.join("/")}`
+          : await repo!.uploadPdf(uploadKeyInput, pdfBuffer);
+
+        const manifestEntry: TraceManifestEntry = {
+          ...metadata,
+          department: subject,
+          s3Key,
+          uploadedAt: new Date().toISOString(),
+        };
+        if (options.courseCode !== undefined) {
+          manifestEntry.courseCode = options.courseCode;
+        }
+
+        await appendManifest(options.manifestPath, manifestEntry);
+        processedReportUrls.add(reportUrl);
+        console.log(
+          `Uploaded ${metadata.termLabel} report for ${metadata.instructor || "unknown instructor"} -> ${s3Key}`,
+        );
+      } finally {
+        if (!isFirstSingleReport) {
+          await reportPage.close();
+        }
+      }
+    }
+
+    console.log(`Done. Manifest written to ${options.manifestPath}`);
+  } finally {
+    await context.close();
+  }
 }
 
 main().catch((err) => {
-    console.error(err);
-    process.exit(1);
+  console.error(err);
+  process.exit(1);
 });
+
+// TRACE_USERNAME=your@email.com TRACE_PASSWORD=yourpass \
+// npx ts-node scripts/scrape-trace-to-s3.ts \
+//   --department MATH \
+//   --headless \
+//   --dry-run \
+//   --limit 3
+
