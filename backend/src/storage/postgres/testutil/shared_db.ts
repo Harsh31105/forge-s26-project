@@ -367,7 +367,8 @@ export async function cleanupTestData() {
       course,
       department,
       course_thread,
-      sample
+      sample,
+      professor
     RESTART IDENTITY CASCADE;
   `);
 }

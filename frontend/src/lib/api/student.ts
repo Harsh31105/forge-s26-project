@@ -34,6 +34,13 @@ export const getStudent = () => {
     });
   };
   /**
+   * Returns a single student by their unique email-ID.
+   * @summary Get student by their Email
+   */
+  const getStudentsEmailEmail = (email: string) => {
+    return customAxios<Student>({ url: `/students/email/${email}`, method: "GET" });
+  };
+  /**
    * Returns a single student by their UUID.
    * @summary Get student by ID
    */
@@ -59,13 +66,23 @@ export const getStudent = () => {
   const deleteStudentsId = (id: string) => {
     return customAxios<void>({ url: `/students/${id}`, method: "DELETE" });
   };
-  return { getStudents, postStudents, getStudentsId, patchStudentsId, deleteStudentsId };
+  return {
+    getStudents,
+    postStudents,
+    getStudentsEmailEmail,
+    getStudentsId,
+    patchStudentsId,
+    deleteStudentsId,
+  };
 };
 export type GetStudentsResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getStudent>["getStudents"]>>
 >;
 export type PostStudentsResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getStudent>["postStudents"]>>
+>;
+export type GetStudentsEmailEmailResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getStudent>["getStudentsEmailEmail"]>>
 >;
 export type GetStudentsIdResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getStudent>["getStudentsId"]>>

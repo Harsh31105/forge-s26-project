@@ -1,0 +1,31 @@
+{
+  "source": "data/example2.pdf",
+  "professor": {
+    "firstName": "Anis",
+    "lastName": "Abdulle",
+    "tags": []
+  },
+  "course": {
+    "name": "Professional Development Co-op",
+    "course_code": "1210",
+    "num_credits": 1,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Professional Development Co-op",
+    "courseCode": "1210",
+    "semester": "fall",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "0-2": 66.7,
+      "3-4": 22.2,
+      "8-10": 11.1
+    },
+    "proffesorEfficency": 4.4,
+    "howOftenPercentage": {
+      "80-100%": 77.8,
+      "60-80%": 22.2
+    }
+  }
+}

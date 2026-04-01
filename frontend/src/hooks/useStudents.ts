@@ -39,6 +39,23 @@ export function useStudent(studentID: string) {
     return { student, isLoading, error: error?.message || null, refetch };
 }
 
+export function useStudentByEmail(email: string) {
+    const studentAPI = getStudent();
+
+    const {
+        data: student,
+        isLoading,
+        error,
+        refetch,
+    } = useQuery({
+        queryKey: ["students", "email", email],
+        queryFn: () => studentAPI.getStudentsEmailEmail(email),
+        enabled: !!email,
+    });
+
+    return { student, isLoading, error: error?.message || null, refetch };
+}
+
 export function useStudentMutations() {
     const queryClient = useQueryClient();
     const studentAPI = getStudent();
