@@ -386,8 +386,8 @@ if __name__ == "__main__":
 
 
 
-# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/manolios-pete-section-04-course-16831-sp-87600-2604-175-f6d3f89020.json - --profile forge-bucket
-
+# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/spring_2025/bernardini-kai-section-09-course-41678-sp-105108-6782-196-07f4e4e6a1.json - --profile forge-bucket
+# aws s3 cp s3://forge-s26-trace-evaluations/trace-evaluations/CS/undefined/spring_2025/bernardini-kai-section-09-course-41678-sp-105108-6782-196-07f4e4e6a1.pdf - --profile forge-bucket > example5.pdf
 
 # aws s3 cp s3://forge-s26-trace-evaluations/trace-evaluations/CS/undefined/fall_2023/manolios-pete-section-04-course-16831-sp-87600-2604-175-f6d3f89020.pdf --profile forge-bucket > example5.pdf
 
