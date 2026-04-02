@@ -26,57 +26,75 @@ import path from "path";
 import process from "process";
 import { createInterface } from "readline/promises";
 
-import { chromium, type BrowserContext, type Frame, type Page } from "playwright";
+import {
+  chromium,
+  type BrowserContext,
+  type Frame,
+  type Page,
+} from "playwright";
 
 import { s3Config } from "../src/config/s3";
-import { TraceDocumentRepositoryS3, type TraceDocumentKey } from "../src/storage/s3/traceDocuments";
+import {
+  TraceDocumentRepositoryS3,
+  type TraceDocumentKey,
+} from "../src/storage/s3/traceDocuments";
 
-const DEFAULT_REPORT_BROWSER_URL = "https://www.applyweb.com/eval/new/reportbrowser";
+const DEFAULT_REPORT_BROWSER_URL =
+  "https://www.applyweb.com/eval/new/reportbrowser";
 const DEFAULT_USER_DATA_DIR = path.resolve(process.cwd(), ".trace-playwright");
-const DEFAULT_MANIFEST_PATH = path.resolve(process.cwd(), "scripts/output/trace-scrape-manifest.json");
-const SAVED_BROWSER_URL_PATH = path.resolve(process.cwd(), ".trace-playwright/saved-browser-url.txt");
-const SAVED_REPORT_URLS_PATH = path.resolve(process.cwd(), ".trace-playwright/saved-report-urls.json");
+const DEFAULT_MANIFEST_PATH = path.resolve(
+  process.cwd(),
+  "scripts/output/trace-scrape-manifest.json",
+);
+const SAVED_BROWSER_URL_PATH = path.resolve(
+  process.cwd(),
+  ".trace-playwright/saved-browser-url.txt",
+);
+const SAVED_REPORT_URLS_PATH = path.resolve(
+  process.cwd(),
+  ".trace-playwright/saved-report-urls.json",
+);
 
 interface CliOptions {
-    department: string;
-    courseCode?: number;
-    reportUrl?: string;
-    reportBrowserUrl: string;
-    limit?: number;
-    headless: boolean;
-    userDataDir: string;
-    manifestPath: string;
-    allowExcluded2025: boolean;
-    dryRun: boolean;
+  department: string;
+  courseCode?: number;
+  reportUrl?: string;
+  reportBrowserUrl: string;
+  limit?: number;
+  headless: boolean;
+  userDataDir: string;
+  manifestPath: string;
+  allowExcluded2025: boolean;
+  dryRun: boolean;
 }
 
 interface TraceCredentials {
-    username: string;
-    password: string;
+  username: string;
+  password: string;
 }
 
 interface ScrapedReportMetadata {
-    reportUrl: string;
-    pdfUrl: string;
-    courseTitle: string;
-    instructor: string;
-    section: string;
-    courseId: string;
-    termLabel: string;
-    semester: string;
-    lectureYear: number;
-    sourceId: string;
+  reportUrl: string;
+  pdfUrl: string;
+  courseTitle: string;
+  instructor: string;
+  section: string;
+  courseId: string;
+  termLabel: string;
+  semester: string;
+  lectureYear: number;
+  sourceId: string;
 }
 
 interface TraceManifestEntry extends ScrapedReportMetadata {
-    department: string;
-    courseCode?: number;
-    s3Key: string;
-    uploadedAt: string;
+  department: string;
+  courseCode?: number;
+  s3Key: string;
+  uploadedAt: string;
 }
 
 function printUsage(): void {
-    console.log(`
+  console.log(`
 Usage:
   npx ts-node scripts/scrape-trace-to-s3.ts --department CS [--course-code 3000] [options]
 
@@ -109,193 +127,232 @@ Environment:
 }
 
 function parseArgs(argv: string[]): Map<string, string | boolean> {
-    const args = new Map<string, string | boolean>();
+  const args = new Map<string, string | boolean>();
 
-    for (let idx = 0; idx < argv.length; idx += 1) {
-        const token = argv[idx];
-        if (!token?.startsWith("--")) continue;
+  for (let idx = 0; idx < argv.length; idx += 1) {
+    const token = argv[idx];
+    if (!token?.startsWith("--")) continue;
 
-        const key = token.slice(2);
-        const next = argv[idx + 1];
-        if (!next || next.startsWith("--")) {
-            args.set(key, true);
-            continue;
-        }
-
-        args.set(key, next);
-        idx += 1;
+    const key = token.slice(2);
+    const next = argv[idx + 1];
+    if (!next || next.startsWith("--")) {
+      args.set(key, true);
+      continue;
     }
 
-    return args;
+    args.set(key, next);
+    idx += 1;
+  }
+
+  return args;
 }
 
-function getStringArg(args: Map<string, string | boolean>, key: string): string | undefined {
-    const value = args.get(key);
-    return typeof value === "string" ? value : undefined;
+function getStringArg(
+  args: Map<string, string | boolean>,
+  key: string,
+): string | undefined {
+  const value = args.get(key);
+  return typeof value === "string" ? value : undefined;
 }
 
-function getBooleanArg(args: Map<string, string | boolean>, key: string): boolean {
-    return args.get(key) === true;
+function getBooleanArg(
+  args: Map<string, string | boolean>,
+  key: string,
+): boolean {
+  return args.get(key) === true;
 }
 
 function slugify(value: string): string {
-    return value
-        .normalize("NFKD")
-        .replace(/\p{M}/gu, "")
-        .toLowerCase()
-        .replace(/[^a-z0-9]+/g, "-")
-        .replace(/^-+|-+$/g, "");
+  return value
+    .normalize("NFKD")
+    .replace(/\p{M}/gu, "")
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, "-")
+    .replace(/^-+|-+$/g, "");
 }
 
 function normalizeSemester(termLabel: string): string {
-    const normalized = termLabel.trim().toLowerCase();
+  const normalized = termLabel.trim().toLowerCase();
 
-    if (normalized.startsWith("spring")) return "spring";
-    if (normalized.startsWith("summer 1")) return "summer_1";
-    if (normalized.startsWith("summer 2")) return "summer_2";
-    if (normalized.startsWith("summer")) return "summer";
-    if (normalized.startsWith("fall")) return "fall";
+  if (normalized.startsWith("spring")) return "spring";
+  if (normalized.startsWith("summer 1")) return "summer_1";
+  if (normalized.startsWith("summer 2")) return "summer_2";
+  if (normalized.startsWith("summer")) return "summer";
+  if (normalized.startsWith("fall")) return "fall";
 
-    return slugify(termLabel).replace(/-/g, "_");
+  return slugify(termLabel).replace(/-/g, "_");
 }
 
 function extractLectureYear(termLabel: string): number {
-    const match = termLabel.match(/\b(20\d{2})\b/);
-    if (!match) {
-        throw new Error(`Could not parse lecture year from term label: "${termLabel}"`);
-    }
+  const match = termLabel.match(/\b(20\d{2})\b/);
+  if (!match) {
+    throw new Error(
+      `Could not parse lecture year from term label: "${termLabel}"`,
+    );
+  }
 
-    return Number(match[1]);
+  return Number(match[1]);
 }
 
-function buildSourceId(reportUrl: string, instructor: string, section: string, courseId: string): string {
-    const url = new URL(reportUrl);
-    const spParts = url.searchParams.getAll("sp");
-    const cPart = url.searchParams.get("c");
-    const hash = createHash("sha1").update(reportUrl).digest("hex").slice(0, 10);
+function buildSourceId(
+  reportUrl: string,
+  instructor: string,
+  section: string,
+  courseId: string,
+): string {
+  const url = new URL(reportUrl);
+  const spParts = url.searchParams.getAll("sp");
+  const cPart = url.searchParams.get("c");
+  const hash = createHash("sha1").update(reportUrl).digest("hex").slice(0, 10);
 
-    return [
-        slugify(instructor) || "instructor",
-        section ? `section-${slugify(section)}` : "",
-        courseId ? `course-${slugify(courseId)}` : "",
-        spParts.length > 0 ? `sp-${spParts.join("-")}` : "",
-        cPart ? `c-${slugify(cPart)}` : "",
-        hash,
-    ]
-        .filter((part) => part.length > 0)
-        .join("-")
-        .slice(0, 180);
+  return [
+    slugify(instructor) || "instructor",
+    section ? `section-${slugify(section)}` : "",
+    courseId ? `course-${slugify(courseId)}` : "",
+    spParts.length > 0 ? `sp-${spParts.join("-")}` : "",
+    cPart ? `c-${slugify(cPart)}` : "",
+    hash,
+  ]
+    .filter((part) => part.length > 0)
+    .join("-")
+    .slice(0, 180);
 }
 
 function looksLikePdf(buffer: Buffer): boolean {
-    return buffer.subarray(0, 4).toString("utf8") === "%PDF";
+  return buffer.subarray(0, 4).toString("utf8") === "%PDF";
 }
 
 const MIN_YEAR = 2021;
 const MIN_SEMESTER = "spring";
 
 function semesterOrder(sem: string): number {
-    if (sem.startsWith("spring")) return 1;
-    if (sem.startsWith("summer")) return 2;
-    if (sem.startsWith("fall")) return 3;
-    return 0;
+  if (sem.startsWith("spring")) return 1;
+  if (sem.startsWith("summer")) return 2;
+  if (sem.startsWith("fall")) return 3;
+  return 0;
 }
 
-function shouldSkipTerm(semester: string, year: number, allowExcluded2025: boolean): "too-old" | "excluded" | false {
-    if (year < MIN_YEAR) return "too-old";
-    if (year === MIN_YEAR && semesterOrder(semester) < semesterOrder(MIN_SEMESTER)) return "too-old";
+function shouldSkipTerm(
+  semester: string,
+  year: number,
+  allowExcluded2025: boolean,
+): "too-old" | "excluded" | false {
+  if (year < MIN_YEAR) return "too-old";
+  if (
+    year === MIN_YEAR &&
+    semesterOrder(semester) < semesterOrder(MIN_SEMESTER)
+  )
+    return "too-old";
 
-    if (!allowExcluded2025 && year === 2025 && (semester === "fall" || semester.startsWith("summer"))) return "excluded";
-    return false;
+  if (
+    !allowExcluded2025 &&
+    year === 2025 &&
+    (semester === "fall" || semester.startsWith("summer"))
+  )
+    return "excluded";
+  return false;
 }
 
 function requireEnv(name: string): void {
-    if (!process.env[name]) {
-        throw new Error(`Missing required environment variable: ${name}`);
-    }
+  if (!process.env[name]) {
+    throw new Error(`Missing required environment variable: ${name}`);
+  }
 }
 
 function getTraceCredentials(): TraceCredentials | undefined {
-    const username = process.env.TRACE_USERNAME?.trim();
-    const password = "pTmT6KUwfaMM$_t";
+  const username = process.env.TRACE_USERNAME?.trim();
+  const password = process.env.TRACE_PASSWORD?.trim();
 
-    if (!username || !password) return undefined;
-    return { username, password };
+  if (!username || !password) return undefined;
+  return { username, password };
 }
 
-async function findFirstVisibleLocator(page: Page, selectors: string[]): Promise<ReturnType<Page["locator"]> | null> {
-    for (const selector of selectors) {
-        const locator = page.locator(selector).first();
-        if (await locator.isVisible().catch(() => false)) {
-            return locator;
-        }
+async function findFirstVisibleLocator(
+  page: Page,
+  selectors: string[],
+): Promise<ReturnType<Page["locator"]> | null> {
+  for (const selector of selectors) {
+    const locator = page.locator(selector).first();
+    if (await locator.isVisible().catch(() => false)) {
+      return locator;
     }
+  }
 
-    return null;
+  return null;
 }
 
-async function maybeAutoLogin(page: Page, credentials: TraceCredentials | undefined): Promise<boolean> {
-    const passwordSelectors = [
-        process.env.TRACE_PASSWORD_SELECTOR,
-        "input[type='password']",
-        "input[name='password']",
-        "input[id='password']",
-    ].filter((value): value is string => Boolean(value));
+async function maybeAutoLogin(
+  page: Page,
+  credentials: TraceCredentials | undefined,
+): Promise<boolean> {
+  const passwordSelectors = [
+    process.env.TRACE_PASSWORD_SELECTOR,
+    "input[type='password']",
+    "input[name='password']",
+    "input[id='password']",
+  ].filter((value): value is string => Boolean(value));
 
-    const passwordInput = await findFirstVisibleLocator(page, passwordSelectors);
-    if (!passwordInput) return false;
-    if (!credentials) {
-        throw new Error("TRACE login page detected but TRACE_USERNAME / TRACE_PASSWORD are not set.");
-    }
+  const passwordInput = await findFirstVisibleLocator(page, passwordSelectors);
+  if (!passwordInput) return false;
+  if (!credentials) {
+    throw new Error(
+      "TRACE login page detected but TRACE_USERNAME / TRACE_PASSWORD are not set.",
+    );
+  }
 
-    const usernameSelectors = [
-        process.env.TRACE_USERNAME_SELECTOR,
-        "input[type='email']",
-        "input[name='username']",
-        "input[id='username']",
-        "input[name='user']",
-        "input[id='user']",
-        "input[name='login']",
-        "input[id='login']",
-        "input[type='text']",
-    ].filter((value): value is string => Boolean(value));
+  const usernameSelectors = [
+    process.env.TRACE_USERNAME_SELECTOR,
+    "input[type='email']",
+    "input[name='username']",
+    "input[id='username']",
+    "input[name='user']",
+    "input[id='user']",
+    "input[name='login']",
+    "input[id='login']",
+    "input[type='text']",
+  ].filter((value): value is string => Boolean(value));
 
-    const submitSelectors = [
-        process.env.TRACE_SUBMIT_SELECTOR,
-        "button[type='submit']",
-        "input[type='submit']",
-        "button:has-text('Sign in')",
-        "button:has-text('Log in')",
-        "button:has-text('Login')",
-        "button:has-text('Continue')",
-        "text=Sign in",
-        "text=Log in",
-        "text=Login",
-    ].filter((value): value is string => Boolean(value));
+  const submitSelectors = [
+    process.env.TRACE_SUBMIT_SELECTOR,
+    "button[type='submit']",
+    "input[type='submit']",
+    "button:has-text('Sign in')",
+    "button:has-text('Log in')",
+    "button:has-text('Login')",
+    "button:has-text('Continue')",
+    "text=Sign in",
+    "text=Log in",
+    "text=Login",
+  ].filter((value): value is string => Boolean(value));
 
-    const usernameInput = await findFirstVisibleLocator(page, usernameSelectors);
-    if (!usernameInput) {
-        throw new Error("TRACE login page detected but no username input could be found.");
-    }
+  const usernameInput = await findFirstVisibleLocator(page, usernameSelectors);
+  if (!usernameInput) {
+    throw new Error(
+      "TRACE login page detected but no username input could be found.",
+    );
+  }
 
-    await usernameInput.fill(credentials.username);
-    await passwordInput.fill(credentials.password);
+  await usernameInput.fill(credentials.username);
+  await passwordInput.fill(credentials.password);
 
-    const submitButton = await findFirstVisibleLocator(page, submitSelectors);
-    if (!submitButton) {
-        await passwordInput.press("Enter");
-    } else {
-        await submitButton.click();
-    }
+  const submitButton = await findFirstVisibleLocator(page, submitSelectors);
+  if (!submitButton) {
+    await passwordInput.press("Enter");
+  } else {
+    await submitButton.click();
+  }
 
-    await page.waitForLoadState("domcontentloaded");
-    await page.waitForLoadState("networkidle").catch(() => undefined);
-    return true;
+  await page.waitForLoadState("domcontentloaded");
+  await page.waitForLoadState("networkidle").catch(() => undefined);
+  return true;
 }
 
 async function isLoggedOutPage(page: Page): Promise<boolean> {
-    const bodyText = await page.locator("body").innerText().catch(() => "");
-    return /logged out|may close your browser/i.test(bodyText);
+  const bodyText = await page
+    .locator("body")
+    .innerText()
+    .catch(() => "");
+  return /logged out|may close your browser/i.test(bodyText);
 }
 
 async function ensureTraceSession(
@@ -593,8 +650,15 @@ async function scrapeReportMetadata(
   // Re-establish it by visiting the report browser first (which sets the
   // necessary TRACE session cookies), then retry the report URL.
   if (await isLoggedOutPage(page)) {
-    console.log(`Session lost for ${reportUrl}, re-establishing via report browser...`);
-    await gotoWithOptionalLogin(page, DEFAULT_REPORT_BROWSER_URL, credentials, true);
+    console.log(
+      `Session lost for ${reportUrl}, re-establishing via report browser...`,
+    );
+    await gotoWithOptionalLogin(
+      page,
+      DEFAULT_REPORT_BROWSER_URL,
+      credentials,
+      true,
+    );
     await page.waitForTimeout(2000);
     await page.goto(reportUrl, { waitUntil: "domcontentloaded" });
     await page.waitForLoadState("networkidle").catch(() => undefined);
@@ -876,11 +940,16 @@ async function main(): Promise<void> {
         // so we save the full URL list after each interactive run and reuse it here.
         try {
           const saved = await readFile(SAVED_REPORT_URLS_PATH, "utf8");
-          const parsed = JSON.parse(saved) as Array<{ url: string; subject: string }>;
+          const parsed = JSON.parse(saved) as Array<{
+            url: string;
+            subject: string;
+          }>;
           for (const { url, subject } of parsed) {
             reportUrlSubjectMap.set(url, subject);
           }
-          console.log(`Headless mode: loaded ${reportUrlSubjectMap.size} saved report URLs.`);
+          console.log(
+            `Headless mode: loaded ${reportUrlSubjectMap.size} saved report URLs.`,
+          );
         } catch {
           throw new Error(
             "No saved report URLs found. Run once without --headless to collect and save them first.",
@@ -919,10 +988,18 @@ async function main(): Promise<void> {
         }
 
         // Save the collected URLs so --headless runs can reuse them without a browser.
-        const toSave = Array.from(reportUrlSubjectMap.entries()).map(([url, subject]) => ({ url, subject }));
+        const toSave = Array.from(reportUrlSubjectMap.entries()).map(
+          ([url, subject]) => ({ url, subject }),
+        );
         await mkdir(path.dirname(SAVED_REPORT_URLS_PATH), { recursive: true });
-        await writeFile(SAVED_REPORT_URLS_PATH, JSON.stringify(toSave, null, 2), "utf8");
-        console.log(`Saved ${toSave.length} report URLs for future headless runs.`);
+        await writeFile(
+          SAVED_REPORT_URLS_PATH,
+          JSON.stringify(toSave, null, 2),
+          "utf8",
+        );
+        console.log(
+          `Saved ${toSave.length} report URLs for future headless runs.`,
+        );
       }
     }
 
@@ -1044,4 +1121,3 @@ main().catch((err) => {
 //   --headless \
 //   --dry-run \
 //   --limit 3
-
