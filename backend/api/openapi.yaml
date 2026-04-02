@@ -18,12 +18,18 @@ tags:
     description: API Endpoint for Specific Course Operations
   - name: Professor
     description: Professor CRUD operations
+  - name: RMP
+    description: Rate My Professor data operations
+  - name: Student
+    description: Student CRUD operations
   - name: Review
     description: Course and professor review CRUD operations
   - name: Auth
     description: Authentication Management Operations for Google OAuth 2.0
   - name: ProfessorReview
     description: API Endpoint for Specific Professor Review
+  - name: Favourite
+    description: Favourite CRUD Operations
 
 paths:
   /health:
@@ -211,9 +217,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
 
-
-# ------
-
   /professor-reviews/{id}/threads:
     get:
       summary: List threads for a professor review
@@ -301,7 +304,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
 
-
   /professor-reviews/{professor_review_id}/threads/{thread_id}:
     patch:
       summary: Update a professor review thread
@@ -373,8 +375,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
 
-# ------
-
   /samples:
     get:
       summary: Getting Samples
@@ -403,7 +403,8 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/Sample"
+                  $ref:
+                    "#/components/schemas/Sample"
         "400":
           description: bad request
           content:
@@ -435,7 +436,7 @@ paths:
     post:
       summary: Create a New Sample
       description: This endpoint creates a new sample with the provided details
-      tags: [Sample]
+      tags: [ Sample ]
       requestBody:
         required: true
         content:
@@ -490,7 +491,7 @@ paths:
     get:
       summary: Get Sample by ID
       description: This endpoint retrieves a specific sample by its ID
-      tags: [Sample]
+      tags: [ Sample ]
       responses:
         "200":
           description: Successfully retrieved the sample details
@@ -520,7 +521,7 @@ paths:
     patch:
       summary: Update Sample by ID
       description: This endpoint updates the details of a specific sample by its ID
-      tags: [Sample]
+      tags: [ Sample ]
       requestBody:
         required: true
         content:
@@ -555,7 +556,7 @@ paths:
     delete:
       summary: Delete Sample by ID
       description: This endpoint deletes a specific sample by its ID
-      tags: [Sample]
+      tags: [ Sample ]
       responses:
         "204":
           description: Successfully deleted the sample (no content)
@@ -598,6 +599,41 @@ paths:
             type: integer
             minimum: 1
             default: 10
+        # add below filtering params 
+        - name: department_id
+          in: query
+          description: Filter by department ID
+          schema:
+            type: integer
+        - name: course_code
+          in: query
+          description: Filter by course code
+          schema:
+            type: integer
+        - name: num_credits
+          in: query
+          description: Filter by number of credits
+          schema:
+            type: integer
+        - name: lecture_type
+          in: query
+          description: Filter by lecture type
+          schema:
+            type: string
+            enum: [lecture, lab, online]
+        - name: sortBy
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+            enum: [name, course_code, num_credits, created_at]
+        - name: sortOrder
+          in: query
+          description: Sort direction
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
       responses:
         "200":
           description: Successfully retrieved list of courses
@@ -769,6 +805,43 @@ paths:
               example:
                 code: 500
                 message: "Internal server error"
+
+  /courses/{id}/favourites:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the course to retrieve
+        example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+
+    get:
+      summary: Getting Favourites for this Course
+      description: Returns a list of all Favourites corresponding to this Course.
+      tags: [ Course ]
+      responses:
+        "200":
+          description: List of favourites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Favourite"
+        "400":
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
 
   /reviews:
     get:
@@ -959,6 +1032,38 @@ paths:
             type: integer
             minimum: 1
             default: 10
+        # add below filtering params
+        - name: firstName
+          in: query
+          description: Filter by first name
+          schema:
+            type: string
+        - name: lastName
+          in: query
+          description: Filter by last name
+          schema:
+            type: string
+        - name: tags
+          in: query
+          description: Filter by location tags
+          schema:
+            type: array
+            items:
+              type: string
+              enum: [boston, oakland, london]
+        - name: sortBy
+          in: query
+          description: Field to sort by
+          schema:
+            type: string
+            enum: [firstName, lastName, createdAt]
+        - name: sortOrder
+          in: query
+          description: Sort direction
+          schema:
+            type: string
+            enum: [asc, desc]
+            default: asc
       responses:
         "200":
           description: list of professors retrieved successfully
@@ -1134,11 +1239,367 @@ paths:
               schema:
                 $ref: "#/components/schemas/Error"
 
+  # rmp 
+  /professors/{id}/rmp:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: the unique identifier of the professor
+        example: "0f171d80-f523-4c56-9e5c-1d825d484e01"
+    get:
+      summary: Get RMP data for a professor
+      description: Returns the Rate My Professor data stored in our DB for a given professor
+      tags: [Professor] # changed from RMP
+      responses:
+        "200":
+          description: RMP data found successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RMP"
+        "400":  
+          description: bad request (bad uuid format, etc.) # updated description & ref
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+              example:
+                code: 400
+                message: "invalid professor id was given"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /rmp:
+    post:
+      summary: Fetch and save RMP data for all professors
+      description: Pings the external RMP API, matches data to professors in our DB, and bulk inserts
+      tags: [RMP] # changed back RMP
+      responses:
+        "201":
+          description: RMP data saved successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RMP"
+        "400":
+          description: bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+              example:
+                code: 400
+                message: "unable to parse input for post-rmp"
+        "500":
+          description: internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+
+  /students:
+    get:
+      summary: Get all students
+      description: Returns a list of all students with ID, first name, last name, email, graduation year, and preferences.
+      tags: [Student]
+      parameters:
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+          example: 1
+        - name: limit
+          in: query
+          required: false
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 100
+          example: 10
+      responses:
+        "200":
+          description: List of students
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Create a student
+      description: Create a new student with the provided information.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentPostInput"
+      responses:
+        "201":
+          description: Student created successfully
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/email/{email}:
+    parameters:
+      - name: email
+        in: path
+        required: true
+        description: Email
+        schema:
+          type: string
+          format: email
+
+    get:
+      summary: Get student by their Email
+      description: Returns a single student by their unique email-ID.
+      tags: [ Student ]
+      responses:
+        "200":
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+
+    get:
+      summary: Get student by ID
+      description: Returns a single student by their UUID.
+      tags: [Student]
+      responses:
+        "200":
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "404":
+          description: Student not found
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    patch:
+      summary: Update a student
+      description: Update a student's information using their UUID.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentPatchInput"
+      responses:
+        "200":
+          description: Student updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "400":
+          description: Invalid UUID or bad input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    delete:
+      summary: Delete a student
+      description: Deletes a student by their UUID.
+      tags: [Student]
+      responses:
+        "204":
+          description: Student deleted successfully
+        "400":
+          description: Invalid UUID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /favourites:
+    get:
+      summary: Gets all the favourites for this student
+      description: Returns all the favourites for this particular student
+      tags: [ Favourite ]
+      responses:
+        "200":
+          description: List of favourites
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Favourite"
+        "400":
+          description: Invalid pagination parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+    post:
+      summary: Adds a favourite to your list
+      description: Returns the favourite that was created.
+      tags: [ Favourite ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/FavoritePostInput"
+      responses:
+        "201":
+          description: Created Favourite
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Favourite"
+        "400":
+          description: Bad request (validation error)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /favourites/{id}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Course UUID
+        schema:
+          type: string
+          format: uuid
+
+    delete:
+      summary: Deletes the favourite.
+      description: Removes a favourited course by a student.
+      tags: [ Favourite ]
+      responses:
+        "204":
+          description: Deleted
+        "400":
+          description: Bad request (invalid id)
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
   /auth/signin:
     get:
       summary: Signin Feature with Google
       description: Redirects the user to Google's OAuth consent screen for authentication
-      tags: [ Auth ]
+      tags: [Auth]
       responses:
         "302":
           description: Redirect to Google OAuth consent screen
@@ -1156,7 +1617,7 @@ paths:
     get:
       summary: Google OAuth callback
       description: Handles redirect from Google after authentication, validating Northeastern email, and creating or finding student
-      tags: [ Auth ]
+      tags: [Auth]
       parameters:
         - name: code
           in: query
@@ -1223,14 +1684,12 @@ paths:
 
 security:
   - bearerAuth: []
-
 components:
   securitySchemes:
     bearerAuth:
       type: http
       scheme: bearer
       bearerFormat: JWT
-
   schemas:
     UuidParam:
       type: string
@@ -1294,8 +1753,8 @@ components:
           example: "2024-01-15T10:35:00Z"
 
     Course:
-      type: object
-      required:
+     type: object
+     required:
         - id
         - name
         - department
@@ -1304,7 +1763,7 @@ components:
         - num_credits
         - created_at
         - updated_at
-      properties:
+     properties:
         id:
           type: string
           format: uuid
@@ -1586,7 +2045,70 @@ components:
             enum: [boston, oakland, london]
           example: ["boston"]
 
-    # base fields shared by all reviews
+    RMP:
+      type: object
+      required:
+        - id
+        - professorId
+        - avgDifficulty
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: integer
+          example: 1
+        professorId:
+          type: string
+          format: uuid
+          example: "0f171d80-f523-4c56-9e5c-1d825d484e01"
+        ratingAvg:
+          type: string
+          nullable: true
+          example: "4.50"
+        ratingWta:
+          type: integer
+          nullable: true
+          example: 85
+        avgDifficulty:
+          type: string
+          example: "3.20"
+        createdAt:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:30:00Z"
+        updatedAt:
+          type: string
+          format: date-time
+          example: "2024-01-15T10:35:00Z"
+
+    # RMPPostInput:
+    #   type: object
+    #   required:
+    #     - professorId
+    #     - avgDifficulty
+    #   properties:
+    #     professorId:
+    #       type: string
+    #       format: uuid
+    #       example: "0f171d80-f523-4c56-9e5c-1d825d484e01"
+    #     ratingAvg:
+    #       type: number
+    #       minimum: 1
+    #       maximum: 5
+    #       nullable: true
+    #       example: 4.5
+    #     ratingWta:
+    #       type: integer
+    #       minimum: 0
+    #       maximum: 100
+    #       nullable: true
+    #       example: 85
+    #     avgDifficulty:
+    #       type: number
+    #       minimum: 1
+    #       maximum: 5
+    #       example: 3.2
+
     BaseReview:
       type: object
       required:
@@ -1621,7 +2143,7 @@ components:
           type: array
           nullable: true
           items:
-            type: enum
+            type: string
           description: Optional tags attached to the review
           example: ["challenging", "rewarding"]
         createdAt:
@@ -1633,7 +2155,6 @@ components:
           format: date-time
           example: "2026-01-15T10:30:00Z"
 
-    # course review — has courseId, no professorId
     CourseReview:
       allOf:
         - $ref: "#/components/schemas/BaseReview"
@@ -1647,7 +2168,6 @@ components:
               description: The ID of the course being reviewed
               example: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d"
 
-    # professor review — has professorId, no courseId
     ProfessorReview:
       allOf:
         - $ref: "#/components/schemas/BaseReview"
@@ -1661,13 +2181,11 @@ components:
               description: The ID of the professor being reviewed
               example: "c3d4e5f6-a7b8-9012-cdef-123456789012"
 
-    # discriminated union: exactly one of courseId or professorId will be present
     Review:
       oneOf:
         - $ref: "#/components/schemas/CourseReview"
         - $ref: "#/components/schemas/ProfessorReview"
 
-    # input for POST /reviews — exactly one of courseId or professorId must be provided
     ReviewPostInput:
       type: object
       required:
@@ -1711,7 +2229,6 @@ components:
           description: Optional tags for the review
           example: ["challenging", "rewarding"]
 
-    # input for PATCH /reviews/{id} — all fields optional
     ReviewPatchInput:
       type: object
       properties:
@@ -1731,6 +2248,157 @@ components:
           type: array
           nullable: true
           items:
-            type: enum
+            type: string
           description: Updated tags (null clears all tags)
           example: ["rewarding"]
+
+    Student:
+      type: object
+      required:
+        - id
+        - firstName
+        - lastName
+        - email
+        - graduationYear
+        - preferences
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: string
+          format: uuid
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+               flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced]
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    StudentPostInput:
+      type: object
+      description: Fields required to create a new student.
+      required:
+        - firstName
+        - lastName
+        - email
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+               flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced]
+
+    StudentPatchInput:
+      type: object
+      description: Fields allowed when updating a student.
+      properties:
+        firstName:
+          type: string
+        lastName:
+          type: string
+        email:
+          type: string
+          format: email
+        graduationYear:
+          type: integer
+        preferences:
+          type: array
+          items:
+            type: string
+            enum:
+              [exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+               flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced]
+
+    ProfThread:
+      type: object
+      properties:
+        id:
+          $ref: "#/components/schemas/UuidParam"
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        profReviewId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          maxLength: 2000
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    ProfThreadPostInput:
+      type: object
+      required:
+        - studentId
+        - content
+      properties:
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    ProfThreadPatchInput:
+      type: object
+      properties:
+        content:
+          type: string
+          minLength: 1
+          maxLength: 2000
+
+    Favourite:
+      type: object
+      required:
+        - studentId
+        - courseId
+        - createdAt
+        - updatedAt
+      properties:
+        studentId:
+          $ref: "#/components/schemas/UuidParam"
+        courseId:
+          $ref: "#/components/schemas/UuidParam"
+        createdAt:
+          type: string
+          format: date-time
+        updatedAt:
+          type: string
+          format: date-time
+
+    FavoritePostInput:
+      type: object
+      required:
+        - course_id
+      properties:
+        course_id:
+          $ref: "#/components/schemas/UuidParam"

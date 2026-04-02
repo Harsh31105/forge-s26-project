@@ -1,12 +1,12 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
-  Sample,
+   Sample,
   SamplePatchInputType,
   SamplePostInputType,
-} from "../models/sample";
+ } from "../models/sample";
 import type {
-  CourseReview,
+   CourseReview,
   ProfessorReview,
   Review,
   ReviewPatchInputType,
@@ -16,9 +16,10 @@ import { ReviewRepositorySchema } from "./postgres/schema/reviews";
 
 import type {
   Course,
+  CourseFilterType,
   CoursePatchInputType,
   CoursePostInputType,
-} from "../models/course";
+ } from "../models/course";
 import { CourseRepositorySchema } from "./postgres/schema/course";
 import type {
   CourseThread,
@@ -29,6 +30,7 @@ import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
 import { PaginationType } from "utils/pagination";
 import type {
   Professor,
+  ProfessorFilterType,
   ProfessorPatchInputType,
   ProfessorPostInputType,
 } from "../models/professor";
@@ -36,6 +38,12 @@ import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
+import {
+  Student,
+  StudentPatchInputType,
+  StudentPostInputType
+} from "../models/student";
+import { StudentRepositorySchema } from "./postgres/schema/students";
 
 import type {
   ProfThread,
@@ -43,6 +51,10 @@ import type {
   ProfessorThreadPatchInputType,
 } from "../models/profThreads";
 import { ProfThreadRepositorySchema } from "./postgres/schema/profThread";
+import type { RMP, RMPPostInputType } from "../models/rmp";
+import { RMPRepositorySchema } from "./postgres/schema/rmp";
+import {Favourite, FavouritePostInputType} from "../models/favourite";
+import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 
 export class Repository {
   public readonly samples: SampleRepository;
@@ -51,9 +63,13 @@ export class Repository {
   public readonly courseThreads: CourseThreadRepository;
   public readonly profThreads: ProfThreadRepository;
   public readonly traceDocuments: TraceDocumentRepository;
+  public readonly rmp: RMPRepository;
   public readonly reviews: ReviewRepository;
+  public readonly students: StudentRepository;
+  public readonly favourites: FavouriteRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
+  
 
   constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
     this.pool = pool;
@@ -65,6 +81,9 @@ export class Repository {
     this.profThreads = new ProfThreadRepositorySchema(db);
     this.reviews = new ReviewRepositorySchema(db);
     this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+    this.students = new StudentRepositorySchema(db);
+    this.favourites = new FavouriteRepositorySchema(db);
+    this.rmp = new RMPRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -115,11 +134,11 @@ export interface ReviewRepository {
 }
 
 export interface CourseRepository {
-  getCourses(pagination: PaginationType): Promise<Course[]>;
-  getCourseByID(id: string): Promise<Course>;
-  createCourse(input: CoursePostInputType): Promise<Course>;
-  patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
-  deleteCourse(id: string): Promise<void>;
+    getCourses(pagination: PaginationType, filters: CourseFilterType): Promise<Course[]>;
+    getCourseByID(id: string): Promise<Course>;
+    createCourse(input: CoursePostInputType): Promise<Course>;
+    patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
+    deleteCourse(id: string): Promise<void>;
 }
 
 export interface CourseThreadRepository {
@@ -154,7 +173,7 @@ export interface ProfThreadRepository {
 }
 
 export interface ProfessorRepository {
-  getProfessors(pagination: PaginationType): Promise<Professor[]>;
+  getProfessors(pagination: PaginationType, filters: ProfessorFilterType): Promise<Professor[]>;
   getProfessorByID(id: string): Promise<Professor>;
   createProfessor(input: ProfessorPostInputType): Promise<Professor>;
   patchProfessor(
@@ -162,4 +181,26 @@ export interface ProfessorRepository {
     input: ProfessorPatchInputType,
   ): Promise<Professor>;
   deleteProfessor(id: string): Promise<void>;
+}
+
+export interface StudentRepository {
+    getStudents(pagination: PaginationType): Promise<Student[]>;
+    getStudentByEmail(email: string): Promise<Student>;
+    getStudentByID(id: string): Promise<Student>;
+    createStudent(input: StudentPostInputType): Promise<Student>;
+    patchStudent(id: string, input: StudentPatchInputType): Promise<Student>;
+    deleteStudent(id: string): Promise<void>;
+}
+
+export interface FavouriteRepository {
+  getFavourites(studentID: string): Promise<Favourite[]>;
+  postFavourite(studentID: string, input: FavouritePostInputType): Promise<Favourite>;
+  deleteFavourite(studentID: string, courseID: string): Promise<void>;
+
+  getStudentIDsWhoFavourited(courseID: string): Promise<Favourite[]>;
+}
+
+export interface RMPRepository {
+    getRMPByProfessorID(professorId: string): Promise<RMP>;
+    postRMP(input: RMPPostInputType[]): Promise<RMP[]>;
 }

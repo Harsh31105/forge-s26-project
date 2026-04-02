@@ -1,13 +1,10 @@
 import express, { type Express } from "express";
-import { NodePgDatabase } from "drizzle-orm/node-postgres";
 import request from "supertest";
 import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { AuthHandler } from "../auth";
 import { errorHandler } from "../../../errs/httpError";
-import { DB } from "config/db";
-import { AnyARecord } from "node:dns";
-// Uncomment the line below
-// import { StudentRepo } from "../../../storage/storage";
+import type { StudentRepository } from "../../../storage/storage";
+import { Student } from "../../../models/student";
 
 jest.mock("../../../auth/authClient", () => ({
     googleClient: {
@@ -26,52 +23,33 @@ const mockGetToken = googleClient.getToken as jest.Mock;
 const mockVerifyIdToken = googleClient.verifyIdToken as jest.Mock;
 
 function mockPayload(email: string, givenName: string = "Tim", familyName: string = "Pineda") {
-    return { 
+    return {
         getPayload: () => ({
             email,
             given_name: givenName,
             family_name: familyName,
             name: `${givenName} ${familyName}`,
         })
-    }
-}
-
-// Delete this function
-function mockDb(options: { duplicateError?: boolean } = {} ) {
-    const db: any = { 
-        insert: jest.fn().mockReturnThis(),
-        values: jest.fn(),
     };
-
-    if (options.duplicateError) {
-        const err = new Error("duplicate key value violates unique constraint");
-        (err as any).cause = "duplicate key value violates unique constraint";
-        db.values.mockRejectedValue(err);
-    } else {
-        db.values.mockResolvedValue([{ id: "new-123" }]);
-    }
-
-    return db;
 }
 
 describe("Auth Endpoints", () => {
     let app: Express;
-    let db: jest.Mocked<DB>;
-    // Uncomment line below
-   // let repo: jest.Mocked<StudentRepository>;
+    let repo: jest.Mocked<StudentRepository>;
     let handler: AuthHandler;
 
     beforeEach(() => {
+        repo = {
+            createStudent: jest.fn(),
+            getStudentByEmail: jest.fn(),
+        } as unknown as jest.Mocked<StudentRepository>;
 
-        db = mockDb();
-        handler = new AuthHandler(db as any);
+        handler = new AuthHandler(repo);
 
         app = express();
         app.use(express.json());
-
         app.get("/auth/signin", handler.handleRedirect.bind(handler));
         app.get("/auth/callback", handler.handleCallback.bind(handler));
-
         app.use(errorHandler);
     });
 
@@ -83,47 +61,42 @@ describe("Auth Endpoints", () => {
         test("redirects to Google OAuth", async () => {
             const res = await request(app).get("/auth/signin");
             expect(res.status).toBe(302);
+            expect(res.headers.location).toContain("accounts.google.com");
         });
     });
 
     describe("GET /auth/callback", () => {
         test("sign up successful creating new student", async () => {
-            mockGetToken.mockResolvedValue({
-                tokens: { id_token: "mock-id-token"}
-            });
+            mockGetToken.mockResolvedValue({ tokens: { id_token: "mock-id-token" } });
             mockVerifyIdToken.mockResolvedValue(mockPayload("student@husky.neu.edu"));
 
-            // Uncomment linse below
-            // repo.createStudent.mockResolvedValue({
-            //     id: "id67",
-            //     firstName: "Tim",
-            //     lastName: "Pineda",
-            //     email: "student@husky.neu.edu",
-            // });
+            repo.createStudent.mockResolvedValue({
+                id: "id67",
+                firstName: "Tim",
+                lastName: "Pineda",
+                email: "student@husky.neu.edu",
+            } as Student);
 
             const res = await request(app).get("/auth/callback?code=mock-code");
             expect(res.status).toBe(201);
             expect(res.body.message).toBe("Signup successful");
         });
 
-        test("login successful", async () => {
-            mockGetToken.mockResolvedValue({
-                tokens: { id_token: "mock-id-token"}
-            });
+        test("login successful when student already exists", async () => {
+            mockGetToken.mockResolvedValue({ tokens: { id_token: "mock-id-token" } });
             mockVerifyIdToken.mockResolvedValue(mockPayload("existing@husky.neu.edu"));
 
-            // Delete lines 118-123
-            db = mockDb({ duplicateError: true }) as any;
-            handler = new AuthHandler(db as any);
-            app = express();
-            app.use(express.json());
-            app.get("/auth/callback", handler.handleCallback.bind(handler));
-            app.use(errorHandler);
+            // Simulate duplicate creation → login path
+            const duplicateError = new Error("duplicate key value violates unique constraint");
+            (duplicateError as any).cause = "duplicate key value violates unique constraint";
 
-            // Uncomment the lines below
-            // const err = new Error("duplicate key value violates unique constraint");
-            // (err as any).cause = "duplicate key value violates unique constraint";
-            // repo.createStudent.mockRejectedValue(err)
+            repo.createStudent.mockRejectedValue(duplicateError);
+            repo.getStudentByEmail.mockResolvedValue({
+                id: "idExisting",
+                firstName: "Existing",
+                lastName: "User",
+                email: "existing@husky.neu.edu",
+            } as Student);
 
             const res = await request(app).get("/auth/callback?code=mock-code");
             expect(res.status).toBe(200);
@@ -131,9 +104,7 @@ describe("Auth Endpoints", () => {
         });
 
         test("rejects non-Northeastern email", async () => {
-            mockGetToken.mockResolvedValue({
-                tokens: { id_token: "mock-id-token" },
-            });
+            mockGetToken.mockResolvedValue({ tokens: { id_token: "mock-id-token" } });
             mockVerifyIdToken.mockResolvedValue(mockPayload("user@gmail.com"));
 
             const res = await request(app).get("/auth/callback?code=mock-code");
@@ -141,27 +112,21 @@ describe("Auth Endpoints", () => {
             expect(res.body.error).toBe("Only Northeastern email addresses are allowed");
         });
 
-        test("missing authorization code", async () => { 
+        test("missing authorization code", async () => {
             const res = await request(app).get("/auth/callback");
             expect(res.status).toBe(400);
             expect(res.body.error).toBe("Missing authorization code");
         });
 
         test("payload has no email", async () => {
-            mockGetToken.mockResolvedValue({
-                tokens: { id_token: "mock-id-token" },
-            });
+            mockGetToken.mockResolvedValue({ tokens: { id_token: "mock-id-token" } });
             mockVerifyIdToken.mockResolvedValue({
-                getPayload: () => ({
-                    given_name: "Tim",
-                    family_name: "Pineda",
-                }),
-            })
+                getPayload: () => ({ given_name: "Tim", family_name: "Pineda" }),
+            });
 
             const res = await request(app).get("/auth/callback?code=mock-code");
-            expect (res.status).toBe(400);
+            expect(res.status).toBe(400);
             expect(res.body.error).toBe("Failed to get user information");
-
         });
     });
 });
