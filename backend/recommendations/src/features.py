@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from collections import Counter
 
-from backend.recommendation_algorithm.src.models import Course, CourseFeatureRecord, CourseReview, Department, Trace
-
+from backend.recommendations.api.schemas.schema import Course, CourseReview, Department, Trace
+from backend.recommendations.api.schemas.rec_schemas import CourseFeatureRecord
 
 def get_department_name(department_id: int, departments: list[Department]) -> str:
     """

@@ -3,7 +3,7 @@ from __future__ import annotations
 import unittest
 from pathlib import Path
 
-from backend.recommendation_algorithm.src.models import (
+from backend.recommendations.src.models import (
     Course,
     CourseReview,
     Department,
@@ -11,15 +11,15 @@ from backend.recommendation_algorithm.src.models import (
     RecommendationResult,
     Trace,
 )
-from backend.recommendation_algorithm.src.recommender import recommend_courses
-from backend.recommendation_algorithm.src.repository import (
+from backend.recommendations.src.recommender import recommend_courses
+from backend.recommendations.src.repository import (
     load_courses,
     load_departments,
     load_favorites,
     load_reviews,
     load_trace,
 )
-from backend.recommendation_algorithm.src.user_profile import build_user_profile
+from backend.recommendations.src.user_profile import build_user_profile
 
 
 class TestRecommenderPipeline(unittest.TestCase):

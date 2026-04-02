@@ -2,8 +2,8 @@ from __future__ import annotations
 
 from collections import Counter
 
-from backend.recommendation_algorithm.src.models import Course, CourseReview, Favorite, UserProfileRecord
-
+from backend.recommendations.api.schemas.schema import Course, CourseReview, Favorite
+from backend.recommendations.api.schemas.rec_schemas import UserProfileRecord
 
 def get_favorited_course_ids(student_id: str, favorites: list[Favorite]) -> list[str]:
     """

@@ -1,20 +1,12 @@
 from __future__ import annotations
 
-from backend.recommendation_algorithm.src.features import (
+from backend.recommendations.src.features import (
     build_course_feature_record,
     semester_strength,
 )
-from backend.recommendation_algorithm.src.models import (
-    Course,
-    CourseFeatureRecord,
-    CourseReview,
-    Department,
-    Favorite,
-    RecommendationResult,
-    Trace,
-    UserProfileRecord,
-)
-from backend.recommendation_algorithm.src.user_profile import build_user_profile
+from backend.recommendations.api.schemas.schema import Course, CourseReview, Department, Favorite, Trace
+from backend.recommendations.api.schemas.rec_schemas import CourseFeatureRecord, RecommendationResult, UserProfileRecord
+from backend.recommendations.src.user_profile import build_user_profile
 
 
 def compute_tag_match_score(
