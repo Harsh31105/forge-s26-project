@@ -1,0 +1,4 @@
+2026/04/01-17:39:30.669 48db51 Creating DB /Users/itaischwarz/Projects/forge-s26-project/backend/.trace-playwright/Default/Extension Rules since it was missing.
+2026/04/01-17:39:30.672 48db51 Reusing MANIFEST /Users/itaischwarz/Projects/forge-s26-project/backend/.trace-playwright/Default/Extension Rules/MANIFEST-000001
+2026/04/01-17:39:30.673 48db51 Recovering log #3
+2026/04/01-17:39:30.673 48db51 Reusing old log /Users/itaischwarz/Projects/forge-s26-project/backend/.trace-playwright/Default/Extension Rules/000003.log 
