@@ -2233,5 +2233,20 @@
     "department": "MATH",
     "s3Key": "trace-evaluations/MATH/undefined/spring_2025/goyal-rangoli-section-34-course-40781-sp-104865-6841-196-19cf091bca.pdf",
     "uploadedAt": "2026-04-02T23:17:04.157Z"
+  },
+  {
+    "reportUrl": "https://www.applyweb.com/eval/new/coursereport?sp=104637&sp=1163&sp=196",
+    "pdfUrl": "https://www.applyweb.com/eval/new/showreport/pdf?c=104637&i=1163&t=196&r=27&d=true",
+    "courseTitle": "Intensive Math Reasoning",
+    "instructor": "Lang, David",
+    "section": "01",
+    "courseId": "40477",
+    "termLabel": "Spring 2025",
+    "semester": "spring",
+    "lectureYear": 2025,
+    "sourceId": "lang-david-section-01-course-40477-sp-104637-1163-196-0ff941d644",
+    "department": "MATH",
+    "s3Key": "trace-evaluations/MATH/undefined/spring_2025/lang-david-section-01-course-40477-sp-104637-1163-196-0ff941d644.pdf",
+    "uploadedAt": "2026-04-02T23:17:14.863Z"
   }
 ]
