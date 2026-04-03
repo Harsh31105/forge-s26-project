@@ -64,7 +64,7 @@ export class ReviewHandler {
 
     let newReview: Review;
     try {
-      const parentId = await this.repo.createParentReview(postReview.studentId);
+      const parentId = await this.repo.createParentReview(postReview.studentId, postReview.semester, postReview.year);
       if (postReview.courseId) {
         newReview = await this.repo.createCourseReview(parentId, {
           courseId: postReview.courseId,

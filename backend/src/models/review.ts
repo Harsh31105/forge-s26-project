@@ -4,6 +4,8 @@ import { z } from "zod";
 interface BaseReview {
   reviewId: string;
   studentId: string | null;
+  semester?: string | null;
+  year?: number | null;
   createdAt: Date;
   updatedAt: Date;
 }
@@ -100,6 +102,8 @@ export const ReviewPostInputSchema = z
     courseId: z.uuid().optional().nullable(),
     professorId: z.uuid().optional().nullable(),
     tags: z.array(z.string()).optional(),
+    semester: z.enum(["fall", "spring", "summer_1", "summer_2"]).optional().nullable(),
+    year: z.number().int().optional().nullable(),
   })
   .refine(
     (data) => !!data.courseId !== !!data.professorId,
