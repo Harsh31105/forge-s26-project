@@ -2,6 +2,7 @@ import {PaginationSchema} from "../../../utils/pagination";
 import {BadRequest, mapDBError} from "../../../errs/httpError";
 import {Trace} from "../../../models/trace";
 import { Request, Response } from "express";
+import {TraceRepository} from "../../../storage/storage";
 
 export class TraceHandler {
     constructor(private readonly repo: TraceRepository) {}

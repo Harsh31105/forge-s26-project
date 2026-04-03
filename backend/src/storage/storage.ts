@@ -56,6 +56,7 @@ import { RMPRepositorySchema } from "./postgres/schema/rmp";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 import {Trace} from "../models/trace";
+import {TraceRepositorySchema} from "./postgres/schema/trace";
 
 export class Repository {
   public readonly samples: SampleRepository;
@@ -68,10 +69,9 @@ export class Repository {
   public readonly reviews: ReviewRepository;
   public readonly students: StudentRepository;
   public readonly favourites: FavouriteRepository;
-  private readonly traces: TraceRepository;
+  public readonly traces: TraceRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
-  
 
   constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
     this.pool = pool;
