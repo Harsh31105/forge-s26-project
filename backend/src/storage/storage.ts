@@ -55,7 +55,7 @@ import type { RMP, RMPPostInputType } from "../models/rmp";
 import { RMPRepositorySchema } from "./postgres/schema/rmp";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
-import {Trace} from "../models/trace";
+import {Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/trace";
 
 export class Repository {
@@ -209,5 +209,5 @@ export interface RMPRepository {
 }
 
 export interface TraceRepository {
-  getTraces(pagination: PaginationType): Promise<Trace[]>;
+  getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
 }
