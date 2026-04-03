@@ -55,6 +55,7 @@ import type { RMP, RMPPostInputType } from "../models/rmp";
 import { RMPRepositorySchema } from "./postgres/schema/rmp";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
+import {Trace} from "../models/trace";
 
 export class Repository {
   public readonly samples: SampleRepository;
@@ -67,6 +68,7 @@ export class Repository {
   public readonly reviews: ReviewRepository;
   public readonly students: StudentRepository;
   public readonly favourites: FavouriteRepository;
+  private readonly traces: TraceRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
   
@@ -84,6 +86,7 @@ export class Repository {
     this.students = new StudentRepositorySchema(db);
     this.favourites = new FavouriteRepositorySchema(db);
     this.rmp = new RMPRepositorySchema(db);
+    this.traces = new TraceRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -203,4 +206,8 @@ export interface FavouriteRepository {
 export interface RMPRepository {
     getRMPByProfessorID(professorId: string): Promise<RMP>;
     postRMP(input: RMPPostInputType[]): Promise<RMP[]>;
+}
+
+export interface TraceRepository {
+  getTraces(pagination: PaginationType): Promise<Trace[]>;
 }
