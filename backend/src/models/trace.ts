@@ -20,3 +20,11 @@ export interface Trace {
     createdAt: Date;
     updatedAt: Date;
 }
+
+export const TraceFilterSchema = z.object({
+    courseId: z.uuid().optional(),
+    professorId: z.uuid().optional(),
+    departmentId: z.uuid().optional(),
+    semester: z.enum(["fall", "spring", "summer_1", "summer_2"]).optional()
+});
+export type TraceFilterType = z.infer<typeof TraceFilterSchema>;
