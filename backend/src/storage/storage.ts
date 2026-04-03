@@ -56,7 +56,7 @@ import { RMPRepositorySchema } from "./postgres/schema/rmp";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 import {Trace, TraceFilterType} from "../models/trace";
-import {TraceRepositorySchema} from "./postgres/schema/trace";
+import {TraceRepositorySchema} from "./postgres/schema/traces";
 
 export class Repository {
   public readonly samples: SampleRepository;
