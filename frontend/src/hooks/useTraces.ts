@@ -1,5 +1,5 @@
 import {GetTraceParams} from "@/src/lib/api/northStarAPI.schemas";
-import { getTrace } from "@/src/lib/api/trace";
+import { getTrace } from "../lib/api/trace";
 import { useQuery } from "@tanstack/react-query";
 
 export function useTraces(params?: GetTraceParams) {
