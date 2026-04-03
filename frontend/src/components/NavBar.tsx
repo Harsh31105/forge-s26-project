@@ -1,4 +1,5 @@
 "use client";
+
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -13,8 +14,8 @@ export default function NavBar() {
   ];
 
   return (
-    <nav style={{ 
-      background: "var(--color-surface-light-cream)", 
+    <nav style={{
+      background: "var(--color-surface-light-cream)",
       borderBottom: "3px solid var(--color-border-tan)",
       height: 80,
       display: "flex",
@@ -29,7 +30,7 @@ export default function NavBar() {
         justifyContent: "space-between",
         alignItems: "center",
       }}>
-        
+
         {/* Logo */}
         <Link href="/" style={{ display: "flex", alignItems: "center", marginRight: "24px" }}>
           <Image
@@ -56,23 +57,6 @@ export default function NavBar() {
               </Link>
             );
           })}
-
-          {/*/!* Compare Courses *!/*/}
-          {/*<Link*/}
-          {/*    href="/compare"*/}
-          {/*    className="bg-[var(--color-primary-navy)] text-white px-4 py-2 font-semibold*/}
-          {/*               no-underline inline-flex items-center justify-center shadow-md duration-150*/}
-          {/*               rounded-[var(--border-radius-md)] transition-all*/}
-          {/*               hover:bg-[var(--color-accent-copper)]"*/}
-          {/*    onMouseEnter={(e) => {*/}
-          {/*      e.currentTarget.style.background = "var(--color-accent-copper)";*/}
-          {/*    }}*/}
-          {/*    onMouseLeave={(e) => {*/}
-          {/*      e.currentTarget.style.background = "var(--color-primary-navy)";*/}
-          {/*    }}*/}
-          {/*>*/}
-          {/*  Compare*/}
-          {/*</Link>*/}
         </div>
 
         {/* Profile */}
@@ -85,14 +69,14 @@ export default function NavBar() {
             border: "1px solid var(--color-border-tan)",
             cursor: "pointer",
           }}>
-             <Image
-            src="/profile.png"
-            alt="profile"
-            width={40}
-            height={40}
-            priority
-            style={{ objectFit: "contain" }}
-          />
+            <Image
+              src="/profile.png"
+              alt="profile"
+              width={40}
+              height={40}
+              priority
+              style={{ objectFit: "contain" }}
+            />
           </button>
         </Link>
       </div>
