@@ -12,11 +12,11 @@ export interface Trace {
     courseCode: number;
     semester: Semester;
     lectureYear: number;
-    lectureType: LectureType;
+    lectureType: LectureType | null;
     howOftenPercentage: number;
     hoursDevoted: number;
-    professorEfficiency: number;
-    eval: string;
+    professorEfficiency: string;
+    eval: string | null;
     createdAt: Date;
     updatedAt: Date;
 }
