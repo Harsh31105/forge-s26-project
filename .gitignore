@@ -49,3 +49,6 @@ terraform/.terraform.lock.hcl
 
 # Other
 backend/coverage/
+
+# Playwright browser profile (TRACE scraper)
+backend/.trace-playwright/
