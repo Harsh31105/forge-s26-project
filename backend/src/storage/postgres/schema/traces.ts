@@ -3,7 +3,7 @@ import {NodePgDatabase} from "drizzle-orm/node-postgres";
 import {getOffset, PaginationType} from "../../../utils/pagination";
 import {AcademicSemester, Semester, Trace, TraceFilterType} from "../../../models/trace";
 import {trace} from "../../tables/trace";
-import { and, eq } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 
 const semesterChronology: Record<Semester, number> = {
     fall: 4,
@@ -36,8 +36,21 @@ export class TraceRepositorySchema implements TraceRepository {
         if (filters.courseId !== undefined) conditions.push(eq(trace.courseId, filters.courseId));
         if (filters.professorId !== undefined) conditions.push(eq(trace.professorId, filters.professorId));
 
+        const semesterOrder = sql`
+            CASE
+                WHEN ${trace.semester} = 'fall' THEN 4
+                WHEN ${trace.semester} = 'summer_2' THEN 3
+                WHEN ${trace.semester} = 'summer_1' THEN 2
+                WHEN ${trace.semester} = 'spring' THEN 1
+            END
+        `;
+
         const rows = await this.db.select().from(trace)
             .where(conditions.length > 0 ? and(...conditions) : undefined)
+            .orderBy(
+                sql`${trace.lectureYear} DESC`,
+                sql`${semesterOrder} DESC`
+            )
             .limit(pagination.limit)
             .offset(getOffset(pagination));
 
@@ -54,13 +67,6 @@ export class TraceRepositorySchema implements TraceRepository {
                 });
             }
         }
-
-        results.sort((a, b) => {
-            if (a.year === b.year) {
-                return b.year - a.year;
-            }
-            return semesterChronology[b.semester] - semesterChronology[a.semester];
-        });
 
         return results;
     }
