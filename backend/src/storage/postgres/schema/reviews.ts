@@ -21,7 +21,6 @@ import { and, eq } from "drizzle-orm";
 import { NotFoundError } from "../../../errs/httpError";
 import { CourseReviewHelper } from "./courseReviews";
 import { ProfReviewHelper } from "./profReviews";
-import { semesterEnum } from "../../tables/enums";
 
 export class ReviewRepositorySchema implements ReviewRepository {
   private readonly courseReviewHelper: CourseReviewHelper;
