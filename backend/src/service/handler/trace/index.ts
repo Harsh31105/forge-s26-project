@@ -1,6 +1,11 @@
 import {PaginationSchema} from "../../../utils/pagination";
 import {BadRequest, mapDBError} from "../../../errs/httpError";
-import {Trace, TraceFilterSchema} from "../../../models/trace";
+import {
+    AcademicSemester,
+    OfferHistoryFilterSchema,
+    Trace,
+    TraceFilterSchema
+} from "../../../models/trace";
 import { Request, Response } from "express";
 import {TraceRepository} from "../../../storage/storage";
 
@@ -13,7 +18,7 @@ export class TraceHandler {
         const pagination = result.data;
 
         const queryParams = TraceFilterSchema.safeParse(req.query);
-        if (!queryParams.success) throw BadRequest("Invalid queryparam parameters for trace");
+        if (!queryParams.success) throw BadRequest("Invalid queryparams parameters for trace");
         const filters = queryParams.data;
 
         let traces: Trace[]
@@ -25,5 +30,25 @@ export class TraceHandler {
         }
 
         res.status(200).json(traces);
+    }
+
+    async handleGetOfferHistory(req: Request, res: Response): Promise<void> {
+        const result = PaginationSchema.safeParse(req.query);
+        if (!result.success) throw BadRequest("Invalid pagination parameters");
+        const pagination = result.data;
+
+        const queryParams = OfferHistoryFilterSchema.safeParse(req.query);
+        if (!queryParams.success) throw BadRequest("Invalid queryparams parameters for trace");
+        const filters = queryParams.data;
+
+        let semesters: AcademicSemester[];
+        try {
+            semesters = await this.repo.getOfferHistory(pagination, filters);
+        } catch (err) {
+            console.error("DB Error in get trace offer history", err);
+            throw mapDBError(err, "failed to retrieve trace offer history");
+        }
+
+        res.status(200).json(semesters);
     }
 }

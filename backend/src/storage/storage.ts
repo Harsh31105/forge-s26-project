@@ -55,7 +55,7 @@ import type { RMP, RMPPostInputType } from "../models/rmp";
 import { RMPRepositorySchema } from "./postgres/schema/rmp";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
-import {Trace, TraceFilterType} from "../models/trace";
+import {AcademicSemester, OfferHistoryFilterType, Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/traces";
 
 export class Repository {
@@ -210,4 +210,5 @@ export interface RMPRepository {
 
 export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
+  getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
 }
