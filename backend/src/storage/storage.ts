@@ -58,6 +58,7 @@ import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 import {Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/traces";
 
+
 export class Repository {
   public readonly samples: SampleRepository;
   public readonly professors: ProfessorRepository;
@@ -142,6 +143,7 @@ export interface CourseRepository {
     createCourse(input: CoursePostInputType): Promise<Course>;
     patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
     deleteCourse(id: string): Promise<void>;
+    getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
 }
 
 export interface CourseThreadRepository {

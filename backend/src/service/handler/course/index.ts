@@ -14,6 +14,7 @@ import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
 import { getOffset, PaginationSchema, PaginationType } from "../../../utils/pagination";
 import { Favourite } from "../../../models/favourite";
+import type { Professor } from "../../../models/professor";
 
 export class CourseHandler {
     constructor(private readonly courseRepo: CourseRepository,
@@ -127,4 +128,19 @@ export class CourseHandler {
 
         res.status(200).json(favourites)
     }
+
+    async handleGetBestProfessors(req: Request, res: Response): Promise<void> {
+    const id = req.params.id as string;
+    if (!isUUID(id)) throw BadRequest("invalid ID was given");
+
+    let professors: Professor[];
+    try {
+        professors = await this.courseRepo.getBestProfessorsByCourseID(id);
+    } catch (err) {
+        console.log(err);
+        throw mapDBError(err, "failed to retrieve best professors for course");
+    }
+
+    res.status(200).json(professors);
+}
 }
