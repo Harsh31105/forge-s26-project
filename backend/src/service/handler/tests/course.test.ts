@@ -70,7 +70,8 @@ describe("CourseHandler Endpoints", () => {
             createCourse: jest.fn(),
             patchCourse: jest.fn(),
             deleteCourse: jest.fn(),
-            handleGetStudentIDsWhoFavourited: jest.fn()
+            handleGetStudentIDsWhoFavourited: jest.fn(),
+            getBestProfessorsByCourseID: jest.fn(),
         } as unknown as jest.Mocked<CourseRepository>;
 
         favRepo = {
@@ -90,6 +91,7 @@ describe("CourseHandler Endpoints", () => {
         app.post("/courses", handler.handlePost.bind(handler));
         app.patch("/courses/:id", handler.handlePatch.bind(handler));
         app.delete("/courses/:id", handler.handleDelete.bind(handler));
+        app.get("/courses/:id/best-professors", handler.handleGetBestProfessors.bind(handler));
 
         app.use(errorHandler);
     });
@@ -521,6 +523,50 @@ describe("CourseHandler Endpoints", () => {
             const res = await request(appWithFav).get(`/courses/${mockCourse1.id}/favourites`);
             expect(res.status).toBe(200);
             expect(res.body).toEqual(mockFavs);
+        });
+    });
+
+    describe("GET /courses/:id/best-professors", () => {
+        test("returns best professors for a course", async () => {
+            const mockProfessors = [
+                {
+                    id: "11111111-1111-1111-1111-111111111111",
+                    firstName: "John",
+                    lastName: "Doe",
+                    tags: null,
+                    createdAt: new Date("2026-01-15T10:30:00Z"),
+                    updatedAt: new Date("2026-01-15T10:30:00Z"),
+                },
+            ];
+            repo.getBestProfessorsByCourseID.mockResolvedValue(mockProfessors as any);
+            mockValidate.mockReturnValue(true);
+
+            const res = await request(app).get(`/courses/${mockCourse1.id}/best-professors`);
+            expect(res.status).toBe(200);
+            expect(res.body.length).toBe(1);
+            expect(res.body[0].firstName).toBe("John");
+            expect(res.body[0].lastName).toBe("Doe");
+        });
+
+        test("invalid UUID returns 400", async () => {
+            mockValidate.mockReturnValue(false);
+            const res = await request(app).get("/courses/invalid-uuid/best-professors");
+            expect(res.status).toBe(400);
+        });
+
+        test("repo error returns 500", async () => {
+            repo.getBestProfessorsByCourseID.mockRejectedValue(new Error("DB error"));
+            mockValidate.mockReturnValue(true);
+            const res = await request(app).get(`/courses/${mockCourse1.id}/best-professors`);
+            expect(res.status).toBe(500);
+        });
+
+        test("returns empty array when no professors found", async () => {
+            repo.getBestProfessorsByCourseID.mockResolvedValue([]);
+            mockValidate.mockReturnValue(true);
+            const res = await request(app).get(`/courses/${mockCourse1.id}/best-professors`);
+            expect(res.status).toBe(200);
+            expect(res.body).toEqual([]);
         });
     });
 });
