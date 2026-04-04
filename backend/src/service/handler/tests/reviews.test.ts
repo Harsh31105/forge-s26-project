@@ -392,6 +392,42 @@ describe("ReviewHandler Endpoints", () => {
       const res = await request(app).post("/reviews").send(payload);
       expect(res.status).toBe(500);
     });
+
+    test("duplicate course review throws error", async () => {
+      const parentId = "parent-uuid-1234-5678-abcd-ef1234567890";
+      repo.createParentReview.mockResolvedValue(parentId);
+      repo.createCourseReview.mockRejectedValue(
+        new Error("Student has already submitted a review for this course"),
+      );
+
+      const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
+        rating: 4,
+        reviewText: "Duplicate course review.",
+      };
+
+      const res = await request(app).post("/reviews").send(payload);
+      expect(res.status).toBe(500);
+    });
+
+    test("duplicate professor review returns 500", async () => {
+      const parentId = "parent-uuid-5678-1234-abcd-ef1234567890";
+      repo.createParentReview.mockResolvedValue(parentId);
+      repo.createProfessorReview.mockRejectedValue(
+        new Error("student has already submitted a review for this professor"),
+      );
+
+      const payload = {
+        studentId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        professorId: "c3d4e5f6-a7b8-4012-8def-123456789012",
+        rating: 5,
+        reviewText: "Duplicate professor review.",
+      };
+
+      const res = await request(app).post("/reviews").send(payload);
+      expect(res.status).toBe(500);
+    });
   });
 
   describe("PATCH /reviews/:id", () => {

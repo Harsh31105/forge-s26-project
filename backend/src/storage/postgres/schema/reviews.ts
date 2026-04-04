@@ -17,7 +17,7 @@ import type {
 import { review } from "../../tables/review";
 import { courseReview } from "../../tables/courseReview";
 import { profReview } from "../../tables/profReview";
-import { eq } from "drizzle-orm";
+import { and, eq } from "drizzle-orm";
 import { NotFoundError } from "../../../errs/httpError";
 import { CourseReviewHelper } from "./courseReviews";
 import { ProfReviewHelper } from "./profReviews";
@@ -157,7 +157,22 @@ export class ReviewRepositorySchema implements ReviewRepository {
     parentId: string,
     input: CourseReviewChildInput,
   ): Promise<CourseReview> {
-    console.log("DATABASE");
+    const [parent] = await this.db
+      .select({ studentId: review.studentId })
+      .from(review)
+      .where(eq(review.id, parentId))
+      .limit(1);
+
+    if (parent?.studentId) {
+      const [existing] = await this.db
+        .select({ reviewId: courseReview.reviewId })
+        .from(courseReview)
+        .innerJoin(review, eq(review.id, courseReview.reviewId))
+        .where(and(eq(review.studentId, parent.studentId), eq(courseReview.courseId, input.courseId)))
+        .limit(1);
+      if (existing) throw new Error("Student has already submitted a review for this course");
+    }
+
     return this.courseReviewHelper.createCourseReview(
       parentId,
       input,
@@ -169,6 +184,22 @@ export class ReviewRepositorySchema implements ReviewRepository {
     parentId: string,
     input: ProfessorReviewChildInput,
   ): Promise<ProfessorReview> {
+    const [parent] = await this.db
+      .select({ studentId: review.studentId })
+      .from(review)
+      .where(eq(review.id, parentId))
+      .limit(1);
+
+    if (parent?.studentId) {
+      const [existing] = await this.db
+        .select({ reviewId: profReview.reviewId })
+        .from(profReview)
+        .innerJoin(review, eq(review.id, profReview.reviewId))
+        .where(and(eq(review.studentId, parent.studentId), eq(profReview.professorId, input.professorId)))
+        .limit(1);
+      if (existing) throw new Error("Student has already submitted a review for this professor");
+    }
+
     return this.profReviewHelper.createProfessorReview(
       parentId,
       input,

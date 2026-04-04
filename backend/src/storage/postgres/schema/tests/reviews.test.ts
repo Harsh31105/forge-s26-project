@@ -84,6 +84,94 @@ describe("ReviewRepositorySchema DB Integration", () => {
     });
   });
 
+  describe("duplicate course review prevention", () => {
+    test("throws if same student reviews same course twice", async () => {
+      const p1 = await repo.createParentReview(testStudentId);
+      await repo.createCourseReview(p1, {
+        courseId: testCourseId,
+        rating: 4,
+        reviewText: "First review",
+      });
+
+      const p2 = await repo.createParentReview(testStudentId);
+      await expect(
+        repo.createCourseReview(p2, {
+          courseId: testCourseId,
+          rating: 3,
+          reviewText: "Duplicate review",
+        }),
+      ).rejects.toThrow("student has already submitted a review for this course");
+    });
+
+    test("allows different students to review the same course", async () => {
+      const otherStudentId = uuid();
+      await db.execute(`
+        INSERT INTO student (id, first_name, last_name, email)
+        VALUES ('${otherStudentId}', 'Other', 'Student', '${otherStudentId}@test.com');
+      `);
+
+      const p1 = await repo.createParentReview(testStudentId);
+      await repo.createCourseReview(p1, {
+        courseId: testCourseId,
+        rating: 4,
+        reviewText: "Student 1 review",
+      });
+
+      const p2 = await repo.createParentReview(otherStudentId);
+      await expect(
+        repo.createCourseReview(p2, {
+          courseId: testCourseId,
+          rating: 5,
+          reviewText: "Student 2 review",
+        }),
+      ).resolves.not.toThrow();
+    });
+  });
+
+  describe("duplicate professor review prevention", () => {
+    test("throws if same student reviews same professor twice", async () => {
+      const p1 = await repo.createParentReview(testStudentId);
+      await repo.createProfessorReview(p1, {
+        professorId: testprofessorId,
+        rating: 5,
+        reviewText: "First review",
+      });
+
+      const p2 = await repo.createParentReview(testStudentId);
+      await expect(
+        repo.createProfessorReview(p2, {
+          professorId: testprofessorId,
+          rating: 3,
+          reviewText: "Duplicate review",
+        }),
+      ).rejects.toThrow("student has already submitted a review for this professor");
+    });
+
+    test("allows different students to review the same professor", async () => {
+      const otherStudentId = uuid();
+      await db.execute(`
+        INSERT INTO student (id, first_name, last_name, email)
+        VALUES ('${otherStudentId}', 'Other', 'Student', '${otherStudentId}@test.com');
+      `);
+
+      const p1 = await repo.createParentReview(testStudentId);
+      await repo.createProfessorReview(p1, {
+        professorId: testprofessorId,
+        rating: 4,
+        reviewText: "Student 1 review",
+      });
+
+      const p2 = await repo.createParentReview(otherStudentId);
+      await expect(
+        repo.createProfessorReview(p2, {
+          professorId: testprofessorId,
+          rating: 5,
+          reviewText: "Student 2 review",
+        }),
+      ).resolves.not.toThrow();
+    });
+  });
+
   describe("createParentReview + createProfessorReview", () => {
     test("bad input first, good input next", async () => {
       const parentId = await repo.createParentReview(testStudentId);
@@ -125,13 +213,19 @@ describe("ReviewRepositorySchema DB Integration", () => {
     });
 
     test("pagination limit works", async () => {
+      const otherStudentId = uuid();
+      await db.execute(`
+        INSERT INTO student (id, first_name, last_name, email)
+        VALUES ('${otherStudentId}', 'Pagination', 'Student', '${otherStudentId}@test.com');
+      `);
+
       const p1 = await repo.createParentReview(testStudentId);
       await repo.createCourseReview(p1, {
         courseId: testCourseId,
         rating: 4,
         reviewText: "First",
       });
-      const p2 = await repo.createParentReview(testStudentId);
+      const p2 = await repo.createParentReview(otherStudentId);
       await repo.createCourseReview(p2, {
         courseId: testCourseId,
         rating: 3,
