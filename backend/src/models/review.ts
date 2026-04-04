@@ -131,5 +131,7 @@ export const ReviewPatchInputSchema = z.object({
   rating: z.number().int().min(1).max(5).optional(),
   reviewText: z.string().min(1, "Content cannot be empty").max(2000).optional(),
   tags: z.array(z.string()).optional().nullable(),
+  semester: z.enum(["fall", "spring", "summer_1", "summer_2"]).optional().nullable(),
+  year: z.number().int().optional().nullable(),
 });
 export type ReviewPatchInputType = z.infer<typeof ReviewPatchInputSchema>;
