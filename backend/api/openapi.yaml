@@ -1764,6 +1764,64 @@ paths:
                 code: 500
                 message: "failed to retrieve traces"
 
+  /trace/offer-history:
+    get:
+      summary: Get the Offer History offered by the TRACE Records
+      description: Retrieves paginated list of offer-history.
+      tags: [ Trace ]
+      parameters:
+        - name: page
+          in: query
+          description: Page Number of Pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+
+        # Filters
+        - name: courseId
+          in: query
+          description: Filter by Course ID
+          schema:
+            type: string
+            format: uuid
+
+        - name: professorId
+          in: query
+          description: Filter by Professor ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successfully retrieved TRACE records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AcademicSemester"
+        "400":
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
 security:
   - bearerAuth: []
 components:
@@ -2566,3 +2624,17 @@ components:
         updatedAt:
           type: string
           format: date-time
+
+    AcademicSemester:
+      type: object
+      required:
+        - semester
+        - year
+      properties:
+        semester:
+          type: string
+          enum: [fall, spring, summer_1, summer_2]
+          example: fall
+        year:
+          type: integer
+          example: 2025
