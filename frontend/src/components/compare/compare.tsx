@@ -1,4 +1,7 @@
 "use client";
+import { useState, useRef, useEffect } from "react";
+
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 type CompatibilityLevel = "High" | "Medium" | "Low";
 
@@ -11,17 +14,10 @@ interface CourseData {
   credits: number;
   nupath: string;
   compatibility: CompatibilityLevel;
+  daysAgo?: string;
 }
 
-interface ProfessorData {
-  id: string;
-  name: string;
-  overall: string;
-  difficulty: string;
-  wouldTakeAgain: string;
-  department: string;
-  compatibility: CompatibilityLevel;
-}
+// ─── Mock Data ────────────────────────────────────────────────────────────────
 
 const MOCK_COURSES: CourseData[] = [
   {
@@ -44,107 +40,408 @@ const MOCK_COURSES: CourseData[] = [
     nupath: "None",
     compatibility: "Medium",
   },
+  {
+    id: "3",
+    name: "CS 2500: Fundamentals of CS",
+    overall: "4.1/5",
+    difficulty: "2.5/5",
+    hoursPerWeek: 8.5,
+    credits: 4,
+    nupath: "None",
+    compatibility: "High",
+    daysAgo: "2 days ago",
+  },
+  {
+    id: "4",
+    name: "CS 4500: Software Development",
+    overall: "3.8/5",
+    difficulty: "3.2/5",
+    hoursPerWeek: 11.2,
+    credits: 4,
+    nupath: "None",
+    compatibility: "Medium",
+    daysAgo: "5 days ago",
+  },
+  {
+    id: "5",
+    name: "BUSN 2301: Marketing Principles",
+    overall: "3.5/5",
+    difficulty: "1.8/5",
+    hoursPerWeek: 6.0,
+    credits: 4,
+    nupath: "None",
+    compatibility: "Low",
+    daysAgo: "1 week ago",
+  },
 ];
 
-const MOCK_PROFESSORS: ProfessorData[] = [
-  {
-    id: "1",
-    name: "Ben Lerner",
-    overall: "4.2/5",
-    difficulty: "2.1/5",
-    wouldTakeAgain: "92%",
-    department: "CS",
-    compatibility: "High",
-  },
-  {
-    id: "2",
-    name: "Olin Shivers",
-    overall: "3.8/5",
-    difficulty: "4.2/5",
-    wouldTakeAgain: "74%",
-    department: "CS",
-    compatibility: "Medium",
-  },
-];
+const RECENTLY_VIEWED = MOCK_COURSES.slice(2);
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
 
 function compatibilityColor(level: CompatibilityLevel): string {
-  if (level === "High") return "#2d7a2d";
-  if (level === "Medium") return "#b87800";
+  if (level === "High") return "#2a7a2a";
+  if (level === "Medium") return "#c8860a";
   return "#c0392b";
 }
 
-function StatRow({ label, value, valueStyle }: {
+// ─── Stat Row ─────────────────────────────────────────────────────────────────
+
+function StatRow({
+  label,
+  value,
+  valueStyle,
+}: {
   label: string;
   value: React.ReactNode;
   valueStyle?: React.CSSProperties;
 }) {
   return (
-    <div style={{ display: "flex", justifyContent: "space-between", padding: "10px 0", borderBottom: "1px solid #ede8d8" }}>
-      <span style={{ color: "#555", fontSize: 15 }}>{label}</span>
-      <span style={{ fontWeight: 700, fontSize: 15, ...valueStyle }}>{value}</span>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+        padding: "11px 0",
+        borderBottom: "1px solid #e8e2d0",
+      }}
+    >
+      <span style={{ color: "#444", fontSize: 14 }}>{label}</span>
+      <span style={{ fontWeight: 700, fontSize: 14, ...valueStyle }}>{value}</span>
     </div>
   );
 }
 
-function CourseCard({ course }: { course: CourseData }) {
+// ─── Course Card ──────────────────────────────────────────────────────────────
+
+function CourseCard({
+  course,
+  onRemove,
+}: {
+  course: CourseData;
+  onRemove: () => void;
+}) {
   return (
-    <div style={{ flex: 1, background: "#fdf8ee", border: "1.5px solid #d6ccb0", borderRadius: 12, padding: "20px 24px" }}>
-      <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>{course.name}</h3>
+    <div
+      style={{
+        flex: 1,
+        background: "#faf7ee",
+        border: "1.5px solid #ddd5b8",
+        borderRadius: 10,
+        padding: "18px 22px",
+        minWidth: 0,
+        position: "relative",
+      }}
+    >
+      {/* X button */}
+      <button
+        onClick={onRemove}
+        style={{
+          position: "absolute",
+          top: 10,
+          right: 12,
+          background: "none",
+          border: "none",
+          fontSize: 16,
+          cursor: "pointer",
+          color: "#aaa",
+          lineHeight: 1,
+          padding: 2,
+        }}
+        onMouseEnter={(e) => (e.currentTarget.style.color = "#555")}
+        onMouseLeave={(e) => (e.currentTarget.style.color = "#aaa")}
+      >
+        ×
+      </button>
+
+      <h3
+        style={{
+          fontSize: 17,
+          fontWeight: 700,
+          color: "#1a1a1a",
+          marginBottom: 14,
+          marginTop: 0,
+          paddingRight: 20,
+        }}
+      >
+        {course.name}
+      </h3>
       <StatRow label="Overall" value={course.overall} />
       <StatRow label="Difficulty" value={course.difficulty} />
       <StatRow label="Hours/Week" value={course.hoursPerWeek} />
       <StatRow label="Credits" value={course.credits} />
       <StatRow label="NUPath" value={course.nupath} />
-      <StatRow label="Compatibility" value={course.compatibility} valueStyle={{ color: compatibilityColor(course.compatibility) }} />
+      <StatRow
+        label="Compatibility"
+        value={course.compatibility}
+        valueStyle={{ color: compatibilityColor(course.compatibility) }}
+      />
     </div>
   );
 }
 
-function ProfessorCard({ professor }: { professor: ProfessorData }) {
-  return (
-    <div style={{ flex: 1, background: "#fdf8ee", border: "1.5px solid #d6ccb0", borderRadius: 12, padding: "20px 24px" }}>
-      <h3 style={{ fontSize: 18, fontWeight: 700, marginBottom: 16 }}>{professor.name}</h3>
-      <StatRow label="Overall" value={professor.overall} />
-      <StatRow label="Difficulty" value={professor.difficulty} />
-      <StatRow label="Would Take Again" value={professor.wouldTakeAgain} />
-      <StatRow label="Department" value={professor.department} />
-      <StatRow label="Compatibility" value={professor.compatibility} valueStyle={{ color: compatibilityColor(professor.compatibility) }} />
-    </div>
-  );
-}
+// ─── Search Dropdown ──────────────────────────────────────────────────────────
 
-export function ComparePage({ onClose }: { onClose?: () => void }) {
-  return (
-    <div style={{ position: "fixed", inset: 0, background: "#f5f0c8", display: "flex", alignItems: "center", justifyContent: "center", zIndex: 1000 }}>
-      <div style={{ background: "#fff", borderRadius: 16, boxShadow: "0 8px 40px rgba(0,0,0,0.12)", width: "min(800px, 95vw)", maxHeight: "90vh", overflowY: "auto" }}>
+function SearchDropdown({
+  onSelect,
+  onClose,
+}: {
+  onSelect: (course: CourseData) => void;
+  onClose: () => void;
+}) {
+  const [query, setQuery] = useState("");
+  const inputRef = useRef<HTMLInputElement>(null);
 
-        {/* heading */}
-        <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", padding: "24px 32px 20px", borderBottom: "1px solid #e8e0cc" }}>
-          <h2 style={{ fontSize: 24, fontWeight: 700, margin: 0 }}>Compare Courses</h2>
-          <button onClick={onClose} style={{ background: "none", border: "none", fontSize: 22, cursor: "pointer", color: "#888" }}>×</button>
+  useEffect(() => {
+    inputRef.current?.focus();
+  }, []);
+
+  const filtered = query
+    ? MOCK_COURSES.filter((c) =>
+        c.name.toLowerCase().includes(query.toLowerCase())
+      )
+    : RECENTLY_VIEWED;
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 2000,
+      }}
+      onClick={onClose}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 12,
+          border: "2px solid #4a90d9",
+          width: 380,
+          overflow: "hidden",
+          boxShadow: "0 8px 32px rgba(0,0,0,0.15)",
+        }}
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* Search input */}
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            gap: 8,
+            padding: "12px 16px",
+            borderBottom: "1px solid #eee",
+          }}
+        >
+          <span style={{ color: "#888", fontSize: 16 }}>🔍</span>
+          <input
+            ref={inputRef}
+            value={query}
+            onChange={(e) => setQuery(e.target.value)}
+            placeholder="Search for a course..."
+            style={{
+              flex: 1,
+              border: "none",
+              outline: "none",
+              fontSize: 14,
+              color: "#333",
+              background: "transparent",
+            }}
+          />
+          <button
+            onClick={onClose}
+            style={{ background: "none", border: "none", cursor: "pointer", fontSize: 18, color: "#888" }}
+          >
+            ×
+          </button>
         </div>
 
-        {/* card */}
-        <div style={{ padding: "24px 32px", display: "flex", gap: 16 }}>
-          {MOCK_COURSES.map((course) => (
-            <CourseCard key={course.id} course={course} />
+        {/* Recently viewed label */}
+        {!query && (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: 6,
+              padding: "10px 16px 6px",
+            }}
+          >
+            <span style={{ fontSize: 12, color: "#888" }}>🕐</span>
+            <span style={{ fontSize: 11, fontWeight: 700, color: "#888", letterSpacing: 1, textTransform: "uppercase" }}>
+              Recently Viewed
+            </span>
+          </div>
+        )}
+
+        {/* Results */}
+        <div>
+          {filtered.map((course) => (
+            <div
+              key={course.id}
+              onClick={() => { onSelect(course); onClose(); }}
+              style={{
+                padding: "10px 16px",
+                borderBottom: "1px solid #f0f0f0",
+                cursor: "pointer",
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "flex-start",
+              }}
+              onMouseEnter={(e) => (e.currentTarget.style.background = "#f8f8f8")}
+              onMouseLeave={(e) => (e.currentTarget.style.background = "transparent")}
+            >
+              <div>
+                <div style={{ fontSize: 14, fontWeight: 600, color: "#1a1a1a", marginBottom: 2 }}>
+                  {course.name}
+                </div>
+                <div style={{ fontSize: 12, color: "#888" }}>
+                  Rating: {course.overall.replace("/5", "")} • Difficulty: {course.difficulty.replace("/5", "")} • {course.hoursPerWeek} hrs/wk
+                </div>
+              </div>
+              {course.daysAgo && (
+                <span style={{ fontSize: 11, color: "#aaa", whiteSpace: "nowrap", marginLeft: 8 }}>
+                  {course.daysAgo}
+                </span>
+              )}
+            </div>
           ))}
         </div>
 
-        {/* to add another */}
-        <div style={{ textAlign: "center", paddingBottom: 16 }}>
-          <button style={{ background: "none", border: "none", color: "#555", fontSize: 14, cursor: "pointer", textDecoration: "underline" }}>
+        {/* Footer hint */}
+        <div style={{ padding: "10px 16px", textAlign: "center" }}>
+          <span style={{ fontSize: 12, color: "#aaa", fontStyle: "italic" }}>
+            Or type to search all courses
+          </span>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// ─── Main Compare Page ────────────────────────────────────────────────────────
+
+export function ComparePage({ onClose }: { onClose?: () => void }) {
+  const [courses, setCourses] = useState<CourseData[]>([
+    MOCK_COURSES[0]!,
+    MOCK_COURSES[1]!,
+  ]);
+  const [showSearch, setShowSearch] = useState(false);
+
+  const handleAddCourse = (course: CourseData) => {
+    setCourses((prev) => [...prev, course]);
+  };
+
+  const handleRemoveCourse = (id: string) => {
+    setCourses((prev) => prev.filter((c) => c.id !== id));
+  };
+
+  return (
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "#f5f0c0",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+      }}
+    >
+      <div
+        style={{
+          background: "#fff",
+          borderRadius: 16,
+          boxShadow: "0 8px 40px rgba(0,0,0,0.12)",
+          width: "min(780px, 95vw)",
+          maxHeight: "90vh",
+          overflowY: "auto",
+        }}
+      >
+        {/* Header */}
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+            padding: "22px 28px 18px",
+            borderBottom: "1px solid #e8e0cc",
+          }}
+        >
+          <h2 style={{ fontSize: 22, fontWeight: 700, margin: 0, color: "#1a1a1a" }}>
+            Compare Courses
+          </h2>
+          <button
+            onClick={onClose}
+            style={{ background: "none", border: "none", fontSize: 20, cursor: "pointer", color: "#666" }}
+          >
+            ×
+          </button>
+        </div>
+
+        {/* Cards */}
+        <div style={{ padding: "20px 28px", display: "flex", gap: 14 }}>
+          {courses.map((course) => (
+            <CourseCard
+              key={course.id}
+              course={course}
+              onRemove={() => handleRemoveCourse(course.id)}
+            />
+          ))}
+        </div>
+
+        {/* Add another */}
+        <div style={{ textAlign: "center", paddingBottom: 18 }}>
+          <button
+            onClick={() => setShowSearch(true)}
+            style={{
+              background: "none",
+              border: "none",
+              color: "#4a7a9b",
+              fontSize: 14,
+              cursor: "pointer",
+              textDecoration: "underline",
+            }}
+          >
             + Add another course to compare
           </button>
         </div>
 
-        {/* footer */}
-        <div style={{ padding: "16px 32px 24px", display: "flex", justifyContent: "flex-end", borderTop: "1px solid #e8e0cc" }}>
-          <button onClick={onClose} style={{ padding: "10px 32px", borderRadius: 8, border: "2px solid #1a1a1a", background: "#fff", fontSize: 16, fontWeight: 600, cursor: "pointer" }}>
+        {/* Footer */}
+        <div
+          style={{
+            padding: "14px 28px 22px",
+            display: "flex",
+            justifyContent: "flex-end",
+            borderTop: "1px solid #e8e0cc",
+          }}
+        >
+          <button
+            onClick={onClose}
+            style={{
+              padding: "9px 28px",
+              borderRadius: 8,
+              border: "2px solid #1a1a1a",
+              background: "#fff",
+              fontSize: 15,
+              fontWeight: 600,
+              color: "#1a1a1a",
+              cursor: "pointer",
+            }}
+          >
             Close
           </button>
         </div>
       </div>
+
+      {/* Search Dropdown */}
+      {showSearch && (
+        <SearchDropdown
+          onSelect={handleAddCourse}
+          onClose={() => setShowSearch(false)}
+        />
+      )}
     </div>
   );
 }
