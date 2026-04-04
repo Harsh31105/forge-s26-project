@@ -5,13 +5,6 @@ import {AcademicSemester, Semester, Trace, TraceFilterType} from "../../../model
 import {trace} from "../../tables/trace";
 import { and, eq, sql } from "drizzle-orm"
 
-const semesterChronology: Record<Semester, number> = {
-    fall: 4,
-    summer_2: 3,
-    summer_1: 2,
-    spring: 1
-};
-
 export class TraceRepositorySchema implements TraceRepository {
     constructor(private readonly db: NodePgDatabase) {
         this.db = db;
