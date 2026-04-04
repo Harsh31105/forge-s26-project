@@ -1,9 +1,13 @@
 "use client";
 
+import Link from "next/link";
+
 const MOCK_COURSES = [
-  { id: "1", code: "CS 3000", rating: 1.1, viewed: "Viewed 3 days ago" },
-  { id: "2", code: "CS 2510", rating: 4.2, viewed: "Viewed 5 days ago" },
-  { id: "3", code: "CS 3500", rating: 3.8, viewed: "Viewed 1 week ago" },
+  { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
+  { id: "2", code: "CS 2510", name: "Fundamentals of CS 2", rating: 4.2, viewed: "Viewed 5 days ago" },
+  { id: "3", code: "CS 3500", name: "Object-Oriented Design", rating: 3.8, viewed: "Viewed 1 week ago" },
+  { id: "4", code: "CS 1800", name: "Discrete Structures", rating: 4.5, viewed: "Viewed 1 week ago" },
+  { id: "5", code: "CS 3200", name: "Database Design", rating: 3.6, viewed: "Viewed 2 weeks ago" },
 ];
 
 const MOCK_DISCUSSIONS = [
@@ -20,24 +24,18 @@ const cardStyle: React.CSSProperties = {
 function NorthStarLogo() {
   return (
     <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      {/* Compass: thick ring + tilted rounded diamond + blue dot + white arrows */}
       <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-        {/* Thick outer ring */}
         <circle cx="28" cy="28" r="24" stroke="#B45309" strokeWidth="6" fill="none" />
-        {/* Diamond: straight edges, rounded corners at each tip */}
         <path
           d="M32,14 L46,25 Q50,28 46,31 L32,42 Q28,45 24,42 L10,31 Q6,28 10,25 L24,14 Q28,11 32,14 Z"
           fill="#B45309"
           transform="rotate(-35 28 28)"
         />
-        {/* Blue center dot */}
         <circle cx="28" cy="28" r="7" fill="#1D3A8A" />
-        {/* White arrows along the diamond's long axis */}
         <polygon points="11,28 17,23 17,33" fill="white" transform="rotate(-35 28 28)" />
         <polygon points="45,28 39,23 39,33" fill="white" transform="rotate(-35 28 28)" />
       </svg>
 
-      {/* Text */}
       <div>
         <p style={{
           fontFamily: "var(--font-logo)",
@@ -71,9 +69,9 @@ export default function Home() {
       {/* Navbar */}
       <nav style={{ background: "var(--color-surface-light-cream)", borderBottom: "1px solid var(--color-border-tan)" }}>
         <div style={{
-          maxWidth: 1060,
+          maxWidth: 1280,
           margin: "0 auto",
-          padding: "0 32px",
+          padding: "0 48px",
           height: 68,
           display: "flex",
           alignItems: "center",
@@ -83,12 +81,12 @@ export default function Home() {
 
           <div style={{ display: "flex", gap: 48 }}>
             {[
-              { label: "Home", active: true },
-              { label: "Courses", active: false },
-              { label: "Professors", active: false },
-              { label: "Reviews", active: false },
-            ].map(({ label, active }) => (
-              <a key={label} href="#" style={{
+              { label: "Home", href: "/", active: true },
+              { label: "Courses", href: "/courses", active: false },
+              { label: "Professors", href: "/professors", active: false },
+              { label: "Reviews", href: "/reviews", active: false },
+            ].map(({ label, href, active }) => (
+              <Link key={label} href={href} style={{
                 fontFamily: "var(--font-body)",
                 fontSize: "var(--font-size-base)",
                 color: active ? "var(--color-primary-navy)" : "var(--color-text-primary)",
@@ -96,7 +94,7 @@ export default function Home() {
                 fontWeight: active ? 600 : 400,
               }}>
                 {label}
-              </a>
+              </Link>
             ))}
           </div>
 
@@ -120,16 +118,16 @@ export default function Home() {
       </nav>
 
       {/* Page content */}
-      <main style={{ maxWidth: 1060, margin: "0 auto", padding: "32px 32px 64px" }}>
+      <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 48px 80px" }}>
 
         {/* Welcome card */}
         <div style={{
           ...cardStyle,
-          padding: "32px 40px",
+          padding: "36px 48px",
           display: "flex",
           alignItems: "center",
           justifyContent: "space-between",
-          marginBottom: 36,
+          marginBottom: 48,
         }}>
           <div>
             <h1 style={{
@@ -145,7 +143,7 @@ export default function Home() {
               Continue planning your semester
             </p>
           </div>
-          <button style={{
+          <Link href="/courses" style={{
             background: "var(--color-primary-navy)",
             color: "white",
             border: "none",
@@ -156,9 +154,10 @@ export default function Home() {
             fontWeight: 600,
             cursor: "pointer",
             whiteSpace: "nowrap",
+            textDecoration: "none",
           }}>
             Browse Courses
-          </button>
+          </Link>
         </div>
 
         {/* Recently Viewed */}
@@ -167,45 +166,56 @@ export default function Home() {
           fontSize: "var(--font-size-xl)",
           fontWeight: 700,
           color: "var(--color-text-primary)",
-          marginBottom: 16,
+          marginBottom: 20,
         }}>
           Recently Viewed
         </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 16, marginBottom: 40 }}>
+        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 20, marginBottom: 56 }}>
           {MOCK_COURSES.map((course) => (
-            <div key={course.id} style={{
-              ...cardStyle,
-              padding: "20px 24px",
-              cursor: "pointer",
-              display: "flex",
-              flexDirection: "column",
-              justifyContent: "space-between",
-              minHeight: 130,
-            }}>
-              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                <p style={{
-                  fontFamily: "var(--font-heading)",
-                  fontSize: "var(--font-size-sm)",
-                  fontWeight: 700,
-                  color: "var(--color-text-primary)",
-                  margin: 0,
-                }}>
-                  {course.code}
+            <Link key={course.id} href={`/courses/${course.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+              <div style={{
+                ...cardStyle,
+                padding: "20px 24px",
+                cursor: "pointer",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "space-between",
+                minHeight: 150,
+              }}>
+                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                  <div>
+                    <p style={{
+                      fontFamily: "var(--font-heading)",
+                      fontSize: "var(--font-size-sm)",
+                      fontWeight: 700,
+                      color: "var(--color-text-primary)",
+                      margin: 0,
+                    }}>
+                      {course.code}
+                    </p>
+                    <p style={{
+                      fontSize: "var(--font-size-xs)",
+                      color: "var(--color-text-secondary)",
+                      margin: "4px 0 0",
+                    }}>
+                      {course.name}
+                    </p>
+                  </div>
+                  <span style={{
+                    fontFamily: "var(--font-heading)",
+                    fontSize: 28,
+                    fontWeight: 700,
+                    color: "var(--color-primary-navy)",
+                    lineHeight: 1,
+                  }}>
+                    {course.rating}
+                  </span>
+                </div>
+                <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-xs)", margin: 0 }}>
+                  {course.viewed}
                 </p>
-                <span style={{
-                  fontFamily: "var(--font-heading)",
-                  fontSize: 32,
-                  fontWeight: 700,
-                  color: "var(--color-primary-navy)",
-                  lineHeight: 1,
-                }}>
-                  {course.rating}
-                </span>
               </div>
-              <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-xs)", margin: 0 }}>
-                {course.viewed}
-              </p>
-            </div>
+            </Link>
           ))}
         </div>
 
@@ -215,26 +225,28 @@ export default function Home() {
           fontSize: "var(--font-size-xl)",
           fontWeight: 700,
           color: "var(--color-text-primary)",
-          marginBottom: 16,
+          marginBottom: 20,
         }}>
           Most-Talked About Course Discussion
         </h2>
-        <div style={{ display: "flex", flexDirection: "column", gap: 12 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           {MOCK_DISCUSSIONS.map((item) => (
-            <div key={item.id} style={{ ...cardStyle, padding: "20px 24px", cursor: "pointer" }}>
-              <p style={{
-                fontFamily: "var(--font-heading)",
-                fontSize: "var(--font-size-sm)",
-                fontWeight: 700,
-                color: "var(--color-text-primary)",
-                margin: 0,
-              }}>
-                {item.courseCode}
-              </p>
-              <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-xs)", marginTop: 4, marginBottom: 0 }}>
-                {item.replies} replies
-              </p>
-            </div>
+            <Link key={item.id} href="/reviews" style={{ textDecoration: "none", color: "inherit" }}>
+              <div style={{ ...cardStyle, padding: "20px 28px", cursor: "pointer" }}>
+                <p style={{
+                  fontFamily: "var(--font-heading)",
+                  fontSize: "var(--font-size-sm)",
+                  fontWeight: 700,
+                  color: "var(--color-text-primary)",
+                  margin: 0,
+                }}>
+                  {item.courseCode} — {item.topic}
+                </p>
+                <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-xs)", marginTop: 6, marginBottom: 0 }}>
+                  {item.replies} replies
+                </p>
+              </div>
+            </Link>
           ))}
         </div>
 
