@@ -28,3 +28,9 @@ export const TraceFilterSchema = z.object({
     semester: z.enum(["fall", "spring", "summer_1", "summer_2"]).optional()
 });
 export type TraceFilterType = z.infer<typeof TraceFilterSchema>;
+
+export const OfferHistorySchema = z.object({
+    courseId: z.uuid().optional(),
+    professorId: z.uuid().optional()
+});
+export type OfferHistoryType = z.infer<typeof OfferHistorySchema>;
