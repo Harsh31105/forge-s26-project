@@ -12,7 +12,7 @@ export function useCourses(params?: GetCoursesParams) {
         refetch,
     } = useQuery({
         queryKey: ["courses", params],
-        queryFn: () => courseAPI.getCourses(params),
+        queryFn: () => courseAPI.getCourses(params)
     });
 
     return { courses: coursesData || [], isLoading, error: error?.message || null, refetch };

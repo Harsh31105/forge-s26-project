@@ -17,7 +17,7 @@ import { getOffset, PaginationSchema } from "../../../utils/pagination";
 export class SampleHandler {
     constructor(private readonly repo: SampleRepository) {}
 
-    async handleGet(req: Request, res: Response) :Promise<void> {
+    async handleGet(req: Request, res: Response): Promise<void> {
         const result = PaginationSchema.safeParse(req.query);
         if (!result.success) {
             throw BadRequest("Invalid pagination parameters");
