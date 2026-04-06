@@ -33,6 +33,8 @@ import { RMPHandler } from "./handler/rmp";
 import { rmpRoutes } from "./handler/rmp/routes";
 import { ProfThreadHandler } from "./handler/professorThreads";
 import { professorThreadRoutes } from "./handler/professorThreads/routes";
+import { TraceHandler } from "./handler/trace";
+import { traceRoutes } from "./handler/trace/routes";
 
 class App {
     public server: Express;
@@ -131,4 +133,7 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const favouritesHandler = new FavouriteHandler(repo.favourites);
     router.use("/favourites", favouriteRoutes(favouritesHandler));
+
+    const traceHandler = new TraceHandler(repo.traces);
+    router.use("/trace", traceRoutes(traceHandler));
 }
