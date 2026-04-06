@@ -1684,6 +1684,28 @@ paths:
                 code: 500
                 message: "Internal server error"
 
+  /auth/me:
+    get:
+      summary: Get current user
+      description: Returns the currently authenticated student from the JWT cookie
+      tags: [Auth]
+      responses:
+        "200":
+          description: The authenticated student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 401
+                message: "Not authenticated"
+
   /trace:
     get:
       summary: Get all TRACE records
