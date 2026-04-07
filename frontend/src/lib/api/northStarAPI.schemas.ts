@@ -535,6 +535,22 @@ export interface Trace {
   updatedAt: string;
 }
 
+export type AcademicSemesterSemester =
+  (typeof AcademicSemesterSemester)[keyof typeof AcademicSemesterSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AcademicSemesterSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+export interface AcademicSemester {
+  semester: AcademicSemesterSemester;
+  year: number;
+}
+
 export type GetCourseReviewsIdThreadsParams = {
   /**
    * Page number of pagination
@@ -783,3 +799,24 @@ export const GetTraceSemester = {
   summer_1: "summer_1",
   summer_2: "summer_2",
 } as const;
+
+export type GetTraceOfferHistoryParams = {
+  /**
+   * Page Number of Pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page
+   * @minimum 1
+   */
+  limit?: number;
+  /**
+   * Filter by Course ID
+   */
+  courseId?: string;
+  /**
+   * Filter by Professor ID
+   */
+  professorId?: string;
+};

@@ -1,9 +1,9 @@
 import {TraceRepository} from "../../storage";
 import {NodePgDatabase} from "drizzle-orm/node-postgres";
 import {getOffset, PaginationType} from "../../../utils/pagination";
-import {Trace, TraceFilterType} from "../../../models/trace";
+import {AcademicSemester, Semester, Trace, TraceFilterType} from "../../../models/trace";
 import {trace} from "../../tables/trace";
-import { and, eq } from "drizzle-orm"
+import { and, eq, sql } from "drizzle-orm"
 
 export class TraceRepositorySchema implements TraceRepository {
     constructor(private readonly db: NodePgDatabase) {
@@ -22,5 +22,43 @@ export class TraceRepositorySchema implements TraceRepository {
             .where(conditions.length > 0 ? and(...conditions) : undefined)
             .limit(pagination.limit)
             .offset(getOffset(pagination));
+    }
+
+    async getOfferHistory(pagination: PaginationType, filters: TraceFilterType): Promise<AcademicSemester[]> {
+        const conditions = [];
+        if (filters.courseId !== undefined) conditions.push(eq(trace.courseId, filters.courseId));
+        if (filters.professorId !== undefined) conditions.push(eq(trace.professorId, filters.professorId));
+
+        const semesterOrder = sql`
+            CASE
+                WHEN ${trace.semester} = 'fall' THEN 4
+                WHEN ${trace.semester} = 'summer_2' THEN 3
+                WHEN ${trace.semester} = 'summer_1' THEN 2
+                WHEN ${trace.semester} = 'spring' THEN 1
+            END
+        `;
+
+        const rows = await this.db.select().from(trace)
+            .where(conditions.length > 0 ? and(...conditions) : undefined)
+            .orderBy(
+                sql`${trace.lectureYear} DESC`,
+                sql`${semesterOrder} DESC`
+            );
+
+        const results: AcademicSemester[] = [];
+        const seen = new Set<string>();
+        for (const row of rows) {
+            const key = `${row.semester}-${row.lectureYear}`;
+
+            if (!seen.has(key)) {
+                seen.add(key);
+                results.push({
+                   semester: row.semester,
+                   year: row.lectureYear
+                });
+            }
+        }
+
+        return results.slice(0, pagination.limit);
     }
 }
