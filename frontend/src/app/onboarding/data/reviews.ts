@@ -1,6 +1,7 @@
 export type Review = {
   courseCode: string;
   courseName: string;
+  professorName?: string; // if set, this is a professor review
   text: string;
   tags: string[];
   stars: number;
@@ -719,5 +720,71 @@ export const REVIEWS: Review[] = [
     text: "Stoichiometry to equilibrium in 16 weeks. Pre-reading each lecture is non-negotiable.",
     tags: ["exam-heavy", "strict_deadlines"],
     stars: 3,
+  },
+
+  // ── Professor reviews ─────────────────────────────────────
+  {
+    courseCode: "CS 3500",
+    courseName: "Object-Oriented Design",
+    professorName: "Lerner",
+    text: "Genuinely one of the best teachers I've had. Explains design patterns like they're obvious in hindsight.",
+    tags: ["project-heavy", "attendance-required"],
+    stars: 5,
+  },
+  {
+    courseCode: "CS 3000",
+    courseName: "Algorithms & Data",
+    professorName: "Razzaq",
+    text: "Very clear lectures. Makes proof-writing feel approachable. Goes out of their way to help during office hours.",
+    tags: ["exam-heavy", "attendance-required"],
+    stars: 5,
+  },
+  {
+    courseCode: "MATH 2331",
+    courseName: "Linear Algebra",
+    professorName: "Breen",
+    text: "Patient, thorough, and actually makes eigenvalues interesting. Take this section if you can.",
+    tags: ["exam-heavy", "slow_paced"],
+    stars: 5,
+  },
+  {
+    courseCode: "CS 4500",
+    courseName: "Software Development",
+    professorName: "Findler",
+    text: "Demanding but fair. You leave this course a significantly better software engineer.",
+    tags: ["project-heavy", "group-work", "strict_deadlines"],
+    stars: 4,
+  },
+  {
+    courseCode: "DS 3000",
+    courseName: "Foundations of Data Science",
+    professorName: "Zheng",
+    text: "Super engaging. Real-world datasets every week and always willing to explain the intuition.",
+    tags: ["project-heavy", "fast_paced"],
+    stars: 5,
+  },
+  {
+    courseCode: "PHYS 1151",
+    courseName: "Physics for Engineering 1",
+    professorName: "Gauthier",
+    text: "Tough course, but they break down every concept clearly. Attendance really matters here.",
+    tags: ["exam-heavy", "attendance-required"],
+    stars: 4,
+  },
+  {
+    courseCode: "ECON 1115",
+    courseName: "Principles of Microeconomics",
+    professorName: "Velarde",
+    text: "Makes econ approachable even if you've never touched it. Lots of real examples from current events.",
+    tags: ["exam-heavy", "slow_paced"],
+    stars: 4,
+  },
+  {
+    courseCode: "CS 4400",
+    courseName: "Programming Languages",
+    professorName: "Krishnamurthi",
+    text: "Mind-expanding. You'll never look at code the same way. Prepare to think hard.",
+    tags: ["exam-heavy", "fast_paced", "little_to_no_test"],
+    stars: 5,
   },
 ];

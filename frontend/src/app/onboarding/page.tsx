@@ -6,7 +6,7 @@ import { getStudent } from "@/src/lib/api/student";
 import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 import type { Student, StudentPatchInputPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import { StudentPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
-import AmbientReviews from "@/src/app/onboarding/components/AmbientReviews";
+import AmbientReviews from "@/src/components/onboarding/AmbientReviews";
 
 // ── Static data ───────────────────────────────────────────
 
@@ -252,37 +252,7 @@ function Nav() {
       >
         NorthStar
       </span>
-      <div style={{ display: "flex", gap: "24px", alignItems: "center" }}>
-        {["Home", "About", "Contact"].map((label) => (
-          <a
-            key={label}
-            href="#"
-            style={{
-              color: C.white,
-              textDecoration: "none",
-              fontFamily: FONT,
-              fontSize: "15px",
-              fontWeight: 500,
-              outline: "none",
-            }}
-            onMouseEnter={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.textDecoration = "underline";
-            }}
-            onMouseLeave={(e) => {
-              (e.currentTarget as HTMLAnchorElement).style.textDecoration = "none";
-            }}
-            onFocus={(e) => {
-              e.currentTarget.style.outline = "2px solid white";
-              e.currentTarget.style.outlineOffset = "2px";
-            }}
-            onBlur={(e) => {
-              e.currentTarget.style.outline = "none";
-            }}
-          >
-            {label}
-          </a>
-        ))}
-      </div>
+      {/* Nav links intentionally empty during onboarding — main nav appears on homepage */}
     </nav>
   );
 }
@@ -729,13 +699,13 @@ export default function OnboardingPage() {
   const [graduationYear, setGraduationYear] = useState<number | "">("");
   const [major, setMajor] = useState("");
   const [concentration, setConcentration] = useState("");
+  const [minors, setMinors] = useState<string[]>([]);
   const [step1Errors, setStep1Errors] = useState<{ year?: string; major?: string }>({});
 
   // Step 2 state
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
-  const [coursePreferences, setCoursePreferences] = useState<
-    Record<string, StudentPatchInputPreferencesItem[]>
-  >({});
+  // General learning preferences (pref_enum) — not tied to individual courses
+  const [selectedPreferences, setSelectedPreferences] = useState<StudentPatchInputPreferencesItem[]>([]);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -747,10 +717,10 @@ export default function OnboardingPage() {
     if (DEV_PREVIEW) {
       setStudent({
         id: "dev",
-        firstName: "Dev",
-        lastName: "User",
-        email: "dev@husky.neu.edu",
-        graduationYear: 2026,
+        firstName: "Alex",
+        lastName: "Chen",
+        email: "alex.chen@husky.neu.edu",
+        graduationYear: 0, // 0 = not yet set, so onboarding form shows
         preferences: [],
         createdAt: "",
         updatedAt: "",
@@ -775,7 +745,14 @@ export default function OnboardingPage() {
       const payload = JSON.parse(atob(storedToken.split(".")[1]));
       studentAPI
         .getStudentsId(payload.id)
-        .then(setStudent)
+        .then((s) => {
+          // Already completed onboarding — skip to homepage
+          if (s.graduationYear && s.graduationYear > 0) {
+            router.push("/");
+            return;
+          }
+          setStudent(s);
+        })
         .catch(() => setLoadError("Failed to load your profile."));
     } catch {
       router.push("/login");
@@ -788,14 +765,10 @@ export default function OnboardingPage() {
     );
   };
 
-  const toggleCoursePreference = (courseId: string, pref: StudentPatchInputPreferencesItem) => {
-    setCoursePreferences((prev) => {
-      const current = prev[courseId] ?? [];
-      return {
-        ...prev,
-        [courseId]: current.includes(pref) ? current.filter((p) => p !== pref) : [...current, pref],
-      };
-    });
+  const togglePreference = (pref: StudentPatchInputPreferencesItem) => {
+    setSelectedPreferences((prev) =>
+      prev.includes(pref) ? prev.filter((p) => p !== pref) : [...prev, pref],
+    );
   };
 
   const handleFinish = async () => {
@@ -803,17 +776,15 @@ export default function OnboardingPage() {
     setSaving(true);
     setSaveError(null);
 
-    // Flatten all preferences from all selected courses (deduplicated)
-    const allPreferences = Array.from(
-      new Set(Object.values(coursePreferences).flat()),
-    ) as StudentPatchInputPreferencesItem[];
-
     try {
       await studentAPI.patchStudentsId(student.id, {
-        ...(graduationYear !== "" && { graduationYear: Number(graduationYear) }),
-        preferences: allPreferences,
-        // TODO: add major, concentration, selectedCourses once API supports them
+        graduationYear: Number(graduationYear),
+        preferences:    selectedPreferences,
+        // TODO: send major, concentration once Major/Concentration endpoints exist (tag Biak's PR)
+        // TODO: send minors once Minor endpoints exist (tag Biak's PR)
+        // TODO: send selectedCourses once course-history endpoints exist
       });
+      // TODO: route to the real homepage URL once agreed upon with other contributors
       router.push("/");
     } catch {
       setSaveError("Failed to save. Please try again.");
@@ -1013,6 +984,60 @@ export default function OnboardingPage() {
                     </div>
                   )}
 
+                  {/* Minors — multi-select, users can have more than one
+                      TODO: replace MAJORS dummy list with a real Minor API endpoint
+                            when available; tag Biak's PR for those changes */}
+                  <div>
+                    <label style={fieldLabel}>
+                      Minor(s){" "}
+                      <span style={{ fontWeight: 400, color: C.textPlaceholder, fontSize: "13px" }}>
+                        — optional, select all that apply
+                      </span>
+                    </label>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                      {MAJORS.map((m) => {
+                        const selected = minors.includes(m);
+                        return (
+                          <button
+                            key={m}
+                            type="button"
+                            aria-pressed={selected}
+                            onClick={() =>
+                              setMinors((prev) =>
+                                prev.includes(m) ? prev.filter((x) => x !== m) : [...prev, m],
+                              )
+                            }
+                            style={{
+                              padding: "5px 12px",
+                              borderRadius: "20px",
+                              fontSize: "13px",
+                              fontFamily: FONT,
+                              fontWeight: selected ? 600 : 400,
+                              border: `1px solid ${selected ? C.navy : C.borderInput}`,
+                              backgroundColor: selected ? C.bgSelectedRow : C.bgCard,
+                              color: selected ? C.navy : C.textSecondary,
+                              cursor: "pointer",
+                              minHeight: "30px",
+                              outline: "none",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!selected)
+                                (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.bgHover;
+                            }}
+                            onMouseLeave={(e) => {
+                              (e.currentTarget as HTMLButtonElement).style.backgroundColor = selected
+                                ? C.bgSelectedRow
+                                : C.bgCard;
+                            }}
+                            {...focusRing}
+                          >
+                            {m}
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+
                   <button
                     onClick={() => {
                       const errors: { year?: string; major?: string } = {};
@@ -1062,7 +1087,7 @@ export default function OnboardingPage() {
                     margin: "0 0 6px 0",
                   }}
                 >
-                  Courses you&apos;ve enjoyed
+                  Your experience
                 </h2>
                 <p
                   style={{
@@ -1073,104 +1098,89 @@ export default function OnboardingPage() {
                     margin: "0 0 28px 0",
                   }}
                 >
-                  Select any courses you&apos;ve taken and liked — we&apos;ll use them to tailor
-                  your recommendations.
+                  Tell us about your learning style and any courses you&apos;ve taken — we&apos;ll
+                  use this to tailor your recommendations.
                 </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+                  {/* Courses taken — optional
+                      TODO: replace MOCK_COURSES with a real API call when the course-history
+                            endpoint is ready */}
                   <CourseSelector selectedCourses={selectedCourses} onToggle={toggleCourse} />
 
-                  {/* Per-course preference tags — appear once at least one course is selected */}
-                  {selectedCourses.length > 0 && (
-                    <div style={{ display: "flex", flexDirection: "column", gap: "20px" }}>
-                      <hr
-                        style={{
-                          border: "none",
-                          borderTop: `1px solid ${C.borderSeparator}`,
-                          margin: 0,
-                        }}
-                      />
-                      {selectedCourses.map((courseId) => {
-                        const course = MOCK_COURSES.find((c) => c.id === courseId);
-                        if (!course) return null;
-                        const selected = coursePreferences[courseId] ?? [];
+                  {/* TODO: search-based course discovery (commented out until search endpoint ready)
+                  <CourseSearch onSelect={...} /> */}
+
+                  {/* Learning preferences (pref_enum) — what the student generally looks for */}
+                  <div>
+                    <hr
+                      style={{
+                        border: "none",
+                        borderTop: `1px solid ${C.borderSeparator}`,
+                        margin: "0 0 20px 0",
+                      }}
+                    />
+                    <p
+                      style={{
+                        fontFamily: FONT,
+                        fontSize: "14px",
+                        fontWeight: 500,
+                        color: C.textHeading,
+                        margin: "0 0 10px 0",
+                      }}
+                    >
+                      What kind of learning environment do you prefer?{" "}
+                      <span style={{ fontWeight: 400, color: C.textPlaceholder, fontSize: "13px" }}>
+                        — optional, pick any that resonate
+                      </span>
+                    </p>
+                    <div
+                      style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}
+                      role="group"
+                      aria-label="Learning preferences"
+                    >
+                      {Object.values(StudentPreferencesItem).map((pref) => {
+                        const isSelected = selectedPreferences.includes(
+                          pref as StudentPatchInputPreferencesItem,
+                        );
                         return (
-                          <div key={courseId}>
-                            <p
-                              style={{
-                                fontFamily: FONT,
-                                fontSize: "14px",
-                                fontWeight: 500,
-                                color: C.textHeading,
-                                margin: "0 0 10px 0",
-                              }}
-                            >
-                              What was true about <strong>{course.code}</strong>?{" "}
-                              <span
-                                style={{
-                                  fontWeight: 400,
-                                  color: C.textPlaceholder,
-                                  fontSize: "13px",
-                                }}
-                              >
-                                — optional
-                              </span>
-                            </p>
-                            <div
-                              style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}
-                              role="group"
-                              aria-label={`Preferences for ${course.code}`}
-                            >
-                              {Object.values(StudentPreferencesItem).map((pref) => {
-                                const isSelected = selected.includes(
-                                  pref as StudentPatchInputPreferencesItem,
-                                );
-                                return (
-                                  <button
-                                    key={pref}
-                                    type="button"
-                                    aria-pressed={isSelected}
-                                    onClick={() =>
-                                      toggleCoursePreference(
-                                        courseId,
-                                        pref as StudentPatchInputPreferencesItem,
-                                      )
-                                    }
-                                    style={{
-                                      padding: "6px 14px",
-                                      borderRadius: "20px",
-                                      fontSize: "13px",
-                                      fontFamily: FONT,
-                                      fontWeight: isSelected ? 600 : 400,
-                                      border: `1px solid ${isSelected ? C.navy : C.borderInput}`,
-                                      backgroundColor: isSelected ? C.bgSelectedRow : C.bgCard,
-                                      color: isSelected ? C.navy : C.textSecondary,
-                                      cursor: "pointer",
-                                      minHeight: "32px",
-                                      outline: "none",
-                                    }}
-                                    onMouseEnter={(e) => {
-                                      if (!isSelected)
-                                        (
-                                          e.currentTarget as HTMLButtonElement
-                                        ).style.backgroundColor = C.bgHover;
-                                    }}
-                                    onMouseLeave={(e) => {
-                                      (e.currentTarget as HTMLButtonElement).style.backgroundColor =
-                                        isSelected ? C.bgSelectedRow : C.bgCard;
-                                    }}
-                                    {...focusRing}
-                                  >
-                                    {PREFERENCE_LABELS[pref as StudentPatchInputPreferencesItem]}
-                                  </button>
-                                );
-                              })}
-                            </div>
-                          </div>
+                          <button
+                            key={pref}
+                            type="button"
+                            aria-pressed={isSelected}
+                            onClick={() =>
+                              togglePreference(pref as StudentPatchInputPreferencesItem)
+                            }
+                            style={{
+                              padding: "6px 14px",
+                              borderRadius: "20px",
+                              fontSize: "13px",
+                              fontFamily: FONT,
+                              fontWeight: isSelected ? 600 : 400,
+                              border: `1px solid ${isSelected ? C.navy : C.borderInput}`,
+                              backgroundColor: isSelected ? C.bgSelectedRow : C.bgCard,
+                              color: isSelected ? C.navy : C.textSecondary,
+                              cursor: "pointer",
+                              minHeight: "32px",
+                              outline: "none",
+                            }}
+                            onMouseEnter={(e) => {
+                              if (!isSelected)
+                                (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                                  C.bgHover;
+                            }}
+                            onMouseLeave={(e) => {
+                              (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                                isSelected ? C.bgSelectedRow : C.bgCard;
+                            }}
+                            {...focusRing}
+                          >
+                            {PREFERENCE_LABELS[pref as StudentPatchInputPreferencesItem]}
+                          </button>
                         );
                       })}
                     </div>
-                  )}
+                  </div>
 
                   {saveError && (
                     <p
