@@ -69,7 +69,7 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
 
-      {/* Navbar */}
+      {/* Navbar - commented out for now
       <nav style={{ background: "var(--color-surface-light-cream)", borderBottom: "1px solid var(--color-border-tan)" }}>
         <div style={{
           maxWidth: 1280,
@@ -119,6 +119,7 @@ export default function Home() {
           </button>
         </div>
       </nav>
+      */}
 
       {/* Page content */}
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 48px 80px" }}>
