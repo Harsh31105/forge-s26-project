@@ -27,7 +27,7 @@ import type {
   CourseThreadPostInputType,
 } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
-import { PaginationType } from "utils/pagination";
+import { PaginationType } from "../utils/pagination";
 import type {
   Professor,
   ProfessorFilterType,
