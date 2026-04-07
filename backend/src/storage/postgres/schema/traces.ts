@@ -43,9 +43,7 @@ export class TraceRepositorySchema implements TraceRepository {
             .orderBy(
                 sql`${trace.lectureYear} DESC`,
                 sql`${semesterOrder} DESC`
-            )
-            .limit(pagination.limit)
-            .offset(getOffset(pagination));
+            );
 
         const results: AcademicSemester[] = [];
         const seen = new Set<string>();
@@ -61,6 +59,6 @@ export class TraceRepositorySchema implements TraceRepository {
             }
         }
 
-        return results;
+        return results.slice(0, pagination.limit);
     }
 }
