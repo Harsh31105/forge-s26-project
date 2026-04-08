@@ -1,8 +1,8 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
-import type {Course, CoursePatchInputType, CoursePostInputType} from "../../../models/course";
+import type { Course, CourseFilterType, CoursePatchInputType, CoursePostInputType } from "../../../models/course";
 import {CourseRepository} from "../../storage";
 import {course} from "../../tables/course";
-import { eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
 import { department } from "../../tables/department";
 import { getOffset, PaginationType } from "../../../utils/pagination";
@@ -12,20 +12,34 @@ export class CourseRepositorySchema implements CourseRepository {
         this.db = db;
     }
 
-    async getCourses(pagination: PaginationType): Promise<Course[]> {
-        const rows = await this.db.select()
-                                  .from(course)
-                                  .innerJoin(department, eq(course.departmentId, department.id))
-                                  .limit(pagination.limit)
-                                  .offset(getOffset(pagination));
+    async getCourses(pagination: PaginationType, filters: CourseFilterType): Promise<Course[]> {
+        const conditions = [];
+        if (filters.department_id !== undefined) conditions.push(eq(course.departmentId, filters.department_id));
+        if (filters.course_code !== undefined) conditions.push(eq(course.courseCode, filters.course_code));
+        if (filters.num_credits !== undefined) conditions.push(eq(course.numCredits, filters.num_credits));
+        if (filters.lecture_type !== undefined) conditions.push(eq(course.lectureType, filters.lecture_type));
 
-        return rows.map((row : typeof rows[number]) => ({
+        const orderColMap = {
+            course_code: course.courseCode,
+            num_credits: course.numCredits,
+            created_at: course.createdAt,
+            name: course.name,
+        };
+        const orderCol = orderColMap[filters.sortBy ?? "name"] ?? course.name;
+        const order = filters.sortOrder === "desc" ? desc(orderCol) : asc(orderCol);
+
+        const rows = await this.db.select()
+            .from(course)
+            .innerJoin(department, eq(course.departmentId, department.id))
+            .where(conditions.length > 0 ? and(...conditions) : undefined)
+            .orderBy(order)
+            .limit(pagination.limit)
+            .offset(getOffset(pagination));
+
+        return rows.map((row) => ({
             id: row.course.id,
             name: row.course.name,
-            department: {
-                id: row.department.id,
-                name: row.department.name
-            },
+            department: { id: row.department.id, name: row.department.name },
             course_code: row.course.courseCode,
             description: row.course.description,
             num_credits: row.course.numCredits,

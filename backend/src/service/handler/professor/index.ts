@@ -1,6 +1,7 @@
-import type { ProfessorRepository } from "../../../storage/storage";
+import type { ProfessorRepository, RMPRepository } from "../../../storage/storage";
+import type { RMP } from "../../../models/rmp";
 import {
-    Professor, ProfessorPatchInputSchema, ProfessorPatchInputType,
+    Professor, ProfessorFilterSchema, ProfessorPatchInputSchema, ProfessorPatchInputType,
     ProfessorPostInputSchema,
     ProfessorPostInputType
 } from "../../../models/professor";
@@ -15,18 +16,27 @@ import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
 
 export class ProfessorHandler {
-    constructor(private readonly repo: ProfessorRepository) {}
+    constructor(
+        private readonly repo: ProfessorRepository,
+        private readonly rmpRepo: RMPRepository
+    ) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
-        const result = PaginationSchema.safeParse(req.query);
-        if (!result.success) {
+        const paginationResult = PaginationSchema.safeParse(req.query);
+        if (!paginationResult.success) {
             throw BadRequest("Invalid pagination parameters");
         }
-        const pagination = result.data;
+        const pagination = paginationResult.data;
+
+        const filterResult = ProfessorFilterSchema.safeParse(req.query);
+        if (!filterResult.success) {
+            throw BadRequest("Invalid filter parameters");
+        }
+        const filters = filterResult.data;
 
         let professors: Professor[];
         try {
-            professors = await this.repo.getProfessors(pagination);
+            professors = await this.repo.getProfessors(pagination, filters);
         } catch (err) {
             console.log("Failed to get professors: ", err);
             throw mapDBError(err, "failed to retrieve professors");
@@ -109,5 +119,31 @@ export class ProfessorHandler {
         }
 
         res.sendStatus(204);
+    }
+
+    // GET /professors/:id/rmp - get RMP data for a professor
+    // revert back to default null object
+    async handleGetRMP(req: Request, res: Response): Promise<void> {
+        const id = req.params.id as string;
+        if (!isUUID(id)) throw BadRequest("invalid professor ID was given");
+
+        let rmpData: RMP;
+        try {
+            rmpData = await this.rmpRepo.getRMPByProfessorID(id);
+        } catch (err) {
+            console.log(err);
+            if (err instanceof NotFoundError) {
+                res.status(200).json({
+                    professorId: id,
+                    ratingAvg: null,
+                    ratingWta: null,
+                    avgDifficulty: null,
+                });
+                return;
+            }
+            throw mapDBError(err, "failed to retrieve RMP data");
+        }
+
+        res.status(200).json(rmpData);
     }
 }

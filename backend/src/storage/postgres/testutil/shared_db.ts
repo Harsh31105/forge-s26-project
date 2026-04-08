@@ -353,6 +353,9 @@ async function createAllTables(db: NodePgDatabase) {
             FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
             FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
         );
+
+        ALTER TABLE rmp
+        ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
     `);
 
 }
@@ -367,7 +370,8 @@ export async function cleanupTestData() {
       course,
       department,
       course_thread,
-      sample
+      sample,
+      professor
     RESTART IDENTITY CASCADE;
   `);
 }

@@ -1,24 +1,40 @@
-import express, {Express, Router} from "express";
+import express, { Express, Router } from "express";
 import { Repository } from "../storage/storage";
-import {Pool} from "pg";
-import {configurePool, getConnectionString} from "../config/db";
+import { Pool } from "pg";
+import { configurePool, getConnectionString } from "../config/db";
 import { config } from "../config/config";
 import { drizzle } from "drizzle-orm/node-postgres";
-import {SampleHandler} from "./handler/sample";
-import {sampleRoutes} from "./handler/sample/routes";
-import {ProfessorHandler} from "./handler/professor";
-import {professorRoutes} from "./handler/professor/routes";
+import { SampleHandler } from "./handler/sample";
+import { sampleRoutes } from "./handler/sample/routes";
+import { ReviewHandler } from "./handler/reviews";
+import { reviewRoutes } from "./handler/reviews/routes";
+import { ProfessorHandler } from "./handler/professor";
+import { professorRoutes } from "./handler/professor/routes";
 import morgan from "morgan";
 import compression from "compression";
 import cors from "cors";
-import {errorHandler} from "../errs/httpError";
+import { errorHandler } from "../errs/httpError";
 import YAML from "yamljs";
 import path from "path";
 import swaggerUi from "swagger-ui-express";
-import {CourseHandler} from "./handler/course";
-import {courseRoutes} from "./handler/course/routes";
+import { CourseHandler } from "./handler/course";
+import { courseRoutes } from "./handler/course/routes";
 import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
+import { AuthHandler } from "./handler/auth";
+import { authRoutes } from "./handler/auth/routes";
+import { authMiddleware } from "../auth/middleware";
+import cookieParser from "cookie-parser";
+import { StudentHandler } from "./handler/student";
+import { studentRoutes } from "./handler/student/routes";
+import {FavouriteHandler} from "./handler/favourite";
+import {favouriteRoutes} from "./handler/favourite/routes";
+import { RMPHandler } from "./handler/rmp";
+import { rmpRoutes } from "./handler/rmp/routes";
+import { ProfThreadHandler } from "./handler/professorThreads";
+import { professorThreadRoutes } from "./handler/professorThreads/routes";
+import { TraceHandler } from "./handler/trace";
+import { traceRoutes } from "./handler/trace/routes";
 
 class App {
     public server: Express;
@@ -45,12 +61,13 @@ class App {
             credentials: true,
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));
+        this.server.use(cookieParser());
 
         const apiV1 = Router();
         this.server.use("/api/v1", apiV1);
 
         this.server.get("/health", (_req, res) => res.sendStatus(200));
-        this.server.get("/", (req, res) => {
+        this.server.get("/", (_req, res) => {
             res.send("API is running!");
         });
 
@@ -74,7 +91,7 @@ export function initApp(): App {
     const pool = new Pool({
         connectionString: getConnectionString(config.db),
         ssl: { rejectUnauthorized: false },
-    })
+    });
     configurePool(pool, config.db);
 
     const db = drizzle(pool);
@@ -84,15 +101,39 @@ export function initApp(): App {
 }
 
 function registerRoutes(router: Router, repo: Repository) {
+    const authHandler = new AuthHandler(repo.students);
+    router.use("/auth", authRoutes(authHandler));
+
+    router.use(authMiddleware);
+
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
 
-    const courseHandler = new CourseHandler(repo.courses);
+    const reviewHandler = new ReviewHandler(repo.reviews);
+    router.use("/reviews", reviewRoutes(reviewHandler));
+
+    const courseHandler = new CourseHandler(repo.courses, repo.favourites);
     router.use("/courses", courseRoutes(courseHandler));
 
+    // Handling Course-Threads - Starting with CourseReviews.
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 
-    const professorHandler = new ProfessorHandler(repo.professors);
+    const professorHandler = new ProfessorHandler(repo.professors, repo.rmp);
     router.use("/professors", professorRoutes(professorHandler));
+
+    const rmpHandler = new RMPHandler(repo.rmp, repo.professors);
+    router.use("/rmp", rmpRoutes(rmpHandler));
+
+    const profThreadHandler = new ProfThreadHandler(repo.profThreads);
+    router.use("/professor-reviews", professorThreadRoutes(profThreadHandler));
+
+    const studentHandler = new StudentHandler(repo.students);
+    router.use("/students", studentRoutes(studentHandler));
+
+    const favouritesHandler = new FavouriteHandler(repo.favourites);
+    router.use("/favourites", favouriteRoutes(favouritesHandler));
+
+    const traceHandler = new TraceHandler(repo.traces);
+    router.use("/trace", traceRoutes(traceHandler));
 }
