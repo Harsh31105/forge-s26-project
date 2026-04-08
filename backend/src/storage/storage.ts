@@ -5,7 +5,7 @@ import type {Course, CoursePatchInputType, CoursePostInputType} from "../models/
 import { CourseRepositorySchema } from "./postgres/schema/course";
 import type { CourseThread, CourseThreadPatchInputType, CourseThreadPostInputType } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
-import { PaginationType } from "utils/pagination";
+import { PaginationType } from "../utils/pagination";
 import { SampleRepositorySchema } from "./postgres/schema/samples";
 import type { Professor, ProfessorPatchInputType, ProfessorPostInputType } from "../models/professor";
 import { ProfessorRepositorySchema } from "./postgres/schema/professor";
