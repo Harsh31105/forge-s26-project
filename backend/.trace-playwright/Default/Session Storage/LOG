@@ -1,6 +1,0 @@
-2026/04/02-19:12:09.871 583e6 Reusing MANIFEST /Users/itaischwarz/Projects/forge-s26-project/backend/.trace-playwright/Default/Session Storage/MANIFEST-000001
-2026/04/02-19:12:09.871 583e6 Recovering log #16
-2026/04/02-19:12:09.872 583e6 Reusing old log /Users/itaischwarz/Projects/forge-s26-project/backend/.trace-playwright/Default/Session Storage/000016.log 
-2026/04/02-19:29:43.258 583e8 Level-0 table #20: started
-2026/04/02-19:29:43.271 583e8 Level-0 table #20: 16273 bytes OK
-2026/04/02-19:29:43.274 583e8 Delete type=0 #16
