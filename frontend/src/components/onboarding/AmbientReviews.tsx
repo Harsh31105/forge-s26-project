@@ -1,7 +1,8 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { REVIEWS, type Review } from "@/src/app/onboarding/data/reviews";
+import type { Review } from "@/src/hooks/useAnimationReviews";
+import { useAnimationReviews } from "@/src/hooks/useAnimationReviews";
 
 // Light-mode ambient review boxes that immediately float around the screen.
 // No dark overlay, no intro sequence, no logo — just the typing boxes.
@@ -189,19 +190,29 @@ function ReviewBubble({ card, blink }: BubbleProps) {
 // ── Main component ────────────────────────────────────────────
 
 export default function AmbientReviews() {
+  const reviews = useAnimationReviews();
   const [cards, setCards] = useState<CardInstance[]>([]);
   const [blink, setBlink] = useState(true);
 
-  const reviewPoolRef = useRef<Review[]>(shuffled(REVIEWS));
+  const reviewPoolRef = useRef<Review[]>([]);
   const usedIdxRef    = useRef(0);
 
+  // Re-seed the pool whenever the reviews source changes
+  useEffect(() => {
+    reviewPoolRef.current = shuffled(reviews);
+    usedIdxRef.current    = 0;
+  }, [reviews]);
+
   const nextReview = useCallback((): Review => {
+    if (reviewPoolRef.current.length === 0) {
+      reviewPoolRef.current = shuffled(reviews);
+    }
     if (usedIdxRef.current >= reviewPoolRef.current.length) {
-      reviewPoolRef.current = shuffled(REVIEWS);
+      reviewPoolRef.current = shuffled(reviews);
       usedIdxRef.current    = 0;
     }
     return reviewPoolRef.current[usedIdxRef.current++];
-  }, []);
+  }, [reviews]);
 
   // Cursor blink
   useEffect(() => {

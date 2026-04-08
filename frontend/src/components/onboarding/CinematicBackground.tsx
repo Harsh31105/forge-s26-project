@@ -1,7 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { REVIEWS, type Review } from "@/src/app/onboarding/data/reviews";
+import { useAnimationReviews, type Review } from "@/src/hooks/useAnimationReviews";
 
 // ─────────────────────────────────────────────────────────────
 //  Stage machine
@@ -303,6 +303,7 @@ interface Props {
 }
 
 export default function CinematicBackground({ onComplete }: Props) {
+  const reviews = useAnimationReviews();
   const [stage,       setStage]       = useState<Stage>("TYPING");
   const [cards,       setCards]       = useState<CardInstance[]>([]);
   const [logoOpacity, setLogoOpacity] = useState(0);
@@ -313,8 +314,17 @@ export default function CinematicBackground({ onComplete }: Props) {
 
   const stageRef     = useRef<Stage>("TYPING");
   const cardsRef     = useRef<CardInstance[]>([]);
-  const reviewPoolRef = useRef<Review[]>(shuffled(REVIEWS));
+  const reviewsRef   = useRef<Review[]>([]);
+  const reviewPoolRef = useRef<Review[]>([]);
   const usedIdxRef   = useRef(0);
+
+  // Keep reviewsRef in sync so callbacks can access latest reviews
+  useEffect(() => {
+    reviewsRef.current = reviews;
+    if (reviewPoolRef.current.length === 0 && reviews.length > 0) {
+      reviewPoolRef.current = shuffled(reviews);
+    }
+  }, [reviews]);
 
   stageRef.current = stage;
   cardsRef.current = cards;
@@ -322,7 +332,7 @@ export default function CinematicBackground({ onComplete }: Props) {
   // Pull the next review from the shuffled pool (cycles infinitely)
   const nextReview = useCallback((): Review => {
     if (usedIdxRef.current >= reviewPoolRef.current.length) {
-      reviewPoolRef.current = shuffled(REVIEWS);
+      reviewPoolRef.current = shuffled(reviewsRef.current.length > 0 ? reviewsRef.current : []);
       usedIdxRef.current = 0;
     }
     return reviewPoolRef.current[usedIdxRef.current++];

@@ -94,25 +94,25 @@ const MOCK_COURSES = [
 // ── Design tokens ─────────────────────────────────────────
 
 const C = {
-  navy:          "var(--color-primary-navy)",
-  navyDark:      "#162b6a",
-  error:         "var(--color-error)",
-  textHeading:   "var(--color-text-primary)",
-  textBody:      "var(--color-text-primary)",
+  navy: "var(--color-primary-navy)",
+  navyDark: "#162b6a",
+  error: "var(--color-error)",
+  textHeading: "var(--color-text-primary)",
+  textBody: "var(--color-text-primary)",
   textSecondary: "var(--color-text-secondary)",
-  textMuted:     "var(--color-text-secondary)",
+  textMuted: "var(--color-text-secondary)",
   textPlaceholder: "var(--color-text-secondary)",
-  borderInput:   "var(--color-border-tan)",
-  borderCard:    "var(--color-border-tan)",
+  borderInput: "var(--color-border-tan)",
+  borderCard: "var(--color-border-tan)",
   borderSeparator: "var(--color-border-tan)",
-  bgPage:        "var(--color-background-cream)",
-  bgCard:        "var(--color-white)",
-  bgHover:       "var(--color-surface-extra-light)",
+  bgPage: "var(--color-background-cream)",
+  bgCard: "var(--color-white)",
+  bgHover: "var(--color-surface-extra-light)",
   bgSelectedRow: "var(--color-surface-light-cream)",
-  white:         "var(--color-white)",
+  white: "var(--color-white)",
 };
 
-const FONT         = "var(--font-body)";
+const FONT = "var(--font-body)";
 const FONT_HEADING = "var(--font-heading)";
 
 // ── Reusable styles ───────────────────────────────────────
@@ -705,7 +705,9 @@ export default function OnboardingPage() {
   // Step 2 state
   const [selectedCourses, setSelectedCourses] = useState<string[]>([]);
   // General learning preferences (pref_enum) — not tied to individual courses
-  const [selectedPreferences, setSelectedPreferences] = useState<StudentPatchInputPreferencesItem[]>([]);
+  const [selectedPreferences, setSelectedPreferences] = useState<
+    StudentPatchInputPreferencesItem[]
+  >([]);
   const [saving, setSaving] = useState(false);
   const [saveError, setSaveError] = useState<string | null>(null);
 
@@ -713,7 +715,7 @@ export default function OnboardingPage() {
 
   useEffect(() => {
     // DEV_PREVIEW: set to true to bypass auth and view the page locally
-    const DEV_PREVIEW = true;
+    const DEV_PREVIEW = false;
     if (DEV_PREVIEW) {
       setStudent({
         id: "dev",
@@ -748,7 +750,7 @@ export default function OnboardingPage() {
         .then((s) => {
           // Already completed onboarding — skip to homepage
           if (s.graduationYear && s.graduationYear > 0) {
-            router.push("/");
+            router.push("/home");
             return;
           }
           setStudent(s);
@@ -779,13 +781,13 @@ export default function OnboardingPage() {
     try {
       await studentAPI.patchStudentsId(student.id, {
         graduationYear: Number(graduationYear),
-        preferences:    selectedPreferences,
+        preferences: selectedPreferences,
         // TODO: send major, concentration once Major/Concentration endpoints exist (tag Biak's PR)
         // TODO: send minors once Minor endpoints exist (tag Biak's PR)
         // TODO: send selectedCourses once course-history endpoints exist
       });
       // TODO: route to the real homepage URL once agreed upon with other contributors
-      router.push("/");
+      router.push("/home");
     } catch {
       setSaveError("Failed to save. Please try again.");
       setSaving(false);
@@ -794,7 +796,13 @@ export default function OnboardingPage() {
 
   // ── Single return ──────────────────────────────────────────
   return (
-    <div style={{ minHeight: "100vh", backgroundColor: "var(--color-background-cream)", position: "relative" }}>
+    <div
+      style={{
+        minHeight: "100vh",
+        backgroundColor: "var(--color-background-cream)",
+        position: "relative",
+      }}
+    >
       {/* Ambient review boxes floating in the background */}
       <AmbientReviews />
 
@@ -839,7 +847,9 @@ export default function OnboardingPage() {
           >
             {/* ── Loading / error ── */}
             {loadError ? (
-              <p style={{ fontSize: "15px", color: C.error, textAlign: "center", fontFamily: FONT }}>
+              <p
+                style={{ fontSize: "15px", color: C.error, textAlign: "center", fontFamily: FONT }}
+              >
                 {loadError}
               </p>
             ) : !student ? (
@@ -894,7 +904,10 @@ export default function OnboardingPage() {
                       }}
                       aria-describedby={step1Errors.year ? "grad-year-error" : undefined}
                       aria-invalid={!!step1Errors.year}
-                      style={{ ...fieldInput, borderColor: step1Errors.year ? C.error : C.borderInput }}
+                      style={{
+                        ...fieldInput,
+                        borderColor: step1Errors.year ? C.error : C.borderInput,
+                      }}
                       {...focusRing}
                     >
                       <option value="">Select a year</option>
@@ -935,7 +948,10 @@ export default function OnboardingPage() {
                       }}
                       aria-describedby={step1Errors.major ? "major-error" : undefined}
                       aria-invalid={!!step1Errors.major}
-                      style={{ ...fieldInput, borderColor: step1Errors.major ? C.error : C.borderInput }}
+                      style={{
+                        ...fieldInput,
+                        borderColor: step1Errors.major ? C.error : C.borderInput,
+                      }}
                       {...focusRing}
                     >
                       <option value="">Select a major</option>
@@ -1022,12 +1038,12 @@ export default function OnboardingPage() {
                             }}
                             onMouseEnter={(e) => {
                               if (!selected)
-                                (e.currentTarget as HTMLButtonElement).style.backgroundColor = C.bgHover;
+                                (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                                  C.bgHover;
                             }}
                             onMouseLeave={(e) => {
-                              (e.currentTarget as HTMLButtonElement).style.backgroundColor = selected
-                                ? C.bgSelectedRow
-                                : C.bgCard;
+                              (e.currentTarget as HTMLButtonElement).style.backgroundColor =
+                                selected ? C.bgSelectedRow : C.bgCard;
                             }}
                             {...focusRing}
                           >

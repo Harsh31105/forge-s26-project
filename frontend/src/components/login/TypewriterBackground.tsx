@@ -14,7 +14,7 @@
 // ─────────────────────────────────────────────────────────────────────────────
 
 import { useCallback, useEffect, useRef, useState } from "react";
-import { REVIEWS } from "@/src/app/onboarding/data/reviews";
+import { useAnimationReviews } from "@/src/hooks/useAnimationReviews";
 
 type Phase = "TYPING" | "BLUR" | "LOGO" | "CLEAR";
 
@@ -106,6 +106,8 @@ function wrap(text: string, maxChars: number): string {
 // ─────────────────────────────────────────────────────────────────────────────
 
 export default function TypewriterBackground() {
+  const reviews = useAnimationReviews();
+
   const [phase,       setPhase]       = useState<Phase>("TYPING");
   const [snippets,    setSnippets]    = useState<Snippet[]>([]);
   const [blurPx,      setBlurPx]      = useState(0);
@@ -113,21 +115,44 @@ export default function TypewriterBackground() {
   const [logoOpacity, setLogoOpacity] = useState(0);
   const [blink,       setBlink]       = useState(true);
 
-  const cycleStart = useRef(Date.now());
+  const cycleStart  = useRef(Date.now());
+  // Rotating queue — reviews are consumed from the front and refilled
+  // from a fresh shuffle once exhausted, so no review repeats until all
+  // have been shown at least once.
+  const queueRef    = useRef<typeof reviews>([]);
+  const shownRef    = useRef<typeof reviews>([]);
 
-  // ── Spawn a new set of 10 snippets ───────────────────────────
-  const startCycle = useCallback(() => {
-    const pool  = shuffled(REVIEWS);
-    const count = 9 + Math.floor(Math.random() * 4); // 9–12 snippets per cycle
-    const slots = randomSlots(count);
+  // Drain `n` items from the queue into shown, refilling when needed.
+  const dequeue = useCallback((n: number): typeof reviews => {
+    const out: typeof reviews = [];
+    while (out.length < n) {
+      if (queueRef.current.length === 0) {
+        // Refill from shown pool (re-shuffle so order differs)
+        queueRef.current = shuffled(shownRef.current);
+        shownRef.current = [];
+      }
+      if (queueRef.current.length === 0) break; // pool is empty
+      const item = queueRef.current.shift()!;
+      shownRef.current.push(item);
+      out.push(item);
+    }
+    return out;
+  }, []);
+
+  // ── Spawn a new set of snippets ──────────────────────────────
+  const startCycle = useCallback((pool: typeof reviews) => {
+    if (pool.length === 0) return;
+    const count = Math.min(9 + Math.floor(Math.random() * 4), pool.length);
+    const pick  = dequeue(count);
+    const slots = randomSlots(pick.length);
     cycleStart.current = Date.now();
     setSnippets(
       slots.map((slot, i) => ({
         id:            uid(),
-        courseCode:    pool[i].professorName ? `Prof. ${pool[i].professorName}` : pool[i].courseCode,
-        courseName:    pool[i].professorName ? pool[i].courseName : pool[i].courseName,
-        professorName: pool[i].professorName,
-        body:          wrap(pool[i].text, slot.lineChars),
+        courseCode:    pick[i].professorName ? `Prof. ${pick[i].professorName}` : pick[i].courseCode,
+        courseName:    pick[i].courseName,
+        professorName: pick[i].professorName,
+        body:          wrap(pick[i].text, slot.lineChars),
         x:             slot.x,
         y:             slot.y,
         size:          slot.size,
@@ -140,9 +165,16 @@ export default function TypewriterBackground() {
     setBlurPx(0);
     setTextOpacity(1);
     setLogoOpacity(0);
-  }, []);
+  }, [dequeue]);
 
-  useEffect(() => { startCycle(); }, [startCycle]);
+  // Seed the queue once reviews load
+  useEffect(() => {
+    if (reviews.length === 0) return;
+    queueRef.current = shuffled(reviews);
+    shownRef.current = [];
+    startCycle(reviews);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [reviews]);
 
   // ── Cursor blink ─────────────────────────────────────────────
   useEffect(() => {
@@ -202,9 +234,9 @@ export default function TypewriterBackground() {
   // CLEAR → new cycle after fade (~900 ms)
   useEffect(() => {
     if (phase !== "CLEAR") return;
-    const t = setTimeout(() => startCycle(), 950);
+    const t = setTimeout(() => startCycle(reviews), 950);
     return () => clearTimeout(t);
-  }, [phase, startCycle]);
+  }, [phase, startCycle, reviews]);
 
   // ─────────────────────────────────────────────────────────────
   return (
@@ -291,21 +323,21 @@ export default function TypewriterBackground() {
           zIndex:         8,
         }}
       >
-        <img
-          src="/images/Logo.png"
-          alt="NorthStar logo"
-          style={{
-            height:       "clamp(58px, 11vw, 140px)",
-            width:        "auto",
-            objectFit:    "contain",
-            mixBlendMode: "multiply",
-          }}
-        />
+        <div style={{
+          fontFamily:    "var(--font-heading)",
+          fontSize:      "clamp(48px, 8vw, 80px)",
+          fontWeight:    700,
+          letterSpacing: "-0.02em",
+          lineHeight:    1,
+        }}>
+          <span style={{ color: "var(--color-text-primary)" }}>North</span>
+          <span style={{ color: "var(--color-primary-navy)" }}>Star</span>
+        </div>
         <div style={{
           fontFamily:    FONT,
           fontSize:      "clamp(13px, 1.6vw, 20px)",
           color:         "var(--color-text-secondary)",
-          marginTop:     "18px",
+          marginTop:     "16px",
           letterSpacing: "0.05em",
           fontWeight:    400,
         }}>
