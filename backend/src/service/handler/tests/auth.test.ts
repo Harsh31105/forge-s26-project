@@ -1,6 +1,6 @@
 import express, { type Express } from "express";
 import request from "supertest";
-import { googleClient, getAuthUrl } from "../../../auth/authClient";
+import { googleClient } from "../../../auth/authClient";
 import { AuthHandler } from "../auth";
 import { errorHandler } from "../../../errs/httpError";
 import type { StudentRepository } from "../../../storage/storage";
@@ -78,8 +78,8 @@ describe("Auth Endpoints", () => {
             } as Student);
 
             const res = await request(app).get("/auth/callback?code=mock-code");
-            expect(res.status).toBe(201);
-            expect(res.body.message).toBe("Signup successful");
+            expect(res.status).toBe(302);
+            expect(res.headers.location).toContain("/onboarding?token=");
         });
 
         test("login successful when student already exists", async () => {
@@ -99,8 +99,8 @@ describe("Auth Endpoints", () => {
             } as Student);
 
             const res = await request(app).get("/auth/callback?code=mock-code");
-            expect(res.status).toBe(200);
-            expect(res.body.message).toBe("Login successful");
+            expect(res.status).toBe(302);
+            expect(res.headers.location).toContain("/?token=");
         });
 
         test("rejects non-Northeastern email", async () => {

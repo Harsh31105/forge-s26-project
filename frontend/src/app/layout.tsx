@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville, Merriweather } from "next/font/google";
+import { Libre_Baskerville, Merriweather, Vollkorn_SC } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/src/lib/ReactQueryProvider";
 
@@ -15,6 +15,12 @@ const merriweather = Merriweather({
   weight: ["300", "400", "700"],
 });
 
+const vollkornSC = Vollkorn_SC({
+  variable: "--font-logo",
+  subsets: ["latin"],
+  weight: ["400", "700"],
+});
+
 export const metadata: Metadata = {
   title: "NorthStar",
   description: "Course discovery platform for Northeastern students",
@@ -28,7 +34,7 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body
-        className={`${libreBaskerville.variable} ${merriweather.variable} antialiased`}
+        className={`${libreBaskerville.variable} ${merriweather.variable} ${vollkornSC.variable} antialiased`}
       >
         <ReactQueryProvider>
           {children}
