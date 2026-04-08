@@ -107,13 +107,13 @@ describe("Auth Endpoints", () => {
             mockGetToken.mockResolvedValue({ tokens: { id_token: "mock-id-token" } });
             mockVerifyIdToken.mockResolvedValue(mockPayload("user@gmail.com"));
 
-            const res = await request(app).get("/auth/callback?code=mock-code");
+            const res = await request(app).get("/auth/callback?code=mock-code").set("Accept", "application/json");
             expect(res.status).toBe(403);
             expect(res.body.error).toBe("Only Northeastern email addresses are allowed");
         });
 
         test("missing authorization code", async () => {
-            const res = await request(app).get("/auth/callback");
+            const res = await request(app).get("/auth/callback").set("Accept", "application/json");
             expect(res.status).toBe(400);
             expect(res.body.error).toBe("Missing authorization code");
         });
@@ -124,7 +124,7 @@ describe("Auth Endpoints", () => {
                 getPayload: () => ({ given_name: "Tim", family_name: "Pineda" }),
             });
 
-            const res = await request(app).get("/auth/callback?code=mock-code");
+            const res = await request(app).get("/auth/callback?code=mock-code").set("Accept", "application/json");
             expect(res.status).toBe(400);
             expect(res.body.error).toBe("Failed to get user information");
         });

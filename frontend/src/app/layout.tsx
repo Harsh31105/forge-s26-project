@@ -1,5 +1,10 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville, Merriweather, Fredericka_the_Great, Vollkorn_SC } from "next/font/google";
+import {
+  Libre_Baskerville,
+  Merriweather,
+  Fredericka_the_Great,
+  Vollkorn_SC,
+} from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/src/lib/ReactQueryProvider";
 
@@ -19,6 +24,8 @@ const frederickaTheGreat = Fredericka_the_Great({
   variable: "--font-display",
   subsets: ["latin"],
   weight: "400",
+});
+
 const vollkornSC = Vollkorn_SC({
   variable: "--font-logo",
   subsets: ["latin"],
@@ -40,9 +47,7 @@ export default function RootLayout({
       <body
         className={`${libreBaskerville.variable} ${merriweather.variable} ${vollkornSC.variable} antialiased`}
       >
-        <ReactQueryProvider>
-          {children}
-        </ReactQueryProvider>
+        <ReactQueryProvider>{children}</ReactQueryProvider>
       </body>
     </html>
   );
