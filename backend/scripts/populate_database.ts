@@ -14,7 +14,7 @@ import { TraceRepositorySchema } from "../src/storage/postgres/schema/trace";
 import { professor } from "../src/storage/tables/professor";
 import { course } from "../src/storage/tables/course";
 import { department } from "../src/storage/tables/department";
-import { SemesterType } from "../src/models/trace";
+import { Semester } from "../src/models/trace";
 
 const s3 = new S3Client({ region: "us-east-1" });
 const BUCKET = "forge-s26-trace-evaluations";
@@ -166,7 +166,7 @@ async function main() {
           courseName: t.courseName,
           departmentId: deptId,
           courseCode: Number(t.courseCode),
-          semester: t.semester as SemesterType,
+          semester: t.semester as Semester,
           lectureYear: t.lectureYear,
           lectureType: (t.lectureType as any) ?? null,
           hoursDevoted: t.hoursDevoted ?? null,

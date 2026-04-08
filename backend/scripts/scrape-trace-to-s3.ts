@@ -184,7 +184,7 @@ function normalizeSemester(termLabel: string): string {
 }
 
 function extractLectureYear(termLabel: string): number {
-  const match = termLabel.match(/\b(20\d{2})\b/);
+  const match = termLabel.match(/\b(20\d{2})/);
   if (!match) {
     throw new Error(
       `Could not parse lecture year from term label: "${termLabel}"`,
@@ -779,7 +779,7 @@ async function collectReportUrlsFromBrowser(
             .filter((t: string) => /\b(19|20)\d{2}\b/.test(t)),
         );
 
-      hasOldTerms = termTexts.some((t) => {
+      hasOldTerms = termTexts.some((t: string) => {
         const yearMatch = t.match(/\b(20\d{2})\b/);
         return yearMatch && Number(yearMatch[1]) < MIN_YEAR;
       });
