@@ -1,9 +1,10 @@
 import express, { type Express } from "express";
 import request from "supertest";
-import { googleClient, getAuthUrl } from "../../../auth/authClient";
+import { googleClient } from "../../../auth/authClient";
 import { AuthHandler } from "../auth";
 import { errorHandler } from "../../../errs/httpError";
 import type { StudentRepository } from "../../../storage/storage";
+import { Student } from "../../../models/student";
 
 jest.mock("../../../auth/authClient", () => ({
     googleClient: {
@@ -40,6 +41,7 @@ describe("Auth Endpoints", () => {
     beforeEach(() => {
         repo = {
             createStudent: jest.fn(),
+            getStudentByEmail: jest.fn(),
         } as unknown as jest.Mocked<StudentRepository>;
 
         handler = new AuthHandler(repo);
@@ -59,6 +61,7 @@ describe("Auth Endpoints", () => {
         test("redirects to Google OAuth", async () => {
             const res = await request(app).get("/auth/signin");
             expect(res.status).toBe(302);
+            expect(res.headers.location).toContain("accounts.google.com");
         });
     });
 
@@ -72,25 +75,32 @@ describe("Auth Endpoints", () => {
                 firstName: "Tim",
                 lastName: "Pineda",
                 email: "student@husky.neu.edu",
-            } as any);
+            } as Student);
 
             const res = await request(app).get("/auth/callback?code=mock-code");
-            expect(res.status).toBe(201);
-            expect(res.body.message).toBe("Signup successful");
+            expect(res.status).toBe(302);
+            expect(res.headers.location).toContain("/onboarding?token=");
         });
 
-        test("login successful", async () => {
+        test("login successful when student already exists", async () => {
             mockGetToken.mockResolvedValue({ tokens: { id_token: "mock-id-token" } });
             mockVerifyIdToken.mockResolvedValue(mockPayload("existing@husky.neu.edu"));
 
-            // Simulate duplicate key error (user already exists → login)
-            const err = new Error("duplicate key value violates unique constraint");
-            (err as any).cause = "duplicate key value violates unique constraint";
-            repo.createStudent.mockRejectedValue(err); // ← mock rejection
+            // Simulate duplicate creation → login path
+            const duplicateError = new Error("duplicate key value violates unique constraint");
+            (duplicateError as any).cause = "duplicate key value violates unique constraint";
+
+            repo.createStudent.mockRejectedValue(duplicateError);
+            repo.getStudentByEmail.mockResolvedValue({
+                id: "idExisting",
+                firstName: "Existing",
+                lastName: "User",
+                email: "existing@husky.neu.edu",
+            } as Student);
 
             const res = await request(app).get("/auth/callback?code=mock-code");
-            expect(res.status).toBe(200);
-            expect(res.body.message).toBe("Login successful");
+            expect(res.status).toBe(302);
+            expect(res.headers.location).toContain("/?token=");
         });
 
         test("rejects non-Northeastern email", async () => {

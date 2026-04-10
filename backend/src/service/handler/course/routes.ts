@@ -10,5 +10,7 @@ export function courseRoutes(handler: CourseHandler): Router {
     router.patch("/:id", handler.handlePatch.bind(handler));
     router.delete("/:id", handler.handleDelete.bind(handler));
 
+    router.get("/:id/favourites", handler.handleGetStudentIDsWhoFavourited.bind(handler));
+
     return router;
 }

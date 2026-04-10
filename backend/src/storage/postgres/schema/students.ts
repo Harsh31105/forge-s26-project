@@ -22,6 +22,13 @@ export class StudentRepositorySchema implements StudentRepository {
             .offset(offset);
     }
 
+    async getStudentByEmail(email: string): Promise<Student> {
+        const [row] = await this.db.select().from(student).where(eq(student.email, email));
+        if (!row) throw new Error("student not found");
+
+        return row;
+    }
+
     async getStudentByID(id: string): Promise<Student> {
         const [row] = await this.db
             .select()
