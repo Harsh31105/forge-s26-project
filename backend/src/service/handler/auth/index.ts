@@ -16,6 +16,10 @@ export class AuthHandler {
         res.redirect(url);
     }
 
+    async handleMe(req: Request, res: Response): Promise<void> {
+        res.json(req.user);
+    }
+
     async handleCallback(req: Request, res: Response): Promise<void> {
         const code = req.query.code as string;
         if (!code) {

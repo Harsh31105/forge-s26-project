@@ -2,19 +2,20 @@
 
 import { useFavourites } from "@/src/hooks/useFavourites";
 import { useCourses } from "@/src/hooks/useCourses";
-import { useStudent, useStudents } from "@/src/hooks/useStudents";
+import { useStudent } from "@/src/hooks/useStudents";
 import {FavoritesCard} from "@/src/components/profilePage";
+import { useQuery } from "@tanstack/react-query";
+import { customAxios } from "@/src/lib/api/apiClient";
 
 
 
-export function ProfilePage() {
-    const {
-    students,
-    isLoading: studentsLoading,
-    error: studentsError,
-    } = useStudents({ limit: 1 });
+export default function ProfilePage() {
+    const { data: me, isLoading: meLoading, error: meError } = useQuery({
+        queryKey: ["me"],
+        queryFn: () => customAxios<{ id: string; email: string; name: string }>({ url: "/auth/me", method: "GET" }),
+    });
 
-    const studentId = students?.[0]?.id ?? "";
+    const studentId = me?.id ?? "";
 
     const {
     student,
@@ -25,7 +26,7 @@ export function ProfilePage() {
     const { favourites, isLoading: favouritesLoading } = useFavourites();
     const { courses, isLoading: coursesLoading } = useCourses();
 
-    if (studentsLoading) {
+    if (meLoading) {
     return (
         <div className="w-full p-8 font-body text-[16px] text-foreground">
         Loading student...
@@ -33,7 +34,7 @@ export function ProfilePage() {
     );
     }
 
-    if (studentsError) {
+    if (meError) {
     return (
         <div className="w-full p-8 font-body text-[16px] text-error">
         Failed to load students.
