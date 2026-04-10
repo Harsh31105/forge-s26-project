@@ -62,7 +62,6 @@ export class AuthHandler {
             res.cookie("token", token, {
                 httpOnly: true,
                 secure: false,
-                sameSite: "lax",
             });
 
             res.status(201).json({ message: "Signup successful" });
