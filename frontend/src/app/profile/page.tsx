@@ -8,7 +8,6 @@ import {useCurrentUser} from "@/src/hooks/useAuth";
 
 export default function ProfilePage() {
     const { user, isLoading: meLoading, error: meError } = useCurrentUser();
-
     const studentId = user?.id as string;
 
     const {
@@ -20,7 +19,7 @@ export default function ProfilePage() {
     const { favourites, isLoading: favouritesLoading } = useFavourites();
     const { courses, isLoading: coursesLoading } = useCourses();
 
-    if (meLoading) {
+    if (meLoading || !user) {
     return (
         <div className="w-full p-8 font-body text-[16px] text-foreground">
         Loading student...
