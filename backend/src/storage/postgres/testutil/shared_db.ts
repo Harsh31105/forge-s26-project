@@ -244,6 +244,8 @@ async function createAllTables(db: NodePgDatabase) {
         CREATE TABLE review (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             student_id UUID NOT NULL,
+            semester semester_enum,
+            year INT,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE
