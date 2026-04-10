@@ -82,6 +82,28 @@ describe("ReviewRepositorySchema DB Integration", () => {
       });
       expect(created.tags).toEqual(["easy_a"]);
     });
+
+    test("creates with semester and year", async () => {
+      const parentId = await repo.createParentReview(testStudentId, "fall", 2026);
+      const created = await repo.createCourseReview(parentId, {
+        courseId: testCourseId,
+        rating: 4,
+        reviewText: "fall semester course",
+      }); 
+      expect(created.semester).toBe("fall");
+      expect(created.year).toBe(2026);
+    });
+
+    test("creates null semester and year", async () => {
+      const parentId = await repo.createParentReview(testStudentId);
+      const created = await repo.createCourseReview(parentId, {
+        courseId: testCourseId,
+        rating: 3,
+        reviewText: "no semester and year",
+      });
+      expect(created.semester).toBeNull();
+      expect(created.year).toBeNull();
+    });
   });
 
   describe("duplicate course review prevention", () => {
@@ -252,6 +274,19 @@ describe("ReviewRepositorySchema DB Integration", () => {
       expect(found.reviewId).toBe(created.reviewId);
       expect("courseId" in found).toBe(true);
     });
+
+    test("includes semester and year in result", async () => {
+      const parentId = await repo.createParentReview(testStudentId, "summer_2", 2024);
+      const created = await repo.createCourseReview(parentId, {
+        courseId: testCourseId,
+        rating: 5,
+        reviewText: "Summer course!",
+      });
+
+      const found = await repo.getReviewByID(created.reviewId);
+      expect(found.semester).toBe("summer_2");
+      expect(found.year).toBe(2024);
+    });
   });
 
   describe("patchReview", () => {
@@ -285,6 +320,24 @@ describe("ReviewRepositorySchema DB Integration", () => {
       expect(patched.reviewText).toBe("Updated!");
       expect(patched.rating).toBe(3);
     });
+
+    test("patches semester and year", async () => {
+      const parentId = await repo.createParentReview(testStudentId);
+      const created = await repo.createCourseReview(parentId, {
+        courseId: testCourseId,
+        rating: 4,
+        reviewText: "Original text",
+      });
+
+      const patched = await repo.patchReview(created.reviewId, {
+        semester: "spring",
+        year: 2025,
+      });
+      expect(patched.semester).toBe("spring");
+      expect(patched.year).toBe(2025);
+      expect(patched.rating).toBe(4);
+    });
+
   });
 
   describe("deleteReview", () => {
