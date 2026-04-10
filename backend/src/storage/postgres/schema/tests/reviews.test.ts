@@ -122,7 +122,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
           rating: 3,
           reviewText: "Duplicate review",
         }),
-      ).rejects.toThrow("student has already submitted a review for this course");
+      ).rejects.toThrow("Student has already submitted a review for this course");
     });
 
     test("allows different students to review the same course", async () => {
@@ -166,7 +166,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
           rating: 3,
           reviewText: "Duplicate review",
         }),
-      ).rejects.toThrow("student has already submitted a review for this professor");
+      ).rejects.toThrow("Student has already submitted a review for this professor");
     });
 
     test("allows different students to review the same professor", async () => {
