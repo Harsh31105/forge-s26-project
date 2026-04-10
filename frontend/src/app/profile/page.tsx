@@ -6,16 +6,14 @@ import { useStudent } from "@/src/hooks/useStudents";
 import {FavoritesCard} from "@/src/components/profilePage";
 import { useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/src/lib/api/apiClient";
+import {useCurrentUser} from "@/src/hooks/useAuth";
 
 
 
 export default function ProfilePage() {
-    const { data: me, isLoading: meLoading, error: meError } = useQuery({
-        queryKey: ["me"],
-        queryFn: () => customAxios<{ id: string; email: string; name: string }>({ url: "/auth/me", method: "GET" }),
-    });
+    const { user, isLoading: meLoading, error: meError } = useCurrentUser();
 
-    const studentId = me?.id ?? "";
+    const studentId = user?.id as string;
 
     const {
     student,
