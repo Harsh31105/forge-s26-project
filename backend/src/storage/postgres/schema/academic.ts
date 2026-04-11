@@ -63,8 +63,9 @@ export class AcademicRepositorySchema implements AcademicRepository {
 
         const result: Record<string, Major[]> = {};
         for (const row of rows) {
-            if (!result[row.studentId]) result[row.studentId] = [];
-            result[row.studentId].push({ id: row.id, name: row.name });
+            const entry = result[row.studentId] ?? [];
+            entry.push({ id: row.id, name: row.name });
+            result[row.studentId] = entry;
         }
         return result;
     }
@@ -79,8 +80,9 @@ export class AcademicRepositorySchema implements AcademicRepository {
 
         const result: Record<string, Concentration[]> = {};
         for (const row of rows) {
-            if (!result[row.studentId]) result[row.studentId] = [];
-            result[row.studentId].push({ id: row.id, name: row.name });
+            const entry = result[row.studentId] ?? [];
+            entry.push({ id: row.id, name: row.name });
+            result[row.studentId] = entry;
         }
         return result;
     }
@@ -95,8 +97,9 @@ export class AcademicRepositorySchema implements AcademicRepository {
 
         const result: Record<string, Minor[]> = {};
         for (const row of rows) {
-            if (!result[row.studentId]) result[row.studentId] = [];
-            result[row.studentId].push({ id: row.id, name: row.name });
+            const entry = result[row.studentId] ?? [];
+            entry.push({ id: row.id, name: row.name });
+            result[row.studentId] = entry;
         }
         return result;
     }
