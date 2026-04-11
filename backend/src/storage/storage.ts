@@ -40,10 +40,14 @@ import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
 import type { S3 as S3Config } from "../config/s3";
 import {
   Student,
+  Major,
+  Minor,
+  Concentration,
   StudentPatchInputType,
   StudentPostInputType
 } from "../models/student";
 import { StudentRepositorySchema } from "./postgres/schema/students";
+import { AcademicRepositorySchema } from "./postgres/schema/academic";
 
 import type {
   ProfThread,
@@ -70,6 +74,7 @@ export class Repository {
   public readonly students: StudentRepository;
   public readonly favourites: FavouriteRepository;
   public readonly traces: TraceRepository;
+  public readonly academic: AcademicRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
 
@@ -87,6 +92,7 @@ export class Repository {
     this.favourites = new FavouriteRepositorySchema(db);
     this.rmp = new RMPRepositorySchema(db);
     this.traces = new TraceRepositorySchema(db);
+    this.academic = new AcademicRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -211,4 +217,22 @@ export interface RMPRepository {
 export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
+}
+
+export interface AcademicRepository {
+  getMajors(): Promise<Major[]>;
+  getConcentrations(): Promise<Concentration[]>;
+  getMinors(): Promise<Minor[]>;
+  getStudentMajors(studentId: string): Promise<Major[]>;
+  getStudentConcentrations(studentId: string): Promise<Concentration[]>;
+  getStudentMinors(studentId: string): Promise<Minor[]>;
+  getMajorsForStudents(studentIds: string[]): Promise<Record<string, Major[]>>;
+  getConcentrationsForStudents(studentIds: string[]): Promise<Record<string, Concentration[]>>;
+  getMinorsForStudents(studentIds: string[]): Promise<Record<string, Minor[]>>;
+  addStudentMajor(studentId: string, majorId: number): Promise<void>;
+  deleteStudentMajor(studentId: string, majorId: number): Promise<void>;
+  addStudentConcentration(studentId: string, concentrationId: number): Promise<void>;
+  deleteStudentConcentration(studentId: string, concentrationId: number): Promise<void>;
+  addStudentMinor(studentId: string, minorId: number): Promise<void>;
+  deleteStudentMinor(studentId: string, minorId: number): Promise<void>;
 }
