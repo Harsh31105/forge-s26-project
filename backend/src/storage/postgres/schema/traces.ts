@@ -48,7 +48,7 @@ export class TraceRepositorySchema implements TraceRepository {
                 professor.createdAt,
                 professor.updatedAt,
             )
-            .orderBy(desc(sql`"avgEfficiency"`));
+            .orderBy(desc(sql<number>`avg(${trace.professorEfficiency})`));
 
         return rows.map((row) => ({
             id: row.id,
