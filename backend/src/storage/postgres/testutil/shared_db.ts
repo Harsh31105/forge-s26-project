@@ -355,9 +355,25 @@ async function createAllTables(db: NodePgDatabase) {
         );
 
         ALTER TABLE rmp
-        ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
-    `);
+            ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
 
+        ALTER TABLE trace DROP CONSTRAINT IF EXISTS hours_devoted_check;
+        ALTER TABLE trace DROP CONSTRAINT IF EXISTS how_often_percentage_check;
+
+        ALTER TABLE trace
+            ALTER COLUMN hours_devoted TYPE jsonb USING
+        CASE
+          WHEN hours_devoted IS NULL THEN NULL
+          ELSE to_jsonb(hours_devoted)
+        END;
+
+        ALTER TABLE trace
+        ALTER COLUMN how_often_percentage TYPE jsonb USING
+            CASE
+              WHEN how_often_percentage IS NULL THEN NULL
+              ELSE to_jsonb(how_often_percentage)
+        END;
+    `);
 }
 
 export async function cleanupTestData() {
