@@ -210,7 +210,7 @@ describe("ReviewHandler Endpoints", () => {
         rating: 4,
         reviewText: "Great course, highly recommend!",
       });
-      expect(repo.createParentReview).toHaveBeenCalledWith(payload.studentId, undefined, undefined);
+      expect(repo.createParentReview).toHaveBeenCalledWith({ studentId: payload.studentId, semester: undefined, year: undefined });
       expect(repo.createCourseReview).toHaveBeenCalledWith(parentId, {
         courseId: payload.courseId,
         rating: payload.rating,
@@ -238,7 +238,7 @@ describe("ReviewHandler Endpoints", () => {
         professorId: "c3d4e5f6-a7b8-4012-8def-123456789012",
         rating: 5,
       });
-      expect(repo.createParentReview).toHaveBeenCalledWith(payload.studentId, undefined, undefined);
+      expect(repo.createParentReview).toHaveBeenCalledWith({ studentId: payload.studentId, semester: undefined, year: undefined });
       expect(repo.createProfessorReview).toHaveBeenCalledWith(parentId, {
         professorId: payload.professorId,
         rating: payload.rating,
@@ -449,11 +449,11 @@ describe("ReviewHandler Endpoints", () => {
 
       const res = await request(app).post("/reviews").send(payload);
       expect(res.status).toBe(201);
-      expect(repo.createParentReview).toHaveBeenCalledWith(
-        payload.studentId,
-        "fall",
-        2026,
-      );
+      expect(repo.createParentReview).toHaveBeenCalledWith( {
+        studentId: payload.studentId,
+        semester: payload.semester,
+        year: payload.year,
+      });
     });
 
     test("creates a professor review with semester and year", async () => {
@@ -472,10 +472,10 @@ describe("ReviewHandler Endpoints", () => {
 
       const res = await request(app).post("/reviews").send(payload);
       expect(res.status).toBe(201);
-      expect(repo.createParentReview).toHaveBeenCalledWith(
-        payload.studentId,
-        "spring",
-        2025,
+      expect(repo.createParentReview).toHaveBeenCalledWith( {
+        studentId: payload.studentId,
+        semester: "spring",
+        year: 2025, }
       );
     });
 
