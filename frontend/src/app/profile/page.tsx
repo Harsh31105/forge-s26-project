@@ -1,7 +1,7 @@
 "use client";
 
 import { useFavourites } from "@/src/hooks/useFavourites";
-import { useCourses } from "@/src/hooks/useCourses";
+import { getCourseById } from "@/src/hooks/useCourses";
 import { useStudent } from "@/src/hooks/useStudents";
 import {FavoritesCard} from "@/src/components/profilePage";
 import { useQuery } from "@tanstack/react-query";
@@ -24,7 +24,6 @@ export default function ProfilePage() {
     } = useStudent(studentId);
 
     const { favourites, isLoading: favouritesLoading } = useFavourites();
-    const { courses, isLoading: coursesLoading } = useCourses();
 
     if (meLoading) {
     return (
@@ -81,7 +80,7 @@ export default function ProfilePage() {
     const favoriteCourses: string[] =
     favourites
         ?.map((favourite) => {
-            const course = courses?.find((c) => c.id === favourite.courseId);
+            const course = getCourseById(favourite.courseId);
             if (!course) return favourite.courseId;
             return `${course.department.name} ${course.course_code}: ${course.name}`;
         })
@@ -116,7 +115,7 @@ export default function ProfilePage() {
             </button>
             </section>
 
-            {favouritesLoading || coursesLoading ? (
+            {favouritesLoading ? (
             <div className="font-body text-[16px] text-foreground">
                 Loading favourites...
             </div>

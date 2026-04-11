@@ -8,13 +8,11 @@ import { useStudent, useStudents } from "@/src/hooks/useStudents";
 type FavoritesCardProps = {
     title: string;
     items: string[];
-    showAvatar?: boolean;
 };
 
 export function FavoritesCard({
     title,
     items,
-    showAvatar = false,
 }: FavoritesCardProps) {
     return (
     <section className="rounded-[16px] border border-border bg-surface p-6 shadow-sm">
@@ -30,7 +28,7 @@ export function FavoritesCard({
                 className="flex items-center justify-between rounded-[10px] bg-surface-light px-5 py-4"
             >
                 <div className="flex items-center gap-4">
-                {showAvatar && <div className="h-8 w-8 rounded-full bg-white" />}
+                {<div className="h-8 w-8 rounded-full bg-white" />}
                 <span className="font-body text-[16px] text-foreground">
                     {item}
                 </span>
