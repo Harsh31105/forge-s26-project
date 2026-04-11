@@ -241,18 +241,9 @@ async function createAllTables(db: NodePgDatabase) {
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
 
-        CREATE TYPE semester_enum AS ENUM (
-            'fall',
-            'spring',
-            'summer_1',
-            'summer_2'
-        );
-
         CREATE TABLE review (
             id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
             student_id UUID NOT NULL,
-            semester semester_enum,
-            year INT,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             FOREIGN KEY (student_id) REFERENCES student(id) ON DELETE CASCADE
@@ -314,6 +305,13 @@ async function createAllTables(db: NodePgDatabase) {
             FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE
         );
 
+        CREATE TYPE semester_enum AS ENUM (
+            'fall',
+            'spring',
+            'summer_1',
+            'summer_2'
+        );
+
         CREATE TABLE degree_requirement (
             course_id UUID NOT NULL,
             major_id INT NOT NULL,
@@ -358,6 +356,16 @@ async function createAllTables(db: NodePgDatabase) {
 
         ALTER TABLE rmp
         ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
+
+        DO $$ BEGIN
+            CREATE TYPE semester_enum AS ENUM ('fall', 'spring', 'summer_1', 'summer_2');
+            EXCEPTION
+        WHEN duplicate_object THEN null;
+            END $$;
+
+        ALTER TABLE review
+            ADD COLUMN IF NOT EXISTS semester semester_enum,
+            ADD COLUMN IF NOT EXISTS year INT;
     `);
 
 }
