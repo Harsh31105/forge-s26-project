@@ -10,6 +10,12 @@ interface BaseReview {
   updatedAt: Date;
 }
 
+export interface CreateParentReviewInput {
+  studentId?: string | null | undefined;
+  semester?: string | null | undefined;
+  year?: number | null | undefined;
+}
+
 export interface CourseReview extends BaseReview {
   courseId: string;
   tags?: string[] | undefined;

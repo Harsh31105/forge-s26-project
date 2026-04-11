@@ -1,6 +1,7 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
   CourseReview,
+  CreateParentReviewInput,
   ProfessorReview,
   Review,
   ReviewPatchInputType,
@@ -136,10 +137,9 @@ export class ReviewRepositorySchema implements ReviewRepository {
   }
 
   async createParentReview(
-    studentId?: string | null,
-    semester?: string | null,
-    year?: number | null,
+    input: CreateParentReviewInput
   ): Promise<string> {
+    const {studentId, semester, year} = input; 
     const [row] = await this.db
       .insert(review)
       .values({
