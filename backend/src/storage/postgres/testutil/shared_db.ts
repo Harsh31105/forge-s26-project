@@ -192,7 +192,6 @@ async function createAllTables(db: NodePgDatabase) {
             email VARCHAR(255) NOT NULL UNIQUE,
             graduation_year INT CHECK ( graduation_year >= 2025 ),
             preferences pref_enum[],
-            profile_picture_key VARCHAR(500),
             created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
@@ -357,6 +356,96 @@ async function createAllTables(db: NodePgDatabase) {
 
         ALTER TABLE rmp
         ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
+
+        ALTER TABLE student
+            ADD COLUMN profile_picture_key VARCHAR(500);
+
+        -- Seed majors from onboarding data
+                INSERT INTO major (name)
+                VALUES ('Architecture'),
+                       ('Biology'),
+                       ('Business Administration'),
+                       ('Chemistry'),
+                       ('Communication Studies'),
+                       ('Computer Science'),
+                       ('Criminal Justice'),
+                       ('Data Science'),
+                       ('Electrical & Computer Engineering'),
+                       ('Environmental Science'),
+                       ('International Business'),
+                       ('Mathematics'),
+                       ('Mechanical Engineering'),
+                       ('Nursing'),
+                       ('Physics'),
+                       ('Political Science'),
+                       ('Psychology')
+                    ON CONFLICT (name) DO NOTHING;
+        
+        -- Seed concentrations (deduplicated across all majors)
+                INSERT INTO concentration (name)
+                VALUES
+        -- Biology
+        ('Biochemistry'),
+        ('Cell & Molecular Biology'),
+        ('Ecology & Evolutionary Biology'),
+        ('Marine Biology'),
+        -- Business Administration
+        ('Accounting'),
+        ('Entrepreneurship'),
+        ('Finance'),
+        ('Management'),
+        ('Marketing'),
+        ('Supply Chain Management'),
+        -- Chemistry
+        ('Medicinal Chemistry'),
+        ('Organic Chemistry'),
+        -- Communication Studies
+        ('Advertising'),
+        ('Digital Media'),
+        ('Journalism'),
+        ('Public Relations'),
+        -- Computer Science
+        ('Artificial Intelligence'),
+        ('Cybersecurity'),
+        ('Data Science'),
+        ('Game Development'),
+        ('Human-Computer Interaction'),
+        ('Software'),
+        ('Systems'),
+        -- Criminal Justice
+        ('Corrections'),
+        ('Law Enforcement'),
+        ('Policy & Planning'),
+        -- Data Science
+        ('Business Analytics'),
+        ('Machine Learning'),
+        ('Statistics'),
+        -- Electrical & Computer Engineering
+        ('Computer Engineering'),
+        ('Electrical Engineering'),
+        -- Environmental Science
+        ('Climate Science'),
+        ('Ecology'),
+        ('Environmental Policy'),
+        -- Mathematics
+        ('Applied Mathematics'),
+        ('Pure Mathematics'),
+        -- Mechanical Engineering
+        ('Manufacturing & Design'),
+        ('Robotics & Control'),
+        -- Physics
+        ('Astrophysics'),
+        ('Condensed Matter'),
+        -- Political Science
+        ('American Politics'),
+        ('International Relations'),
+        ('Law & Politics'),
+        -- Psychology
+        ('Clinical'),
+        ('Cognitive'),
+        ('Experimental'),
+        ('Health Psychology')
+                    ON CONFLICT (name) DO NOTHING;
 
         DO $$ BEGIN
             CREATE TYPE semester_enum AS ENUM ('fall', 'spring', 'summer_1', 'summer_2');
