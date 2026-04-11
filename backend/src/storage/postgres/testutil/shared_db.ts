@@ -192,6 +192,7 @@ async function createAllTables(db: NodePgDatabase) {
             email VARCHAR(255) NOT NULL UNIQUE,
             graduation_year INT CHECK ( graduation_year >= 2025 ),
             preferences pref_enum[],
+            profile_picture_key VARCHAR(500),
             created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
