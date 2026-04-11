@@ -11,7 +11,7 @@ interface BaseReview {
 }
 
 export interface CreateParentReviewInput {
-  studentId?: string | null | undefined;
+  studentId?: string | null ;
   semester?: string | null | undefined;
   year?: number | null | undefined;
 }

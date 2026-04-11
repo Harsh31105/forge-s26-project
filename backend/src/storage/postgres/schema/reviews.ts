@@ -143,7 +143,7 @@ export class ReviewRepositorySchema implements ReviewRepository {
     const [row] = await this.db
       .insert(review)
       .values({
-        studentId: studentId ?? null,
+        studentId,
         ...(semester != null && { semester: semester as any }),
         ...(year != null && { year }),
       } as any)
