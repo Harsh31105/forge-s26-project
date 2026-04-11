@@ -366,6 +366,16 @@ async function createAllTables(db: NodePgDatabase) {
         ALTER TABLE review
             ADD COLUMN IF NOT EXISTS semester semester_enum,
             ADD COLUMN IF NOT EXISTS year INT;
+
+        DELETE FROM professor p
+            USING professor p2
+        WHERE p.first_name = p2.first_name
+          AND p.last_name = p2.last_name
+          AND p.id > p2.id;
+
+        ALTER TABLE professor
+            ADD CONSTRAINT professor_name_unique
+                UNIQUE (first_name, last_name);
     `);
 
 }
