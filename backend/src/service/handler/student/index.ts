@@ -182,7 +182,7 @@ export class StudentHandler {
     // DELETE /students/:id/majors/:majorId
     async handleDeleteMajor(req: Request, res: Response): Promise<void> {
         const studentId = req.params.id as string;
-        const majorId = parseInt(req.params.majorId, 10);
+        const majorId = parseInt(req.params.majorId as string, 10);
 
         if (!isUUID(studentId)) throw BadRequest("Invalid student ID");
         if (isNaN(majorId)) throw BadRequest("Invalid major ID");
@@ -216,7 +216,7 @@ export class StudentHandler {
     // DELETE /students/:id/concentrations/:concentrationId
     async handleDeleteConcentration(req: Request, res: Response): Promise<void> {
         const studentId = req.params.id as string;
-        const concentrationId = parseInt(req.params.concentrationId, 10);
+        const concentrationId = parseInt(req.params.concentrationId as string, 10);
 
         if (!isUUID(studentId)) throw BadRequest("Invalid student ID");
         if (isNaN(concentrationId)) throw BadRequest("Invalid concentration ID");
@@ -250,7 +250,7 @@ export class StudentHandler {
     // DELETE /students/:id/minors/:minorId
     async handleDeleteMinor(req: Request, res: Response): Promise<void> {
         const studentId = req.params.id as string;
-        const minorId = parseInt(req.params.minorId, 10);
+        const minorId = parseInt(req.params.minorId as string, 10);
 
         if (!isUUID(studentId)) throw BadRequest("Invalid student ID");
         if (isNaN(minorId)) throw BadRequest("Invalid minor ID");

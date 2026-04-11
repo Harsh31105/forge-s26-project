@@ -1,7 +1,7 @@
 import request from "supertest";
 import express, { Express } from "express";
 import { StudentHandler } from "../student";
-import { StudentRepository } from "../../../storage/storage";
+import { AcademicRepository, StudentRepository } from "../../../storage/storage";
 import {
     StudentPostInputType,
     StudentPatchInputType,
@@ -21,6 +21,7 @@ describe("StudentHandler Endpoints", () => {
 
     let app: Express;
     let repo: jest.Mocked<StudentRepository>;
+    let academicRepo: jest.Mocked<AcademicRepository>;
     let handler: StudentHandler;
 
     beforeEach(() => {
@@ -33,7 +34,25 @@ describe("StudentHandler Endpoints", () => {
             getStudentByEmail: jest.fn()
         } as unknown as jest.Mocked<StudentRepository>;
 
-        handler = new StudentHandler(repo);
+        academicRepo = {
+            getMajors: jest.fn(),
+            getConcentrations: jest.fn(),
+            getMinors: jest.fn(),
+            getStudentMajors: jest.fn().mockResolvedValue([]),
+            getStudentConcentrations: jest.fn().mockResolvedValue([]),
+            getStudentMinors: jest.fn().mockResolvedValue([]),
+            getMajorsForStudents: jest.fn().mockResolvedValue({}),
+            getConcentrationsForStudents: jest.fn().mockResolvedValue({}),
+            getMinorsForStudents: jest.fn().mockResolvedValue({}),
+            addStudentMajor: jest.fn(),
+            deleteStudentMajor: jest.fn(),
+            addStudentConcentration: jest.fn(),
+            deleteStudentConcentration: jest.fn(),
+            addStudentMinor: jest.fn(),
+            deleteStudentMinor: jest.fn(),
+        } as unknown as jest.Mocked<AcademicRepository>;
+
+        handler = new StudentHandler(repo, academicRepo);
 
         app = express();
         app.use(express.json());
@@ -111,6 +130,7 @@ describe("StudentHandler Endpoints", () => {
     describe("GET /students/email/:email", () => {
         let app: Express;
         let repo: jest.Mocked<StudentRepository>;
+        let academicRepo: jest.Mocked<AcademicRepository>;
         let handler: StudentHandler;
 
         const baseStudent: Student = {
@@ -139,7 +159,25 @@ describe("StudentHandler Endpoints", () => {
                 getStudentByEmail: jest.fn(),
             } as unknown as jest.Mocked<StudentRepository>;
 
-            handler = new StudentHandler(repo);
+            academicRepo = {
+                getMajors: jest.fn(),
+                getConcentrations: jest.fn(),
+                getMinors: jest.fn(),
+                getStudentMajors: jest.fn().mockResolvedValue([]),
+                getStudentConcentrations: jest.fn().mockResolvedValue([]),
+                getStudentMinors: jest.fn().mockResolvedValue([]),
+                getMajorsForStudents: jest.fn().mockResolvedValue({}),
+                getConcentrationsForStudents: jest.fn().mockResolvedValue({}),
+                getMinorsForStudents: jest.fn().mockResolvedValue({}),
+                addStudentMajor: jest.fn(),
+                deleteStudentMajor: jest.fn(),
+                addStudentConcentration: jest.fn(),
+                deleteStudentConcentration: jest.fn(),
+                addStudentMinor: jest.fn(),
+                deleteStudentMinor: jest.fn(),
+            } as unknown as jest.Mocked<AcademicRepository>;
+
+            handler = new StudentHandler(repo, academicRepo);
 
             app = express();
             app.use(express.json());
