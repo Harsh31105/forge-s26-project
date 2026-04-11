@@ -4,7 +4,12 @@
  * NorthStar API
  * OpenAPI spec version: 0.1.0
  */
-import type { GetTraceParams, Trace } from "./northStarAPI.schemas";
+import type {
+  AcademicSemester,
+  GetTraceOfferHistoryParams,
+  GetTraceParams,
+  Trace,
+} from "./northStarAPI.schemas";
 
 import { customAxios } from "./apiClient";
 
@@ -16,8 +21,18 @@ export const getTrace = () => {
   const getTrace = (params?: GetTraceParams) => {
     return customAxios<Trace[]>({ url: `/trace`, method: "GET", params });
   };
-  return { getTrace };
+  /**
+   * Retrieves paginated list of offer-history.
+   * @summary Get the Offer History offered by the TRACE Records
+   */
+  const getTraceOfferHistory = (params?: GetTraceOfferHistoryParams) => {
+    return customAxios<AcademicSemester[]>({ url: `/trace/offer-history`, method: "GET", params });
+  };
+  return { getTrace, getTraceOfferHistory };
 };
 export type GetTraceResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getTrace>["getTrace"]>>
+>;
+export type GetTraceOfferHistoryResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getTrace>["getTraceOfferHistory"]>>
 >;

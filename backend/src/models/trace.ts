@@ -3,6 +3,11 @@ import {LectureType} from "./course";
 
 export type Semester = "fall" | "spring" | "summer_1" | "summer_2";
 
+export type AcademicSemester = {
+    semester: Semester;
+    year: number;
+}
+
 export interface Trace {
     id: number;
     courseId: string;
@@ -28,3 +33,9 @@ export const TraceFilterSchema = z.object({
     semester: z.enum(["fall", "spring", "summer_1", "summer_2"]).optional()
 });
 export type TraceFilterType = z.infer<typeof TraceFilterSchema>;
+
+export const OfferHistoryFilterSchema = z.object({
+    courseId: z.uuid().optional(),
+    professorId: z.uuid().optional()
+});
+export type OfferHistoryFilterType = z.infer<typeof OfferHistoryFilterSchema>;

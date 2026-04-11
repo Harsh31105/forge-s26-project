@@ -27,7 +27,7 @@ import type {
   CourseThreadPostInputType,
 } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
-import { PaginationType } from "utils/pagination";
+import { PaginationType } from "../utils/pagination";
 import type {
   Professor,
   ProfessorFilterType,
@@ -55,7 +55,7 @@ import type { RMP, RMPPostInputType } from "../models/rmp";
 import { RMPRepositorySchema } from "./postgres/schema/rmp";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
-import {Trace, TraceFilterType} from "../models/trace";
+import {AcademicSemester, OfferHistoryFilterType, Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/traces";
 
 
@@ -212,4 +212,5 @@ export interface RMPRepository {
 export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
   getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
+  getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
 }
