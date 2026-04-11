@@ -13,5 +13,14 @@ export function studentRoutes(handler: StudentHandler): Router {
     router.patch("/:id", handler.handlePatch.bind(handler));
     router.delete("/:id", handler.handleDelete.bind(handler));
 
+    router.post("/:id/majors", handler.handlePostMajor.bind(handler));
+    router.delete("/:id/majors/:majorId", handler.handleDeleteMajor.bind(handler));
+
+    router.post("/:id/concentrations", handler.handlePostConcentration.bind(handler));
+    router.delete("/:id/concentrations/:concentrationId", handler.handleDeleteConcentration.bind(handler));
+
+    router.post("/:id/minors", handler.handlePostMinor.bind(handler));
+    router.delete("/:id/minors/:minorId", handler.handleDeleteMinor.bind(handler));
+
     return router;
 }
