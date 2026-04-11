@@ -49,16 +49,19 @@ export interface Student {
 export const StudentMajorPostInputSchema = z.object({
     majorId: z.number().int().positive(),
 });
+
 export type StudentMajorPostInputType = z.infer<typeof StudentMajorPostInputSchema>;
 
 export const StudentConcentrationPostInputSchema = z.object({
     concentrationId: z.number().int().positive(),
 });
+
 export type StudentConcentrationPostInputType = z.infer<typeof StudentConcentrationPostInputSchema>;
 
 export const StudentMinorPostInputSchema = z.object({
     minorId: z.number().int().positive(),
 });
+
 export type StudentMinorPostInputType = z.infer<typeof StudentMinorPostInputSchema>;
 
 // POST
