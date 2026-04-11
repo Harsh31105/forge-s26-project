@@ -7,6 +7,7 @@ import type {
  } from "../models/sample";
 import type {
    CourseReview,
+  CreateParentReviewInput,
   ProfessorReview,
   Review,
   ReviewPatchInputType,
@@ -124,7 +125,9 @@ export interface ProfessorReviewChildInput {
 export interface ReviewRepository {
   getReviews(pagination: PaginationType): Promise<Review[]>;
   getReviewByID(id: string): Promise<Review>;
-  createParentReview(studentId?: string | null): Promise<string>;
+  createParentReview(
+    input: CreateParentReviewInput
+  ): Promise<string>;
   createCourseReview(
     parentId: string,
     input: CourseReviewChildInput,

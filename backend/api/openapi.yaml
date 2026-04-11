@@ -2331,6 +2331,17 @@ components:
           nullable: true
           description: The ID of the student who wrote the review (null if anonymous)
           example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        semester: 
+          type: string
+          enum: [fall, spring, summer_1, summer_2]
+          nullable: true
+          description: The semester the review is referring to
+          example: "fall"
+        year: 
+          type: integer
+          nullable: true
+          description: The year the review is referring to
+          example: 2022
         rating:
           type: integer
           minimum: 1
@@ -2402,6 +2413,17 @@ components:
           nullable: true
           description: The ID of the student submitting the review (omit for anonymous)
           example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        semester: 
+          type: string
+          enum: [fall, spring, summer_1, summer_2]
+          nullable: true
+          description: The semester the review is referring to
+          example: "fall"
+        year: 
+          type: integer
+          nullable: true
+          description: The year the review is referring to
+          example: 2022
         rating:
           type: integer
           minimum: 1
@@ -2436,6 +2458,17 @@ components:
     ReviewPatchInput:
       type: object
       properties:
+        semester: 
+          type: string
+          enum: [fall, spring, summer_1, summer_2]
+          nullable: true
+          description: The semester the review is referring to
+          example: "fall"
+        year: 
+          type: integer
+          nullable: true
+          description: The year the review is referring to
+          example: 2022
         rating:
           type: integer
           minimum: 1
