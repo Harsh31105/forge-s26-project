@@ -367,11 +367,13 @@ export async function cleanupTestData() {
 
     await db.execute(`
     TRUNCATE TABLE 
+      trace,
       course,
       department,
       course_thread,
       sample,
-      professor
+      professor,
+      student
     RESTART IDENTITY CASCADE;
   `);
 }

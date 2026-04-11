@@ -112,10 +112,9 @@ function registerRoutes(router: Router, repo: Repository) {
     const reviewHandler = new ReviewHandler(repo.reviews);
     router.use("/reviews", reviewRoutes(reviewHandler));
 
-    const courseHandler = new CourseHandler(repo.courses, repo.favourites);
+    const courseHandler = new CourseHandler(repo.courses, repo.favourites, repo.traces);
     router.use("/courses", courseRoutes(courseHandler));
 
-    // Handling Course-Threads - Starting with CourseReviews.
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 

@@ -5,9 +5,6 @@ import {course} from "../../tables/course";
 import {NotFoundError} from "../../../errs/httpError";
 import { department } from "../../tables/department";
 import { getOffset, PaginationType } from "../../../utils/pagination";
-import { trace } from "../../tables/trace";
-import { professor } from "../../tables/professor";
-import type { Professor } from "../../../models/professor";
 import { and, asc, desc, eq, sql } from "drizzle-orm";
 
 export class CourseRepositorySchema implements CourseRepository {
@@ -106,39 +103,5 @@ export class CourseRepositorySchema implements CourseRepository {
 
     async deleteCourse(id: string): Promise<void> {
         await this.db.delete(course).where(eq(course.id, id))
-    }
-
-    async getBestProfessorsByCourseID(courseId: string): Promise<Professor[]> {
-        const rows = await this.db
-            .select({
-                id: professor.id,
-                firstName: professor.firstName,
-                lastName: professor.lastName,
-                tags: professor.tags,
-                createdAt: professor.createdAt,
-                updatedAt: professor.updatedAt,
-                avgEfficiency: sql<number>`avg(${trace.professorEfficiency})`,
-            })
-            .from(trace)
-            .innerJoin(professor, eq(trace.professorId, professor.id))
-            .where(eq(trace.courseId, courseId))
-            .groupBy(
-                professor.id,
-                professor.firstName,
-                professor.lastName,
-                professor.tags,
-                professor.createdAt,
-                professor.updatedAt,
-            )
-            .orderBy(desc(sql`avg(${trace.professorEfficiency})`));
-
-        return rows.map((row) => ({
-            id: row.id,
-            firstName: row.firstName,
-            lastName: row.lastName,
-            tags: row.tags,
-            createdAt: row.createdAt,
-            updatedAt: row.updatedAt,
-        }));
-    }
+    };
 }

@@ -143,7 +143,6 @@ export interface CourseRepository {
     createCourse(input: CoursePostInputType): Promise<Course>;
     patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;
     deleteCourse(id: string): Promise<void>;
-    getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
 }
 
 export interface CourseThreadRepository {
@@ -212,4 +211,5 @@ export interface RMPRepository {
 
 export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
+  getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
 }

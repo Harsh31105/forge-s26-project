@@ -1,7 +1,7 @@
 import request from "supertest";
 import express, { Express } from "express";
 import { CourseHandler } from "../course";
-import type {CourseRepository, FavouriteRepository} from "../../../storage/storage";
+import type {CourseRepository, FavouriteRepository, TraceRepository } from "../../../storage/storage";
 import { CoursePostInputType, CoursePatchInputType, Course } from "../../../models/course";
 import { validate as isUUID } from "uuid";
 import {errorHandler, NotFoundError} from "../../../errs/httpError";
@@ -62,6 +62,8 @@ describe("CourseHandler Endpoints", () => {
     let repo: jest.Mocked<CourseRepository>;
     let favRepo: jest.Mocked<FavouriteRepository>;
     let handler: CourseHandler;
+    let traceRepo: jest.Mocked<TraceRepository>;
+
 
     beforeEach(() => {
         repo = {
@@ -72,6 +74,7 @@ describe("CourseHandler Endpoints", () => {
             deleteCourse: jest.fn(),
             handleGetStudentIDsWhoFavourited: jest.fn(),
             getBestProfessorsByCourseID: jest.fn(),
+
         } as unknown as jest.Mocked<CourseRepository>;
 
         favRepo = {
@@ -81,7 +84,11 @@ describe("CourseHandler Endpoints", () => {
             deleteFavourite: jest.fn(),
         } as unknown as jest.Mocked<FavouriteRepository>;
 
-        handler = new CourseHandler(repo, favRepo);
+        traceRepo = {
+            getBestProfessorsByCourseID: jest.fn(),
+        } as unknown as jest.Mocked<TraceRepository>;
+
+        handler = new CourseHandler(repo, favRepo, traceRepo)
 
         app = express();
         app.use(express.json());
@@ -514,7 +521,7 @@ describe("CourseHandler Endpoints", () => {
         test("returns student IDs who favourited course", async () => {
             const mockFavs = [{ student_id: "stu1" }, { student_id: "stu2" }];
             const favRepo = { getStudentIDsWhoFavourited: jest.fn().mockResolvedValue(mockFavs) };
-            const handlerWithFav = new CourseHandler(repo, favRepo as any);
+            const handlerWithFav = new CourseHandler(repo, favRepo as any, traceRepo);
             const appWithFav = express();
             appWithFav.use(express.json());
             appWithFav.get("/courses/:id/favourites", handlerWithFav.handleGetStudentIDsWhoFavourited.bind(handlerWithFav));
@@ -538,7 +545,7 @@ describe("CourseHandler Endpoints", () => {
                     updatedAt: new Date("2026-01-15T10:30:00Z"),
                 },
             ];
-            repo.getBestProfessorsByCourseID.mockResolvedValue(mockProfessors as any);
+            traceRepo.getBestProfessorsByCourseID.mockResolvedValue(mockProfessors as any);
             mockValidate.mockReturnValue(true);
 
             const res = await request(app).get(`/courses/${mockCourse1.id}/best-professors`);
@@ -555,14 +562,14 @@ describe("CourseHandler Endpoints", () => {
         });
 
         test("repo error returns 500", async () => {
-            repo.getBestProfessorsByCourseID.mockRejectedValue(new Error("DB error"));
+            traceRepo.getBestProfessorsByCourseID.mockRejectedValue(new Error("DB error"));
             mockValidate.mockReturnValue(true);
             const res = await request(app).get(`/courses/${mockCourse1.id}/best-professors`);
             expect(res.status).toBe(500);
         });
 
         test("returns empty array when no professors found", async () => {
-            repo.getBestProfessorsByCourseID.mockResolvedValue([]);
+            traceRepo.getBestProfessorsByCourseID.mockResolvedValue([]);
             mockValidate.mockReturnValue(true);
             const res = await request(app).get(`/courses/${mockCourse1.id}/best-professors`);
             expect(res.status).toBe(200);
