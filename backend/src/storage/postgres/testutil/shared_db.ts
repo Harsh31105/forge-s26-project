@@ -356,6 +356,16 @@ async function createAllTables(db: NodePgDatabase) {
 
         ALTER TABLE rmp
         ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
+
+        DO $$ BEGIN
+            CREATE TYPE semester_enum AS ENUM ('fall', 'spring', 'summer_1', 'summer_2');
+            EXCEPTION
+        WHEN duplicate_object THEN null;
+            END $$;
+
+        ALTER TABLE review
+            ADD COLUMN IF NOT EXISTS semester semester_enum,
+            ADD COLUMN IF NOT EXISTS year INT;
     `);
 
 }

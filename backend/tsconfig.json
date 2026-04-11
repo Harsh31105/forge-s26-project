@@ -12,6 +12,7 @@
     "target": "ES2022",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
+    "types": ["jest"],
     // "types": ["node", "jest"],
     // For nodejs:
     // "lib": ["esnext"],
