@@ -38,6 +38,8 @@ import type {
 import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
+import type { ProfilePictureRepository } from "./s3/profilePictures";
+import { ProfilePictureRepositoryS3 } from "./s3/profilePictures";
 import type { S3 as S3Config } from "../config/s3";
 import {
   Student,
@@ -71,6 +73,7 @@ export class Repository {
   public readonly courseThreads: CourseThreadRepository;
   public readonly profThreads: ProfThreadRepository;
   public readonly traceDocuments: TraceDocumentRepository;
+  public readonly profilePictures: ProfilePictureRepository;
   public readonly rmp: RMPRepository;
   public readonly reviews: ReviewRepository;
   public readonly students: StudentRepository;
@@ -90,6 +93,7 @@ export class Repository {
     this.profThreads = new ProfThreadRepositorySchema(db);
     this.reviews = new ReviewRepositorySchema(db);
     this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+    this.profilePictures = new ProfilePictureRepositoryS3(s3Config);
     this.students = new StudentRepositorySchema(db);
     this.favourites = new FavouriteRepositorySchema(db);
     this.rmp = new RMPRepositorySchema(db);
@@ -223,6 +227,8 @@ export interface TraceRepository {
   getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
 }
+
+export { ProfilePictureRepository } from "./s3/profilePictures";
 
 export interface AcademicRepository {
   getMajors(): Promise<Major[]>;
