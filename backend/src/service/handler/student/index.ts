@@ -1,4 +1,4 @@
-import type { AcademicRepository, StudentRepository } from "../../../storage/storage";
+import type { AcademicRepository, ProfilePictureRepository, StudentRepository } from "../../../storage/storage";
 import {
     StudentPostInputSchema,
     StudentPatchInputSchema,
@@ -24,6 +24,7 @@ export class StudentHandler {
     constructor(
         private readonly repo: StudentRepository,
         private readonly academicRepo: AcademicRepository,
+        private readonly profilePictureRepo: ProfilePictureRepository,
     ) {}
 
     // GET /students
@@ -55,12 +56,15 @@ export class StudentHandler {
             this.academicRepo.getMinorsForStudents(studentIds),
         ]);
 
-        const enriched = students.map((s) => ({
+        const enriched = await Promise.all(students.map(async (s) => ({
             ...s,
             majors: majorsMap[s.id] ?? [],
             concentrations: concentrationsMap[s.id] ?? [],
             minors: minorsMap[s.id] ?? [],
-        }));
+            profilePictureUrl: s.profilePictureKey
+                ? await this.profilePictureRepo.getPresignedUrl(s.profilePictureKey)
+                : null,
+        })));
 
         res.status(200).json(enriched);
     }
@@ -85,7 +89,11 @@ export class StudentHandler {
             this.academicRepo.getStudentMinors(student.id),
         ]);
 
-        res.status(200).json({ ...student, majors, concentrations, minors });
+        const profilePictureUrl = student.profilePictureKey
+            ? await this.profilePictureRepo.getPresignedUrl(student.profilePictureKey)
+            : null;
+
+        res.status(200).json({ ...student, majors, concentrations, minors, profilePictureUrl });
     }
 
     // GET /students/:id
@@ -108,7 +116,11 @@ export class StudentHandler {
             this.academicRepo.getStudentMinors(id),
         ]);
 
-        res.status(200).json({ ...student, majors, concentrations, minors });
+        const profilePictureUrl = student.profilePictureKey
+            ? await this.profilePictureRepo.getPresignedUrl(student.profilePictureKey)
+            : null;
+
+        res.status(200).json({ ...student, majors, concentrations, minors, profilePictureUrl });
     }
 
     // POST /students
@@ -136,11 +148,24 @@ export class StudentHandler {
         const result = StudentPatchInputSchema.safeParse(req.body);
         if (!result.success) throw BadRequest("Unable to parse input for student PATCH");
 
-        const patchStudent: StudentPatchInputType = result.data;
+        const patchInput: StudentPatchInputType = result.data;
+
+        if (req.file) {
+            const { mimetype, buffer } = req.file;
+            if (!["image/jpeg", "image/png", "image/webp"].includes(mimetype)) {
+                throw BadRequest("Profile picture must be a JPEG, PNG, or WebP image");
+            }
+            try {
+                patchInput.profilePictureKey = await this.profilePictureRepo.upload(id, buffer, mimetype);
+            } catch (err) {
+                console.error(err);
+                throw BadRequest("Failed to upload profile picture");
+            }
+        }
 
         let updatedStudent: Student;
         try {
-            updatedStudent = await this.repo.patchStudent(id, patchStudent);
+            updatedStudent = await this.repo.patchStudent(id, patchInput);
         } catch (err) {
             console.error(err);
             throw mapDBError(err, "Failed to patch student");
