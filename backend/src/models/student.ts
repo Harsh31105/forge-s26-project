@@ -75,5 +75,7 @@ export const StudentPostInputSchema = z.object({
 export type StudentPostInputType = z.infer<typeof StudentPostInputSchema>;
 
 // PATCH
-export const StudentPatchInputSchema = StudentPostInputSchema.partial();
+export const StudentPatchInputSchema = StudentPostInputSchema.partial().extend({
+    profilePictureKey: z.string().nullable().optional(),
+});
 export type StudentPatchInputType = z.infer<typeof StudentPatchInputSchema>;
