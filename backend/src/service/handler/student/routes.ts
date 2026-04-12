@@ -1,5 +1,8 @@
 import { Router } from "express";
+import multer from "multer";
 import { StudentHandler } from "./index";
+
+const upload = multer({ storage: multer.memoryStorage() });
 
 export function studentRoutes(handler: StudentHandler): Router {
     const router = Router();
@@ -10,7 +13,7 @@ export function studentRoutes(handler: StudentHandler): Router {
 
     router.get("/:id", handler.handleGetByID.bind(handler));
     router.post("/", handler.handlePost.bind(handler));
-    router.patch("/:id", handler.handlePatch.bind(handler));
+    router.patch("/:id", upload.single("profilePicture"), handler.handlePatch.bind(handler));
     router.delete("/:id", handler.handleDelete.bind(handler));
 
     router.post("/:id/majors", handler.handlePostMajor.bind(handler));

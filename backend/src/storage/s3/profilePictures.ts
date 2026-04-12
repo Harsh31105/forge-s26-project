@@ -9,7 +9,7 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import type { S3 as S3Config } from "../../config/s3";
 
 const PRESIGNED_URL_EXPIRES_IN = 60 * 60; // 1 hour
-y
+
 export interface ProfilePictureRepository {
     upload(studentId: string, buffer: Buffer, mimeType: string): Promise<string>;
     getPresignedUrl(key: string): Promise<string>;
