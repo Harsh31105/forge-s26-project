@@ -808,6 +808,48 @@ paths:
                 code: 500
                 message: "Internal server error"
 
+  /courses/{id}/best-professors:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the course
+        example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+    get:
+      summary: Get best professors for a course
+      description: Returns professors who have taught this course, sorted by their average efficiency rating from TRACE data (descending)
+      tags: [Course]
+      responses:
+        "200":
+          description: Successfully retrieved best professors for the course
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Professor"
+        "400":
+          description: Invalid course ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "invalid ID was given"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
   /courses/{id}/favourites:
     parameters:
       - name: id

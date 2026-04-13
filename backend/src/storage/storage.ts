@@ -59,6 +59,7 @@ import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 import {AcademicSemester, OfferHistoryFilterType, Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/traces";
 
+
 export class Repository {
   public readonly samples: SampleRepository;
   public readonly professors: ProfessorRepository;
@@ -213,5 +214,6 @@ export interface RMPRepository {
 
 export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
+  getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
 }
