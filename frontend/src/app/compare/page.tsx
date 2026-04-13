@@ -2,9 +2,9 @@
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { ArrowRight } from "lucide-react";
-import { useCourses } from "@/src/hooks/useCourses";
-import { CourseCard } from "@/src/components/compare/courseCard";
-import { Course } from "@/src/lib/api/northStarAPI.schemas";
+import { useCourses } from "../../hooks/useCourses";
+import { CourseCard } from "../../components/compare/courseCard";
+import { Course } from "../../lib/api/northStarAPI.schemas";
 
 const MAX_COURSES = 4;
 
