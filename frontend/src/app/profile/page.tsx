@@ -1,9 +1,8 @@
 "use client";
 
 import { useFavourites } from "@/src/hooks/useFavourites";
-import { getCourseById } from "@/src/hooks/useCourses";
 import { useStudent } from "@/src/hooks/useStudents";
-import {FavoritesCard} from "@/src/components/profilePage";
+import { FavoritesCourseRow } from "@/src/components/profilePage";
 import { useQuery } from "@tanstack/react-query";
 import { customAxios } from "@/src/lib/api/apiClient";
 
@@ -23,7 +22,7 @@ export default function ProfilePage() {
     error: studentError,
     } = useStudent(studentId);
 
-    const { favourites, isLoading: favouritesLoading } = useFavourites();
+    const { favourites } = useFavourites();
 
     if (meLoading) {
     return (
@@ -77,22 +76,14 @@ export default function ProfilePage() {
     student.lastName?.[0]?.toUpperCase() ||
     "H";
 
-    const favoriteCourses: string[] =
-    favourites
-        ?.map((favourite) => {
-            const course = getCourseById(favourite.courseId);
-            if (!course) return favourite.courseId;
-            return `${course.department.name} ${course.course_code}: ${course.name}`;
-        })
-        .filter(Boolean) ?? [];
 
     return (
     <div className="w-full">
         <div className="space-y-8 px-12 py-10 mt-16">
             <section className="flex items-start justify-between gap-8">
             <div className="flex items-start gap-6">
-                <div className="flex h-28 w-28 items-center justify-center rounded-full border border-border bg-surface">
-                <div className="flex h-14 w-14 items-center justify-center rounded-[10px] bg-primary font-heading text-[28px] font-bold text-white shadow-md">
+                <div className="flex h-36 w-36 items-center justify-center rounded-full border border-border bg-surface">
+                <div className="flex h-20 w-20 items-center justify-center rounded-[10px] bg-primary font-heading text-[28px] font-bold text-white shadow-md">
                     {initial}
                 </div>
                 </div>
@@ -115,13 +106,22 @@ export default function ProfilePage() {
             </button>
             </section>
 
-            {favouritesLoading ? (
-            <div className="font-body text-[16px] text-foreground">
-                Loading favourites...
-            </div>
-            ) : (
-            <FavoritesCard title="Favourite Courses" items={favoriteCourses} />
-            )}
+            <section className="border border-border bg-surface p-8 shadow-sm">
+                <h3 className="mb-5 mt-2 font-heading text-[32px] font-semibold text-foreground">
+                Favorite Courses
+                </h3>
+                <div className="space-y-4">
+                    {favourites?.length > 0 ? (
+                    favourites.map((favourite) => (
+                        <FavoritesCourseRow key={favourite.courseId} courseId={favourite.courseId} />
+                    ))
+                    ) : (
+                        <div className="bg-surface-light px-5 py-4 font-body text-[16px] text-text-secondary rounded-[10px]">
+                        No favourite courses added yet.
+                        </div>
+                    )}
+                </div>
+            </section>
         </div>
     </div>
     );

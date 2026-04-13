@@ -1,7 +1,7 @@
 "use client";
 
 import { useFavourites } from "@/src/hooks/useFavourites";
-import { useCourses } from "@/src/hooks/useCourses";
+import { useCourse } from "@/src/hooks/useCourses";
 import { useStudent, useStudents } from "@/src/hooks/useStudents";
 
 
@@ -10,13 +10,17 @@ type FavoritesCardProps = {
     items: string[];
 };
 
+type FavoritesCourseRowProps = {
+    courseId: string;
+};
+
 export function FavoritesCard({
     title,
     items,
 }: FavoritesCardProps) {
     return (
-    <section className="rounded-[16px] border border-border bg-surface p-6 shadow-sm">
-        <h3 className="mb-5 font-heading text-[32px] font-semibold text-foreground">
+    <section className="rounded-[16px] border border-border bg-surface p-8 shadow-sm">
+        <h3 className="mb-5 font-heading text-[32px] font-semibold text-foreground mt-2">
         {title}
         </h3>
 
@@ -25,14 +29,11 @@ export function FavoritesCard({
             items.map((item) => (
             <div
                 key={item}
-                className="flex items-center justify-between rounded-[10px] bg-surface-light px-5 py-4"
+                className="flex items-center justify-between rounded-[10px] bg-white px-5 py-4 shadow-sm"
             >
-                <div className="flex items-center gap-4">
-                {<div className="h-8 w-8 rounded-full bg-white" />}
-                <span className="font-body text-[16px] text-foreground">
+                <span className="font-body text-[18px] font-semibold text-foreground">
                     {item}
                 </span>
-                </div>
                 <span className="text-[22px] text-foreground">★</span>
             </div>
             ))
@@ -43,5 +44,21 @@ export function FavoritesCard({
         )}
         </div>
     </section>
+    );
+}
+
+export function FavoritesCourseRow({
+    courseId,
+}: FavoritesCourseRowProps) {
+    const { course, isLoading } = useCourse(courseId);
+    if (isLoading || !course) return null;
+
+    return (
+        <div className = "flex items-center justify-between bg-white px-5 py-4 shadow-sm">
+            <span className="font-body text-[18px] font-semibold text-foreground">
+                {course.department.name} {course.course_code}: {course.name}
+            </span>
+            <span className="text-[22px] text-foreground">★</span>
+        </div>
     );
 }
