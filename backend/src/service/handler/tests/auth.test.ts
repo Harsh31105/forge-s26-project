@@ -1,6 +1,6 @@
 import express, { type Express } from "express";
 import request from "supertest";
-import { googleClient, getAuthUrl } from "../../../auth/authClient";
+import { googleClient } from "../../../auth/authClient";
 import { AuthHandler } from "../auth";
 import { errorHandler } from "../../../errs/httpError";
 import type { StudentRepository } from "../../../storage/storage";
@@ -78,8 +78,8 @@ describe("Auth Endpoints", () => {
             } as Student);
 
             const res = await request(app).get("/auth/callback?code=mock-code");
-            expect(res.status).toBe(201);
-            expect(res.body.message).toBe("Signup successful");
+            expect(res.status).toBe(302);
+            expect(res.headers.location).toContain("/login?token=");
         });
 
         test("login successful when student already exists", async () => {
@@ -99,21 +99,21 @@ describe("Auth Endpoints", () => {
             } as Student);
 
             const res = await request(app).get("/auth/callback?code=mock-code");
-            expect(res.status).toBe(200);
-            expect(res.body.message).toBe("Login successful");
+            expect(res.status).toBe(302);
+            expect(res.headers.location).toContain("/login?token=");
         });
 
         test("rejects non-Northeastern email", async () => {
             mockGetToken.mockResolvedValue({ tokens: { id_token: "mock-id-token" } });
             mockVerifyIdToken.mockResolvedValue(mockPayload("user@gmail.com"));
 
-            const res = await request(app).get("/auth/callback?code=mock-code");
+            const res = await request(app).get("/auth/callback?code=mock-code").set("Accept", "application/json");
             expect(res.status).toBe(403);
             expect(res.body.error).toBe("Only Northeastern email addresses are allowed");
         });
 
         test("missing authorization code", async () => {
-            const res = await request(app).get("/auth/callback");
+            const res = await request(app).get("/auth/callback").set("Accept", "application/json");
             expect(res.status).toBe(400);
             expect(res.body.error).toBe("Missing authorization code");
         });
@@ -124,7 +124,7 @@ describe("Auth Endpoints", () => {
                 getPayload: () => ({ given_name: "Tim", family_name: "Pineda" }),
             });
 
-            const res = await request(app).get("/auth/callback?code=mock-code");
+            const res = await request(app).get("/auth/callback?code=mock-code").set("Accept", "application/json");
             expect(res.status).toBe(400);
             expect(res.body.error).toBe("Failed to get user information");
         });

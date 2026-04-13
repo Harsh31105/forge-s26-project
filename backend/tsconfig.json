@@ -37,7 +37,6 @@
 
     // Recommended Options
     "strict": true,
-    "baseUrl": "./src",
     "jsx": "react-jsx",
     "verbatimModuleSyntax": false,
     "isolatedModules": true,

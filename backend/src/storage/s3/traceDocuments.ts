@@ -10,7 +10,7 @@ import type { Readable } from "stream";
 
 export interface TraceDocumentKey {
     department: string;
-    courseCode: number;
+    courseCode?: number;
     semester: string;
     lectureYear: number;
     professorId: string;

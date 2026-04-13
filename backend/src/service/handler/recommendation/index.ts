@@ -8,6 +8,7 @@ import { courseReview } from "../../../storage/tables/courseReview";
 import { trace } from "../../../storage/tables/trace";
 import { favorite } from "../../../storage/tables/favourite";
 import { BadRequest } from "../../../errs/httpError";
+import type {UserPayload} from "../../../auth/middleware";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? "http://localhost:8000";
 
@@ -15,7 +16,8 @@ export class RecommendationHandler {
     constructor(private readonly repo: Repository) {}
 
     async handleGetRecommendations(req: Request, res: Response): Promise<void> {
-        const studentId = req.params.studentId;
+        const user = (req as any).user as UserPayload;
+        const studentId = user.id;
         if (!isUUID(studentId)) throw BadRequest("Invalid student ID");
 
         const semester = req.query.semester as string;

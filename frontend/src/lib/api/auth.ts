@@ -8,6 +8,7 @@ import type {
   GetAuthCallback200,
   GetAuthCallback201,
   GetAuthCallbackParams,
+  Student,
 } from "./northStarAPI.schemas";
 
 import { customAxios } from "./apiClient";
@@ -31,11 +32,21 @@ export const getAuth = () => {
       params,
     });
   };
-  return { getAuthSignin, getAuthCallback };
+  /**
+   * Returns the currently authenticated student from the JWT cookie
+   * @summary Get current user
+   */
+  const getAuthMe = () => {
+    return customAxios<Student>({ url: `/auth/me`, method: "GET" });
+  };
+  return { getAuthSignin, getAuthCallback, getAuthMe };
 };
 export type GetAuthSigninResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getAuth>["getAuthSignin"]>>
 >;
 export type GetAuthCallbackResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getAuth>["getAuthCallback"]>>
+>;
+export type GetAuthMeResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["getAuthMe"]>>
 >;

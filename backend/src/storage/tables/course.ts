@@ -1,13 +1,7 @@
 import { pgTable, uuid, varchar, integer, timestamp, check } from "drizzle-orm/pg-core";
-import { pgEnum } from "drizzle-orm/pg-core";
 import { sql } from "drizzle-orm";
 import { department } from "./department";
-
-export const lectureTypeEnum = pgEnum("lecture_type_enum", [
-  "lecture",
-  "lab",
-  "online",
-]);
+import { lectureTypeEnum } from "./enums";
 
 export const course = pgTable("course", {
   id: uuid("id").defaultRandom().primaryKey(),

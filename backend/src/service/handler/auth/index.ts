@@ -3,27 +3,36 @@ import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { config } from "../../../config/config";
 import { mapDBError } from "../../../errs/httpError";
 import type { StudentRepository } from "../../../storage/storage";
+import type { UserPayload } from "../../../auth/middleware";
 import jwt from "jsonwebtoken";
-import {Student} from "../../../models/student";
 
 export class AuthHandler {
     constructor(
         private readonly studentRepo: StudentRepository
     ) {}
 
-    async handleRedirect(req: Request, res: Response): Promise<void> {
+    async handleRedirect(_req: Request, res: Response): Promise<void> {
         const url = getAuthUrl();
         res.redirect(url);
     }
 
-    async handleMe(req: Request, res: Response): Promise<void> {
-        res.json(req.user);
-    }
-
     async handleCallback(req: Request, res: Response): Promise<void> {
+        const wantsHtml = req.accepts(["html", "json"]) === "html";
+        const redirectWithError = (code: string, status: number, message: string) => {
+            if (wantsHtml) {
+                res.redirect(`${config.application.frontendUrl}/login?error=${encodeURIComponent(code)}`);
+                return;
+            }
+            res.status(status).json({ error: message });
+        };
+
+        const redirectWithToken = (token: string) => {
+            res.redirect(`${config.application.frontendUrl}/login?token=${encodeURIComponent(token)}`);
+        };
+
         const code = req.query.code as string;
         if (!code) {
-            res.status(400).json({ error: "Missing authorization code" });
+            redirectWithError("missing_code", 400, "Missing authorization code");
             return;
         }
 
@@ -37,61 +46,55 @@ export class AuthHandler {
         const payload = ticket.getPayload();
 
         if (!payload || !payload.email) {
-            res.status(400).json({ error: "Failed to get user information" });
+            redirectWithError("auth_failed", 400, "Failed to get user information");
             return;
         }
 
         if (!payload.email.endsWith("@husky.neu.edu")) {
-            res.status(403).json({ error: "Only Northeastern email addresses are allowed" });
+            redirectWithError(
+                "not_northeastern",
+                403,
+                "Only Northeastern email addresses are allowed"
+            );
             return;
         }
 
+        const makeToken = (id: string) =>
+            jwt.sign(
+                { id, email: payload.email, name: payload.name },
+                config.google.jwtSecret,
+                { expiresIn: "24h" }
+            );
+
         try {
-            const student: Student = await this.studentRepo.createStudent({
+            const student = await this.studentRepo.createStudent({
                 firstName: payload.given_name!,
                 lastName: payload.family_name!,
                 email: payload.email,
             });
 
-            const token = jwt.sign(
-                { id: student.id, email: payload.email, name: payload.name },
-                config.google.jwtSecret,
-                { expiresIn: "24h" }
-            );
-
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: false,
-            });
-
-            res.status(201).json({ message: "Signup successful" });
-            return;
+            const token = makeToken(student.id);
+            redirectWithToken(token);
         } catch (error) {
             if (error instanceof Error) {
                 if (
                     String(error.cause).includes("duplicate key") ||
                     String(error.cause).includes("unique constraint")
                 ) {
-                    const student: Student = await this.studentRepo.getStudentByEmail(payload.email);
-
-                    const token = jwt.sign(
-                        { id: student.id, email: payload.email, name: payload.name },
-                        config.google.jwtSecret,
-                        { expiresIn: "24h" }
-                    );
-
-                    res.cookie("token", token, {
-                        httpOnly: true,
-                        secure: false,
-                        sameSite: "lax",
-                    });
-
-                    res.status(200).json({ message: "Login successful" });
+                    const student = await this.studentRepo.getStudentByEmail(payload.email);
+                    const token = makeToken(student.id);
+                    redirectWithToken(token);
                     return;
                 }
 
                 throw mapDBError(error, error.message);
             }
         }
+    }
+
+    async handleMe(req: Request, res: Response): Promise<void> {
+        const user = (req as any).user as UserPayload;
+        const student = await this.studentRepo.getStudentByEmail(user.email);
+        res.status(200).json(student);
     }
 }
