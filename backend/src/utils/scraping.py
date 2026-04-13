@@ -1,69 +1,60 @@
 import requests
 from bs4 import BeautifulSoup
 import re
-import sqlite3
+import os
 from typing import Optional
+import psycopg2
+from dotenv import load_dotenv
+from pathlib import Path
 
-# Dummy tables setup
+env_path = Path(__file__).resolve().parents[2] / ".env"
+load_dotenv(dotenv_path=env_path)
 
-conn = sqlite3.connect("courses.db")
+DB_USER = os.getenv("DB_USER")
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_HOST = os.getenv("DB_HOST")
+DB_PORT = os.getenv("DB_PORT")
+DB_NAME = os.getenv("DB_NAME")
+
+conn = psycopg2.connect(
+    dbname=DB_NAME,
+    user=DB_USER,
+    password=DB_PASSWORD,
+    host=DB_HOST,
+    port=DB_PORT
+)
+
 cur = conn.cursor()
 
-cur.executescript("""
-    CREATE TABLE IF NOT EXISTS courses (
-        id          INTEGER PRIMARY KEY AUTOINCREMENT,
-        dept        TEXT    NOT NULL,
-        course_code INTEGER NOT NULL,
-        name        TEXT    NOT NULL,
-        description TEXT,
-        credits     INTEGER DEFAULT 4,
-        prereqs     TEXT,
-        coreqs      TEXT,
-        nupaths     TEXT
-    );
-
-    CREATE TABLE IF NOT EXISTS course_nupaths (
-        course_id   INTEGER REFERENCES courses(id),
-        nupath      TEXT NOT NULL,
-        PRIMARY KEY (course_id, nupath)
-    );
-""")
-
-# Helpers
-
 def parse_credits(raw: str) -> int:
-    """Extract credit hours from title string, e.g. '(4 Hours)' → 4."""
     m = re.search(r'\((\d+)(?:-\d+)?\s+Hours?\)', raw, re.IGNORECASE)
     return int(m.group(1)) if m else 4
 
+def parse_extra(course_block) -> dict:
+    result = {"prereqs": None, "coreqs": None, "nupaths": []}
 
-def parse_extra(course_block) -> dict:  # type: ignore[type-arg]
-    """
-    Parse courseblockextra / courseblockattr paragraphs for:
-      - Prerequisite(s)
-      - Corequisite(s)
-      - Attribute(s) → NUpath tags
-    """
-    result: dict = {"prereqs": None, "coreqs": None, "nupaths": []}
-
-    extra_blocks = course_block.find_all("p", class_=re.compile(r"courseblock(extra|attr)"))
+    extra_blocks = course_block.find_all(
+        "p", class_=re.compile(r"courseblock(extra|attr)")
+    )
 
     for block in extra_blocks:
-        block_text = block.get_text(" ", strip=True)
+        text = block.get_text(" ", strip=True)
 
-        if re.match(r"Prerequisite", block_text, re.IGNORECASE):
+        if re.match(r"Prerequisite", text, re.IGNORECASE):
             result["prereqs"] = re.sub(
-                r"^Prerequisite\(s\):\s*", "", block_text, flags=re.IGNORECASE
+                r"^Prerequisite\(s\):\s*", "", text, flags=re.IGNORECASE
             ).strip()
 
-        elif re.match(r"Corequisite", block_text, re.IGNORECASE):
+        elif re.match(r"Corequisite", text, re.IGNORECASE):
             result["coreqs"] = re.sub(
-                r"^Corequisite\(s\):\s*", "", block_text, flags=re.IGNORECASE
+                r"^Corequisite\(s\):\s*", "", text, flags=re.IGNORECASE
             ).strip()
 
-        elif re.match(r"Attribute", block_text, re.IGNORECASE):
-            attrs_raw = re.sub(r"^Attribute\(s\):\s*", "", block_text, flags=re.IGNORECASE)
-            nupaths: list[str] = [
+        elif re.match(r"Attribute", text, re.IGNORECASE):
+            attrs_raw = re.sub(
+                r"^Attribute\(s\):\s*", "", text, flags=re.IGNORECASE
+            )
+            nupaths = [
                 a.strip()
                 for a in re.split(r",\s*(?=NUpath|\b[A-Z])", attrs_raw)
                 if a.strip()
@@ -73,46 +64,61 @@ def parse_extra(course_block) -> dict:  # type: ignore[type-arg]
     return result
 
 
-def insert_course(
-    cursor: sqlite3.Cursor,
-    dept: str,
-    course_code: int,
-    name: str,
-    description: Optional[str],
-    credits: int,
-    prereqs: Optional[str],
-    coreqs: Optional[str],
-    nupaths_str: Optional[str],
-) -> int:
-    """Insert a course row and return its rowid."""
-    cursor.execute(
-        """INSERT INTO courses
-           (dept, course_code, name, description, credits, prereqs, coreqs, nupaths)
-           VALUES (?, ?, ?, ?, ?, ?, ?, ?)""",
-        (dept, course_code, name, description, credits, prereqs, coreqs, nupaths_str),
-    )
-    return cursor.lastrowid  # type: ignore[return-value]
+def clean(val):
+    return val if val and val.strip() else None
 
+def patch_course(cursor, dept, course_code, description, prereqs, coreqs, nupath):
+    cursor.execute("""
+        SELECT c.id
+        FROM course c
+        JOIN department d ON c.department_id = d.id
+        WHERE d.name = %s AND c.course_code = %s
+        LIMIT 1
+    """, (dept, course_code))
 
-def insert_nupath(cursor: sqlite3.Cursor, course_id: int, nupath: str) -> None:
-    """Insert a course↔nupath mapping (ignore duplicates)."""
-    cursor.execute(
-        "INSERT OR IGNORE INTO course_nupaths (course_id, nupath) VALUES (?, ?)",
-        (course_id, nupath),
-    )
+    row = cursor.fetchone()
 
+    if not row:
+        print(f"SKIP: {dept} {course_code} not found")
+        return None
 
-# Scraping
+    course_id = row[0]
 
-base_url = "https://catalog.northeastern.edu"
-index_url = base_url + "/course-descriptions/"
+    cursor.execute("""
+        UPDATE course
+        SET
+            description = COALESCE(%s, description),
+            prereqs = COALESCE(%s, prereqs),
+            coreqs = COALESCE(%s, coreqs),
+            nupath = COALESCE(%s, nupath),
+            updated_at = NOW()
+        WHERE id = %s
+    """, (description, prereqs, coreqs, nupath, course_id))
 
-index_page = requests.get(index_url, timeout=15)
-index_soup = BeautifulSoup(index_page.text, "html.parser")
-links = [a["href"] for a in index_soup.select("#atozindex a") if a.get("href")]
+    print(f"UPDATED: {dept} {course_code}")
+    return course_id
+
+# Commented out stuff for iteration. Only for 'CS' for testing purposes!
+BASE_URL = "https://catalog.northeastern.edu"
+# INDEX_URL = BASE_URL + "/course-descriptions/"
+#
+# print("Fetching index...")
+# index_page = requests.get(INDEX_URL, timeout=15)
+# index_soup = BeautifulSoup(index_page.text, "html.parser")
+#
+# links = [
+#     a["href"]
+#     for a in index_soup.select("#atozindex a")
+#     if a.get("href")
+# ]
+links = ["/course-descriptions/cs/"]
+
+print(f"Found {len(links)} departments\n")
 
 for link in links:
-    dept_page = requests.get(base_url + link, timeout=15)
+    print(f"Processing {link}...")
+
+    dept_page = requests.get(BASE_URL + link, timeout=15)
     soup = BeautifulSoup(dept_page.text, "html.parser")
 
     for course in soup.find_all("div", class_="courseblock"):
@@ -120,82 +126,45 @@ for link in links:
         title_tag = course.find("p", class_="courseblocktitle")
         if not title_tag:
             continue
+
         title_text = title_tag.get_text(" ", strip=True)
 
-        num_credits = parse_credits(title_text)
-
         title_clean = re.sub(
-            r"\s*\(\d+(?:-\d+)?\s+Hours?\)", "", title_text, flags=re.IGNORECASE
+            r"\s*\(\d+(?:-\d+)?\s+Hours?\)",
+            "",
+            title_text,
+            flags=re.IGNORECASE
         ).strip()
 
         if "." not in title_clean:
             continue
-        header, name = title_clean.split(".", 1)
-        header = header.strip()
-        name = name.strip()
 
-        parts = header.split()
+        header, name = title_clean.split(".", 1)
+        parts = header.strip().split()
+
         if len(parts) < 2 or not parts[1].isdigit():
             continue
+
         dept_name = parts[0]
         course_code = int(parts[1])
 
-        desc_tag = course.find("p", class_="courseblockdesc")
-        desc: Optional[str] = desc_tag.get_text(" ", strip=True) if desc_tag else None
+        desc_tag = course.find("p", class_="cb_desc")
+        desc = desc_tag.get_text(" ", strip=True) if desc_tag else None
 
         extra = parse_extra(course)
-        nupaths_str: Optional[str] = (
-            ", ".join(extra["nupaths"]) if extra["nupaths"] else None
-        )
+        nupath_str = ", ".join(extra["nupaths"]) if extra["nupaths"] else None
 
-        course_id = insert_course(
+        patch_course(
             cur,
             dept_name,
             course_code,
-            name,
-            desc,
-            num_credits,
-            extra["prereqs"],
-            extra["coreqs"],
-            nupaths_str,
+            clean(desc),
+            clean(extra["prereqs"]),
+            clean(extra["coreqs"]),
+            clean(nupath_str),
         )
 
-        for np in extra["nupaths"]:
-            insert_nupath(cur, course_id, np)
-
-    conn.commit()
-    print(f"Done: {link}")
-
+conn.commit()
 conn.close()
-print("\nAll done — results saved to courses.db")
 
-import sqlite3
-
-conn = sqlite3.connect("courses.db")
-cur = conn.cursor()
-
-# Row counts
-cur.execute("SELECT COUNT(*) FROM courses")
-print("Total courses:", cur.fetchone()[0])
-
-cur.execute("SELECT COUNT(*) FROM course_nupaths")
-print("Total nupath mappings:", cur.fetchone()[0])
-
-# Sample rows from courses
-print("\n--- Sample courses ---")
-cur.execute("SELECT dept, course_code, name, credits, prereqs, nupaths FROM courses LIMIT 10")
-for row in cur.fetchall():
-    print(row)
-
-# Check NUpath variety
-print("\n--- Distinct NUPaths ---")
-cur.execute("SELECT DISTINCT nupath FROM course_nupaths ORDER BY nupath")
-for row in cur.fetchall():
-    print(row[0])
-
-# Spot-check a specific course
-print("\n--- CS 2500 ---")
-cur.execute("SELECT * FROM courses WHERE dept='CS' AND course_code=2500")
-print(cur.fetchone())
-
-conn.close()
+print("\nDONE — database updated successfully 🚀")
