@@ -7,6 +7,7 @@ import type {
  } from "../models/sample";
 import type {
    CourseReview,
+  CreateParentReviewInput,
   ProfessorReview,
   Review,
   ReviewPatchInputType,
@@ -27,7 +28,7 @@ import type {
   CourseThreadPostInputType,
 } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
-import { PaginationType } from "utils/pagination";
+import { PaginationType } from "../utils/pagination";
 import type {
   Professor,
   ProfessorFilterType,
@@ -55,6 +56,8 @@ import type { RMP, RMPPostInputType } from "../models/rmp";
 import { RMPRepositorySchema } from "./postgres/schema/rmp";
 import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
+import {AcademicSemester, OfferHistoryFilterType, Trace, TraceFilterType} from "../models/trace";
+import {TraceRepositorySchema} from "./postgres/schema/traces";
 
 export class Repository {
   public readonly samples: SampleRepository;
@@ -67,9 +70,9 @@ export class Repository {
   public readonly reviews: ReviewRepository;
   public readonly students: StudentRepository;
   public readonly favourites: FavouriteRepository;
+  public readonly traces: TraceRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
-  
 
   constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
     this.pool = pool;
@@ -84,6 +87,7 @@ export class Repository {
     this.students = new StudentRepositorySchema(db);
     this.favourites = new FavouriteRepositorySchema(db);
     this.rmp = new RMPRepositorySchema(db);
+    this.traces = new TraceRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -120,7 +124,9 @@ export interface ProfessorReviewChildInput {
 export interface ReviewRepository {
   getReviews(pagination: PaginationType): Promise<Review[]>;
   getReviewByID(id: string): Promise<Review>;
-  createParentReview(studentId?: string | null): Promise<string>;
+  createParentReview(
+    input: CreateParentReviewInput
+  ): Promise<string>;
   createCourseReview(
     parentId: string,
     input: CourseReviewChildInput,
@@ -203,4 +209,9 @@ export interface FavouriteRepository {
 export interface RMPRepository {
     getRMPByProfessorID(professorId: string): Promise<RMP>;
     postRMP(input: RMPPostInputType[]): Promise<RMP[]>;
+}
+
+export interface TraceRepository {
+  getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
+  getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
 }

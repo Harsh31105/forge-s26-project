@@ -6,11 +6,16 @@ interface RetryAxiosRequestConfig extends AxiosRequestConfig {
 };
 
 const forceLogout = () => {
-    window.location.href = "/login";
+    if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+        localStorage.removeItem(TOKEN_KEY);
+        window.location.href = "/login";
+    }
 };
 
+export const TOKEN_KEY = "auth_token";
+
 const apiClient = axios.create({
-    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080',
+    baseURL: process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080/api/v1',
     timeout: 10000,
     headers: {
         'Content-Type': 'application/json',
@@ -19,6 +24,13 @@ const apiClient = axios.create({
 });
 
 apiClient.interceptors.request.use((config) => {
+    if (typeof window !== "undefined") {
+        const token = localStorage.getItem(TOKEN_KEY);
+        if (token) {
+            config.headers = config.headers ?? {};
+            config.headers["Authorization"] = `Bearer ${token}`;
+        }
+    }
     return config;
 }, (error) => {
     return Promise.reject(error);
