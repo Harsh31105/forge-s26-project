@@ -3,6 +3,8 @@
 import { useFavourites } from "@/src/hooks/useFavourites";
 import { useCourse } from "@/src/hooks/useCourses";
 import { useStudent, useStudents } from "@/src/hooks/useStudents";
+import { useFavouriteMutations } from "@/src/hooks/useFavourites";
+import Link from "next/link";
 
 
 type FavoritesCardProps = {
@@ -51,14 +53,18 @@ export function FavoritesCourseRow({
     courseId,
 }: FavoritesCourseRowProps) {
     const { course, isLoading } = useCourse(courseId);
+    const {removeFavourite} = useFavouriteMutations();
     if (isLoading || !course) return null;
 
     return (
         <div className = "flex items-center justify-between bg-white px-5 py-4 shadow-sm">
             <span className="font-body text-[18px] font-semibold text-foreground">
-                {course.department.name} {course.course_code}: {course.name}
+                <Link href={`/courses/${courseId}`}>
+                    {course.department.name} {course.course_code}: {course.name}
+                </Link>
             </span>
             <span className="text-[22px] text-foreground">★</span>
+            <button onClick={() => removeFavourite(courseId)}>x</button>
         </div>
     );
 }
