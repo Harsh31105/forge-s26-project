@@ -23,7 +23,7 @@ import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { AuthHandler } from "./handler/auth";
 import { authRoutes } from "./handler/auth/routes";
-import { authMiddleware } from "../auth/middleware";
+import { authMiddleware, readOnlyMiddleware } from "../auth/middleware";
 import cookieParser from "cookie-parser";
 import { StudentHandler } from "./handler/student";
 import { studentRoutes } from "./handler/student/routes";
@@ -33,6 +33,8 @@ import { RMPHandler } from "./handler/rmp";
 import { rmpRoutes } from "./handler/rmp/routes";
 import { ProfThreadHandler } from "./handler/professorThreads";
 import { professorThreadRoutes } from "./handler/professorThreads/routes";
+import { TraceHandler } from "./handler/trace";
+import { traceRoutes } from "./handler/trace/routes";
 import { RecommendationHandler } from "./handler/recommendation";
 import { recommendationRoutes } from "./handler/recommendation/routes";
 
@@ -104,23 +106,24 @@ function registerRoutes(router: Router, repo: Repository) {
     const authHandler = new AuthHandler(repo.students);
     router.use("/auth", authRoutes(authHandler));
 
+    // Read-only endpoints: accept JWT or ANIMATION_API_KEY (GET only)
+    const reviewHandler = new ReviewHandler(repo.reviews);
+    router.use("/reviews", readOnlyMiddleware, reviewRoutes(reviewHandler));
+
+    const courseHandler = new CourseHandler(repo.courses, repo.favourites, repo.traces);
+    router.use("/courses", readOnlyMiddleware, courseRoutes(courseHandler));
+
+    const professorHandler = new ProfessorHandler(repo.professors, repo.rmp);
+    router.use("/professors", readOnlyMiddleware, professorRoutes(professorHandler));
+
     router.use(authMiddleware);
 
     const sampleHandler = new SampleHandler(repo.samples);
     router.use("/samples", sampleRoutes(sampleHandler));
 
-    const reviewHandler = new ReviewHandler(repo.reviews);
-    router.use("/reviews", reviewRoutes(reviewHandler));
-
-    const courseHandler = new CourseHandler(repo.courses, repo.favourites);
-    router.use("/courses", courseRoutes(courseHandler));
-
     // Handling Course-Threads - Starting with CourseReviews.
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
-
-    const professorHandler = new ProfessorHandler(repo.professors, repo.rmp);
-    router.use("/professors", professorRoutes(professorHandler));
 
     const rmpHandler = new RMPHandler(repo.rmp, repo.professors);
     router.use("/rmp", rmpRoutes(rmpHandler));
@@ -133,6 +136,9 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const favouritesHandler = new FavouriteHandler(repo.favourites);
     router.use("/favourites", favouriteRoutes(favouritesHandler));
+
+    const traceHandler = new TraceHandler(repo.traces);
+    router.use("/trace", traceRoutes(traceHandler));
 
     const recHandler = new RecommendationHandler(repo);
     router.use("/recommendations", recommendationRoutes(recHandler));

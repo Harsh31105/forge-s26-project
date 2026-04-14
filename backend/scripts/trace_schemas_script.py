@@ -1,3 +1,37 @@
+"""
+trace_schemas_script.py
+=======================
+Extracts structured JSON schemas from TRACE evaluation PDFs stored in S3.
+
+Designed to run on an EC2 instance with AWS credentials in the environment.
+
+Pipeline
+--------
+1. **Catalog scrape** — fetches course codes and credit hours from
+   https://catalog.northeastern.edu/course-descriptions/{department}/
+   using urllib (no external HTTP library required).
+
+2. **PDF extraction** — for each PDF in the S3 bucket:
+
+   a. *Structured PDFs* (standard TRACE template): pdfplumber parses tables
+      directly from the last page(s) to extract attendance and hours-devoted
+      chart data via regex matching against known label sets.
+
+   b. *Complex PDFs* (irregular layouts): falls back to Claude Haiku
+      (claude-haiku-4-5-20251001, max_tokens=250) which receives only the
+      last page(s) as a base64-encoded PDF document and returns chart data
+      as JSON.
+
+3. **Schema assembly** — combines catalog metadata, instructor ratings,
+   and chart data into professor / course / trace JSON schemas that map
+   directly to the database input models.
+
+Output
+------
+Each PDF produces a JSON file at s3://<BUCKET>/extracted/<original_key>.json
+Failed keys are appended to failed.txt; match scores to scores.txt.
+"""
+
 import boto3
 import pdfplumber
 import anthropic
@@ -11,10 +45,9 @@ from collections import defaultdict
 from rapidfuzz import fuzz
  
 s3 = boto3.client("s3")
-claude = anthropic.Anthropic()  # picks up ANTHROPIC_API_KEY from env
 BUCKET = "forge-s26-trace-evaluations"
 courses = defaultdict(dict)
-scrape_claude = True
+scrape_claude = False
 
 def extract_tables(pdf_bytes):
     results = []
@@ -35,6 +68,7 @@ def extract_tables(pdf_bytes):
 def extract_charts_with_claude(pdf_bytes):
     import pypdf
 
+    claude = anthropic.Anthropic()
     reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
     writer = pypdf.PdfWriter()
     for page in reader.pages[-1:]:  # last two pages only
@@ -156,6 +190,11 @@ def parse_course_info(text):
     m = re.search(r"Course ID:\s*(\d+)", text)
     if m:
         info["course_code"] = int(m.group(1))
+
+    # Subject code: e.g. "ARTF 4575" or "CS 3500" — the actual academic department
+    m = re.search(r"\b([A-Z]{2,6})\s+\d{4}\b", text)
+    if m:
+        info["subject"] = m.group(1)
 
     # Lecture type: infer "online" if the PDF has online experience questions
     if "Online" in text or "online" in text:
@@ -352,12 +391,58 @@ def process_bucket(folder=None):
 
     print(f"\nDone: {stats}")
 
+ALL_DEPT_SLUGS = [
+    "acct","acc","avm","afrs","afcs","amsl","aly","anth","ant","aai","apl","arab","arch",
+    "army","art","artg","artf","arte","arth","artd","arts","aace","asns","bnsc","bioc",
+    "bioe","binf","biol","bio","biot","btc","busn","exsc","chme","chem","chm","chns",
+    "cive","ced","comm","cmn","cmmn","cnet","cet","cs","csye","cmg","coop","cop","exed",
+    "eeam","eeba","eesc","eesh","inno","caep","crte","crwt","crim","cjs","cltr","cy",
+    "da","dads","damg","ds","deaf","dgm","dgtr","envr","eemb","econ","ecn","ecnm",
+    "educ","edut","edu","eece","eet","ensy","encp","engr","enlr","emgt","engl","eng",
+    "eslg","engw","eai","entr","esc","envs","exre","fina","fin","fsem","frnh","game",
+    "gsnd","ge","get","gis","grmn","gbst","gst","hinf","hmg","hsci","hsc","hlth",
+    "hbrw","hist","hst","hsty","hls","honr","hrmg","hrm","husv","hsv","ie","is","info",
+    "itc","ins","int","inam","insc","insh","inmi","inpr","intl","intb","intp","itln",
+    "jpns","jwss","jrnl","kore","larc","lang","lacs","law","lw","lwp","lpsc","ldr",
+    "ls","lst","ling","mgmt","mgt","mism","mgsc","mecn","mktg","mkt","matl","math",
+    "mth","matm","meie","me","met","mscr","msci","musc","mus","musi","must","nnmd",
+    "nets","npm","nrsg","ntr","or","orgb","phsc","pmst","pmcl","phmd","phdl","phil",
+    "phl","phls","pt","pth","pa","phys","phy","pols","pol","plsc","port","pdm","pst",
+    "pjm","psyc","psy","phth","ppua","prel","pbr","rga","rfa","rms","rpt","rssn",
+    "smt","smfa","socl","soc","scly","spns","slpa","sia","strt","abrd","abrb","abrc",
+    "abrl","abrs","abrh","abru","schm","sbsy","suen","tcc","telr","tele","thtr","wmns",
+]
+
+# global catalog keyed by course name → {number, credits, department}
+global_catalog = {}
+
+def scrape_all_departments():
+    """Scrape every department catalog and build a global lookup."""
+    pattern = re.compile(r'([A-Z]+)\s+(\d+)\.\s+(.+?)\.\s+\((\d+)\s+Hours?\)', re.IGNORECASE)
+    for slug in ALL_DEPT_SLUGS:
+        url = f"https://catalog.northeastern.edu/course-descriptions/{slug}/"
+        try:
+            with urllib.request.urlopen(url, timeout=10) as r:
+                html = r.read().decode("utf-8")
+        except Exception:
+            continue
+        for dept_code, number, name, credits in pattern.findall(html):
+            name = name.strip()
+            if name not in global_catalog:
+                global_catalog[name] = {
+                    "number": number,
+                    "credits": int(credits),
+                    "department": dept_code.upper(),
+                }
+    print(f"  [catalog] scraped {len(global_catalog)} courses across all departments")
+
+
 def scrape_course_information(department):
     url = f"https://catalog.northeastern.edu/course-descriptions/{department.lower()}/"
-    
+
     with urllib.request.urlopen(url) as r:
         html = r.read().decode("utf-8")
-    
+
     pattern = re.compile(r'([A-Z]+)\s+(\d+)\.\s+(.+?)\.\s+\((\d+)\s+Hours?\)', re.IGNORECASE)
 
     for _, number, name, credits in pattern.findall(html):
@@ -386,10 +471,13 @@ if __name__ == "__main__":
 
 
 
-# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/fall_2023/manolios-pete-section-04-course-16831-sp-87600-2604-175-f6d3f89020.json - --profile forge-bucket
-
+# aws s3 cp s3://forge-s26-trace-evaluations/extracted/trace-evaluations/CS/undefined/spring_2025/bernardini-kai-section-09-course-41678-sp-105108-6782-196-07f4e4e6a1.json - --profile forge-bucket
+# aws s3 cp s3://forge-s26-trace-evaluations/trace-evaluations/CS/undefined/spring_2025/bernardini-kai-section-09-course-41678-sp-105108-6782-196-07f4e4e6a1.pdf - --profile forge-bucket > example5.pdf
 
 # aws s3 cp s3://forge-s26-trace-evaluations/trace-evaluations/CS/undefined/fall_2023/manolios-pete-section-04-course-16831-sp-87600-2604-175-f6d3f89020.pdf --profile forge-bucket > example5.pdf
 
 
-# Processing trace-evaluations/CS/undefined/fall_2023/arunagiri-sara-section-01-course-11549-sp-85576-3424-175-f09c72ecf8.pdf
+# Processing trace-evaluations/CS/undefined/fall_2023/arunagiri-sara-section-01-course-11549-sp-85576-3424-175-f09c72ecf8.pdfnpx ts-node scripts/scrape-trace-to-s3.ts --department CS --dry-run --limit 5
+
+
+# npx ts-node scripts/scrape-trace-to-s3.ts --department MATH --dry-run --limit 1

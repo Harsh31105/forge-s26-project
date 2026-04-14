@@ -353,6 +353,29 @@ async function createAllTables(db: NodePgDatabase) {
             FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
             FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
         );
+
+        ALTER TABLE rmp
+        ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
+
+        DO $$ BEGIN
+            CREATE TYPE semester_enum AS ENUM ('fall', 'spring', 'summer_1', 'summer_2');
+            EXCEPTION
+        WHEN duplicate_object THEN null;
+            END $$;
+
+        ALTER TABLE review
+            ADD COLUMN IF NOT EXISTS semester semester_enum,
+            ADD COLUMN IF NOT EXISTS year INT;
+
+        DELETE FROM professor p
+            USING professor p2
+        WHERE p.first_name = p2.first_name
+          AND p.last_name = p2.last_name
+          AND p.id > p2.id;
+
+        ALTER TABLE professor
+            ADD CONSTRAINT professor_name_unique
+                UNIQUE (first_name, last_name);
     `);
 
 }
@@ -364,11 +387,13 @@ export async function cleanupTestData() {
 
     await db.execute(`
     TRUNCATE TABLE 
+      trace,
       course,
       department,
       course_thread,
       sample,
-      professor
+      professor,
+      student
     RESTART IDENTITY CASCADE;
   `);
 }
