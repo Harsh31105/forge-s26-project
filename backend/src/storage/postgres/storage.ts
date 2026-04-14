@@ -3,8 +3,6 @@ import { Repository } from "../storage";
 import {type DB, getConnectionString} from "../../config/db";
 import { setTimeout } from "node:timers/promises";
 
-
-
 export async function connectDatabase(dbConfig: DB): Promise<Pool> {
     console.log(`Pool Config - MaxConns: ${dbConfig.maxOpenConns},
                                         MinConns: ${dbConfig.maxIdleConns},

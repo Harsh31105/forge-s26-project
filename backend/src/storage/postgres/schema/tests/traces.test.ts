@@ -23,6 +23,10 @@ describe("TraceRepositorySchema DB Integration", () => {
     let testDepartmentId: number;
     let testProfessorId: string;
 
+    let profID1: string;
+    let profID2: string;
+    let profID3: string;
+
     beforeAll(async () => {
         db = await setupTestWithCleanup();
         repo = new TraceRepositorySchema(db);
@@ -188,6 +192,72 @@ describe("TraceRepositorySchema DB Integration", () => {
             );
 
             expect(traces).toHaveLength(0);
+        });
+    });
+
+    describe("getBestProfessorsByCourseID", () => {
+        test("returns professors sorted by avg efficiency descending across multiple sections and semesters", async () => {
+            // insert 2 more professors
+            profID1 = uuid();
+            profID2 = uuid();
+            profID3 = testProfessorId; // reuse existing prof as Carol
+
+            await db.insert(professor).values([
+                { id: profID1, firstName: "Alice", lastName: "Smith", tags: null, createdAt: new Date(), updatedAt: new Date() },
+                { id: profID2, firstName: "Bob", lastName: "Jones", tags: null, createdAt: new Date(), updatedAt: new Date() },
+            ]);
+
+            // Alice: spring 2024 (4.5) + fall 2024 (4.0) → avg 4.25
+            // Bob: spring 2024 (3.0) + spring 2025 (3.5) + fall 2024 (3.0) → avg ~3.17
+            // existing prof (Carol): already has fall 2024 (4.50) + spring 2023 (3.80) → avg 4.15
+            await db.insert(trace).values([
+                {
+                    courseId: testCourseId, professorId: profID1,
+                    courseName: "Algorithms", departmentId: testDepartmentId,
+                    courseCode: 5800, semester: "spring", lectureYear: 2024, lectureType: "lecture",
+                    howOftenPercentage: 80, hoursDevoted: 8, professorEfficiency: "4.5",
+                },
+                {
+                    courseId: testCourseId, professorId: profID1,
+                    courseName: "Algorithms", departmentId: testDepartmentId,
+                    courseCode: 5800, semester: "fall", lectureYear: 2024, lectureType: "lecture",
+                    howOftenPercentage: 75, hoursDevoted: 9, professorEfficiency: "4.0",
+                },
+                {
+                    courseId: testCourseId, professorId: profID2,
+                    courseName: "Algorithms", departmentId: testDepartmentId,
+                    courseCode: 5800, semester: "spring", lectureYear: 2024, lectureType: "lecture",
+                    howOftenPercentage: 70, hoursDevoted: 7, professorEfficiency: "3.0",
+                },
+                {
+                    courseId: testCourseId, professorId: profID2,
+                    courseName: "Algorithms", departmentId: testDepartmentId,
+                    courseCode: 5800, semester: "spring", lectureYear: 2025, lectureType: "lecture",
+                    howOftenPercentage: 72, hoursDevoted: 8, professorEfficiency: "3.5",
+                },
+                {
+                    courseId: testCourseId, professorId: profID2,
+                    courseName: "Algorithms", departmentId: testDepartmentId,
+                    courseCode: 5800, semester: "fall", lectureYear: 2024, lectureType: "lecture",
+                    howOftenPercentage: 68, hoursDevoted: 7, professorEfficiency: "3.0",
+                },
+            ]);
+
+            const results = await repo.getBestProfessorsByCourseID(testCourseId);
+
+            expect(results.length).toBe(3);
+            // Alice avg 4.25 should be first
+            expect(results[0]!.id).toBe(profID1);
+            expect(results[0]!.firstName).toBe("Alice");
+            // Bob avg ~3.17 should be last
+            expect(results[2]!.id).toBe(profID2);
+            expect(results[2]!.firstName).toBe("Bob");
+        });
+
+        test("returns empty array when no trace data for course", async () => {
+            const fakeCourseId = uuid();
+            const results = await repo.getBestProfessorsByCourseID(fakeCourseId);
+            expect(results).toEqual([]);
         });
     });
 });

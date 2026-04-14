@@ -108,7 +108,7 @@ function registerRoutes(router: Router, repo: Repository) {
     const reviewHandler = new ReviewHandler(repo.reviews);
     router.use("/reviews", readOnlyMiddleware, reviewRoutes(reviewHandler));
 
-    const courseHandler = new CourseHandler(repo.courses, repo.favourites);
+    const courseHandler = new CourseHandler(repo.courses, repo.favourites, repo.traces);
     router.use("/courses", readOnlyMiddleware, courseRoutes(courseHandler));
 
     const professorHandler = new ProfessorHandler(repo.professors, repo.rmp);

@@ -2,10 +2,10 @@ import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type { Course, CourseFilterType, CoursePatchInputType, CoursePostInputType } from "../../../models/course";
 import {CourseRepository} from "../../storage";
 import {course} from "../../tables/course";
-import { and, asc, desc, eq } from "drizzle-orm";
 import {NotFoundError} from "../../../errs/httpError";
 import { department } from "../../tables/department";
 import { getOffset, PaginationType } from "../../../utils/pagination";
+import { and, asc, desc, eq, sql } from "drizzle-orm";
 
 export class CourseRepositorySchema implements CourseRepository {
     constructor(private readonly db: NodePgDatabase) {
@@ -103,5 +103,5 @@ export class CourseRepositorySchema implements CourseRepository {
 
     async deleteCourse(id: string): Promise<void> {
         await this.db.delete(course).where(eq(course.id, id))
-    }
+    };
 }
