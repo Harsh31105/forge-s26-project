@@ -268,6 +268,22 @@ export interface Rmp {
   updatedAt: string;
 }
 
+/**
+ * The semester the review is referring to
+ * @nullable
+ */
+export type BaseReviewSemester =
+  | (typeof BaseReviewSemester)[keyof typeof BaseReviewSemester]
+  | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const BaseReviewSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
 export interface BaseReview {
   /** The unique ID of the review */
   id: string;
@@ -276,6 +292,16 @@ export interface BaseReview {
    * @nullable
    */
   studentId?: string | null;
+  /**
+   * The semester the review is referring to
+   * @nullable
+   */
+  semester?: BaseReviewSemester;
+  /**
+   * The year the review is referring to
+   * @nullable
+   */
+  year?: number | null;
   /**
    * Rating from 1 (worst) to 5 (best)
    * @minimum 1
@@ -313,12 +339,38 @@ export type ProfessorReview = BaseReview & ProfessorReviewAllOf;
 
 export type Review = CourseReview | ProfessorReview;
 
+/**
+ * The semester the review is referring to
+ * @nullable
+ */
+export type ReviewPostInputSemester =
+  | (typeof ReviewPostInputSemester)[keyof typeof ReviewPostInputSemester]
+  | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ReviewPostInputSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
 export interface ReviewPostInput {
   /**
    * The ID of the student submitting the review (omit for anonymous)
    * @nullable
    */
   studentId?: string | null;
+  /**
+   * The semester the review is referring to
+   * @nullable
+   */
+  semester?: ReviewPostInputSemester;
+  /**
+   * The year the review is referring to
+   * @nullable
+   */
+  year?: number | null;
   /**
    * Rating from 1 (worst) to 5 (best)
    * @minimum 1
@@ -345,7 +397,33 @@ export interface ReviewPostInput {
   tags?: string[];
 }
 
+/**
+ * The semester the review is referring to
+ * @nullable
+ */
+export type ReviewPatchInputSemester =
+  | (typeof ReviewPatchInputSemester)[keyof typeof ReviewPatchInputSemester]
+  | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ReviewPatchInputSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
 export interface ReviewPatchInput {
+  /**
+   * The semester the review is referring to
+   * @nullable
+   */
+  semester?: ReviewPatchInputSemester;
+  /**
+   * The year the review is referring to
+   * @nullable
+   */
+  year?: number | null;
   /**
    * Updated rating
    * @minimum 1
@@ -485,6 +563,70 @@ export interface Favourite {
 
 export interface FavoritePostInput {
   course_id: UuidParam;
+}
+
+export type TraceSemester = (typeof TraceSemester)[keyof typeof TraceSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const TraceSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+/**
+ * @nullable
+ */
+export type TraceLectureType = (typeof TraceLectureType)[keyof typeof TraceLectureType] | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const TraceLectureType = {
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
+} as const;
+
+export interface Trace {
+  id: number;
+  courseId: string;
+  professorId: string;
+  courseName: string;
+  departmentId: number;
+  courseCode: number;
+  semester: TraceSemester;
+  lectureYear: number;
+  /** @nullable */
+  lectureType?: TraceLectureType;
+  /**
+   * @minimum 0
+   * @maximum 100
+   */
+  howOftenPercentage: number;
+  /** @minimum 0 */
+  hoursDevoted: number;
+  /** Decimal stored as string (Drizzle behavior) */
+  professorEfficiency: string;
+  /** @nullable */
+  eval?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export type AcademicSemesterSemester =
+  (typeof AcademicSemesterSemester)[keyof typeof AcademicSemesterSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AcademicSemesterSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+export interface AcademicSemester {
+  semester: AcademicSemesterSemester;
+  year: number;
 }
 
 export type GetCourseReviewsIdThreadsParams = {
@@ -695,4 +837,64 @@ export type GetAuthCallback201 = {
   message?: string;
   /** JWT access token */
   token?: string;
+};
+
+export type GetTraceParams = {
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page
+   * @minimum 1
+   */
+  limit?: number;
+  /**
+   * Filter by course ID
+   */
+  courseId?: string;
+  /**
+   * Filter by professor ID
+   */
+  professorId?: string;
+  /**
+   * Filter by department ID
+   */
+  departmentId?: number;
+  /**
+   * Filter by semester
+   */
+  semester?: GetTraceSemester;
+};
+
+export type GetTraceSemester = (typeof GetTraceSemester)[keyof typeof GetTraceSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const GetTraceSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+export type GetTraceOfferHistoryParams = {
+  /**
+   * Page Number of Pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page
+   * @minimum 1
+   */
+  limit?: number;
+  /**
+   * Filter by Course ID
+   */
+  courseId?: string;
+  /**
+   * Filter by Professor ID
+   */
+  professorId?: string;
 };

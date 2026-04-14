@@ -1,0 +1,4 @@
+ALTER TABLE course
+    ADD COLUMN prereqs VARCHAR(1000),
+    ADD COLUMN coreqs VARCHAR(1000),
+    ADD COLUMN nupath VARCHAR(255);

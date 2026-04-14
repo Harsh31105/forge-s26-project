@@ -10,6 +10,7 @@
     "orval": "orval"
   },
   "dependencies": {
+    "@chenglou/pretext": "^0.0.3",
     "@tanstack/react-query": "^5.95.2",
     "axios": "^1.13.5",
     "jsonwebtoken": "^9.0.3",

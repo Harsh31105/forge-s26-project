@@ -30,6 +30,8 @@ tags:
     description: API Endpoint for Specific Professor Review
   - name: Favourite
     description: Favourite CRUD Operations
+  - name: Trace
+    description: API Endpoints to directly do with TRACE Evaluations
 
 paths:
   /health:
@@ -796,6 +798,48 @@ paths:
               example:
                 code: 400
                 message: "Invalid course ID format"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 500
+                message: "Internal server error"
+
+  /courses/{id}/best-professors:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: The unique identifier of the course
+        example: "1a2b3c4d-5678-90ab-cdef-1234567890ab"
+    get:
+      summary: Get best professors for a course
+      description: Returns professors who have taught this course, sorted by their average efficiency rating from TRACE data (descending)
+      tags: [Course]
+      responses:
+        "200":
+          description: Successfully retrieved best professors for the course
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Professor"
+        "400":
+          description: Invalid course ID format
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 400
+                message: "invalid ID was given"
         "500":
           description: Internal server error
           content:
@@ -1682,6 +1726,166 @@ paths:
                 code: 500
                 message: "Internal server error"
 
+  /auth/me:
+    get:
+      summary: Get current user
+      description: Returns the currently authenticated student from the JWT cookie
+      tags: [Auth]
+      responses:
+        "200":
+          description: The authenticated student
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Student"
+        "401":
+          description: Not authenticated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Error"
+              example:
+                code: 401
+                message: "Not authenticated"
+
+  /trace:
+    get:
+      summary: Get all TRACE records
+      description: Retrieves a paginated list of TRACE data with optional filtering.
+      tags: [ Trace ]
+      parameters:
+        - name: page
+          in: query
+          description: Page number of pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+
+        # Filters
+        - name: courseId
+          in: query
+          description: Filter by course ID
+          schema:
+            type: string
+            format: uuid
+
+        - name: professorId
+          in: query
+          description: Filter by professor ID
+          schema:
+            type: string
+            format: uuid
+
+        - name: departmentId
+          in: query
+          description: Filter by department ID
+          schema:
+            type: integer
+
+        - name: semester
+          in: query
+          description: Filter by semester
+          schema:
+            type: string
+            enum: [ fall, spring, summer_1, summer_2 ]
+
+      responses:
+        "200":
+          description: Successfully retrieved TRACE records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Trace"
+
+        "400":
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+              example:
+                code: 400
+                message: "Invalid queryparam parameters for trace"
+
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+              example:
+                code: 500
+                message: "failed to retrieve traces"
+
+  /trace/offer-history:
+    get:
+      summary: Get the Offer History offered by the TRACE Records
+      description: Retrieves paginated list of offer-history.
+      tags: [ Trace ]
+      parameters:
+        - name: page
+          in: query
+          description: Page Number of Pagination
+          schema:
+            type: integer
+            minimum: 1
+            default: 1
+
+        - name: limit
+          in: query
+          description: Number of items per page
+          schema:
+            type: integer
+            minimum: 1
+            default: 10
+
+        # Filters
+        - name: courseId
+          in: query
+          description: Filter by Course ID
+          schema:
+            type: string
+            format: uuid
+
+        - name: professorId
+          in: query
+          description: Filter by Professor ID
+          schema:
+            type: string
+            format: uuid
+      responses:
+        "200":
+          description: Successfully retrieved TRACE records
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AcademicSemester"
+        "400":
+          description: Invalid query parameters
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
 security:
   - bearerAuth: []
 components:
@@ -2127,6 +2331,17 @@ components:
           nullable: true
           description: The ID of the student who wrote the review (null if anonymous)
           example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        semester: 
+          type: string
+          enum: [fall, spring, summer_1, summer_2]
+          nullable: true
+          description: The semester the review is referring to
+          example: "fall"
+        year: 
+          type: integer
+          nullable: true
+          description: The year the review is referring to
+          example: 2022
         rating:
           type: integer
           minimum: 1
@@ -2198,6 +2413,17 @@ components:
           nullable: true
           description: The ID of the student submitting the review (omit for anonymous)
           example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+        semester: 
+          type: string
+          enum: [fall, spring, summer_1, summer_2]
+          nullable: true
+          description: The semester the review is referring to
+          example: "fall"
+        year: 
+          type: integer
+          nullable: true
+          description: The year the review is referring to
+          example: 2022
         rating:
           type: integer
           minimum: 1
@@ -2232,6 +2458,17 @@ components:
     ReviewPatchInput:
       type: object
       properties:
+        semester: 
+          type: string
+          enum: [fall, spring, summer_1, summer_2]
+          nullable: true
+          description: The semester the review is referring to
+          example: "fall"
+        year: 
+          type: integer
+          nullable: true
+          description: The year the review is referring to
+          example: 2022
         rating:
           type: integer
           minimum: 1
@@ -2402,3 +2639,99 @@ components:
       properties:
         course_id:
           $ref: "#/components/schemas/UuidParam"
+
+    Trace:
+      type: object
+      required:
+        - id
+        - courseId
+        - professorId
+        - courseName
+        - departmentId
+        - courseCode
+        - semester
+        - lectureYear
+        - howOftenPercentage
+        - hoursDevoted
+        - professorEfficiency
+        - createdAt
+        - updatedAt
+      properties:
+        id:
+          type: integer
+          example: 1
+
+        courseId:
+          type: string
+          format: uuid
+
+        professorId:
+          type: string
+          format: uuid
+
+        courseName:
+          type: string
+          example: "Object Oriented Design"
+
+        departmentId:
+          type: integer
+          example: 1
+
+        courseCode:
+          type: integer
+          example: 3500
+
+        semester:
+          type: string
+          enum: [ fall, spring, summer_1, summer_2 ]
+
+        lectureYear:
+          type: integer
+          example: 2024
+
+        lectureType:
+          type: string
+          enum: [ lecture, lab, online ]
+          nullable: true
+
+        howOftenPercentage:
+          type: integer
+          minimum: 0
+          maximum: 100
+          example: 75
+
+        hoursDevoted:
+          type: integer
+          minimum: 0
+          example: 12
+
+        professorEfficiency:
+          type: string
+          description: Decimal stored as string (Drizzle behavior)
+          example: "4.25"
+
+        eval:
+          type: string
+          nullable: true
+
+        createdAt:
+          type: string
+          format: date-time
+
+        updatedAt:
+          type: string
+          format: date-time
+
+    AcademicSemester:
+      type: object
+      required:
+        - semester
+        - year
+      properties:
+        semester:
+          type: string
+          enum: [fall, spring, summer_1, summer_2]
+          example: fall
+        year:
+          type: integer
+          example: 2025

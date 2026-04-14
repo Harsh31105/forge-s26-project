@@ -12,7 +12,7 @@ export function useCourses(params?: GetCoursesParams) {
         refetch,
     } = useQuery({
         queryKey: ["courses", params],
-        queryFn: () => courseAPI.getCourses(params),
+        queryFn: () => courseAPI.getCourses(params)
     });
 
     return { courses: coursesData || [], isLoading, error: error?.message || null, refetch };
@@ -93,4 +93,21 @@ export function useCourseMutations() {
         updateError: updateMutation.error?.message || null,
         deleteError: deleteMutation.error?.message || null,
     };
+}
+
+export function useBestProfessors(courseId: string) {
+    const courseAPI = getCourse();
+
+    const {
+        data: professorsData,
+        isLoading,
+        error,
+        refetch,
+    } = useQuery({
+        queryKey: ["courses", courseId, "best-professors"],
+        queryFn: () => courseAPI.getCoursesIdBestProfessors(courseId),
+        enabled: !!courseId,
+    });
+
+    return { professors: professorsData || [], isLoading, error: error?.message || null, refetch };
 }
