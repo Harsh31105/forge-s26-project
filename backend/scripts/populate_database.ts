@@ -16,7 +16,7 @@ import { course } from "../src/storage/tables/course";
 import { department } from "../src/storage/tables/department";
 import { Semester } from "../src/models/trace";
 
-const s3 = new S3Client({ region: "us-east-1" });
+const s3 = new S3Client({ region: process.env.AWS_REGION ?? "us-east-2" });
 const BUCKET = "forge-s26-trace-evaluations";
 const PREFIX = "extracted/trace-evaluations/";
 

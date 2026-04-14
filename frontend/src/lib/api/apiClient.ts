@@ -7,6 +7,7 @@ interface RetryAxiosRequestConfig extends AxiosRequestConfig {
 
 const forceLogout = () => {
     if (typeof window !== "undefined" && window.location.pathname !== "/login") {
+        localStorage.removeItem(TOKEN_KEY);
         window.location.href = "/login";
     }
 };

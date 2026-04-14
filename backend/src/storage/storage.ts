@@ -7,6 +7,7 @@ import type {
  } from "../models/sample";
 import type {
    CourseReview,
+  CreateParentReviewInput,
   ProfessorReview,
   Review,
   ReviewPatchInputType,
@@ -57,6 +58,7 @@ import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 import {AcademicSemester, OfferHistoryFilterType, Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/traces";
+
 
 export class Repository {
   public readonly samples: SampleRepository;
@@ -123,7 +125,9 @@ export interface ProfessorReviewChildInput {
 export interface ReviewRepository {
   getReviews(pagination: PaginationType): Promise<Review[]>;
   getReviewByID(id: string): Promise<Review>;
-  createParentReview(studentId?: string | null): Promise<string>;
+  createParentReview(
+    input: CreateParentReviewInput
+  ): Promise<string>;
   createCourseReview(
     parentId: string,
     input: CourseReviewChildInput,
@@ -210,5 +214,6 @@ export interface RMPRepository {
 
 export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
+  getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
 }
