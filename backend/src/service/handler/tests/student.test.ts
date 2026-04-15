@@ -327,7 +327,7 @@ describe("StudentHandler Endpoints", () => {
             repo.patchStudent.mockResolvedValue(makeStudent({ profilePictureKey: s3Key }));
 
             const res = await request(app)
-                .patch("/students/1")
+                .patch(`/students/${baseStudent.id}`)
                 .attach("profilePicture", Buffer.from("fake-image-data"), {
                     filename: "photo.jpg",
                     contentType: "image/jpeg",
@@ -348,7 +348,7 @@ describe("StudentHandler Endpoints", () => {
 
         test("invalid file type returns 400", async () => {
             const res = await request(app)
-                .patch("/students/1")
+                .patch(`/students/${baseStudent.id}`)
                 .attach("profilePicture", Buffer.from("fake-data"), {
                     filename: "doc.pdf",
                     contentType: "application/pdf",
@@ -362,7 +362,7 @@ describe("StudentHandler Endpoints", () => {
             profilePictureRepo.upload.mockRejectedValue(new Error("S3 upload failed"));
 
             const res = await request(app)
-                .patch("/students/1")
+                .patch(`/students/${baseStudent.id}`)
                 .attach("profilePicture", Buffer.from("fake-image-data"), {
                     filename: "photo.jpg",
                     contentType: "image/jpeg",
