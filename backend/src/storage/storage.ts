@@ -228,7 +228,7 @@ export interface TraceRepository {
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
 }
 
-export { ProfilePictureRepository } from "./s3/profilePictures";
+export type { ProfilePictureRepository } from "./s3/profilePictures";
 
 export interface AcademicRepository {
   getMajors(): Promise<Major[]>;

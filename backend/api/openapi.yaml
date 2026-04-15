@@ -1504,11 +1504,34 @@ paths:
 
     patch:
       summary: Update a student
-      description: Update a student's information using their UUID.
+      description: Update a student's information using their UUID. Supports optional profile picture upload via multipart/form-data.
       tags: [Student]
       requestBody:
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                graduationYear:
+                  type: integer
+                preferences:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      [exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                       flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced]
+                profilePicture:
+                  type: string
+                  format: binary
           application/json:
             schema:
               $ref: "#/components/schemas/StudentPatchInput"
