@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
+import { useSearchParams, useRouter } from "next/navigation";
 import { useCurrentUser } from "@/src/hooks/useAuth";
 import ProfilePicture from "@/src/components/ProfilePicture";
+import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 
 const MOCK_COURSES = [
   { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
@@ -65,7 +68,17 @@ function NorthStarLogo() {
 }
 
 export default function Home() {
+  const searchParams = useSearchParams();
+  const router = useRouter();
   const { firstName, user } = useCurrentUser();
+
+  useEffect(() => {
+    const token = searchParams.get("token");
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      router.replace("/");
+    }
+  }, [searchParams, router]);
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>

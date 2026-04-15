@@ -112,7 +112,7 @@ export function useUploadProfilePicture(studentID: string) {
             return customAxios({
                 url: `/students/${studentID}`,
                 method: "PATCH",
-                headers: { "Content-Type": "multipart/form-data" },
+                headers: { "Content-Type": null },
                 data: formData,
             });
         },
