@@ -89,9 +89,14 @@ export class StudentHandler {
             this.academicRepo.getStudentMinors(student.id),
         ]);
 
-        const profilePictureUrl = student.profilePictureKey
-            ? await this.profilePictureRepo.getPresignedUrl(student.profilePictureKey)
-            : null;
+        let profilePictureUrl: string | null = null;
+        if (student.profilePictureKey) {
+            try {
+                profilePictureUrl = await this.profilePictureRepo.getPresignedUrl(student.profilePictureKey);
+            } catch (err) {
+                console.error("Failed to generate presigned URL:", err);
+            }
+        }
 
         res.status(200).json({ ...student, majors, concentrations, minors, profilePictureUrl });
     }
@@ -116,9 +121,14 @@ export class StudentHandler {
             this.academicRepo.getStudentMinors(id),
         ]);
 
-        const profilePictureUrl = student.profilePictureKey
-            ? await this.profilePictureRepo.getPresignedUrl(student.profilePictureKey)
-            : null;
+        let profilePictureUrl: string | null = null;
+        if (student.profilePictureKey) {
+            try {
+                profilePictureUrl = await this.profilePictureRepo.getPresignedUrl(student.profilePictureKey);
+            } catch (err) {
+                console.error("Failed to generate presigned URL:", err);
+            }
+        }
 
         res.status(200).json({ ...student, majors, concentrations, minors, profilePictureUrl });
     }
@@ -170,7 +180,12 @@ export class StudentHandler {
             console.error(err);
             throw mapDBError(err, "Failed to patch student");
         }
-        res.status(200).json(updatedStudent);
+
+        const profilePictureUrl = updatedStudent.profilePictureKey
+            ? await this.profilePictureRepo.getPresignedUrl(updatedStudent.profilePictureKey)
+            : null;
+
+        res.status(200).json({ ...updatedStudent, profilePictureUrl });
     }
 
     // DELETE /students/:id

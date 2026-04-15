@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useCurrentUser } from "@/src/hooks/useAuth";
+import ProfilePicture from "@/src/components/ProfilePicture";
 
 const MOCK_COURSES = [
   { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
@@ -64,7 +65,7 @@ function NorthStarLogo() {
 }
 
 export default function Home() {
-  const { firstName } = useCurrentUser();
+  const { firstName, user } = useCurrentUser();
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
@@ -133,19 +134,27 @@ export default function Home() {
           justifyContent: "space-between",
           marginBottom: 48,
         }}>
-          <div>
-            <h1 style={{
-              fontFamily: "var(--font-heading)",
-              fontSize: "var(--font-size-xl)",
-              fontWeight: 700,
-              color: "var(--color-text-primary)",
-              margin: 0,
-            }}>
-              Welcome Back{firstName ? `, ${firstName}` : ""}!
-            </h1>
-            <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", marginTop: 8, marginBottom: 0 }}>
-              Continue planning your semester
-            </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 24 }}>
+            {user && (
+              <ProfilePicture
+                studentID={user.id}
+                profilePictureUrl={user.profilePictureUrl}
+              />
+            )}
+            <div>
+              <h1 style={{
+                fontFamily: "var(--font-heading)",
+                fontSize: "var(--font-size-xl)",
+                fontWeight: 700,
+                color: "var(--color-text-primary)",
+                margin: 0,
+              }}>
+                Welcome Back{firstName ? `, ${firstName}` : ""}!
+              </h1>
+              <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", marginTop: 8, marginBottom: 0 }}>
+                Continue planning your semester
+              </p>
+            </div>
           </div>
           <Link href="/courses" style={{
             background: "var(--color-primary-navy)",

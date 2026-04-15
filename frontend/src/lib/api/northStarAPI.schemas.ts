@@ -469,6 +469,8 @@ export interface Student {
   preferences: StudentPreferencesItem[];
   createdAt: string;
   updatedAt: string;
+  /** @nullable */
+  profilePictureUrl?: string | null;
 }
 
 export type StudentPostInputPreferencesItem =
