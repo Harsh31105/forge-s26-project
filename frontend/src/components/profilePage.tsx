@@ -1,8 +1,6 @@
 "use client";
 
-import { useFavourites } from "@/src/hooks/useFavourites";
 import { useCourse } from "@/src/hooks/useCourses";
-import { useStudent, useStudents } from "@/src/hooks/useStudents";
 import { useFavouriteMutations } from "@/src/hooks/useFavourites";
 import Link from "next/link";
 
@@ -53,7 +51,7 @@ export function FavoritesCourseRow({
     courseId,
 }: FavoritesCourseRowProps) {
     const { course, isLoading } = useCourse(courseId);
-    const {removeFavourite} = useFavouriteMutations();
+    const { removeFavourite } = useFavouriteMutations();
     if (isLoading || !course) return null;
 
     return (

@@ -3,12 +3,7 @@
 import { useFavourites } from "@/src/hooks/useFavourites";
 import { useStudent } from "@/src/hooks/useStudents";
 import { FavoritesCourseRow } from "@/src/components/profilePage";
-import { useQuery } from "@tanstack/react-query";
-import { customAxios } from "@/src/lib/api/apiClient";
-
-
-import {FavoritesCard} from "@/src/components/profilePage";
-import {useCurrentUser} from "@/src/hooks/useAuth";
+import { useCurrentUser } from "@/src/hooks/useAuth";
 
 export default function ProfilePage() {
     const { user, isLoading: meLoading, error: meError } = useCurrentUser();
