@@ -5,6 +5,7 @@ import {
     StudentPostInput,
     StudentPatchInput
 } from "@/src/lib/api/northStarAPI.schemas";
+import { customAxios } from "@/src/lib/api/apiClient";
 
 export function useStudents(params?: GetStudentsParams) {
     const studentAPI = getStudent();
@@ -98,5 +99,32 @@ export function useStudentMutations() {
         createError: createMutation.error?.message || null,
         updateError: updateMutation.error?.message || null,
         deleteError: deleteMutation.error?.message || null,
+    };
+}
+
+export function useUploadProfilePicture(studentID: string) {
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: (file: File) => {
+            const formData = new FormData();
+            formData.append("profilePicture", file);
+            return customAxios({
+                url: `/students/${studentID}`,
+                method: "PATCH",
+                headers: { "Content-Type": "multipart/form-data" },
+                data: formData,
+            });
+        },
+        onSuccess: () => {
+            queryClient.invalidateQueries({ queryKey: ["students", studentID] });
+            queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+        },
+    });
+
+    return {
+        uploadProfilePicture: mutation.mutateAsync,
+        isUploading: mutation.isPending,
+        uploadError: mutation.error?.message || null,
     };
 }

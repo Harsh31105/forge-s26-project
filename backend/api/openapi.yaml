@@ -2526,6 +2526,9 @@ components:
         updatedAt:
           type: string
           format: date-time
+        profilePictureUrl:
+          type: string
+          nullable: true
 
     StudentPostInput:
       type: object
