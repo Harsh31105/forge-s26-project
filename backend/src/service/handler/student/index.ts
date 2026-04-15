@@ -155,7 +155,22 @@ export class StudentHandler {
         const id = req.params.id as string;
         if (!isUUID(id)) throw BadRequest("Invalid student ID was given");
 
-        const result = StudentPatchInputSchema.safeParse(req.body);
+        const rawBody = { ...req.body };
+        if (typeof rawBody.graduationYear === "string") {
+            if (rawBody.graduationYear === "" || rawBody.graduationYear === "0") {
+                delete rawBody.graduationYear;
+            } else {
+                rawBody.graduationYear = Number(rawBody.graduationYear);
+            }
+        }
+        if (typeof rawBody.preferences === "string") {
+            rawBody.preferences = rawBody.preferences === "" ? undefined : [rawBody.preferences];
+        }
+        for (const key of ["firstName", "lastName", "email"] as const) {
+            if (rawBody[key] === "") delete rawBody[key];
+        }
+
+        const result = StudentPatchInputSchema.safeParse(rawBody);
         if (!result.success) throw BadRequest("Unable to parse input for student PATCH");
 
         const patchInput: StudentPatchInputType = result.data;
