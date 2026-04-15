@@ -1,5 +1,5 @@
 import { z } from "zod";
-//
+
 export const StudentPreferenceEnum = z.enum([
     "exam-heavy",
     "project-heavy",
