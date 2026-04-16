@@ -5,7 +5,6 @@ export interface Application {
     environment: string;
     allowedOrigins: string;
     frontendUrl: string;
-    animationApiKey: string;
 }
 
 export const applicationConfig: Application = {
@@ -13,5 +12,4 @@ export const applicationConfig: Application = {
     environment: process.env.ENVIRONMENT || 'development',
     allowedOrigins: process.env.ALLOWED_ORIGINS || 'http://localhost:3000',
     frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
-    animationApiKey: process.env.ANIMATION_API_KEY || '',
 }

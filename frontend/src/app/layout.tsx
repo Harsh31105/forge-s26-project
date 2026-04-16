@@ -7,6 +7,7 @@ import {
 } from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/src/lib/ReactQueryProvider";
+import AuthGuard from "@/src/components/AuthGuard";
 
 const libreBaskerville = Libre_Baskerville({
   variable: "--font-heading",
@@ -47,7 +48,9 @@ export default function RootLayout({
       <body
         className={`${libreBaskerville.variable} ${merriweather.variable} ${vollkornSC.variable} antialiased`}
       >
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ReactQueryProvider>
+          <AuthGuard>{children}</AuthGuard>
+        </ReactQueryProvider>
       </body>
     </html>
   );

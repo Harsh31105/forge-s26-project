@@ -23,7 +23,7 @@ import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { AuthHandler } from "./handler/auth";
 import { authRoutes } from "./handler/auth/routes";
-import { authMiddleware, readOnlyMiddleware } from "../auth/middleware";
+import { authMiddleware } from "../auth/middleware";
 import cookieParser from "cookie-parser";
 import { StudentHandler } from "./handler/student";
 import { studentRoutes } from "./handler/student/routes";
@@ -57,7 +57,7 @@ class App {
                 "http://127.0.0.1:3000",
             ],
             methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-            allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization", "X-Api-Key"],
+            allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization"],
             credentials: true,
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));
@@ -104,15 +104,15 @@ function registerRoutes(router: Router, repo: Repository) {
     const authHandler = new AuthHandler(repo.students);
     router.use("/auth", authRoutes(authHandler));
 
-    // Read-only endpoints: accept JWT or ANIMATION_API_KEY (GET only)
+    // Public endpoints — no auth required
     const reviewHandler = new ReviewHandler(repo.reviews);
-    router.use("/reviews", readOnlyMiddleware, reviewRoutes(reviewHandler));
+    router.use("/reviews", reviewRoutes(reviewHandler));
 
     const courseHandler = new CourseHandler(repo.courses, repo.favourites);
-    router.use("/courses", readOnlyMiddleware, courseRoutes(courseHandler));
+    router.use("/courses", courseRoutes(courseHandler));
 
     const professorHandler = new ProfessorHandler(repo.professors, repo.rmp);
-    router.use("/professors", readOnlyMiddleware, professorRoutes(professorHandler));
+    router.use("/professors", professorRoutes(professorHandler));
 
     router.use(authMiddleware);
 

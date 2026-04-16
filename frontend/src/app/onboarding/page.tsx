@@ -4,9 +4,11 @@ import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getStudent } from "@/src/lib/api/student";
 import { TOKEN_KEY } from "@/src/lib/api/apiClient";
-import type { Student, StudentPatchInputPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
+import { useMe } from "@/src/hooks/useMe";
+import type { StudentPatchInputPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import { StudentPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import AmbientReviews from "@/src/components/onboarding/AmbientReviews";
+import { Check, ChevronDown } from "lucide-react";
 
 // ── Static data ───────────────────────────────────────────
 
@@ -150,44 +152,24 @@ const focusRing = {
   },
 };
 
-// ── SVG helpers ───────────────────────────────────────────
+// ── Icon helpers (lucide-react) ──────────────────────────
 
 function Checkmark() {
-  return (
-    <svg width="11" height="8" viewBox="0 0 11 8" fill="none" aria-hidden="true">
-      <path
-        d="M1 3.5L4 6.5L10 1"
-        stroke="white"
-        strokeWidth="2"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
-  );
+  return <Check size={11} color="white" strokeWidth={2.5} aria-hidden="true" />;
 }
 
 function Chevron({ open }: { open: boolean }) {
   return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
+    <ChevronDown
+      size={16}
+      color={C.textSecondary}
       aria-hidden="true"
       style={{
         transform: open ? "rotate(180deg)" : "none",
         transition: "transform 0.12s",
         flexShrink: 0,
       }}
-    >
-      <path
-        d="M3 6L8 11L13 6"
-        stroke={C.textSecondary}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    />
   );
 }
 
@@ -689,10 +671,22 @@ function CourseSelector({
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const studentAPI = getStudent();
 
-  const [student, setStudent] = useState<Student | null>(null);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  // Save token from URL synchronously before hooks fire
+  const [tokenReady] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      window.history.replaceState({}, "", "/onboarding");
+    }
+    return Boolean(localStorage.getItem(TOKEN_KEY));
+  });
+
+  const { student, isLoading, error: loadError } = useMe();
+  const studentAPI = getStudent(); // kept for PATCH only
+
   const [step, setStep] = useState<1 | 2>(1);
 
   // Step 1 state
@@ -713,53 +707,19 @@ export default function OnboardingPage() {
 
   const concentrations = major ? (MAJORS_WITH_CONCENTRATIONS[major] ?? []) : [];
 
+  // Redirect if not authenticated
   useEffect(() => {
-    // DEV_PREVIEW: set to true to bypass auth and view the page locally
-    const DEV_PREVIEW = false;
-    if (DEV_PREVIEW) {
-      setStudent({
-        id: "dev",
-        firstName: "Alex",
-        lastName: "Chen",
-        email: "alex.chen@husky.neu.edu",
-        graduationYear: 0, // 0 = not yet set, so onboarding form shows
-        preferences: [],
-        createdAt: "",
-        updatedAt: "",
-      });
-      return;
-    }
-
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-    if (token) {
-      localStorage.setItem(TOKEN_KEY, token);
-      window.history.replaceState({}, "", "/onboarding");
-    }
-
-    const storedToken = token || localStorage.getItem(TOKEN_KEY);
-    if (!storedToken) {
-      router.push("/login");
-      return;
-    }
-
-    try {
-      const payload = JSON.parse(atob(storedToken.split(".")[1]));
-      studentAPI
-        .getStudentsId(payload.id)
-        .then((s) => {
-          // Already completed onboarding — skip to homepage
-          if (s.graduationYear && s.graduationYear > 0) {
-            router.push("/home");
-            return;
-          }
-          setStudent(s);
-        })
-        .catch(() => setLoadError("Failed to load your profile."));
-    } catch {
+    if (!tokenReady) {
       router.push("/login");
     }
-  }, []);
+  }, [tokenReady, router]);
+
+  // Redirect to homepage if onboarding is already complete
+  useEffect(() => {
+    if (student?.graduationYear && student.graduationYear > 0) {
+      router.push("/");
+    }
+  }, [student, router]);
 
   const toggleCourse = (id: string) => {
     setSelectedCourses((prev) =>
@@ -786,8 +746,7 @@ export default function OnboardingPage() {
         // TODO: send minors once Minor endpoints exist (tag Biak's PR)
         // TODO: send selectedCourses once course-history endpoints exist
       });
-      // TODO: route to the real homepage URL once agreed upon with other contributors
-      router.push("/home");
+      router.push("/");
     } catch {
       setSaveError("Failed to save. Please try again.");
       setSaving(false);

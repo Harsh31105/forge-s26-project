@@ -1,17 +1,7 @@
 import { useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { customAxios, TOKEN_KEY } from "@/src/lib/api/apiClient";
+import { customAxios } from "@/src/lib/api/apiClient";
 import type { CourseReview, ProfessorReview } from "@/src/lib/api/northStarAPI.schemas";
-
-const ANIMATION_API_KEY = process.env.NEXT_PUBLIC_ANIMATION_API_KEY ?? "";
-
-/** Extra headers for animation queries: use API key when no user JWT is present. */
-function animationHeaders(): Record<string, string> {
-    if (typeof window === "undefined") return {};
-    const hasToken = Boolean(localStorage.getItem(TOKEN_KEY));
-    if (hasToken || !ANIMATION_API_KEY) return {};
-    return { "x-api-key": ANIMATION_API_KEY };
-}
 
 export type Review = {
   courseCode:     string;
@@ -32,23 +22,21 @@ function isCourseReview(r: CourseReview | ProfessorReview): r is CourseReview {
  * AmbientReviews, CinematicBackground). Returns [] while loading.
  */
 export function useAnimationReviews(): Review[] {
-    const headers = animationHeaders();
-
     const { data: apiReviews } = useQuery({
         queryKey: ["animation-reviews"],
-        queryFn:  () => customAxios<(CourseReview | ProfessorReview)[]>({ url: "/reviews", method: "GET", headers }),
+        queryFn:  () => customAxios<(CourseReview | ProfessorReview)[]>({ url: "/reviews", method: "GET", params: { limit: 100 } }),
         staleTime: 5 * 60 * 1000,
     });
 
     const { data: courses } = useQuery({
         queryKey: ["animation-courses"],
-        queryFn:  () => customAxios<{ id: string; name: string; course_code: number; department: { name: string } }[]>({ url: "/courses", method: "GET", headers }),
+        queryFn:  () => customAxios<{ id: string; name: string; course_code: number; department: { name: string } }[]>({ url: "/courses", method: "GET", params: { limit: 100 } }),
         staleTime: 60 * 60 * 1000,
     });
 
     const { data: professors } = useQuery({
         queryKey: ["animation-professors"],
-        queryFn:  () => customAxios<{ id: string; firstName: string; lastName: string }[]>({ url: "/professors", method: "GET", headers }),
+        queryFn:  () => customAxios<{ id: string; firstName: string; lastName: string }[]>({ url: "/professors", method: "GET", params: { limit: 100 } }),
         staleTime: 60 * 60 * 1000,
     });
 
