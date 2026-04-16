@@ -6,7 +6,11 @@
  */
 import type {
   GetStudentsParams,
+  PatchStudentsIdBodyOne,
   Student,
+  StudentConcentrationPostInput,
+  StudentMajorPostInput,
+  StudentMinorPostInput,
   StudentPatchInput,
   StudentPostInput,
 } from "./northStarAPI.schemas";
@@ -48,15 +52,17 @@ export const getStudent = () => {
     return customAxios<Student>({ url: `/students/${id}`, method: "GET" });
   };
   /**
-   * Update a student's information using their UUID.
+   * Update a student's information using their UUID. Supports optional profile picture upload via multipart/form-data.
    * @summary Update a student
    */
-  const patchStudentsId = (id: string, studentPatchInput: StudentPatchInput) => {
+  const patchStudentsId = (
+    id: string,
+    patchStudentsIdBody: PatchStudentsIdBodyOne | StudentPatchInput,
+  ) => {
     return customAxios<Student>({
       url: `/students/${id}`,
       method: "PATCH",
-      headers: { "Content-Type": "application/json" },
-      data: studentPatchInput,
+      data: patchStudentsIdBody,
     });
   };
   /**
@@ -66,6 +72,69 @@ export const getStudent = () => {
   const deleteStudentsId = (id: string) => {
     return customAxios<void>({ url: `/students/${id}`, method: "DELETE" });
   };
+  /**
+   * Associates a major with the specified student.
+   * @summary Add a major to a student
+   */
+  const postStudentsIdMajors = (id: string, studentMajorPostInput: StudentMajorPostInput) => {
+    return customAxios<void>({
+      url: `/students/${id}/majors`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: studentMajorPostInput,
+    });
+  };
+  /**
+   * Removes the association between a student and a major.
+   * @summary Remove a major from a student
+   */
+  const deleteStudentsIdMajorsMajorId = (id: string, majorId: number) => {
+    return customAxios<void>({ url: `/students/${id}/majors/${majorId}`, method: "DELETE" });
+  };
+  /**
+   * Associates a concentration with the specified student.
+   * @summary Add a concentration to a student
+   */
+  const postStudentsIdConcentrations = (
+    id: string,
+    studentConcentrationPostInput: StudentConcentrationPostInput,
+  ) => {
+    return customAxios<void>({
+      url: `/students/${id}/concentrations`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: studentConcentrationPostInput,
+    });
+  };
+  /**
+   * Removes the association between a student and a concentration.
+   * @summary Remove a concentration from a student
+   */
+  const deleteStudentsIdConcentrationsConcentrationId = (id: string, concentrationId: number) => {
+    return customAxios<void>({
+      url: `/students/${id}/concentrations/${concentrationId}`,
+      method: "DELETE",
+    });
+  };
+  /**
+   * Associates a minor with the specified student.
+   * @summary Add a minor to a student
+   */
+  const postStudentsIdMinors = (id: string, studentMinorPostInput: StudentMinorPostInput) => {
+    return customAxios<void>({
+      url: `/students/${id}/minors`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: studentMinorPostInput,
+    });
+  };
+  /**
+   * Removes the association between a student and a minor.
+   * @summary Remove a minor from a student
+   */
+  const deleteStudentsIdMinorsMinorId = (id: string, minorId: number) => {
+    return customAxios<void>({ url: `/students/${id}/minors/${minorId}`, method: "DELETE" });
+  };
   return {
     getStudents,
     postStudents,
@@ -73,6 +142,12 @@ export const getStudent = () => {
     getStudentsId,
     patchStudentsId,
     deleteStudentsId,
+    postStudentsIdMajors,
+    deleteStudentsIdMajorsMajorId,
+    postStudentsIdConcentrations,
+    deleteStudentsIdConcentrationsConcentrationId,
+    postStudentsIdMinors,
+    deleteStudentsIdMinorsMinorId,
   };
 };
 export type GetStudentsResult = NonNullable<
@@ -92,4 +167,24 @@ export type PatchStudentsIdResult = NonNullable<
 >;
 export type DeleteStudentsIdResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getStudent>["deleteStudentsId"]>>
+>;
+export type PostStudentsIdMajorsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getStudent>["postStudentsIdMajors"]>>
+>;
+export type DeleteStudentsIdMajorsMajorIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getStudent>["deleteStudentsIdMajorsMajorId"]>>
+>;
+export type PostStudentsIdConcentrationsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getStudent>["postStudentsIdConcentrations"]>>
+>;
+export type DeleteStudentsIdConcentrationsConcentrationIdResult = NonNullable<
+  Awaited<
+    ReturnType<ReturnType<typeof getStudent>["deleteStudentsIdConcentrationsConcentrationId"]>
+  >
+>;
+export type PostStudentsIdMinorsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getStudent>["postStudentsIdMinors"]>>
+>;
+export type DeleteStudentsIdMinorsMinorIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getStudent>["deleteStudentsIdMinorsMinorId"]>>
 >;
