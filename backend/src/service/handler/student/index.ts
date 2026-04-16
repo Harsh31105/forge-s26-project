@@ -155,38 +155,28 @@ export class StudentHandler {
         const id = req.params.id as string;
         if (!isUUID(id)) throw BadRequest("Invalid student ID was given");
 
-        const rawBody = { ...req.body };
-        if (typeof rawBody.graduationYear === "string") {
-            if (rawBody.graduationYear === "" || rawBody.graduationYear === "0") {
-                delete rawBody.graduationYear;
-            } else {
-                rawBody.graduationYear = Number(rawBody.graduationYear);
-            }
-        }
-        if (typeof rawBody.preferences === "string") {
-            rawBody.preferences = rawBody.preferences === "" ? undefined : [rawBody.preferences];
-        }
-        for (const key of ["firstName", "lastName", "email"] as const) {
-            if (rawBody[key] === "") delete rawBody[key];
-        }
-
-        const result = StudentPatchInputSchema.safeParse(rawBody);
+        const result = StudentPatchInputSchema.safeParse(req.body);
         if (!result.success) throw BadRequest("Unable to parse input for student PATCH");
 
-        const patchInput: StudentPatchInputType = result.data;
-
+        let profilePictureKey: string | undefined;
         if (req.file) {
             const { mimetype, buffer } = req.file;
             if (!["image/jpeg", "image/png", "image/webp"].includes(mimetype)) {
                 throw BadRequest("Profile picture must be a JPEG, PNG, or WebP image");
             }
             try {
-                patchInput.profilePictureKey = await this.profilePictureRepo.upload(id, buffer, mimetype);
+                // Upload to S3 and capture the key so it can be stored in the DB below
+                profilePictureKey = await this.profilePictureRepo.upload(id, buffer, mimetype);
             } catch (err) {
                 console.error(err);
                 throw BadRequest("Failed to upload profile picture");
             }
         }
+
+        const patchInput: StudentPatchInputType = {
+            ...result.data,
+            ...(profilePictureKey !== undefined ? { profilePictureKey } : {}),
+        };
 
         let updatedStudent: Student;
         try {
