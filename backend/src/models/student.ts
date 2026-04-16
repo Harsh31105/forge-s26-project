@@ -74,8 +74,36 @@ export const StudentPostInputSchema = z.object({
 });
 export type StudentPostInputType = z.infer<typeof StudentPostInputSchema>;
 
-// PATCH
-export const StudentPatchInputSchema = StudentPostInputSchema.partial().extend({
+// PATCH — uses z.preprocess to coerce multipart/form-data strings (all fields arrive as strings)
+export const StudentPatchInputSchema = z.object({
+    firstName: z.preprocess(
+        (val) => (val === "" ? undefined : val),
+        z.string().min(1, "first name must not be empty").optional(),
+    ),
+    lastName: z.preprocess(
+        (val) => (val === "" ? undefined : val),
+        z.string().min(1, "last name must not be empty").optional(),
+    ),
+    email: z.preprocess(
+        (val) => (val === "" ? undefined : val),
+        z.string().email("must be a valid email").optional(),
+    ),
+    graduationYear: z.preprocess(
+        (val) => {
+            if (val === "" || val === "0" || val === 0) return undefined;
+            if (typeof val === "string") return Number(val);
+            return val;
+        },
+        z.number().int().positive().optional(),
+    ),
+    preferences: z.preprocess(
+        (val) => {
+            if (val === "" || val === undefined) return undefined;
+            if (typeof val === "string") return [val];
+            return val;
+        },
+        z.array(StudentPreferenceEnum).optional(),
+    ),
     profilePictureKey: z.string().nullable().optional(),
 });
 export type StudentPatchInputType = z.infer<typeof StudentPatchInputSchema>;
