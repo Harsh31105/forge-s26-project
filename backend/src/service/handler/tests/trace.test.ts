@@ -22,6 +22,7 @@ describe("TraceHandler Endpoints", () => {
         semester: "fall",
         lectureYear: 2024,
         lectureType: "lecture",
+        section: "01",
         howOftenPercentage: { "80-100%": 45, "60-80%": 30 },
         hoursDevoted: { "0-2": 10, "3-4": 25 },
         professorEfficiency: 4.25,
