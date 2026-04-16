@@ -26,6 +26,7 @@ export const trace = pgTable("trace", {
   courseCode: integer("course_code").notNull(),
   semester: semesterEnum("semester").notNull(),
   lectureYear: integer("lecture_year").notNull(),
+  section: varchar("section", { length: 10 }),
   lectureType: lectureTypeEnum("lecture_type"),
   eval: text("eval"),
   hoursDevoted: jsonb("hours_devoted").$type<Record<string, number>>(),

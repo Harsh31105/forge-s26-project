@@ -17,6 +17,7 @@ export interface Trace {
   courseCode: number;
   semester: Semester;
   lectureYear: number;
+  section: string | null;
   lectureType: LectureType | null;
   hoursDevoted: Record<string, number> | null;
   professorEfficiency: number | null;
@@ -34,6 +35,7 @@ export const TracePostInputSchema = z.object({
   courseCode: z.number().int(),
   semester: z.enum(["fall", "spring", "summer_1", "summer_2"]),
   lectureYear: z.number().int(),
+  section: z.string().max(10).nullable().optional(),
   lectureType: z.enum(["lecture", "lab", "online"]).nullable().optional(),
   eval: z.string().nullable().optional(),
   hoursDevoted: z.record(z.string(), z.number()).nullable().optional(),

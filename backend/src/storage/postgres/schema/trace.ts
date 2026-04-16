@@ -27,6 +27,7 @@ export class TraceRepositorySchema {
             courseCode: input.courseCode,
             semester: input.semester,
             lectureYear: input.lectureYear,
+            section: input.section ?? null,
             lectureType: input.lectureType ?? null,
             eval: input.eval ?? null,
             hoursDevoted: input.hoursDevoted ?? null,

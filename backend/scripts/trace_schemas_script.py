@@ -256,15 +256,23 @@ def parse_instructor_ratings(tables):
 def build_schemas_from_bytes(pdf_bytes, source_key, department, threshold=80):
     """Extract professor/course/trace schemas from raw PDF bytes."""
     tables = extract_tables(pdf_bytes)
-    if scrape_claude:
-        charts_data = extract_charts_with_claude(pdf_bytes)
-    else:
-        charts_data = _extract_charts_from_text(pdf_bytes)
+
 
     with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
         first_page_text = pdf.pages[0].extract_text() or ""
 
+    # Skip Fall 2025 PDFs (new trace format, not supported yet)
+    if "fall_2025" in source_key:
+        print(f"  ⚠ skipping {source_key} due to unsupported Fall 2025 format")
+        return
+
     course_info = parse_course_info(first_page_text)
+
+    if scrape_claude:
+        charts_data = extract_charts_with_claude(pdf_bytes)
+    else:
+        charts_data = _extract_charts_from_text(pdf_bytes)
+    
     professor_ratings = parse_instructor_ratings(tables)
 
     hours_devoted = {}
@@ -370,6 +378,8 @@ def process_bucket(folder=None):
 
             try:
                 result = build_schemas_from_bytes(pdf_bytes, key, department)
+                if result is None:
+                    continue
 
                 s3.put_object(
                     Bucket=BUCKET,

@@ -15,6 +15,7 @@ import { professor } from "../src/storage/tables/professor";
 import { course } from "../src/storage/tables/course";
 import { department } from "../src/storage/tables/department";
 import { Semester } from "../src/models/trace";
+import { trace } from "../src/storage/tables/trace";
 
 const s3 = new S3Client({ region: process.env.AWS_REGION ?? "us-east-2" });
 const BUCKET = "forge-s26-trace-evaluations";
@@ -34,6 +35,7 @@ interface TraceJSON {
     courseCode: string | number;
     semester: string;
     lectureYear: number;
+    section: string | null;
     lectureType: string | null;
     hoursDevoted: Record<string, number>;
     proffesorEfficency: number | null;
@@ -75,7 +77,9 @@ async function main() {
       // key shape: extracted/trace-evaluations/<DEPT>/undefined/<semester>/file.json
       const parts = key.split("/");
       const deptName = parts[2];
-
+      const filename = key.split("/").pop()!;
+      const sectionMatch = filename.match(/section-(\w+)/);
+      const section = sectionMatch ? sectionMatch[1] : null;
       // download
       let raw: string;
       try {
@@ -105,17 +109,21 @@ async function main() {
 
       try {
         // resolve department id
+
         if (!deptCache.has(deptName)) {
-          const [row] = await db
+          let [row] = await db
             .select()
             .from(department)
             .where(eq(department.name, deptName));
           if (!row) {
-            console.warn(`⚠ unknown dept "${deptName}", skipping`);
-            stats.skipped++;
-            continue;
+            console.log(`⚠ unknown dept "${deptName}", creating new record`);
+            [row] = await db
+              .insert(department)
+              .values({ name: deptName })
+              .returning();
           }
-          deptCache.set(deptName, row.id);
+
+          deptCache.set(deptName, row!.id);
         }
         const deptId = deptCache.get(deptName)!;
 
@@ -160,19 +168,38 @@ async function main() {
 
         // insert trace using TraceRepositorySchema
         const t = schema.trace;
-        await traceRepo.createTrace({
-          courseId: courseRow.id,
-          professorId: prof.id,
-          courseName: t.courseName,
-          departmentId: deptId,
-          courseCode: Number(t.courseCode),
-          semester: t.semester as Semester,
-          lectureYear: t.lectureYear,
-          lectureType: (t.lectureType as any) ?? null,
-          hoursDevoted: t.hoursDevoted ?? null,
-          professorEfficiency: t.proffesorEfficency ?? null,
-          howOftenPercentage: t.howOftenPercentage ?? null,
-        });
+        const existingTrace = await db
+          .select()
+          .from(trace)
+          .where(
+            and(
+              eq(trace.courseId, courseRow.id),
+              eq(trace.professorId, prof.id),
+              eq(trace.semester, t.semester),
+              eq(trace.lectureYear, t.lectureYear),
+              eq(trace.section, section),
+            ),
+          );
+
+        if (existingTrace.length === 0) {
+          await traceRepo.createTrace({
+            courseId: courseRow.id,
+            professorId: prof.id,
+            courseName: t.courseName,
+            departmentId: deptId,
+            courseCode: Number(t.courseCode),
+            semester: t.semester as Semester,
+            lectureYear: t.lectureYear,
+            section: section,
+            lectureType: (t.lectureType as any) ?? null,
+            hoursDevoted: t.hoursDevoted ?? null,
+            professorEfficiency: t.proffesorEfficency ?? null,
+            howOftenPercentage: t.howOftenPercentage ?? null,
+          });
+        } else {
+          console.log(`⏭ duplicate trace, skipping ${key}`);
+          stats.skipped++;
+        }
 
         console.log(`✓ ${key}`);
         stats.success++;
