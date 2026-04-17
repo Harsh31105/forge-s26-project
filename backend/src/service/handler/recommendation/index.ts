@@ -5,8 +5,6 @@ import { Repository } from "../../../storage/storage";
 import { course } from "../../../storage/tables/course";
 import { department } from "../../../storage/tables/department";
 import { courseReview } from "../../../storage/tables/courseReview";
-import { trace } from "../../../storage/tables/trace";
-import { favorite } from "../../../storage/tables/favourite";
 import { BadRequest } from "../../../errs/httpError";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? "http://localhost:8000";
@@ -31,9 +29,9 @@ export class RecommendationHandler {
         const [courseRows, reviewRows, traceRows, favouriteRows] = await Promise.all([
             db.select().from(course).innerJoin(department, eq(course.departmentId, department.id)),
             db.select().from(courseReview),
-            db.select().from(trace),
-            db.select().from(favorite).where(eq(favorite.studentId, studentId)),
-        ]);
+            this.repo.traces.getAllTraces(),
+            this.repo.favourites.getFavourites(studentId),
+            ]);
 
         const deptMap = new Map<number, string>();
         for (const row of courseRows) {
