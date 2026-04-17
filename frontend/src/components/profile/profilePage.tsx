@@ -4,7 +4,6 @@ import { useCourse } from "@/src/hooks/useCourses";
 import { useFavouriteMutations } from "@/src/hooks/useFavourites";
 import Link from "next/link";
 
-
 type FavoritesCardProps = {
     title: string;
     items: string[];
@@ -57,7 +56,7 @@ export function FavoritesCourseRow({
     if (isLoading || !course) return null;
 
     return (
-        <div className = {`flex items-center justify-between bg-white px-5 py-4 shadow-sm ${index % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
+        <div className={`flex items-center justify-between px-5 py-4 shadow-sm ${index % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
             <span className="font-body text-[18px] font-semibold text-foreground">
                 <Link href={`/courses/${courseId}`}>
                     {course.department.name} {course.course_code}: {course.name}
@@ -65,9 +64,10 @@ export function FavoritesCourseRow({
             </span>
             <div className="flex items-center gap-3">
                 <span className="text-[22px] text-foreground">★</span>
-                <button 
-                onClick={() => removeFavourite(courseId)}
-                className="flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white text-[14px] font-bold">
+                <button
+                    onClick={() => removeFavourite(courseId)}
+                    className="flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white text-[14px] font-bold"
+                >
                     ✕
                 </button>
             </div>
