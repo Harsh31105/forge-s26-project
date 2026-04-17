@@ -1,10 +1,7 @@
 import { Request, Response } from "express";
 import { z } from "zod";
-import { eq } from "drizzle-orm";
 import { Repository } from "../../../storage/storage";
-import { course } from "../../../storage/tables/course";
-import { department } from "../../../storage/tables/department";
-import { courseReview } from "../../../storage/tables/courseReview";
+import { CourseReview } from "../../../models/review";
 import { BadRequest } from "../../../errs/httpError";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? "http://localhost:8000";
@@ -24,35 +21,36 @@ export class RecommendationHandler {
         if (!result.success) throw BadRequest("semester must be apart of fall/spring/summer_1/summer_2");
         const {semester } = result.data;
 
-        const db = await this.repo.getDB();
-
-        const [courseRows, reviewRows, traceRows, favouriteRows] = await Promise.all([
-            db.select().from(course).innerJoin(department, eq(course.departmentId, department.id)),
-            db.select().from(courseReview),
+        // NOTE: getCourses and getReviews require pagination params, but the ML service needs all records
+        // to compute recommendations. We use a large limit to fetch everything in one shot since no
+        // getAllCourses/getAllCourseReviews repo methods exist yet.
+        const [courses, allReviews, traceRows, favouriteRows] = await Promise.all([
+            this.repo.courses.getCourses({ limit: 10000, page: 1 }, { sortOrder: "asc" }),
+            this.repo.reviews.getReviews({ limit: 10000, page: 1 }),
             this.repo.traces.getAllTraces(),
             this.repo.favourites.getFavourites(studentId),
-            ]);
+        ]);
+
+        const courseReviews = allReviews.filter((r): r is CourseReview => "courseId" in r);
 
         const deptMap = new Map<number, string>();
-        for (const row of courseRows) {
-            deptMap.set(row.department.id, row.department.name);
-        }
+        courses.forEach(c => deptMap.set(c.department.id, c.department.name));
 
-        const mlCourses = courseRows.map(r => ({
-            id: r.course.id,
-            name: r.course.name,
-            department_id: r.course.departmentId,
-            course_code: r.course.courseCode,
-            description: r.course.description ?? "",
-            num_credits: r.course.numCredits,
-            lecture_type: r.course.lectureType ?? "lecture",
-            created_at: r.course.createdAt.toISOString(),
-            updated_at: r.course.updatedAt.toISOString(),
+        const mlCourses = courses.map(c => ({
+            id: c.id,
+            name: c.name,
+            department_id: c.department.id,
+            course_code: c.course_code,
+            description: c.description ?? "",
+            num_credits: c.num_credits,
+            lecture_type: c.lecture_type ?? "lecture",
+            created_at: c.created_at.toISOString(),
+            updated_at: c.updated_at.toISOString(),
         }));
 
         const mlDepartments = Array.from(deptMap.entries()).map(([id, name]) => ({ id, name }));
 
-        const mlReviews = reviewRows.map(r => ({
+        const mlReviews = courseReviews.map(r => ({
             review_id: r.reviewId,
             course_id: r.courseId,
             rating: r.rating,
@@ -94,7 +92,6 @@ export class RecommendationHandler {
             reviews: mlReviews,
             trace_rows: mlTraceRows,
             favorites: mlFavorites,
-            top_k: 5,
         };
 
         let fetchRes: globalThis.Response;

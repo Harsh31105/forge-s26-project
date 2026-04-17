@@ -11,27 +11,18 @@ global.fetch = mockFetch;
 
 describe("RecommendationHandler Endpoints", () => {
     let app: Express;
-    let mockRepo: jest.Mocked<Pick<Repository, "traces" | "favourites" | "getDB">>;
+    let mockRepo: jest.Mocked<Pick<Repository, "traces" | "favourites" | "courses" | "reviews">>;
     let handler: RecommendationHandler;
 
     const studentId = "550e8400-e29b-41d4-a716-446655440000";
 
     beforeEach(() => {
-        const mockFrom = jest.fn().mockImplementation(() => ({
-            innerJoin: jest.fn().mockResolvedValue([]),
-            then: (fn: any) => Promise.resolve([]).then(fn),
-            catch: (fn: any) => Promise.resolve([]).catch(fn),
-        }));
-
-        const mockDb = {
-            select: jest.fn().mockReturnValue({ from: mockFrom }),
-        };
-
         mockRepo = {
             traces: { getAllTraces: jest.fn().mockResolvedValue([]) },
             favourites: { getFavourites: jest.fn().mockResolvedValue([]) },
-            getDB: jest.fn().mockResolvedValue(mockDb),
-        } as unknown as jest.Mocked<Pick<Repository, "traces" | "favourites" | "getDB">>;
+            courses: { getCourses: jest.fn().mockResolvedValue([]) },
+            reviews: { getReviews: jest.fn().mockResolvedValue([]) },
+        } as unknown as jest.Mocked<Pick<Repository, "traces" | "favourites" | "courses" | "reviews">>;
 
         handler = new RecommendationHandler(mockRepo as unknown as Repository);
 
