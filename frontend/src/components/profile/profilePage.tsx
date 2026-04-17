@@ -12,6 +12,7 @@ type FavoritesCardProps = {
 
 type FavoritesCourseRowProps = {
     courseId: string;
+    index: number;
 };
 
 export function FavoritesCard({
@@ -49,20 +50,27 @@ export function FavoritesCard({
 
 export function FavoritesCourseRow({
     courseId,
+    index,
 }: FavoritesCourseRowProps) {
     const { course, isLoading } = useCourse(courseId);
     const { removeFavourite } = useFavouriteMutations();
     if (isLoading || !course) return null;
 
     return (
-        <div className = "flex items-center justify-between bg-white px-5 py-4 shadow-sm">
+        <div className = {`flex items-center justify-between bg-white px-5 py-4 shadow-sm ${index % 2 === 0 ? "bg-white" : "bg-slate-50"}`}>
             <span className="font-body text-[18px] font-semibold text-foreground">
                 <Link href={`/courses/${courseId}`}>
                     {course.department.name} {course.course_code}: {course.name}
                 </Link>
             </span>
-            <span className="text-[22px] text-foreground">★</span>
-            <button onClick={() => removeFavourite(courseId)}>x</button>
+            <div className="flex items-center gap-3">
+                <span className="text-[22px] text-foreground">★</span>
+                <button 
+                onClick={() => removeFavourite(courseId)}
+                className="flex h-7 w-7 items-center justify-center rounded-full bg-red-500 text-white text-[14px] font-bold">
+                    ✕
+                </button>
+            </div>
         </div>
     );
 }

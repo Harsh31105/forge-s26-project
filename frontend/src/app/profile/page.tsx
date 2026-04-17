@@ -2,7 +2,7 @@
 
 import { useFavourites } from "@/src/hooks/useFavourites";
 import { useStudent } from "@/src/hooks/useStudents";
-import { FavoritesCourseRow } from "@/src/components/profilePage";
+import { FavoritesCourseRow } from "@/src/components/profile/profilePage";
 import { useCurrentUser } from "@/src/hooks/useAuth";
 
 export default function ProfilePage() {
@@ -74,9 +74,9 @@ export default function ProfilePage() {
     <div className="w-full">
         <div className="space-y-8 px-12 py-10 mt-16">
             <section className="flex items-start justify-between gap-8">
-            <div className="flex items-start gap-6">
-                <div className="flex h-36 w-36 items-center justify-center rounded-full border border-border bg-surface">
-                <div className="flex h-20 w-20 items-center justify-center rounded-[10px] bg-primary font-heading text-[28px] font-bold text-white shadow-md">
+            <div className="flex items-center gap-6">
+                <div className="flex h-48 w-36 items-center justify-center rounded-full border border-border bg-surface">
+                <div className="flex h-28 w-20 items-center justify-center rounded-[10px] bg-primary font-heading text-[28px] font-bold text-white shadow-md">
                     {initial}
                 </div>
                 </div>
@@ -105,8 +105,8 @@ export default function ProfilePage() {
                 </h3>
                 <div className="space-y-4">
                     {favourites?.length > 0 ? (
-                    favourites.map((favourite) => (
-                        <FavoritesCourseRow key={favourite.courseId} courseId={favourite.courseId} />
+                    favourites.map((favourite, i) => (
+                        <FavoritesCourseRow key={favourite.courseId} courseId={favourite.courseId} index={i} />
                     ))
                     ) : (
                         <div className="bg-surface-light px-5 py-4 font-body text-[16px] text-text-secondary rounded-[10px]">
