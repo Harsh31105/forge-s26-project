@@ -10,6 +10,7 @@ import type {
   CoursePostInput,
   Favourite,
   GetCoursesParams,
+  Professor,
 } from "./northStarAPI.schemas";
 
 import { customAxios } from "./apiClient";
@@ -61,6 +62,13 @@ export const getCourse = () => {
     return customAxios<void>({ url: `/courses/${id}`, method: "DELETE" });
   };
   /**
+   * Returns professors who have taught this course, sorted by their average efficiency rating from TRACE data (descending)
+   * @summary Get best professors for a course
+   */
+  const getCoursesIdBestProfessors = (id: string) => {
+    return customAxios<Professor[]>({ url: `/courses/${id}/best-professors`, method: "GET" });
+  };
+  /**
    * Returns a list of all Favourites corresponding to this Course.
    * @summary Getting Favourites for this Course
    */
@@ -73,6 +81,7 @@ export const getCourse = () => {
     getCoursesId,
     patchCoursesId,
     deleteCoursesId,
+    getCoursesIdBestProfessors,
     getCoursesIdFavourites,
   };
 };
@@ -90,6 +99,9 @@ export type PatchCoursesIdResult = NonNullable<
 >;
 export type DeleteCoursesIdResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getCourse>["deleteCoursesId"]>>
+>;
+export type GetCoursesIdBestProfessorsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["getCoursesIdBestProfessors"]>>
 >;
 export type GetCoursesIdFavouritesResult = NonNullable<
   Awaited<ReturnType<ReturnType<typeof getCourse>["getCoursesIdFavourites"]>>

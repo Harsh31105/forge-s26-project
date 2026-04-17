@@ -11,6 +11,7 @@ export function courseRoutes(handler: CourseHandler): Router {
     router.delete("/:id", handler.handleDelete.bind(handler));
 
     router.get("/:id/favourites", handler.handleGetStudentIDsWhoFavourited.bind(handler));
+    router.get("/:id/best-professors", handler.handleGetBestProfessors.bind(handler)); // best prof endpoint route
 
     return router;
 }

@@ -94,3 +94,20 @@ export function useCourseMutations() {
         deleteError: deleteMutation.error?.message || null,
     };
 }
+
+export function useBestProfessors(courseId: string) {
+    const courseAPI = getCourse();
+
+    const {
+        data: professorsData,
+        isLoading,
+        error,
+        refetch,
+    } = useQuery({
+        queryKey: ["courses", courseId, "best-professors"],
+        queryFn: () => courseAPI.getCoursesIdBestProfessors(courseId),
+        enabled: !!courseId,
+    });
+
+    return { professors: professorsData || [], isLoading, error: error?.message || null, refetch };
+}
