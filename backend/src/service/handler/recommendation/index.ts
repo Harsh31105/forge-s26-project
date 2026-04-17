@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
+import {z} from "zod";
 import { eq } from "drizzle-orm";
-import { validate as isUUID } from "uuid";
 import { Repository } from "../../../storage/storage";
 import { course } from "../../../storage/tables/course";
 import { department } from "../../../storage/tables/department";
@@ -11,15 +11,20 @@ import { BadRequest } from "../../../errs/httpError";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? "http://localhost:8000";
 
+const RecommendationRequestSchema = z.object({
+    semester: z.enum(["fall", "spring", "summer_1", "summer_2"]),
+});
+
 export class RecommendationHandler {
     constructor(private readonly repo: Repository) {}
 
     async handleGetRecommendations(req: Request, res: Response): Promise<void> {
-        const studentId = req.params.studentId as string;
-        if (!isUUID(studentId)) throw BadRequest("Invalid student ID");
+        const studentId = req.user?.id;
+        if (!studentId) throw BadRequest("Student Id not found");
 
-        const semester = req.query.semester as string | undefined;
-        if (!semester || typeof semester !== "string") throw BadRequest("semester query param is required (fall | spring | summer_1 | summer_2)");
+        const result = RecommendationRequestSchema.safeParse(req.body);
+        if (!result.success) throw BadRequest("semester must be apart of fall/spring/summer_1/summer_2");
+        const {semester } = result.data;
 
         const db = await this.repo.getDB();
 
@@ -94,27 +99,27 @@ export class RecommendationHandler {
             top_k: 5,
         };
 
-        let mlRes: Response;
+        let fetchRes: globalThis.Response;
         try {
-            mlRes = await fetch(`${ML_SERVICE_URL}/recommend`, {
+            fetchRes = await fetch(`${ML_SERVICE_URL}/recommend`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
-            }) as unknown as Response;
+            });
         } catch (err) {
             console.error("Failed to reach ML service:", err);
             res.status(502).json({ error: "Could not reach recommendation service" });
             return;
         }
 
-        if (!(mlRes as any).ok) {
-            const errText = await (mlRes as any).text();
+        if (!fetchRes.ok) {
+            const errText = await fetchRes.text();
             console.error("ML service returned error:", errText);
             res.status(502).json({ error: "Recommendation service failed" });
             return;
         }
 
-        const recommendations = await (mlRes as any).json();
+        const recommendations = await fetchRes.json();
         res.status(200).json(recommendations);
     }
 }
