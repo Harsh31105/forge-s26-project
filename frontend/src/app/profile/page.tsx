@@ -75,7 +75,7 @@ export default function ProfilePage() {
         <div className="space-y-8 px-12 py-10 mt-16">
             <section className="flex items-start justify-between gap-8">
             <div className="flex items-center gap-6">
-                <div className="flex h-48 w-36 items-center justify-center rounded-full border border-border bg-surface">
+                <div className="flex h-48 w-36 flex-shrink-0 items-center justify-center rounded-full border border-border bg-surface">
                 <div className="flex h-28 w-20 items-center justify-center rounded-[10px] bg-primary font-heading text-[28px] font-bold text-white shadow-md">
                     {initial}
                 </div>
