@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import {z} from "zod";
+import { z } from "zod";
 import { eq } from "drizzle-orm";
 import { Repository } from "../../../storage/storage";
 import { course } from "../../../storage/tables/course";
