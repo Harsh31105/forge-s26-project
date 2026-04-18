@@ -20,8 +20,10 @@ function SearchDropdown({
     const [query, setQuery] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // fetch all courses from real API
-    const { courses, isLoading } = useCourses();
+    // TODO: pagination — limit:100 is the backend max per page; fetching all courses
+    // requires paginating through all pages. For now this gets up to 100 courses.
+    // TODO: implement "Recently Viewed" courses to show before the user starts typing
+    const { courses, isLoading } = useCourses({ limit: 100 });
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -150,8 +152,7 @@ export default function ComparePage() {
     };
 
     const handleRemoveCourse = (id: string) => {
-        // X button navigates back to previous page
-        router.back();
+        setCourses((prev) => prev.filter((c) => c.id !== id));
     };
 
     const handleBack = () => {
