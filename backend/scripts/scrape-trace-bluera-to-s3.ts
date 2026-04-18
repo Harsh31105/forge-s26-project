@@ -42,10 +42,6 @@ import {
   type TraceDocumentKey,
 } from "../src/storage/s3/traceDocuments";
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
 const DEFAULT_USER_DATA_DIR = path.resolve(process.cwd(), ".trace-playwright");
 const DEFAULT_MANIFEST_PATH = path.resolve(
   process.cwd(),
@@ -95,10 +91,6 @@ interface TraceManifestEntry extends ScrapedReportMetadata {
   s3Key: string;
   uploadedAt: string;
 }
-
-// ---------------------------------------------------------------------------
-// CLI
-// ---------------------------------------------------------------------------
 
 function printUsage(): void {
   console.log(`
