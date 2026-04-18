@@ -51,7 +51,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
   describe("createParentReview + createCourseReview", () => {
     test("bad input first, good input next", async () => {
       // Invalid course ID should fail FK constraint
-      const parentId = await repo.createParentReview(testStudentId);
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
       await expect(
         repo.createCourseReview(parentId, {
           courseId: uuid(), // non-existent course
@@ -61,7 +61,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
       ).rejects.toThrow();
 
       // Valid input
-      const parentId2 = await repo.createParentReview(testStudentId);
+      const parentId2 = await repo.createParentReview({ studentId: testStudentId });
       const created = await repo.createCourseReview(parentId2, {
         courseId: testCourseId,
         rating: 4,
@@ -73,7 +73,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
     });
 
     test("creates with tags", async () => {
-      const parentId = await repo.createParentReview(testStudentId);
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
       const created = await repo.createCourseReview(parentId, {
         courseId: testCourseId,
         rating: 5,
@@ -82,11 +82,121 @@ describe("ReviewRepositorySchema DB Integration", () => {
       });
       expect(created.tags).toEqual(["easy_a"]);
     });
+
+    test("creates with semester and year", async () => {
+      const parentId = await repo.createParentReview({ studentId: testStudentId, semester: "fall", year: 2026 });
+      const created = await repo.createCourseReview(parentId, {
+        courseId: testCourseId,
+        rating: 4,
+        reviewText: "fall semester course",
+      }); 
+      expect(created.semester).toBe("fall");
+      expect(created.year).toBe(2026);
+    });
+
+    test("creates null semester and year", async () => {
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
+      const created = await repo.createCourseReview(parentId, {
+        courseId: testCourseId,
+        rating: 3,
+        reviewText: "no semester and year",
+      });
+      expect(created.semester).toBeNull();
+      expect(created.year).toBeNull();
+    });
+  });
+
+  describe("duplicate course review prevention", () => {
+    test("throws if same student reviews same course twice", async () => {
+      const p1 = await repo.createParentReview({ studentId: testStudentId });
+      await repo.createCourseReview(p1, {
+        courseId: testCourseId,
+        rating: 4,
+        reviewText: "First review",
+      });
+
+      const p2 = await repo.createParentReview({ studentId: testStudentId });
+      await expect(
+        repo.createCourseReview(p2, {
+          courseId: testCourseId,
+          rating: 3,
+          reviewText: "Duplicate review",
+        }),
+      ).rejects.toThrow("Student has already submitted a review for this course");
+    });
+
+    test("allows different students to review the same course", async () => {
+      const otherStudentId = uuid();
+      await db.execute(`
+        INSERT INTO student (id, first_name, last_name, email)
+        VALUES ('${otherStudentId}', 'Other', 'Student', '${otherStudentId}@test.com');
+      `);
+
+      const p1 = await repo.createParentReview({ studentId: testStudentId });
+      await repo.createCourseReview(p1, {
+        courseId: testCourseId,
+        rating: 4,
+        reviewText: "Student 1 review",
+      });
+
+      const p2 = await repo.createParentReview({ studentId: otherStudentId });
+      await expect(
+        repo.createCourseReview(p2, {
+          courseId: testCourseId,
+          rating: 5,
+          reviewText: "Student 2 review",
+        }),
+      ).resolves.not.toThrow();
+    });
+  });
+
+  describe("duplicate professor review prevention", () => {
+    test("throws if same student reviews same professor twice", async () => {
+      const p1 = await repo.createParentReview({ studentId: testStudentId });
+      await repo.createProfessorReview(p1, {
+        professorId: testprofessorId,
+        rating: 5,
+        reviewText: "First review",
+      });
+
+      const p2 = await repo.createParentReview({ studentId: testStudentId });
+      await expect(
+        repo.createProfessorReview(p2, {
+          professorId: testprofessorId,
+          rating: 3,
+          reviewText: "Duplicate review",
+        }),
+      ).rejects.toThrow("Student has already submitted a review for this professor");
+    });
+
+    test("allows different students to review the same professor", async () => {
+      const otherStudentId = uuid();
+      await db.execute(`
+        INSERT INTO student (id, first_name, last_name, email)
+        VALUES ('${otherStudentId}', 'Other', 'Student', '${otherStudentId}@test.com');
+      `);
+
+      const p1 = await repo.createParentReview({ studentId: testStudentId });
+      await repo.createProfessorReview(p1, {
+        professorId: testprofessorId,
+        rating: 4,
+        reviewText: "Student 1 review",
+      });
+
+      const p2 = await repo.createParentReview({ studentId: otherStudentId });
+      await expect(
+        repo.createProfessorReview(p2, {
+          professorId: testprofessorId,
+          rating: 5,
+          reviewText: "Student 2 review",
+        }),
+      ).resolves.not.toThrow();
+    });
   });
 
   describe("createParentReview + createProfessorReview", () => {
     test("bad input first, good input next", async () => {
-      const parentId = await repo.createParentReview(testStudentId);
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
       await expect(
         repo.createProfessorReview(parentId, {
           professorId: uuid(), // non-existent professor
@@ -95,7 +205,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
         }),
       ).rejects.toThrow();
 
-      const parentId2 = await repo.createParentReview(testStudentId);
+      const parentId2 = await repo.createParentReview({ studentId: testStudentId });
       const created = await repo.createProfessorReview(parentId2, {
         professorId: testprofessorId,
         rating: 5,
@@ -113,7 +223,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
       let results = await repo.getReviews(pagination);
       expect(results).toEqual([]);
 
-      const parentId = await repo.createParentReview(testStudentId);
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
       await repo.createCourseReview(parentId, {
         courseId: testCourseId,
         rating: 3,
@@ -125,13 +235,19 @@ describe("ReviewRepositorySchema DB Integration", () => {
     });
 
     test("pagination limit works", async () => {
-      const p1 = await repo.createParentReview(testStudentId);
+      const otherStudentId = uuid();
+      await db.execute(`
+        INSERT INTO student (id, first_name, last_name, email)
+        VALUES ('${otherStudentId}', 'Pagination', 'Student', '${otherStudentId}@test.com');
+      `);
+
+      const p1 = await repo.createParentReview({ studentId: testStudentId });
       await repo.createCourseReview(p1, {
         courseId: testCourseId,
         rating: 4,
         reviewText: "First",
       });
-      const p2 = await repo.createParentReview(testStudentId);
+      const p2 = await repo.createParentReview({ studentId: otherStudentId });
       await repo.createCourseReview(p2, {
         courseId: testCourseId,
         rating: 3,
@@ -147,7 +263,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
     test("invalid ID first, valid ID next", async () => {
       await expect(repo.getReviewByID(uuid())).rejects.toThrow(NotFoundError);
 
-      const parentId = await repo.createParentReview(testStudentId);
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
       const created = await repo.createCourseReview(parentId, {
         courseId: testCourseId,
         rating: 5,
@@ -158,13 +274,26 @@ describe("ReviewRepositorySchema DB Integration", () => {
       expect(found.reviewId).toBe(created.reviewId);
       expect("courseId" in found).toBe(true);
     });
+
+    test("includes semester and year in result", async () => {
+      const parentId = await repo.createParentReview({ studentId: testStudentId, semester: "summer_2", year: 2024 });
+      const created = await repo.createCourseReview(parentId, {
+        courseId: testCourseId,
+        rating: 5,
+        reviewText: "Summer course!",
+      });
+
+      const found = await repo.getReviewByID(created.reviewId);
+      expect(found.semester).toBe("summer_2");
+      expect(found.year).toBe(2024);
+    });
   });
 
   describe("patchReview", () => {
     test("non-existent ID first, valid update next", async () => {
       await expect(repo.patchReview(uuid(), { rating: 3 })).rejects.toThrow();
 
-      const parentId = await repo.createParentReview(testStudentId);
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
       const created = await repo.createCourseReview(parentId, {
         courseId: testCourseId,
         rating: 4,
@@ -178,7 +307,7 @@ describe("ReviewRepositorySchema DB Integration", () => {
     });
 
     test("patches professor review", async () => {
-      const parentId = await repo.createParentReview(testStudentId);
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
       const created = await repo.createProfessorReview(parentId, {
         professorId: testprofessorId,
         rating: 3,
@@ -191,11 +320,30 @@ describe("ReviewRepositorySchema DB Integration", () => {
       expect(patched.reviewText).toBe("Updated!");
       expect(patched.rating).toBe(3);
     });
+
+    test("patches semester and year", async () => {
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
+      const created = await repo.createCourseReview(parentId, {
+        courseId: testCourseId,
+        rating: 4,
+        reviewText: "Original text",
+      });
+
+      const patched = await repo.patchReview(created.reviewId, {
+        semester: "spring",
+        year: 2025,
+      });
+      expect(patched.semester).toBe("spring");
+      expect(patched.year).toBe(2025);
+      expect(patched.rating).toBe(4);
+    });
+
+
   });
 
   describe("deleteReview", () => {
     test("deletes and cascades to child table", async () => {
-      const parentId = await repo.createParentReview(testStudentId);
+      const parentId = await repo.createParentReview({ studentId: testStudentId });
       const created = await repo.createCourseReview(parentId, {
         courseId: testCourseId,
         rating: 4,

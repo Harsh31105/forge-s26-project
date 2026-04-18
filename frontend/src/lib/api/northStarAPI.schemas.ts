@@ -268,6 +268,22 @@ export interface Rmp {
   updatedAt: string;
 }
 
+/**
+ * The semester the review is referring to
+ * @nullable
+ */
+export type BaseReviewSemester =
+  | (typeof BaseReviewSemester)[keyof typeof BaseReviewSemester]
+  | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const BaseReviewSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
 export interface BaseReview {
   /** The unique ID of the review */
   id: string;
@@ -276,6 +292,16 @@ export interface BaseReview {
    * @nullable
    */
   studentId?: string | null;
+  /**
+   * The semester the review is referring to
+   * @nullable
+   */
+  semester?: BaseReviewSemester;
+  /**
+   * The year the review is referring to
+   * @nullable
+   */
+  year?: number | null;
   /**
    * Rating from 1 (worst) to 5 (best)
    * @minimum 1
@@ -313,12 +339,38 @@ export type ProfessorReview = BaseReview & ProfessorReviewAllOf;
 
 export type Review = CourseReview | ProfessorReview;
 
+/**
+ * The semester the review is referring to
+ * @nullable
+ */
+export type ReviewPostInputSemester =
+  | (typeof ReviewPostInputSemester)[keyof typeof ReviewPostInputSemester]
+  | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ReviewPostInputSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
 export interface ReviewPostInput {
   /**
    * The ID of the student submitting the review (omit for anonymous)
    * @nullable
    */
   studentId?: string | null;
+  /**
+   * The semester the review is referring to
+   * @nullable
+   */
+  semester?: ReviewPostInputSemester;
+  /**
+   * The year the review is referring to
+   * @nullable
+   */
+  year?: number | null;
   /**
    * Rating from 1 (worst) to 5 (best)
    * @minimum 1
@@ -345,7 +397,33 @@ export interface ReviewPostInput {
   tags?: string[];
 }
 
+/**
+ * The semester the review is referring to
+ * @nullable
+ */
+export type ReviewPatchInputSemester =
+  | (typeof ReviewPatchInputSemester)[keyof typeof ReviewPatchInputSemester]
+  | null;
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const ReviewPatchInputSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
 export interface ReviewPatchInput {
+  /**
+   * The semester the review is referring to
+   * @nullable
+   */
+  semester?: ReviewPatchInputSemester;
+  /**
+   * The year the review is referring to
+   * @nullable
+   */
+  year?: number | null;
   /**
    * Updated rating
    * @minimum 1

@@ -45,10 +45,9 @@ from collections import defaultdict
 from rapidfuzz import fuzz
  
 s3 = boto3.client("s3")
-claude = anthropic.Anthropic()  # picks up ANTHROPIC_API_KEY from env
 BUCKET = "forge-s26-trace-evaluations"
 courses = defaultdict(dict)
-scrape_claude = True
+scrape_claude = False
 
 def extract_tables(pdf_bytes):
     results = []
@@ -69,6 +68,7 @@ def extract_tables(pdf_bytes):
 def extract_charts_with_claude(pdf_bytes):
     import pypdf
 
+    claude = anthropic.Anthropic()
     reader = pypdf.PdfReader(io.BytesIO(pdf_bytes))
     writer = pypdf.PdfWriter()
     for page in reader.pages[-1:]:  # last two pages only

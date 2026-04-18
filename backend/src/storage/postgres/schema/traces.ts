@@ -3,7 +3,9 @@ import {NodePgDatabase} from "drizzle-orm/node-postgres";
 import {getOffset, PaginationType} from "../../../utils/pagination";
 import {AcademicSemester, Semester, Trace, TraceFilterType} from "../../../models/trace";
 import {trace} from "../../tables/trace";
-import { and, eq, sql } from "drizzle-orm"
+import { and, desc, eq, sql } from "drizzle-orm";
+import { professor } from "../../tables/professor";
+import type { Professor } from "../../../models/professor";
 
 export class TraceRepositorySchema implements TraceRepository {
     constructor(private readonly db: NodePgDatabase) {
@@ -24,6 +26,40 @@ export class TraceRepositorySchema implements TraceRepository {
             .offset(getOffset(pagination));
     }
 
+    async getBestProfessorsByCourseID(courseId: string): Promise<Professor[]> {
+        const rows = await this.db
+            .select({
+                id: professor.id,
+                firstName: professor.firstName,
+                lastName: professor.lastName,
+                tags: professor.tags,
+                createdAt: professor.createdAt,
+                updatedAt: professor.updatedAt,
+                avgEfficiency: sql<number>`avg(${trace.professorEfficiency})`,
+            })
+            .from(trace)
+            .innerJoin(professor, eq(trace.professorId, professor.id))
+            .where(eq(trace.courseId, courseId))
+            .groupBy(
+                professor.id,
+                professor.firstName,
+                professor.lastName,
+                professor.tags,
+                professor.createdAt,
+                professor.updatedAt,
+            )
+            .orderBy(desc(sql<number>`avg(${trace.professorEfficiency})`));
+
+        return rows.map((row) => ({
+            id: row.id,
+            firstName: row.firstName,
+            lastName: row.lastName,
+            tags: row.tags,
+            createdAt: row.createdAt,
+            updatedAt: row.updatedAt,
+        }));
+    }
+    
     async getOfferHistory(pagination: PaginationType, filters: TraceFilterType): Promise<AcademicSemester[]> {
         const conditions = [];
         if (filters.courseId !== undefined) conditions.push(eq(trace.courseId, filters.courseId));
