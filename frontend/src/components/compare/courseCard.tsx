@@ -41,8 +41,30 @@ export function CourseCard({
         ? (traces.reduce((sum, t) => sum + Number(t.professorEfficiency), 0) / traces.length).toFixed(2)
         : "N/A";
 
+    // hoursDevoted is a distribution at runtime, so {"5-7": 38.2, "8-10": 38.2, "More than 10": 18.2}
+    // despite being typed as number in the generated schema
+    function rangeMidpoint(range: string): number {
+        if (range === "More than 10") return 11; // treat as 10-12, midpoint 11
+        const m = range.match(/(\d+)-(\d+)/);
+        if (m) return (parseInt(m[1]) + parseInt(m[2])) / 2;
+        return 0;
+    }
+
+    // return one number -- the weighted average hours/week based on the distribution
+    function weightedHours(dist: Record<string, number>): number {
+        let weightedSum = 0, totalPct = 0;
+        for (const [range, pct] of Object.entries(dist)) {
+            const mid = rangeMidpoint(range);
+            if (mid > 0) { weightedSum += mid * pct; totalPct += pct; }
+        }
+        return totalPct > 0 ? weightedSum / totalPct : 0;
+    }
+
     const avgHours = traces.length > 0
-        ? (traces.reduce((sum, t) => sum + Number(t.hoursDevoted), 0) / traces.length).toFixed(1)
+        ? (traces.reduce((sum, t) => {
+            const dist = t.hoursDevoted as unknown as Record<string, number>;
+            return sum + (typeof dist === "object" && dist !== null ? weightedHours(dist) : Number(t.hoursDevoted));
+        }, 0) / traces.length).toFixed(1)
         : "N/A";
 
     // pick the most common non-null lectureType across all TRACE records for this course
@@ -104,9 +126,9 @@ export function CourseCard({
             <StatRow label="Hours/Week" value={isLoading ? "..." : avgHours} />
             <StatRow label="Lecture Type" value={isLoading ? "..." : lectureType} />
             <StatRow label="Credits" value={course.num_credits} />
-            {/* TODO: NUPath — not available */}
+            {/* TODO: NUPath — leave empty for now */}
             <StatRow label="NUPath" value="N/A" />
-            {/* TODO: Compatibility — not available */}
+            {/* TODO: Compatibility — leave empty for now */}
             <StatRow label="Compatibility" value="N/A" isLast />
         </div>
     );
