@@ -378,8 +378,8 @@ async function createAllTables(db: NodePgDatabase) {
             ADD CONSTRAINT professor_name_unique
                 UNIQUE (first_name, last_name);
 
-        ALTER TABLE trace DROP CONSTRAINT IF EXISTS hours_devoted_check;
-        ALTER TABLE trace DROP CONSTRAINT IF EXISTS how_often_percentage_check;
+        ALTER TABLE trace DROP CONSTRAINT IF EXISTS trace_hours_devoted_check;
+        ALTER TABLE trace DROP CONSTRAINT IF EXISTS trace_how_often_percentage_check;
 
         ALTER TABLE trace
             ALTER COLUMN hours_devoted TYPE jsonb USING
