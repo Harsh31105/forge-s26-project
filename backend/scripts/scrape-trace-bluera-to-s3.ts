@@ -42,10 +42,6 @@ import {
   type TraceDocumentKey,
 } from "../src/storage/s3/traceDocuments";
 
-// ---------------------------------------------------------------------------
-// Constants
-// ---------------------------------------------------------------------------
-
 const DEFAULT_USER_DATA_DIR = path.resolve(process.cwd(), ".trace-playwright");
 const DEFAULT_MANIFEST_PATH = path.resolve(
   process.cwd(),
@@ -95,10 +91,6 @@ interface TraceManifestEntry extends ScrapedReportMetadata {
   s3Key: string;
   uploadedAt: string;
 }
-
-// ---------------------------------------------------------------------------
-// CLI
-// ---------------------------------------------------------------------------
 
 function printUsage(): void {
   console.log(`
@@ -487,6 +479,7 @@ async function collectReportUrlsFromList(
       break;
     }
 
+    const sizeBefore = seenTitles.size;
     for (const entry of pageEntries) {
       if (seenTitles.has(entry.title)) continue;
       seenTitles.add(entry.title);
@@ -497,6 +490,12 @@ async function collectReportUrlsFromList(
     }
 
     if (limit && entries.length >= limit) break;
+
+    // If no new reports were found on this page, we're looping — stop
+    if (seenTitles.size === sizeBefore) {
+      console.log("No new reports on this page. Done paginating.");
+      break;
+    }
 
     // Pagination: ASP.NET WebForms uses __doPostBack links.
     // Page numbers (2, 3, ..., 10) and "..." to advance to the next batch.
@@ -868,7 +867,7 @@ async function main(): Promise<void> {
         const before = reportEntries.length;
         const filterUpper = options.filter.toUpperCase();
         reportEntries = reportEntries.filter((entry) => {
-          const match = entry.title.match(/for\s+([A-Z]{2,6}\d)/i);
+          const match = entry.title.match(/for\s+([A-Z]{2,6}\d{0,4})/i);
           if (!match) return false;
           return match[1]!.toUpperCase().startsWith(filterUpper);
         });
