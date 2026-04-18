@@ -120,7 +120,7 @@ export function CourseCard({
                 {course.name}
             </h3>
 
-            <StatRow label="Overall" value={isLoading ? "..." : `${avgEfficiency}/5`} />
+            <StatRow label="Overall" value={isLoading ? "..." : (avgEfficiency === "N/A" ? "N/A" : `${avgEfficiency}/5`)} />
             {/* TODO: Difficulty — no difficulty field exists in TRACE data ..? */}
             <StatRow label="Difficulty" value="N/A" />
             <StatRow label="Hours/Week" value={isLoading ? "..." : avgHours} />
