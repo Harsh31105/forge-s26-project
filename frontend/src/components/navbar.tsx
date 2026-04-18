@@ -52,6 +52,7 @@
 
 "use client";
 import Link from "next/link";
+import Image from "next/image";
 import { usePathname } from "next/navigation";
 
 export default function Navbar() {
@@ -81,8 +82,24 @@ export default function Navbar() {
         justifyContent: "space-between",
         alignItems: "center",
       }}>
-        {/* Placeholder for Logo */}
-        <div style={{ fontWeight: 700, fontFamily: "var(--font-logo)" }}>NorthStar</div>
+
+<Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
+  <Image
+    src="/NorthStarLogo.png"
+    alt="NorthStar"
+    width={180}
+    height={56}
+    priority
+    style={{
+      objectFit: "contain",
+      height: "56px",
+      width: "auto",
+    }}
+  />
+</Link>
+
+       {/* Placeholder for Logo */}
+       {/* <div style={{ fontWeight: 700, fontFamily: "var(--font-logo)" }}>NorthStar</div> */}
 
         <div style={{ display: "flex", gap: 48 }}>
           {navLinks.map(({ label, href }) => {
