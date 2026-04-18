@@ -23,6 +23,18 @@ VALUES ('Architecture'),
        ('Psychology')
 ON CONFLICT (name) DO NOTHING;
 
+INSERT INTO minor (name)
+VALUES
+    ('Biology'),
+    ('Business'),
+    ('Creative Writing'),
+    ('Healthcare Administration'),
+    ('Information Technology'),
+    ('Organizational Communication'),
+    ('Psychology'),
+    ('Sociology')
+    ON CONFLICT (name) DO NOTHING;
+
 -- Seed concentrations (deduplicated across all majors)
 INSERT INTO concentration (name)
 VALUES
