@@ -23,7 +23,7 @@ import { CourseThreadHandler } from "./handler/courseThreads";
 import { courseThreadRoutes } from "./handler/courseThreads/routes";
 import { AuthHandler } from "./handler/auth";
 import { authRoutes } from "./handler/auth/routes";
-import { authMiddleware } from "../auth/middleware";
+import { authMiddleware, readOnlyMiddleware } from "../auth/middleware";
 import cookieParser from "cookie-parser";
 import { StudentHandler } from "./handler/student";
 import { studentRoutes } from "./handler/student/routes";

@@ -5,7 +5,7 @@ import { useRouter } from "next/navigation";
 import { getStudent } from "@/src/lib/api/student";
 import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 import { useMe } from "@/src/hooks/useMe";
-import type { StudentPatchInputPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
+import type { Student, StudentPatchInputPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import { StudentPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import AmbientReviews from "@/src/components/onboarding/AmbientReviews";
 import { Check, ChevronDown } from "lucide-react";
@@ -152,10 +152,20 @@ const focusRing = {
   },
 };
 
-// ── Icon helpers (lucide-react) ──────────────────────────
+// ── SVG helpers ───────────────────────────────────────────
 
 function Checkmark() {
-  return <Check size={11} color="white" strokeWidth={2.5} aria-hidden="true" />;
+  return (
+    <svg width="11" height="8" viewBox="0 0 11 8" fill="none" aria-hidden="true">
+      <path
+        d="M1 3.5L4 6.5L10 1"
+        stroke="white"
+        strokeWidth="2"
+        strokeLinecap="round"
+        strokeLinejoin="round"
+      />
+    </svg>
+  );
 }
 
 function Chevron({ open }: { open: boolean }) {

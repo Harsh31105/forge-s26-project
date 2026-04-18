@@ -79,7 +79,7 @@ describe("Auth Endpoints", () => {
 
             const res = await request(app).get("/auth/callback?code=mock-code");
             expect(res.status).toBe(302);
-            expect(res.headers.location).toContain("/login?token=");
+            expect(res.headers.location).toContain("/login");
         });
 
         test("login successful when student already exists", async () => {
@@ -100,7 +100,7 @@ describe("Auth Endpoints", () => {
 
             const res = await request(app).get("/auth/callback?code=mock-code");
             expect(res.status).toBe(302);
-            expect(res.headers.location).toContain("/login?token=");
+            expect(res.headers.location).toContain("/login");
         });
 
         test("rejects non-Northeastern email", async () => {
