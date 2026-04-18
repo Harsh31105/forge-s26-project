@@ -58,6 +58,8 @@ import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 import {AcademicSemester, OfferHistoryFilterType, Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/traces";
+import type { AiSummary, AiSummaryUpsertInput, ReviewWithScore } from "../models/aiSummary";
+import { AiSummaryRepositorySchema } from "./postgres/schema/aiSummaries";
 
 
 export class Repository {
@@ -72,6 +74,7 @@ export class Repository {
   public readonly students: StudentRepository;
   public readonly favourites: FavouriteRepository;
   public readonly traces: TraceRepository;
+  public readonly aiSummaries: AiSummaryRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
 
@@ -89,6 +92,7 @@ export class Repository {
     this.favourites = new FavouriteRepositorySchema(db);
     this.rmp = new RMPRepositorySchema(db);
     this.traces = new TraceRepositorySchema(db);
+    this.aiSummaries = new AiSummaryRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -216,4 +220,10 @@ export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
   getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
+}
+
+export interface AiSummaryRepository {
+  getByReviewId(reviewId: string, reviewType: "course" | "professor"): Promise<AiSummary | null>;
+  upsertSummary(data: AiSummaryUpsertInput): Promise<AiSummary>;
+  getTopScoredReviews(reviewType: "course" | "professor", limit: number): Promise<ReviewWithScore[]>;
 }

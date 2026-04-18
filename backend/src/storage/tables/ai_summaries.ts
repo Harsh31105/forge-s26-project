@@ -1,10 +1,11 @@
 import { pgTable, uuid, text, real, timestamp, pgEnum, uniqueIndex } from "drizzle-orm/pg-core";
+import { review } from "./review";
 
 export const reviewTypeEnum = pgEnum("review_type", ["course", "professor"]);
 
 export const aiSummary = pgTable("ai_summary", {
   id: uuid("id").defaultRandom().primaryKey(),
-  reviewId: uuid("review_id").notNull(),
+  reviewId: uuid("review_id").notNull().references(() => review.id, { onDelete: "cascade" }),
   reviewType: reviewTypeEnum("review_type").notNull(),
   summary: text("summary").notNull(),
   score: real("score").notNull().default(0),
