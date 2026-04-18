@@ -21,6 +21,7 @@
   "description": "",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
+    "@google/generative-ai": "^0.24.1",
     "@jest/globals": "^30.2.0",
     "cheerio": "^1.2.0",
     "compression": "^1.8.1",

@@ -1,4 +1,4 @@
-import { pgTable, uuid, text, real, timestamp, pgEnum } from "drizzle-orm/pg-core";
+import { pgTable, uuid, text, real, timestamp, pgEnum, uniqueIndex } from "drizzle-orm/pg-core";
 
 export const reviewTypeEnum = pgEnum("review_type", ["course", "professor"]);
 
@@ -10,4 +10,6 @@ export const aiSummary = pgTable("ai_summary", {
   score: real("score").notNull().default(0),
   summaryUpdatedAt: timestamp("summary_updated_at", { withTimezone: true }).defaultNow().notNull(),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
-});
+}, (table) => [
+  uniqueIndex("ai_summary_review_id_type_idx").on(table.reviewId, table.reviewType),
+]);
