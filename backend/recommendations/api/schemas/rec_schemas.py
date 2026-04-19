@@ -54,7 +54,6 @@ class RecommendRequest(BaseModel):
     reviews: list[CourseReview]
     trace_rows: list[Trace]
     favorites: list[Favorite]
-    top_k: int = 5
 
 class RecommendResponse(BaseModel):
     high: list[RecommendationResult]
