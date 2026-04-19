@@ -1887,7 +1887,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
-  /recommend:
+  /recommendations:
     post:
       summary: Rule-based course recommendations
       description: Returns recommended courses for a student using a rule-based algorithm, scored and bucketed into high/medium/low tiers.
@@ -1912,7 +1912,7 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
 
-  /recommend/ml:
+  /recommendations/ml:
     post:
       summary: ML-based course recommendations
       description: Returns recommended courses for a student using a trained ML model, bucketed into high/medium/low tiers by probability.

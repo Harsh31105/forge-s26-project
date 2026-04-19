@@ -13,7 +13,7 @@ const RecommendationRequestSchema = z.object({
 export class RecommendationHandler {
     constructor(private readonly repo: Repository) {}
 
-    async handleGetRecommendations(req: Request, res: Response): Promise<void> {
+    async handleGetRecommendations(req: Request, res: Response, useML = false): Promise<void> {
         const studentId = req.user?.id;
         if (!studentId) throw BadRequest("Student Id not found");
 
@@ -96,7 +96,7 @@ export class RecommendationHandler {
 
         let fetchRes: globalThis.Response;
         try {
-            fetchRes = await fetch(`${ML_SERVICE_URL}/recommend`, {
+            fetchRes = await fetch(`${ML_SERVICE_URL}${useML ? "/recommend/ml" : "/recommend"}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
@@ -116,5 +116,9 @@ export class RecommendationHandler {
 
         const recommendations = await fetchRes.json();
         res.status(200).json(recommendations);
+    }
+
+    async handleGetMLRecommendations(req: Request, res: Response): Promise<void> {
+        return this.handleGetRecommendations(req, res, true);
     }
 }
