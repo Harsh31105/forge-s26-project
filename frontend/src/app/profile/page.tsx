@@ -84,12 +84,12 @@ export default function ProfilePage() {
             <section className="flex items-start justify-between gap-8">
             <div className="flex items-center gap-6">
                 <div className="flex h-48 w-48 flex-shrink-0 items-center justify-center rounded-full border border-border bg-surface">
-                <div className="flex h-20 w-20 items-center justify-center rounded-[10px] bg-primary font-heading text-[28px] font-bold text-white shadow-md">
+                <div className="flex h-20 w-20 items-center justify-center rounded-[10px] bg-primary font-heading text-[24px] font-bold text-white shadow-md">
                     {initial}
                 </div>
                 </div>
 
-                <div className="pt-1">
+                <div>
                 <h2 className="font-heading text-[40px] font-semibold text-foreground">
                     {fullName}
                 </h2>
@@ -115,8 +115,8 @@ export default function ProfilePage() {
                 </h3>
                 <div className="space-y-4">
                     {favourites?.length > 0 ? (
-                    favourites.map((favourite, i) => (
-                        <FavoritesCourseRow key={favourite.courseId} courseId={favourite.courseId} index={i} />
+                    favourites.map((favourite) => (
+                        <FavoritesCourseRow key={favourite.courseId} courseId={favourite.courseId} />
                     ))
                     ) : (
                         <div className="bg-surface-light px-5 py-4 font-body text-[16px] text-text-secondary rounded-[10px]">
