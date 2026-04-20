@@ -109,16 +109,25 @@ export function useUploadProfilePicture(studentID: string) {
         mutationFn: (file: File) => {
             const formData = new FormData();
             formData.append("profilePicture", file);
-            return customAxios({
+            return customAxios<{ profilePictureUrl?: string | null }>({
                 url: `/students/${studentID}`,
                 method: "PATCH",
-                headers: { "Content-Type": null },
+                headers: { "Content-Type": undefined },
                 data: formData,
             });
         },
-        onSuccess: () => {
+        onSuccess: (data) => {
             queryClient.invalidateQueries({ queryKey: ["students", studentID] });
             queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+            // Directly patch the ["me"] cache with the presigned URL from the PATCH response
+            // instead of relying on /auth/me to regenerate it
+            if (data?.profilePictureUrl) {
+                queryClient.setQueryData(["me"], (old: any) =>
+                    old ? { ...old, profilePictureUrl: data.profilePictureUrl } : old
+                );
+            } else {
+                queryClient.invalidateQueries({ queryKey: ["me"] });
+            }
         },
     });
 

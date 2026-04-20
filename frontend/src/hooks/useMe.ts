@@ -7,6 +7,8 @@ export function useMe() {
     const { data: student, isLoading, error } = useQuery({
         queryKey: ["me"],
         queryFn: () => meAPI.getAuthMe(),
+        staleTime: 5 * 60 * 1000,
+        refetchOnWindowFocus: false,
     });
 
     return { student, isLoading, error: error?.message || null };

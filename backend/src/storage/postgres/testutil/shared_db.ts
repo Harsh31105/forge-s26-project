@@ -358,9 +358,6 @@ async function createAllTables(db: NodePgDatabase) {
         ALTER TABLE rmp
         ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
 
-        ALTER TABLE student
-            ADD COLUMN profile_picture_key VARCHAR(500);
-
         -- Seed majors from onboarding data
                 INSERT INTO major (name)
                 VALUES ('Architecture'),

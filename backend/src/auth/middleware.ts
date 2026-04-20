@@ -28,6 +28,7 @@ export interface UserPayload {
     id: string;
     email: string;
     name: string;
+    picture?: string | null;
     iat?: number;
     exp?: number;
 }
