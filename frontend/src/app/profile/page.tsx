@@ -104,7 +104,7 @@ export default function ProfilePage() {
 
             <button 
                 onClick={() => setIsEditing(true)}
-                className="rounded-[10px] border border-foreground bg-primary px-8 py-4 font-body text-[20px] font-semibold text-white shadow-sm">
+                className="rounded-[10px] mt-15 border border-foreground bg-primary px-8 py-4 font-body text-[20px] font-semibold text-white shadow-sm">
                 Edit Profile
             </button>
             </section>
