@@ -10,7 +10,7 @@ import { eq, and } from "drizzle-orm";
 import { dbConfig, getConnectionString } from "../src/config/db";
 import { ProfessorRepositorySchema } from "../src/storage/postgres/schema/professor";
 import { CourseRepositorySchema } from "../src/storage/postgres/schema/course";
-import { TraceRepositorySchema } from "../src/storage/postgres/schema/trace";
+import { TraceRepositorySchema } from "../src/storage/postgres/schema/traces";
 import { professor } from "../src/storage/tables/professor";
 import { course } from "../src/storage/tables/course";
 import { department } from "../src/storage/tables/department";
