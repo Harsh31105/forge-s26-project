@@ -130,6 +130,24 @@ describe("StudentRepositorySchema DB Integration", () => {
 
             expect(updated.firstName).toBe("Updated");
         });
+
+        test("stores and retrieves profilePictureKey", async () => {
+            const key = "profile-pictures/test-student.jpg";
+
+            const updated = await repo.patchStudent(testStudentID, { profilePictureKey: key });
+            expect(updated.profilePictureKey).toBe(key);
+
+            const fetched = await repo.getStudentByID(testStudentID);
+            expect(fetched.profilePictureKey).toBe(key);
+        });
+
+        test("clears profilePictureKey when set to null", async () => {
+            const key = "profile-pictures/test-student.jpg";
+            await repo.patchStudent(testStudentID, { profilePictureKey: key });
+
+            const cleared = await repo.patchStudent(testStudentID, { profilePictureKey: null });
+            expect(cleared.profilePictureKey).toBeNull();
+        });
     });
 
     describe("deleteStudent", () => {
