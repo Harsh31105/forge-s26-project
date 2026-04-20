@@ -3,7 +3,6 @@ import {NodePgDatabase} from "drizzle-orm/node-postgres";
 import {getOffset, PaginationType} from "../../../utils/pagination";
 import {
     AcademicSemester,
-    Semester,
     Trace,
     TraceFilterType, type TracePatchInputType,
     type TracePostInputType
@@ -36,7 +35,7 @@ export class TraceRepositorySchema implements TraceRepository {
     async getTraceByID(id: number): Promise<Trace> {
         const [row] = await this.db.select().from(trace).where(eq(trace.id, id));
         if (!row) throw new NotFoundError("trace with given ID not found");
-        return row as Trace;
+        return row;
     }
 
     async createTrace(input: TracePostInputType): Promise<Trace> {
@@ -57,7 +56,7 @@ export class TraceRepositorySchema implements TraceRepository {
         }).returning();
 
         if (!row) throw new Error("Failed to create trace");
-        return row as Trace;
+        return row;
     }
 
     async patchTrace(id: number, input: TracePatchInputType): Promise<Trace> {
@@ -65,13 +64,12 @@ export class TraceRepositorySchema implements TraceRepository {
             Object.entries(input).filter(([_, value]) => value !== undefined)
         );
         const [row] = await this.db.update(trace).set({ ...updates }).where(eq(trace.id, id)).returning();
-        if (!row) throw new NotFoundError("trace with given ID not found");
-        return row as Trace;
+        if (!row) throw new Error();
+        return row;
     }
 
     async deleteTrace(id: number): Promise<void> {
-        const [row] = await this.db.delete(trace).where(eq(trace.id, id)).returning();
-        if (!row) throw new NotFoundError("trace with given ID not found");
+        await this.db.delete(trace).where(eq(trace.id, id)).returning();
     }
 
     async getBestProfessorsByCourseID(courseId: string): Promise<Professor[]> {
