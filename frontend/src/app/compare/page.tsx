@@ -1,7 +1,7 @@
 "use client";
 import { useState, useRef, useEffect } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { useCourses } from "../../hooks/useCourses";
 import { CourseCard } from "../../components/compare/courseCard";
 import { Course } from "../../lib/api/northStarAPI.schemas";
@@ -20,10 +20,7 @@ function SearchDropdown({
     const [query, setQuery] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
 
-    // TODO: pagination — limit:100 is the backend max per page; fetching all courses
-    // requires paginating through all pages. For now this gets up to 100 courses.
-    // TODO: implement "Recently Viewed" courses to show before the user starts typing
-    const { courses, isLoading } = useCourses({ limit: 100 });
+    const { courses, isLoading } = useCourses();
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -68,7 +65,7 @@ function SearchDropdown({
                         borderBottom: "1px solid #eee",
                     }}
                 >
-                    <span style={{ color: "#888", fontSize: 16 }}>🔍</span>
+                    <Search size={16} color="#888" />
                     <input
                         ref={inputRef}
                         value={query}
@@ -131,9 +128,9 @@ function SearchDropdown({
                 </div>
 
                 <div style={{ padding: "10px 16px", textAlign: "center" }}>
-                    <span style={{ fontSize: 12, color: "#aaa", fontStyle: "italic" }}>
+                    <p style={{ fontSize: 12, color: "#aaa", fontStyle: "italic", margin: 0 }}>
                         Or type to search all courses
-                    </span>
+                    </p>
                 </div>
             </div>
         </div>
