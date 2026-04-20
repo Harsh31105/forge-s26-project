@@ -62,14 +62,13 @@ export default function Navbar() {
     { label: "Home", href: "/" },
     { label: "Courses", href: "/courses" },
     { label: "Professors", href: "/professors" },
-    { label: "Reviews", href: "/reviews" },
   ];
 
   return (
     <nav style={{ 
       background: "var(--color-surface-light-cream)", 
-      borderBottom: "1px solid var(--color-border-tan)",
-      height: 68,
+      borderBottom: "3px solid var(--color-border-tan)",
+      height: 80,
       display: "flex",
       alignItems: "center",
     }}>
@@ -82,57 +81,73 @@ export default function Navbar() {
         justifyContent: "space-between",
         alignItems: "center",
       }}>
+        
+        {/* Logo */}
+        <Link href="/" style={{ display: "flex", alignItems: "center", marginRight: "24px" }}>
+          <Image
+            src="/NorthStarLogo.png"
+            alt="NorthStar"
+            width={230} // Slightly bigger
+            height={64}
+            priority
+            style={{ objectFit: "contain" }}
+          />
+        </Link>
 
-<Link href="/" style={{ display: "flex", alignItems: "center", textDecoration: "none" }}>
-  <Image
-    src="/NorthStarLogo.png"
-    alt="NorthStar"
-    width={180}
-    height={56}
-    priority
-    style={{
-      objectFit: "contain",
-      height: "56px",
-      width: "auto",
-    }}
-  />
-</Link>
-
-       {/* Placeholder for Logo */}
-       {/* <div style={{ fontWeight: 700, fontFamily: "var(--font-logo)" }}>NorthStar</div> */}
-
-        <div style={{ display: "flex", gap: 48 }}>
+        <div style={{ display: "flex", gap: 32, alignItems: "center" }}>
           {navLinks.map(({ label, href }) => {
             const isActive = pathname === href;
             return (
-              <Link 
-                key={label} 
-                href={href} 
-                style={{
-                  fontFamily: "var(--font-body)",
-                  fontSize: "var(--font-size-base)",
-                  color: isActive ? "var(--color-primary-navy)" : "var(--color-text-primary)",
-                  textDecoration: isActive ? "underline" : "none",
-                  fontWeight: isActive ? 600 : 400,
-                }}
-              >
+              <Link key={label} href={href} style={{
+                fontFamily: "var(--font-body)",
+                color: isActive ? "var(--color-primary-navy)" : "var(--color-text-primary)",
+                textDecoration: isActive ? "underline" : "none",
+                fontWeight: isActive ? 600 : 400,
+              }}>
                 {label}
               </Link>
             );
           })}
+
+          {/* Compare Courses */}
+          {/* possible designs are commented out */}
+
+          <Link href="/compare" style={{
+            //padding: "2px 4px",
+            //border: "1px solid var(--color-text-primary)",
+            //borderRadius: "10px",
+            fontFamily: "var(--font-body)",
+            fontWeight: 400,
+            color: "var(--color-text-primary)",
+            //textDecoration: "none",
+            textDecoration: "underline",
+          }}>
+            Compare Course
+          </Link>
         </div>
 
-        <button style={{
-          width: 40,
-          height: 40,
-          borderRadius: "50%",
-          border: "1px solid var(--color-border-tan)",
-          background: "white",
-          cursor: "pointer",
-        }}>
-          {/* User Icon Placeholder */}
-          👤
-        </button>
+        {/* Profile */}
+        <Link href="/profile">
+          <button style={{
+            width: 40,
+            height: 40,
+            borderRadius: "50%",
+            overflow: "hidden",
+            border: "1px solid var(--color-border-tan)",
+            //background: "white",
+            cursor: "pointer",
+          }}>
+             <Image
+            src="/profile.png"
+            alt="profile"
+            width={40}
+            height={40}
+            priority
+            style={{ objectFit: "contain" }}
+            //style={{ objectFit: "cover" }}
+          />
+          </button>
+        </Link>
       </div>
     </nav>
   );
