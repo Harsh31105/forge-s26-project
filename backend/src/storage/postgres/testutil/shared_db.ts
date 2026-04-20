@@ -344,7 +344,6 @@ async function createAllTables(db: NodePgDatabase) {
             semester semester_enum NOT NULL,
             lecture_year INT NOT NULL CHECK (lecture_year >= 2000 AND lecture_year <= 10000),
             lecture_type lecture_type_enum,
-            section VARCHAR(10),
             how_often_percentage INT NOT NULL CHECK (how_often_percentage BETWEEN 0 AND 100),
             hours_devoted INT NOT NULL CHECK (hours_devoted >= 0),
             professor_efficiency DECIMAL(3,2) NOT NULL CHECK (professor_efficiency BETWEEN 1.00 AND 5.00),
