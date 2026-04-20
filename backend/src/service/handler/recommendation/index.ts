@@ -13,7 +13,7 @@ const RecommendationRequestSchema = z.object({
 export class RecommendationHandler {
     constructor(private readonly repo: Repository) {}
 
-    async handleGetRecommendations(req: Request, res: Response, useML = false): Promise<void> {
+    private async _getRecommendations(req: Request, res: Response, useML: boolean): Promise<void> {
         const studentId = req.user?.id;
         if (!studentId) throw BadRequest("Student Id not found");
 
@@ -118,7 +118,11 @@ export class RecommendationHandler {
         res.status(200).json(recommendations);
     }
 
+    async handleGetRecommendations(req: Request, res: Response): Promise<void> {
+        return this._getRecommendations(req, res, false);
+    }
+
     async handleGetMLRecommendations(req: Request, res: Response): Promise<void> {
-        return this.handleGetRecommendations(req, res, true);
+        return this._getRecommendations(req, res, true);
     }
 }
