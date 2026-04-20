@@ -20,7 +20,7 @@ function SearchDropdown({
     const [query, setQuery] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const { courses, isLoading } = useCourses();
+    const { courses, isLoading } = useCourses({ limit: 4000 });
 
     useEffect(() => {
         inputRef.current?.focus();
