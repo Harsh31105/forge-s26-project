@@ -35,7 +35,7 @@ export function CourseCard({
     onRemove: () => void;
 }) {
     // fetch TRACE records for this course to compute averages
-    const { traces, isLoading } = useTraces({ courseId: course.id, limit: 100 });
+    const { traces, isLoading } = useTraces({ courseId: course.id });
 
     const avgEfficiency = traces.length > 0
         ? (traces.reduce((sum, t) => sum + Number(t.professorEfficiency), 0) / traces.length).toFixed(2)
@@ -121,14 +121,12 @@ export function CourseCard({
             </h3>
 
             <StatRow label="Overall" value={isLoading ? "..." : (avgEfficiency === "N/A" ? "N/A" : `${avgEfficiency}/5`)} />
-            {/* TODO: Difficulty — no difficulty field exists in TRACE data ..? */}
-            <StatRow label="Difficulty" value="N/A" />
             <StatRow label="Hours/Week" value={isLoading ? "..." : avgHours} />
             <StatRow label="Lecture Type" value={isLoading ? "..." : lectureType} />
             <StatRow label="Credits" value={course.num_credits} />
-            {/* TODO: NUPath — leave empty for now */}
+            {/* TODO: NUPath @itaischwarz */}
             <StatRow label="NUPath" value="N/A" />
-            {/* TODO: Compatibility — leave empty for now */}
+            {/* TODO: Compatibility @shokahuskies */}
             <StatRow label="Compatibility" value="N/A" isLast />
         </div>
     );
