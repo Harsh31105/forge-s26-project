@@ -28,7 +28,7 @@ import type {
   CourseThreadPostInputType,
 } from "../models/courseThread";
 import { CourseThreadRepositorySchema } from "./postgres/schema/courseThreads";
-import { PaginationType, CoursePaginationType } from "../utils/pagination";
+import { PaginationType } from "../utils/pagination";
 import type {
   Professor,
   ProfessorFilterType,
@@ -141,7 +141,7 @@ export interface ReviewRepository {
 }
 
 export interface CourseRepository {
-    getCourses(pagination: CoursePaginationType, filters: CourseFilterType): Promise<Course[]>;
+    getCourses(pagination: PaginationType, filters: CourseFilterType): Promise<Course[]>;
     getCourseByID(id: string): Promise<Course>;
     createCourse(input: CoursePostInputType): Promise<Course>;
     patchCourse(id: string, input: CoursePatchInputType): Promise<Course>;

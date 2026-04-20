@@ -4,7 +4,7 @@ import {CourseRepository} from "../../storage";
 import {course} from "../../tables/course";
 import {NotFoundError} from "../../../errs/httpError";
 import { department } from "../../tables/department";
-import { getOffset, CoursePaginationType } from "../../../utils/pagination";
+import { getOffset, PaginationType } from "../../../utils/pagination";
 import { and, asc, desc, eq } from "drizzle-orm";
 
 export class CourseRepositorySchema implements CourseRepository {
@@ -12,7 +12,7 @@ export class CourseRepositorySchema implements CourseRepository {
         this.db = db;
     }
 
-    async getCourses(pagination: CoursePaginationType, filters: CourseFilterType): Promise<Course[]> {
+    async getCourses(pagination: PaginationType, filters: CourseFilterType): Promise<Course[]> {
         const conditions = [];
         if (filters.department_id !== undefined) conditions.push(eq(course.departmentId, filters.department_id));
         if (filters.course_code !== undefined) conditions.push(eq(course.courseCode, filters.course_code));

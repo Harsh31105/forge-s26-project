@@ -12,7 +12,7 @@ import {
 } from "../../../errs/httpError";
 import { Request, Response } from "express";
 import { validate as isUUID } from "uuid";
-import { CoursePaginationSchema } from "../../../utils/pagination";
+import { getOffset, PaginationSchema, PaginationType } from "../../../utils/pagination";
 import { Favourite } from "../../../models/favourite";
 import type { Professor } from "../../../models/professor";
 
@@ -24,7 +24,7 @@ export class CourseHandler {
     ) {}
 
     async handleGet(req: Request, res: Response): Promise<void> {
-        const paginationResult = CoursePaginationSchema.safeParse(req.query);
+        const paginationResult = PaginationSchema.safeParse(req.query);
         if (!paginationResult.success) {
             throw BadRequest("Invalid pagination parameters");
         }
