@@ -394,6 +394,8 @@ async function createAllTables(db: NodePgDatabase) {
               WHEN how_often_percentage IS NULL THEN NULL
               ELSE to_jsonb(how_often_percentage)
         END;
+
+        ALTER TABLE trace ADD COLUMN section VARCHAR(10);
     `);
 }
 
