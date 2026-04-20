@@ -268,7 +268,7 @@ export default function ComparePage() {
                             cursor: "pointer",
                         }}
                     >
-                        Back To Course
+                        Back
                         <ArrowRight size={16} />
                     </button>
                 </div>
