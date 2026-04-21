@@ -1083,15 +1083,15 @@ export default function OnboardingPage() {
                     margin: "0 0 28px 0",
                   }}
                 >
-                  Tell us about your learning style and any courses you&apos;ve taken — we&apos;ll
-                  use this to tailor your recommendations.
+                  Tell us about your learning style — we&apos;ll use this to tailor your
+                  recommendations.
                 </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                  {/* Courses taken — optional
-                      TODO: replace MOCK_COURSES with a real API call when the course-history
-                            endpoint is ready */}
+                  {/* TODO: re-enable CourseSelector once a course-history backend endpoint exists.
+                      Commented out for now per PR review — no endpoint to persist these selections.
                   <CourseSelector selectedCourses={selectedCourses} onToggle={toggleCourse} />
+                  */}
 
                   {/* TODO: search-based course discovery (commented out until search endpoint ready)
                   <CourseSearch onSelect={...} /> */}

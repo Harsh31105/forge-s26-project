@@ -39,7 +39,7 @@ export default function LoginPage() {
     // Already logged in — skip login page
     const existing = localStorage.getItem(TOKEN_KEY);
     if (existing) {
-      router.push("/home");
+      router.push("/");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
