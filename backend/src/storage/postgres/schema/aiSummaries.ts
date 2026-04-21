@@ -107,7 +107,14 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                 ORDER BY score DESC
                 LIMIT ${limit}
             `);
-            return rows.rows as ReviewWithScore[];
+
+            return (rows.rows as Array<Record<string, unknown>>).map(row => ({
+                reviewId: row.reviewId as string,
+                reviewType: row.reviewType as "course" | "professor",
+                reviewText: row.reviewText as string,
+                score: row.score as number,
+            }));
+
         } else {
             const rows = await this.db.execute(sql`
                 SELECT
@@ -125,7 +132,12 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                 ORDER BY score DESC
                 LIMIT ${limit}
             `);
-            return rows.rows as ReviewWithScore[];
+            return (rows.rows as Array<Record<string, unknown>>).map(row => ({
+                reviewId: row.reviewId as string,
+                reviewType: row.reviewType as "course" | "professor",
+                reviewText: row.reviewText as string,
+                score: row.score as number,
+            }));
         }
     }
 }
