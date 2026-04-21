@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useCurrentUser } from "@/src/hooks/useAuth";
-//import Navbar from "@/src/components/navbar";
+//import NavBar from "@/src/components/navbar";
 
 const MOCK_COURSES = [
   { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
@@ -70,9 +70,9 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
 
-      {/* <Navbar /> */}
+      {/* <NavBar /> */}
 
-      {/* Navbar - commented out for now
+      {/* NavBar - commented out for now
       <nav style={{ background: "var(--color-surface-light-cream)", borderBottom: "1px solid var(--color-border-tan)" }}>
         <div style={{
           maxWidth: 1280,

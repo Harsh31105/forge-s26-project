@@ -1,6 +1,6 @@
 "use client";
 import { usePathname } from "next/navigation";
-import Navbar from "./navbar";
+import NavBar from "./NavBar";
 
 export default function NavbarWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -10,10 +10,10 @@ export default function NavbarWrapper({ children }: { children: React.ReactNode 
     return <>{children}</>;
   }
 
-  // Otherwise, we show the Navbar
+  // Otherwise, we show the NavBar
   return (
     <>
-      <Navbar />
+      <NavBar />
       {children}
     </>
   );
