@@ -28,7 +28,7 @@ export default function CoursesPage() {
 
   const { courses, isLoading, error } = useCourses({
     num_credits: creditsFilter ? parseInt(creditsFilter) : undefined,
-    limit: 100,
+    limit: 2690,
     ...(sortBy === "az" && { sortBy: "name", sortOrder: "asc" }),
     ...(sortBy === "za" && { sortBy: "name", sortOrder: "desc" }),
   });
