@@ -5,9 +5,10 @@ import { useMemo, useState } from "react";
 import { useProfessor } from "@/src/hooks/useProfessors";
 import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
+import { useTraces } from "@/src/hooks/useTraces";
 import { MapPin } from "lucide-react";
 import Navbar from "@/src/components/NavBar";
-import { Review } from "@/src/lib/api/northStarAPI.schemas";
+import { Review, Trace } from "@/src/lib/api/northStarAPI.schemas";
 
 type SortOption = "newest" | "oldest" | "popular";
 const formatTag = (tag: string) =>
@@ -21,7 +22,47 @@ export default function ProfessorProfilePage() {
 
   const { professor, isLoading: profLoading, error: profError } = useProfessor(id);
   const { rmpData, isLoading: rmpLoading } = useRMP(id);
-  const { reviews, isLoading: reviewsLoading } = useReviews();
+  const { reviews, isLoading: reviewsLoading } = useReviews({ limit: 500 });
+  const { traces } = useTraces({ professorId: id, limit: 500 });
+
+  // Group this professor's traces by courseId to build offer history
+  const offerHistory = useMemo(() => {
+    const byCourse = new Map<string, {
+      courseId: string;
+      courseName: string;
+      courseCode: number;
+      offerings: Array<{ semester: string; year: number }>;
+    }>();
+    for (const t of traces as Trace[]) {
+      const existing = byCourse.get(t.courseId);
+      const offering = { semester: t.semester, year: t.lectureYear };
+      if (existing) {
+        // Dedupe offerings (multiple sections per term)
+        const has = existing.offerings.some(
+          (o) => o.semester === offering.semester && o.year === offering.year,
+        );
+        if (!has) existing.offerings.push(offering);
+      } else {
+        byCourse.set(t.courseId, {
+          courseId: t.courseId,
+          courseName: t.courseName,
+          courseCode: t.courseCode,
+          offerings: [offering],
+        });
+      }
+    }
+    return Array.from(byCourse.values());
+  }, [traces]);
+
+  const formatSemester = (sem: string, year: number) => {
+    const map: Record<string, string> = {
+      fall: "Fall",
+      spring: "Spring",
+      summer_1: "Summer 1",
+      summer_2: "Summer 2",
+    };
+    return `${map[sem] ?? sem} ${year}`;
+  };
   
   const profReviews = useMemo(
     () => reviews.filter(r => (r as any).professorId === id),
@@ -316,17 +357,59 @@ export default function ProfessorProfilePage() {
           }}>
             Offer History
           </h2>
-          <div style={{
-            padding: "24px",
-            background: "var(--color-surface-light-cream)",
-            borderRadius: "var(--border-radius-sm)",
-            textAlign: "center",
-            color: "var(--color-text-secondary)",
-            fontSize: "var(--font-size-xs)",
-            border: "1px dashed var(--color-border-tan)",
-          }}>
-            Offer history coming soon
-          </div>
+          {offerHistory.length === 0 ? (
+            <div style={{
+              padding: "24px",
+              background: "var(--color-surface-light-cream)",
+              borderRadius: "var(--border-radius-sm)",
+              textAlign: "center",
+              color: "var(--color-text-secondary)",
+              fontSize: "var(--font-size-xs)",
+              border: "1px dashed var(--color-border-tan)",
+            }}>
+              No offer history available
+            </div>
+          ) : (
+            <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+              {offerHistory.map((course) => (
+                <div
+                  key={course.courseId}
+                  style={{
+                    padding: "16px 20px",
+                    background: "var(--color-surface-light-cream)",
+                    borderRadius: "var(--border-radius-sm)",
+                    border: "1px solid var(--color-border-tan)",
+                  }}
+                >
+                  <div style={{
+                    fontFamily: "var(--font-heading)",
+                    fontWeight: "var(--font-weight-bold)",
+                    fontSize: "var(--font-size-md)",
+                    color: "var(--color-text-primary)",
+                    marginBottom: "8px",
+                  }}>
+                    {course.courseCode}: {course.courseName}
+                  </div>
+                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                    {course.offerings.map((o, i) => (
+                      <span
+                        key={`${o.semester}-${o.year}-${i}`}
+                        style={{
+                          padding: "4px 12px",
+                          background: "var(--color-border-tan)",
+                          borderRadius: "999px",
+                          fontSize: "var(--font-size-xs)",
+                          color: "var(--color-text-primary)",
+                        }}
+                      >
+                        {formatSemester(o.semester, o.year)}
+                      </span>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* Reviews section */}
