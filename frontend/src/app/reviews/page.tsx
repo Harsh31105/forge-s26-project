@@ -3,6 +3,7 @@
 import { useMemo } from "react";
 import { useReviews, useReviewMutations } from "@/src/hooks/useReviews";
 import { useCurrentUser } from "@/src/hooks/useAuth";
+import { MessageCircle, ThumbsUp, Award, TrendingUp, PenLine } from "lucide-react";
 import Navbar from "@/src/components/NavBar";
 import { Review } from "@/src/lib/api/northStarAPI.schemas";
 
@@ -53,9 +54,7 @@ export default function ReviewsPage() {
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
       <Navbar activePage="reviews" />
 
-              <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 48px 80px" }}>
-
-        {/* Page header */}
+      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 48px 80px" }}>
         <h1 style={{
           fontFamily: "var(--font-heading)",
           fontSize: "var(--font-size-xl)",
@@ -73,17 +72,15 @@ export default function ReviewsPage() {
         }}>
           Your review contributions and helpful votes across courses and professors
         </p>
-
-        {/* Stats cards */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: "20px",
           marginBottom: "32px",
         }}>
-          <StatCard icon="💬" value={myReviews.length} label="Reviews Written" />
-          <StatCard icon="👍" value={0} label="Helpful Votes Given" />
-          <StatCard icon="🏅" value={0} label="Your Reviews Marked Helpful" />
+          <StatCard icon={<MessageCircle size={26} />} value={myReviews.length} label="Reviews Written" />
+          <StatCard icon={<ThumbsUp size={26} />} value={0} label="Helpful Votes Given" />
+          <StatCard icon={<Award size={26} />} value={0} label="Your Reviews Marked Helpful" />
         </div>
 
         {/* My Reviews */}
@@ -91,7 +88,7 @@ export default function ReviewsPage() {
           {isLoading && <SkeletonReviews />}
 
           {!isLoading && myReviews.length === 0 && (
-            <EmptyState icon="✍️" message="You haven't written any reviews yet." />
+            <EmptyState icon={<PenLine size={32} style={{ opacity: 0.4 }} />} message="You haven't written any reviews yet." />
           )}
 
           {!isLoading && myReviews.map((review, idx) => (
@@ -101,20 +98,24 @@ export default function ReviewsPage() {
                 <div style={{ flex: 1 }}>
                   <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start", marginBottom: "4px" }}>
                     <div>
-                      <span style={{
+                      <p style={{
                         fontSize: "var(--font-size-xs)",
                         fontWeight: "var(--font-weight-semibold)",
                         color: "var(--color-text-secondary)",
+                        margin: 0,
+                        display: "inline",
                       }}>
                         {getReviewLabel(review)}
-                      </span>
-                      <span style={{
+                      </p>
+                      <p style={{
                         fontSize: "var(--font-size-xs)",
                         color: "var(--color-text-secondary)",
                         marginLeft: "8px",
+                        margin: 0,
+                        display: "inline",
                       }}>
                         {formatDate(review.createdAt)}
-                      </span>
+                      </p>
                     </div>
                     <div style={{ display: "flex", gap: "12px" }}>
                       <button style={linkBtnStyle("var(--color-primary-navy)")}>Edit</button>
@@ -144,13 +145,9 @@ export default function ReviewsPage() {
                       ))}
                     </div>
                   )}
-
-                  <span style={{
-                    fontSize: "var(--font-size-xs)",
-                    color: "var(--color-text-secondary)",
-                  }}>
-                    👍 0 found helpful
-                  </span>
+                  <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", margin: 0, display: "flex", alignItems: "center", gap: "4px" }}>
+                    <ThumbsUp size={11} /> 0 found helpful
+                  </p>
                 </div>
               </div>
               {idx < myReviews.length - 1 && <Divider />}
@@ -166,16 +163,18 @@ export default function ReviewsPage() {
             fontStyle: "italic",
             margin: 0,
           }}>
-            Need helpful backend ticket...
+            Backend ticket needed: helpful votes system not yet implemented
           </p>
         </Section>
-
-        {/* Trending Reviews */}
-        <Section title="📈 Trending Reviews This Week">
+        <Section
+          title="Trending Reviews This Week"
+          titleIcon={<TrendingUp size={18} />}
+          subtitle="Showing most recent reviews"
+        >
           {isLoading && <SkeletonReviews count={3} />}
 
           {!isLoading && trendingReviews.length === 0 && (
-            <EmptyState icon="📊" message="No trending reviews yet." />
+            <EmptyState icon={<TrendingUp size={32} style={{ opacity: 0.4 }} />} message="No trending reviews yet." />
           )}
 
           {!isLoading && trendingReviews.map((review, idx) => (
@@ -212,13 +211,9 @@ export default function ReviewsPage() {
                   {review.reviewText ?? "No review text"}
                 </p>
               </div>
-              <span style={{
-                fontSize: "var(--font-size-xs)",
-                color: "var(--color-text-secondary)",
-                flexShrink: 0,
-              }}>
-                👍 0
-              </span>
+              <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", flexShrink: 0, margin: 0, display: "flex", alignItems: "center", gap: "4px" }}>
+                <ThumbsUp size={11} /> 0
+              </p>
             </div>
           ))}
         </Section>
@@ -229,9 +224,9 @@ export default function ReviewsPage() {
   );
 }
 
-
-function Section({ title, subtitle, children }: {
+function Section({ title, titleIcon, subtitle, children }: {
   title: string;
+  titleIcon?: React.ReactNode;
   subtitle?: string;
   children: React.ReactNode;
 }) {
@@ -249,7 +244,11 @@ function Section({ title, subtitle, children }: {
         fontWeight: "var(--font-weight-bold)",
         color: "var(--color-text-primary)",
         margin: subtitle ? "0 0 4px 0" : "0 0 16px 0",
+        display: "flex",
+        alignItems: "center",
+        gap: "8px",
       }}>
+        {titleIcon}
         {title}
       </h2>
       {subtitle && (
@@ -268,7 +267,7 @@ function Section({ title, subtitle, children }: {
 }
 
 function StatCard({ icon, value, label, note }: {
-  icon: string; value: number; label: string; note?: string;
+  icon: React.ReactNode; value: number; label: string; note?: string;
 }) {
   return (
     <div style={{
@@ -278,7 +277,9 @@ function StatCard({ icon, value, label, note }: {
       padding: "32px 24px",
       textAlign: "center",
     }}>
-      <div style={{ fontSize: "26px", marginBottom: "8px" }}>{icon}</div>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "8px", color: "var(--color-primary-navy)" }}>
+        {icon}
+      </div>
       <div style={{
         fontFamily: "var(--font-heading)",
         fontSize: "var(--font-size-xl)",
@@ -348,7 +349,7 @@ function Divider() {
   return <div style={{ borderTop: "var(--border-width) solid var(--color-border-tan)" }} />;
 }
 
-function EmptyState({ icon, message }: { icon: string; message: string }) {
+function EmptyState({ icon, message }: { icon: React.ReactNode; message: string }) {
   return (
     <div style={{
       textAlign: "center",
@@ -356,7 +357,9 @@ function EmptyState({ icon, message }: { icon: string; message: string }) {
       color: "var(--color-text-secondary)",
       fontSize: "var(--font-size-sm)",
     }}>
-      <div style={{ fontSize: "32px", marginBottom: "10px" }}>{icon}</div>
+      <div style={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
+        {icon}
+      </div>
       <p style={{ margin: 0 }}>{message}</p>
     </div>
   );
