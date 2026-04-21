@@ -94,6 +94,7 @@ describe("AiSummaryHandler Endpoints", () => {
                 reviewType: "course",
                 reviewText: "good course",
                 score: 10,
+                displayName: "Course Test",
             };
             const fresh = makeSummary(REVIEW_ID_1, "course", 0);
 
@@ -116,6 +117,7 @@ describe("AiSummaryHandler Endpoints", () => {
                 reviewType: "course",
                 reviewText: "good course",
                 score: 10,
+                displayName: "Course Test",
             };
             const upserted = makeSummary(REVIEW_ID_1, "course", 0);
 
@@ -147,6 +149,7 @@ describe("AiSummaryHandler Endpoints", () => {
                 reviewType: "professor",
                 reviewText: "Great prof",
                 score: 8,
+                displayName: "Professor Test",
             };
             const old = makeSummary(REVIEW_ID_1, "professor", ONE_WEEK_MS + 1000);
             const fresh = makeSummary(REVIEW_ID_1, "professor", 0);
@@ -179,6 +182,7 @@ describe("AiSummaryHandler Endpoints", () => {
                 reviewType: "course",
                 reviewText: "Great course",
                 score: 10,
+                displayName: "Course Test",
             };
             const old = makeSummary(REVIEW_ID_1, "course", ONE_WEEK_MS + 1000);
 
@@ -202,6 +206,7 @@ describe("AiSummaryHandler Endpoints", () => {
                 reviewType: "course",
                 reviewText: "Great course",
                 score: 10,
+                displayName: "Course Test",
             };
             const upserted = makeSummary(REVIEW_ID_1, "course", 0);
 
@@ -231,6 +236,7 @@ describe("AiSummaryHandler Endpoints", () => {
                 reviewType: "professor",
                 reviewText: "Great prof",
                 score: 9,
+                displayName: "Professor Test",
             };
             const upserted = makeSummary(REVIEW_ID_2, "professor", 0);
 
@@ -255,10 +261,10 @@ describe("AiSummaryHandler Endpoints", () => {
 
         test("merges and sorts course and professor reviews by score", async () => {
             const courseReview: ReviewWithScore = {
-                reviewId: REVIEW_ID_1, reviewType: "course", reviewText: "Good", score: 5,
+                reviewId: REVIEW_ID_1, reviewType: "course", reviewText: "Good", score: 5, displayName: "Course Test",
             };
             const profReview: ReviewWithScore = {
-                reviewId: REVIEW_ID_2, reviewType: "professor", reviewText: "Better", score: 10,
+                reviewId: REVIEW_ID_2, reviewType: "professor", reviewText: "Better", score: 10, displayName: "Professor Test",
             };
             const courseSummary = makeSummary(REVIEW_ID_1, "course", 0);
             const profSummary = makeSummary(REVIEW_ID_2, "professor", 0);
