@@ -921,7 +921,7 @@ export type GetTraceOfferHistoryParams = {
 
 export type GetAiSummariesPopularParams = {
   /**
-   * Number of popular reviews to return (max 20, default 20)
+   * Number of popular reviews to return (max 20, default 5)
    * @minimum 1
    * @maximum 20
    */
