@@ -3,7 +3,7 @@ import type { AiSummaryRepository, CourseThreadRepository, ProfThreadRepository 
 import { generateBatchSummaries, type ReviewInput } from "../../../ai/geminiClient";
 
 const ONE_WEEK_MS = 7 * 24 * 60 * 60 * 1000;
-const DEFAULT_LIMIT = 20;
+const DEFAULT_LIMIT = 10;
 
 export class AiSummaryHandler {
     constructor(
