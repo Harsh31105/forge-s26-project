@@ -19,5 +19,6 @@ export interface ReviewWithScore {
     reviewId: string;
     reviewType: "course" | "professor";
     reviewText: string;
+    displayName: string;
     score: number;
 }

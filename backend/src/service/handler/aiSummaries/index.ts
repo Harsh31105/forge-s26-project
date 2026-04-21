@@ -80,6 +80,10 @@ export class AiSummaryHandler {
             }
         }
 
-        res.status(200).json(cached.filter(Boolean));
+        res.status(200).json(
+            cached
+                .map((summary, i) => summary ? { ...summary, displayName: topReviews[i]!.displayName } : null)
+                .filter(Boolean),
+        );
     }
 }

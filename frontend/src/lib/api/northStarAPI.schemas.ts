@@ -645,6 +645,8 @@ export interface AiSummary {
   score: number;
   summaryUpdatedAt: string;
   createdAt: string;
+  /** Course code (e.g. "CS 3000") for course reviews, or professor full name for professor reviews */
+  displayName: string;
 }
 
 export type GetCourseReviewsIdThreadsParams = {

@@ -7,6 +7,9 @@ import { courseThread } from "../../tables/courseThread";
 import { profThread } from "../../tables/profThread";
 import { courseReview } from "../../tables/courseReview";
 import { profReview } from "../../tables/profReview";
+import { course } from "../../tables/course";
+import { department } from "../../tables/department";
+import { professor } from "../../tables/professor";
 
 export class AiSummaryRepositorySchema implements AiSummaryRepository {
     constructor(private readonly db: NodePgDatabase) {
@@ -96,6 +99,7 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                     cr.review_id       AS "reviewId",
                     'course'           AS "reviewType",
                     cr.review_text     AS "reviewText",
+                    d.name || ' ' || c.course_code AS "displayName",
                     (
                         COUNT(ct.id) * 1.0 +
                         COUNT(DISTINCT ct.student_id) * 1.5 +
@@ -103,7 +107,9 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                     ) AS score
                 FROM ${courseReview} cr
                 LEFT JOIN ${courseThread} ct ON ct.course_review_id = cr.review_id
-                GROUP BY cr.review_id, cr.review_text, cr.created_at
+                JOIN ${course} c ON c.id = cr.course_id
+                JOIN ${department} d ON d.id = c.department_id
+                GROUP BY cr.review_id, cr.review_text, cr.created_at, d.name, c.course_code
                 ORDER BY score DESC
                 LIMIT ${limit}
             `);
@@ -112,6 +118,7 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                 reviewId: row.reviewId as string,
                 reviewType: row.reviewType as "course" | "professor",
                 reviewText: row.reviewText as string,
+                displayName: row.displayName as string,
                 score: row.score as number,
             }));
 
@@ -121,6 +128,7 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                     pr.review_id       AS "reviewId",
                     'professor'        AS "reviewType",
                     pr.review_text     AS "reviewText",
+                    p.first_name || ' ' || p.last_name AS "displayName",
                     (
                         COUNT(pt.id) * 1.0 +
                         COUNT(DISTINCT pt.student_id) * 2.0 +
@@ -128,7 +136,8 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                     ) AS score
                 FROM ${profReview} pr
                 LEFT JOIN ${profThread} pt ON pt.professor_review_id = pr.review_id
-                GROUP BY pr.review_id, pr.review_text, pr.created_at
+                JOIN ${professor} p ON p.id = pr.professor_id
+                GROUP BY pr.review_id, pr.review_text, pr.created_at, p.first_name, p.last_name
                 ORDER BY score DESC
                 LIMIT ${limit}
             `);
@@ -136,6 +145,7 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                 reviewId: row.reviewId as string,
                 reviewType: row.reviewType as "course" | "professor",
                 reviewText: row.reviewText as string,
+                displayName: row.displayName as string,
                 score: row.score as number,
             }));
         }
