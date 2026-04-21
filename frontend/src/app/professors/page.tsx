@@ -27,12 +27,13 @@ export default function ProfessorsPage() {
 
   const { courses } = useCourses();
   const { professors, isLoading, error } = useProfessors({
+    limit: 500,
     tags: campusFilters.length > 0 ? campusFilters : undefined,
     ...(sortBy === "highest" && { sortBy: "firstName", sortOrder: "asc" }),
     ...(sortBy === "lowest" && { sortBy: "firstName", sortOrder: "desc" }),
   });
 
-  const { reviews } = useReviews();
+  const { reviews } = useReviews({ limit: 500 });
   const { favourites } = useFavourites();
   const { addFavourite, removeFavourite } = useFavouriteMutations();
   const reviewCountMap = useMemo(() => {
