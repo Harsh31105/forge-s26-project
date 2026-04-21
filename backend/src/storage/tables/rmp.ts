@@ -13,5 +13,5 @@ export const rmp = pgTable("rmp", {
 }, (table) => [
     check("rating_avg_check", sql`${table.ratingAvg} >= 1 AND ${table.ratingAvg} <= 5`),
     check("rating_wta_check", sql`${table.ratingWta} BETWEEN 0 AND 100`),
-    check("avg_difficulty_check", sql`${table.avgDifficulty} >= 1 AND ${table.avgDifficulty} <= 5`),
+    check("avg_difficulty_check", sql`${table.avgDifficulty} IS NULL OR (${table.avgDifficulty} >= 1 AND ${table.avgDifficulty} <= 5)`),
 ]);
