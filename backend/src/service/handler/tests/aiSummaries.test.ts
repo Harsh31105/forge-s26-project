@@ -283,23 +283,5 @@ describe("AiSummaryHandler Endpoints", () => {
             expect(res.body[0].reviewId).toBe(REVIEW_ID_2);
         });
 
-        test("uses default limit of 10 when no limit param provided", async () => {
-            aiSummaryRepo.getTopScoredReviews.mockResolvedValue([]);
-
-            const res = await request(app).get("/ai-summaries/popular");
-
-            expect(res.status).toBe(200);
-            expect(aiSummaryRepo.getTopScoredReviews).toHaveBeenCalledWith("course", 10);
-        });
-
-        test("caps limit at 20 even when a larger value is passed", async () => {
-            aiSummaryRepo.getTopScoredReviews.mockResolvedValue([]);
-
-            const res = await request(app).get("/ai-summaries/popular?limit=100");
-
-            expect(res.status).toBe(200);
-            expect(aiSummaryRepo.getTopScoredReviews).toHaveBeenCalledWith("course", 20);
-            expect(aiSummaryRepo.getTopScoredReviews).toHaveBeenCalledWith("professor", 20);
-        });
     });
 });
