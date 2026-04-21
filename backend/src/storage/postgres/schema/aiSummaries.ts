@@ -101,9 +101,9 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                     cr.review_text     AS "reviewText",
                     d.name || ' ' || c.course_code AS "displayName",
                     (
-                        COUNT(ct.id) * 1.0 +
-                        COUNT(DISTINCT ct.student_id) * 1.5 +
-                        7.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(ct.created_at), cr.created_at))) / 86400 + 1)
+                        COUNT(ct.id) * 2.5 +
+                        COUNT(DISTINCT ct.student_id) * 2.5 +
+                        2.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(ct.created_at), cr.created_at))) / 86400 + 1)
                     ) AS score
                 FROM ${courseReview} cr
                 LEFT JOIN ${courseThread} ct ON ct.course_review_id = cr.review_id
@@ -130,9 +130,9 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                     pr.review_text     AS "reviewText",
                     p.first_name || ' ' || p.last_name AS "displayName",
                     (
-                        COUNT(pt.id) * 1.0 +
-                        COUNT(DISTINCT pt.student_id) * 2.0 +
-                        7.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(pt.created_at), pr.created_at))) / 86400 + 1)
+                        COUNT(pt.id) * 2.5 +
+                        COUNT(DISTINCT pt.student_id) * 2.5 +
+                        2.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(pt.created_at), pr.created_at))) / 86400 + 1)
                     ) AS score
                 FROM ${profReview} pr
                 LEFT JOIN ${profThread} pt ON pt.professor_review_id = pr.review_id
