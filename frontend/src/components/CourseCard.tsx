@@ -1,7 +1,10 @@
 "use client";
 
+import { Star } from "lucide-react";
+import { useFavourites, useFavouriteMutations } from "@/src/hooks/useFavourites";
 import { useRouter } from "next/navigation";
 import { Course, Trace } from "@/src/lib/api/northStarAPI.schemas";
+import { Anchor } from "lucide-react";
 
 interface CourseCardProps {
   course: Course;
@@ -22,10 +25,6 @@ export default function CourseCard({
     ? (traces.reduce((sum, t) => sum + t.hoursDevoted, 0) / traces.length).toFixed(1)
     : null;
 
-  const avgEfficiency = traces.length > 0
-    ? (traces.reduce((sum, t) => sum + parseFloat(t.professorEfficiency), 0) / traces.length).toFixed(1)
-    : null;
-
   const latestTrace = traces.length > 0
     ? [...traces].sort((a, b) => b.lectureYear - a.lectureYear)[0]
     : null;
@@ -36,11 +35,27 @@ export default function CourseCard({
 
   const nupath = (course as any).nupath;
   const prereqs = (course as any).prereqs;
+  const { favourites } = useFavourites();
+
+const { addFavourite, removeFavourite } = useFavouriteMutations();
+
+const isFavourited = favourites.some(f => f.courseId === course.id);
+
+const handleToggleFavourite = async (e: React.MouseEvent) => {
+  e.stopPropagation();
+  if (isFavourited) {
+    const fav = favourites.find(f => f.courseId === course.id);
+    if (fav) await removeFavourite(fav.courseId);
+  } else {
+    await addFavourite({ course_id: course.id });
+  }
+};
 
   return (
     <div
       onClick={() => router.push(`/courses/${course.id}`)}
       style={{
+        position: "relative",
         background: "var(--color-white)",
         border: "var(--border-width) solid var(--color-border-tan)",
         borderRadius: "var(--border-radius-md)",
@@ -75,7 +90,7 @@ export default function CourseCard({
               alignItems: "center",
               gap: "4px",
             }}>
-              ⚓ Pre Reqs: {prereqs}
+              <Anchor size={12} /> Pre Reqs: {prereqs}
             </p>
           )}
 
@@ -87,6 +102,16 @@ export default function CourseCard({
               margin: "0 0 10px 0",
             }}>
               {semesterLabel}
+            </p>
+          )}
+
+          {latestTrace && (
+            <p style={{
+              fontSize: "var(--font-size-xs)",
+              color: "var(--color-text-secondary)",
+              margin: "0 0 6px 0",
+            }}>
+              Last offered: {latestTrace.semester.charAt(0).toUpperCase() + latestTrace.semester.slice(1).replace("_", " ")} {latestTrace.lectureYear}
             </p>
           )}
 
@@ -137,25 +162,19 @@ export default function CourseCard({
             color: "var(--color-text-secondary)",
             flexWrap: "wrap",
           }}>
-            <span>
-              Difficulty:{" "}
-              <strong style={{ color: "var(--color-text-primary)" }}>
-                {avgEfficiency !== null ? `${avgEfficiency}/5` : "—"}
-              </strong>
-            </span>
-            <span>
+            <p style={{ margin: 0 }}>
               Relevant:{" "}
               <strong style={{ color: "var(--color-text-primary)" }}>
                 {avgRating !== null ? `${avgRating.toFixed(1)}/5` : "—"}
               </strong>
-            </span>
-            <span>
+            </p>
+            <p style={{ margin: 0 }}>
               Hours/Week:{" "}
               <strong style={{ color: "var(--color-text-primary)" }}>
                 {avgHours !== null ? avgHours : "—"}
               </strong>
-            </span>
-            {reviewCount > 0 && <span>{reviewCount} reviews</span>}
+            </p>
+            {reviewCount > 0 && <p style={{ margin: 0 }}>{reviewCount} reviews</p>}
           </div>
         </div>
 
@@ -205,7 +224,30 @@ export default function CourseCard({
             </>
           )}
         </div>
+        <button
+          onClick={handleToggleFavourite}
+          style={{
+            position: "absolute",
+            top: "16px",
+            right: "100px",
+            background: "none",
+            border: "none",
+            cursor: "pointer",
+            padding: 0,
+            color: isFavourited 
+              ? "var(--color-accent-copper)" 
+              : "var(--color-border-tan)",
+            transition: "color 0.15s ease",
+          }}
+          aria-label={isFavourited ? "Remove from favourites" : "Save course"}
+        >
+          <Star 
+            size={20} 
+            fill={isFavourited ? "var(--color-accent-copper)" : "none"}
+          />
+        </button>
       </div>
     </div>
+    
   );
 }

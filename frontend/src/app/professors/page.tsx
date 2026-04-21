@@ -1,16 +1,17 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useTraces } from "@/src/hooks/useTraces";
 import { useProfessors } from "@/src/hooks/useProfessors";
-import { useCourses } from "@/src/hooks/useCourses";
 import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
-import { useFavourites, useFavouriteMutations } from "@/src/hooks/useFavourites";
 import ProfessorCard from "@/src/components/ProfessorCard";
 import Navbar from "@/src/components/NavBar";
 import { Professor } from "@/src/lib/api/northStarAPI.schemas";
+import { Search, BookOpen } from "lucide-react";
+import SearchableSelect from "@/src/components/SearchableSelect";
 
-type SortOption = "relevance" | "highest" | "lowest";
+type SortOption = "default" | "highest" | "lowest";
 type CampusFilter = "boston" | "oakland" | "london";
 type RatingFilter = "4.5" | "4" | "3" | null;
 type WtaFilter = "90" | "80" | "70" | null;
@@ -19,22 +20,37 @@ type DifficultyFilter = "easy" | "medium" | "hard" | null;
 export default function ProfessorsPage() {
   const [search, setSearch] = useState("");
   const [campusFilters, setCampusFilters] = useState<CampusFilter[]>([]);
-  const [sortBy, setSortBy] = useState<SortOption>("relevance");
+  const [sortBy, setSortBy] = useState<SortOption>("default");
   const [ratingFilter, setRatingFilter] = useState<RatingFilter>(null);
   const [wtaFilter, setWtaFilter] = useState<WtaFilter>(null);
   const [difficultyFilter, setDifficultyFilter] = useState<DifficultyFilter>(null);
   const [selectedCourse, setSelectedCourse] = useState<string>("");
-
-  const { courses } = useCourses();
   const { professors, isLoading, error } = useProfessors({
     tags: campusFilters.length > 0 ? campusFilters : undefined,
+    limit: 100,
     ...(sortBy === "highest" && { sortBy: "firstName", sortOrder: "asc" }),
     ...(sortBy === "lowest" && { sortBy: "firstName", sortOrder: "desc" }),
   });
 
   const { reviews } = useReviews();
-  const { favourites } = useFavourites();
-  const { addFavourite, removeFavourite } = useFavouriteMutations();
+  const { traces } = useTraces();
+
+  const courseOptions = useMemo(() => {
+    const seen = new Set<string>();
+    return traces
+      .filter(t => {
+        if (seen.has(t.courseId)) return false;
+        seen.add(t.courseId);
+        return true;
+      })
+      .map(t => ({
+        value: t.courseId,
+        label: t.courseName,
+        sublabel: `${t.courseCode}`,
+      }))
+      .sort((a, b) => a.label.localeCompare(b.label));
+  }, [traces]);
+
   const reviewCountMap = useMemo(() => {
     const map: Record<string, number> = {};
     reviews.forEach(r => {
@@ -44,10 +60,6 @@ export default function ProfessorsPage() {
     return map;
   }, [reviews]);
 
-  const favouritedIds = useMemo(
-    () => new Set(favourites.map(f => (f as any).professorId ?? (f as any).courseId)),
-    [favourites]
-  );
   const filtered = useMemo(() => {
     let list = professors;
     if (search.trim()) {
@@ -59,8 +71,14 @@ export default function ProfessorsPage() {
           `${p.firstName} ${p.lastName}`.toLowerCase().includes(q)
       );
     }
+    if (selectedCourse) {
+      const profIdsForCourse = new Set(
+        traces.filter(t => t.courseId === selectedCourse).map(t => t.professorId)
+      );
+      list = list.filter(p => profIdsForCourse.has(p.id));
+    }
     return list;
-  }, [professors, search, ratingFilter, wtaFilter, difficultyFilter]);
+  }, [professors, search, selectedCourse, traces, ratingFilter, wtaFilter, difficultyFilter]);
 
   const handleToggleCampus = (tag: CampusFilter) => {
     setCampusFilters(prev =>
@@ -68,17 +86,17 @@ export default function ProfessorsPage() {
     );
   };
 
-  const handleToggleFavourite = async (professorId: string) => {
-    if (favouritedIds.has(professorId)) {
-      await removeFavourite(professorId);
-    } else {
-      // @ts-expect-error — professor_id not yet in schema;
-      await addFavourite({ professor_id: professorId });
-    }
+  const handleClearFilters = () => {
+    setCampusFilters([]);
+    setSelectedCourse("");
+    setRatingFilter(null);
+    setWtaFilter(null);
+    setDifficultyFilter(null);
   };
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
+      { /*Remove when Navbar ticket added */}
       <Navbar activePage="professors" />
 
       <div style={{ display: "flex", padding: "32px 40px", gap: "32px" }}>
@@ -111,38 +129,13 @@ export default function ProfessorsPage() {
           <div style={{ borderTop: "var(--border-width) solid var(--color-border-tan)", marginBottom: "24px" }} />
 
           <FilterSection label="COURSE">
-            <select
+            <SearchableSelect
+              options={courseOptions}
               value={selectedCourse}
-              onChange={e => setSelectedCourse(e.target.value)}
-              style={{
-                width: "100%",
-                padding: "8px 12px",
-                border: "var(--border-width) solid var(--color-border-tan)",
-                borderRadius: "var(--border-radius-sm)",
-                background: "var(--color-surface-light-cream)",
-                fontSize: "var(--font-size-xs)",
-                color: selectedCourse ? "var(--color-text-primary)" : "var(--color-text-secondary)",
-                fontFamily: "var(--font-body)",
-                cursor: "pointer",
-              }}
-            >
-              <option value="">All</option>
-              {courses.map(c => (
-                <option key={c.id} value={c.id}>
-                  {c.department?.name} {c.course_code}: {c.name}
-                </option>
-              ))}
-            </select>
-            {selectedCourse && (
-              <p style={{
-                fontSize: "11px",
-                color: "var(--color-text-secondary)",
-                margin: "4px 0 0 0",
-                fontStyle: "italic",
-              }}>
-                ⚠ Professor filtering by course needs backend ticket
-              </p>
-            )}
+              onChange={setSelectedCourse}
+              placeholder="Search courses..."
+              emptyLabel="Any course"
+            />
           </FilterSection>
 
           <FilterSection label="CAMPUS / LOCATION">
@@ -226,30 +219,28 @@ export default function ProfessorsPage() {
               flexWrap: "wrap",
             }}
           >
-            <span
+            <p
               style={{
                 fontSize: "var(--font-size-sm)",
                 color: "var(--color-text-secondary)",
               }}
             >
               {isLoading ? "Loading..." : `${filtered.length} professor${filtered.length !== 1 ? "s" : ""} found`}
-            </span>
+            </p>
 
             <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
               <div style={{ position: "relative" }}>
-                <span
+                <Search
+                  size={14}
                   style={{
                     position: "absolute",
                     left: "12px",
                     top: "50%",
                     transform: "translateY(-50%)",
                     color: "var(--color-text-secondary)",
-                    fontSize: "14px",
                     pointerEvents: "none",
                   }}
-                >
-                  🔍
-                </span>
+                />
                 <input
                   type="text"
                   placeholder="Search for professor"
@@ -286,7 +277,7 @@ export default function ProfessorsPage() {
                   cursor: "pointer",
                 }}
               >
-                <option value="relevance">Sort by: Relevance</option>
+                <option value="default">Sort by: Default</option>
                 <option value="highest">Highest Rated</option>
                 <option value="lowest">Lowest Rated</option>
               </select>
@@ -326,7 +317,7 @@ export default function ProfessorsPage() {
                 fontSize: "var(--font-size-sm)",
               }}
             >
-              <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔭</div>
+              <BookOpen size={48} style={{ marginBottom: "16px", opacity: 0.3 }} />
               <p style={{ fontFamily: "var(--font-heading)", fontSize: "var(--font-size-base)", marginBottom: "8px" }}>
                 No professors found
               </p>
@@ -341,14 +332,13 @@ export default function ProfessorsPage() {
                   key={prof.id}
                   professor={prof}
                   reviewCount={reviewCountMap[prof.id] ?? 0}
-                  isFavourited={favouritedIds.has(prof.id)}
-                  onToggleFavourite={handleToggleFavourite}
                 />
               ))}
             </div>
           )}
         </main>
       </div>
+      <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}`}</style>
     </div>
   );
 }
@@ -356,13 +346,9 @@ export default function ProfessorsPage() {
 function ProfessorCardWrapper({
   professor,
   reviewCount,
-  isFavourited,
-  onToggleFavourite,
 }: {
   professor: Professor;
   reviewCount: number;
-  isFavourited: boolean;
-  onToggleFavourite: (id: string) => void;
 }) {
   const { rmpData } = useRMP(professor.id);
   return (
@@ -370,8 +356,6 @@ function ProfessorCardWrapper({
       professor={professor}
       rmpData={rmpData}
       reviewCount={reviewCount}
-      isFavourited={isFavourited}
-      onToggleFavourite={onToggleFavourite}
     />
   );
 }

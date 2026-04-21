@@ -2,6 +2,7 @@
 "use client";
 
 import { useRouter } from "next/navigation";
+import { MapPin } from "lucide-react";
 import { Professor } from "@/src/lib/api/northStarAPI.schemas";
 
 interface RMPData {
@@ -14,16 +15,12 @@ interface ProfessorCardProps {
   professor: Professor;
   rmpData?: RMPData;
   reviewCount?: number;
-  isFavourited?: boolean;
-  onToggleFavourite?: (professorId: string) => void;
 }
 
 export default function ProfessorCard({
   professor,
   rmpData,
   reviewCount = 0,
-  isFavourited = false,
-  onToggleFavourite,
 }: ProfessorCardProps) {
   const router = useRouter();
 
@@ -52,30 +49,6 @@ export default function ProfessorCard({
       onMouseEnter={e => (e.currentTarget.style.background = "var(--color-surface-extra-light)")}
       onMouseLeave={e => (e.currentTarget.style.background = "var(--color-white)")}
     >
-      {/* Favorite button */}
-      <button
-        onClick={e => {
-          e.stopPropagation();
-          onToggleFavourite?.(professor.id);
-        }}
-        title="Backend ticket needed: add professor_id support to Favourites API"
-        style={{
-          position: "absolute",
-          top: "16px",
-          right: "16px",
-          background: "none",
-          border: "none",
-          cursor: "pointer",
-          fontSize: "18px",
-          color: isFavourited ? "var(--color-accent-copper)" : "var(--color-border-tan)",
-          transition: "color 0.15s ease",
-          lineHeight: 1,
-        }}
-        aria-label={isFavourited ? "Remove from favourites" : "Add to favourites"}
-      >
-        {isFavourited ? "♥" : "♡"}
-      </button>
-
       <div style={{ display: "flex", alignItems: "flex-start", gap: "16px" }}>
         {/* Avatar */}
         <div style={{
@@ -123,7 +96,7 @@ export default function ProfessorCard({
                   padding: "2px 10px",
                   background: "var(--color-surface-light-cream)",
                 }}>
-                  <span style={{ fontSize: "10px" }}>📍</span>
+                  <MapPin size={10} />
                   {tagLabel[tag] ?? tag}
                 </span>
               ))}
@@ -145,19 +118,19 @@ export default function ProfessorCard({
             flexWrap: "wrap",
             alignItems: "center",
           }}>
-            <span>
+            <p style={{ margin: 0 }}>
               Difficulty:{" "}
               <strong style={{ color: "var(--color-text-primary)" }}>
                 {difficulty !== null ? `${difficulty.toFixed(1)}/5` : "—"}
               </strong>
-            </span>
-            <span>
+            </p>
+            <p style={{ margin: 0 }}>
               Would take again:{" "}
               <strong style={{ color: "var(--color-text-primary)" }}>
                 {wta !== null ? `${wta}%` : "—"}
               </strong>
-            </span>
-            <span>{reviewCount} reviews</span>
+            </p>
+            <p style={{ margin: 0 }}>{reviewCount} reviews</p>
           </div>
         </div>
 

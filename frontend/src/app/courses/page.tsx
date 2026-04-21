@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { Search, BookOpen } from "lucide-react";
 import { useCourses } from "@/src/hooks/useCourses";
 import { useTraces } from "@/src/hooks/useTraces";
 import { useReviews } from "@/src/hooks/useReviews";
@@ -8,45 +9,33 @@ import { useProfessors } from "@/src/hooks/useProfessors";
 import Navbar from "@/src/components/NavBar";
 import CourseCard from "@/src/components/CourseCard";
 import SearchableSelect from "@/src/components/SearchableSelect";
-import { Course, Trace } from "@/src/lib/api/northStarAPI.schemas";
-import { GetCoursesLectureType } from "@/src/lib/api/northStarAPI.schemas";
+import { Trace } from "@/src/lib/api/northStarAPI.schemas";
+import { GetTraceSemester } from "@/src/lib/api/northStarAPI.schemas";
 
-type SortOption = "relevance" | "highest" | "lowest" | "name";
+type SortOption = "default" | "highest" | "lowest" | "az" | "za";
 type RatingFilter = "4" | "3" | null;
 type CreditsFilter = "1" | "2" | "3" | "4" | null;
-type TimeSlotFilter = "morning" | "afternoon" | "evening" | null;
+type SemesterFilter = GetTraceSemester | null;
 
-const NUPATH_OPTIONS = [
-  "Creative Expression",
-  "Cultures and Civilizations",
-  "Difference, Power, and Equity",
-  "Ethics and Social Responsibility",
-  "Formal and Quantitative Reasoning",
-  "Integration Experience",
-  "Natural and Designed World",
-  "Science and Technology Literacy",
-  "Societies and Institutions",
-  "Writing Intensive",
-];
 
 export default function CoursesPage() {
   const [search, setSearch] = useState("");
-  const [sortBy, setSortBy] = useState<SortOption>("relevance");
+  const [sortBy, setSortBy] = useState<SortOption>("default");
   const [selectedProfessor, setSelectedProfessor] = useState("");
-  const [selectedNupath, setSelectedNupath] = useState("");
   const [ratingFilter, setRatingFilter] = useState<RatingFilter>(null);
   const [creditsFilter, setCreditsFilter] = useState<CreditsFilter>(null);
-  const [timeSlotFilter, setTimeSlotFilter] = useState<TimeSlotFilter>(null);
+  const [semesterFilter, setSemesterFilter] = useState<SemesterFilter>(null);
 
   const { courses, isLoading, error } = useCourses({
     num_credits: creditsFilter ? parseInt(creditsFilter) : undefined,
-    ...(sortBy === "name" && { sortBy: "name", sortOrder: "asc" }),
-    ...(sortBy === "highest" && { sortBy: "name", sortOrder: "asc" }),
+    limit: 100,
+    ...(sortBy === "az" && { sortBy: "name", sortOrder: "asc" }),
+    ...(sortBy === "za" && { sortBy: "name", sortOrder: "desc" }),
   });
 
   const { traces } = useTraces();
   const { reviews } = useReviews();
-  const { professors } = useProfessors();
+  const { professors } = useProfessors({ limit: 100 });
 
   const professorOptions = useMemo(() =>
     professors.map(p => ({
@@ -55,11 +44,6 @@ export default function CoursesPage() {
       sublabel: p.tags?.[0]?.charAt(0).toUpperCase() + (p.tags?.[0]?.slice(1) ?? "") || "",
     })),
     [professors]
-  );
-
-  const nupathOptions = useMemo(() =>
-    NUPATH_OPTIONS.map(n => ({ value: n, label: n })),
-    []
   );
 
   const tracesByCourse = useMemo(() => {
@@ -99,15 +83,18 @@ export default function CoursesPage() {
       );
     }
 
-    if (selectedNupath) {
-      list = list.filter(c => (c as any).nupath === selectedNupath);
-    }
-
     if (selectedProfessor) {
       const courseIdsForProf = new Set(
         traces.filter(t => t.professorId === selectedProfessor).map(t => t.courseId)
       );
       list = list.filter(c => courseIdsForProf.has(c.id));
+    }
+
+    if (semesterFilter) {
+      const courseIdsForSemester = new Set(
+        traces.filter(t => t.semester === semesterFilter).map(t => t.courseId)
+      );
+      list = list.filter(c => courseIdsForSemester.has(c.id));
     }
 
     if (ratingFilter) {
@@ -122,23 +109,21 @@ export default function CoursesPage() {
       list = [...list].sort((a, b) => (ratingByCourse[b.id] ?? 0) - (ratingByCourse[a.id] ?? 0));
     } else if (sortBy === "lowest") {
       list = [...list].sort((a, b) => (ratingByCourse[a.id] ?? 0) - (ratingByCourse[b.id] ?? 0));
-    } else if (sortBy === "name") {
-      list = [...list].sort((a, b) => a.name.localeCompare(b.name));
     }
 
     return list;
-  }, [courses, search, selectedNupath, selectedProfessor, ratingFilter, sortBy, traces, ratingByCourse]);
+  }, [courses, search, selectedProfessor, ratingFilter, sortBy, traces, ratingByCourse]);
 
   const handleClearFilters = () => {
     setSelectedProfessor("");
-    setSelectedNupath("");
     setRatingFilter(null);
     setCreditsFilter(null);
-    setTimeSlotFilter(null);
+    setSemesterFilter(null);
   };
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
+      {/* Remove when NavBar added*/}
       <Navbar activePage="courses" />
 
       <div style={{ display: "flex", padding: "32px 40px", gap: "32px" }}>
@@ -186,25 +171,6 @@ export default function CoursesPage() {
             )}
           </FilterSection>
 
-          <FilterSection label="NUPATH">
-            <SearchableSelect
-              options={nupathOptions}
-              value={selectedNupath}
-              onChange={setSelectedNupath}
-              placeholder="Search NUpath..."
-              emptyLabel="Any NUpath"
-            />
-            {selectedNupath && (
-              <p style={{
-                fontSize: "11px",
-                color: "var(--color-text-secondary)",
-                margin: "4px 0 0 0",
-                fontStyle: "italic",
-              }}>
-              </p>
-            )}
-          </FilterSection>
-
           <FilterSection label="RATING">
             <CheckboxItem
               label="4+ stars"
@@ -229,26 +195,20 @@ export default function CoursesPage() {
             ))}
           </FilterSection>
 
-          <FilterSection label="TIME SLOT">
+          <FilterSection label="SEMESTER">
             {([
-              ["morning", "Morning (8-12)"],
-              ["afternoon", "Afternoon (12-5)"],
-              ["evening", "Evening (5-9)"],
-            ] as [TimeSlotFilter, string][]).map(([val, label]) => (
+              ["fall", "Fall"],
+              ["spring", "Spring"],
+              ["summer_1", "Summer 1"],
+              ["summer_2", "Summer 2"],
+            ] as [GetTraceSemester, string][]).map(([val, label]) => (
               <CheckboxItem
                 key={val}
                 label={label}
-                checked={timeSlotFilter === val}
-                onChange={() => setTimeSlotFilter(p => p === val ? null : val)}
+                checked={semesterFilter === val}
+                onChange={() => setSemesterFilter(p => p === val ? null : val)}
               />
             ))}
-            <p style={{
-              fontSize: "11px",
-              color: "var(--color-text-secondary)",
-              margin: "4px 0 0 0",
-              fontStyle: "italic",
-            }}>
-            </p>
           </FilterSection>
 
           <div style={{ borderTop: "var(--border-width) solid var(--color-border-tan)", margin: "8px 0 16px" }} />
@@ -280,23 +240,20 @@ export default function CoursesPage() {
             gap: "16px",
             flexWrap: "wrap",
           }}>
-            <span style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)" }}>
+            <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", margin: 0 }}>
               {isLoading ? "Loading..." : `${filtered.length} course${filtered.length !== 1 ? "s" : ""} found`}
-            </span>
+            </p>
 
             <div style={{ display: "flex", gap: "12px", alignItems: "center", flexWrap: "wrap" }}>
               <div style={{ position: "relative" }}>
-                <span style={{
+                <Search size={14} style={{
                   position: "absolute",
                   left: "12px",
                   top: "50%",
                   transform: "translateY(-50%)",
                   color: "var(--color-text-secondary)",
-                  fontSize: "14px",
                   pointerEvents: "none",
-                }}>
-                  🔍
-                </span>
+                }} />
                 <input
                   type="text"
                   placeholder="Search for courses"
@@ -333,10 +290,11 @@ export default function CoursesPage() {
                   cursor: "pointer",
                 }}
               >
-                <option value="relevance">Sort by: Relevance</option>
+                <option value="default">Sort by: Default</option>
                 <option value="highest">Highest Rated</option>
                 <option value="lowest">Lowest Rated</option>
-                <option value="name">A → Z</option>
+                <option value="az">A → Z</option>
+                <option value="za">Z → A</option>
               </select>
             </div>
           </div>
@@ -368,7 +326,7 @@ export default function CoursesPage() {
               color: "var(--color-text-secondary)",
               fontSize: "var(--font-size-sm)",
             }}>
-              <div style={{ fontSize: "48px", marginBottom: "16px" }}>🔭</div>
+              <BookOpen size={48} style={{ marginBottom: "16px", opacity: 0.3 }} />
               <p style={{ fontFamily: "var(--font-heading)", fontSize: "var(--font-size-base)", marginBottom: "8px" }}>
                 No courses found
               </p>
