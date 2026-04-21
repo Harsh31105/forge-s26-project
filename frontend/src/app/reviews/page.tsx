@@ -52,14 +52,9 @@ export default function ReviewsPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar />
-
-      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 48px 80px" }}>
       <Navbar activePage="reviews" />
 
-              <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 48px 80px" }}>
-
-        {/* Page header */}
+      <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 48px 80px" }}>
         <h1 style={{
           fontFamily: "var(--font-heading)",
           fontSize: "var(--font-size-xl)",
@@ -77,8 +72,6 @@ export default function ReviewsPage() {
         }}>
           Your review contributions and helpful votes across courses and professors
         </p>
-
-        {/* Stats cards */}
         <div style={{
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
@@ -88,9 +81,6 @@ export default function ReviewsPage() {
           <StatCard icon={<MessageCircle size={26} />} value={myReviews.length} label="Reviews Written" />
           <StatCard icon={<ThumbsUp size={26} />} value={0} label="Helpful Votes Given" />
           <StatCard icon={<Award size={26} />} value={0} label="Your Reviews Marked Helpful" />
-          <StatCard icon="💬" value={myReviews.length} label="Reviews Written" />
-          <StatCard icon="👍" value={0} label="Helpful Votes Given" />
-          <StatCard icon="🏅" value={0} label="Your Reviews Marked Helpful" />
         </div>
 
         {/* My Reviews */}
@@ -99,7 +89,6 @@ export default function ReviewsPage() {
 
           {!isLoading && myReviews.length === 0 && (
             <EmptyState icon={<PenLine size={32} style={{ opacity: 0.4 }} />} message="You haven't written any reviews yet." />
-            <EmptyState icon="✍️" message="You haven't written any reviews yet." />
           )}
 
           {!isLoading && myReviews.map((review, idx) => (
@@ -127,20 +116,6 @@ export default function ReviewsPage() {
                       }}>
                         {formatDate(review.createdAt)}
                       </p>
-                      <span style={{
-                        fontSize: "var(--font-size-xs)",
-                        fontWeight: "var(--font-weight-semibold)",
-                        color: "var(--color-text-secondary)",
-                      }}>
-                        {getReviewLabel(review)}
-                      </span>
-                      <span style={{
-                        fontSize: "var(--font-size-xs)",
-                        color: "var(--color-text-secondary)",
-                        marginLeft: "8px",
-                      }}>
-                        {formatDate(review.createdAt)}
-                      </span>
                     </div>
                     <div style={{ display: "flex", gap: "12px" }}>
                       <button style={linkBtnStyle("var(--color-primary-navy)")}>Edit</button>
@@ -173,13 +148,6 @@ export default function ReviewsPage() {
                   <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", margin: 0, display: "flex", alignItems: "center", gap: "4px" }}>
                     <ThumbsUp size={11} /> 0 found helpful
                   </p>
-
-                  <span style={{
-                    fontSize: "var(--font-size-xs)",
-                    color: "var(--color-text-secondary)",
-                  }}>
-                    👍 0 found helpful
-                  </span>
                 </div>
               </div>
               {idx < myReviews.length - 1 && <Divider />}
@@ -207,16 +175,6 @@ export default function ReviewsPage() {
 
           {!isLoading && trendingReviews.length === 0 && (
             <EmptyState icon={<TrendingUp size={32} style={{ opacity: 0.4 }} />} message="No trending reviews yet." />
-            Need helpful backend ticket...
-          </p>
-        </Section>
-
-        {/* Trending Reviews */}
-        <Section title="📈 Trending Reviews This Week">
-          {isLoading && <SkeletonReviews count={3} />}
-
-          {!isLoading && trendingReviews.length === 0 && (
-            <EmptyState icon="📊" message="No trending reviews yet." />
           )}
 
           {!isLoading && trendingReviews.map((review, idx) => (
@@ -256,13 +214,6 @@ export default function ReviewsPage() {
               <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", flexShrink: 0, margin: 0, display: "flex", alignItems: "center", gap: "4px" }}>
                 <ThumbsUp size={11} /> 0
               </p>
-              <span style={{
-                fontSize: "var(--font-size-xs)",
-                color: "var(--color-text-secondary)",
-                flexShrink: 0,
-              }}>
-                👍 0
-              </span>
             </div>
           ))}
         </Section>
@@ -276,9 +227,6 @@ export default function ReviewsPage() {
 function Section({ title, titleIcon, subtitle, children }: {
   title: string;
   titleIcon?: React.ReactNode;
-
-function Section({ title, subtitle, children }: {
-  title: string;
   subtitle?: string;
   children: React.ReactNode;
 }) {
@@ -301,7 +249,6 @@ function Section({ title, subtitle, children }: {
         gap: "8px",
       }}>
         {titleIcon}
-      }}>
         {title}
       </h2>
       {subtitle && (
@@ -321,7 +268,6 @@ function Section({ title, subtitle, children }: {
 
 function StatCard({ icon, value, label, note }: {
   icon: React.ReactNode; value: number; label: string; note?: string;
-  icon: string; value: number; label: string; note?: string;
 }) {
   return (
     <div style={{
@@ -334,7 +280,6 @@ function StatCard({ icon, value, label, note }: {
       <div style={{ display: "flex", justifyContent: "center", marginBottom: "8px", color: "var(--color-primary-navy)" }}>
         {icon}
       </div>
-      <div style={{ fontSize: "26px", marginBottom: "8px" }}>{icon}</div>
       <div style={{
         fontFamily: "var(--font-heading)",
         fontSize: "var(--font-size-xl)",
@@ -405,7 +350,6 @@ function Divider() {
 }
 
 function EmptyState({ icon, message }: { icon: React.ReactNode; message: string }) {
-function EmptyState({ icon, message }: { icon: string; message: string }) {
   return (
     <div style={{
       textAlign: "center",
@@ -416,7 +360,6 @@ function EmptyState({ icon, message }: { icon: string; message: string }) {
       <div style={{ display: "flex", justifyContent: "center", marginBottom: "10px" }}>
         {icon}
       </div>
-      <div style={{ fontSize: "32px", marginBottom: "10px" }}>{icon}</div>
       <p style={{ margin: 0 }}>{message}</p>
     </div>
   );
