@@ -7,7 +7,6 @@ import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
 import { useFavourites, useFavouriteMutations } from "@/src/hooks/useFavourites";
 import ProfessorCard from "@/src/components/ProfessorCard";
-import Navbar from "@/src/components/NavBar";
 import { Professor } from "@/src/lib/api/northStarAPI.schemas";
 
 type SortOption = "relevance" | "highest" | "lowest";
@@ -80,8 +79,6 @@ export default function ProfessorsPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="professors" />
-
       <div style={{ display: "flex", padding: "32px 40px", gap: "32px" }}>
         <aside
           style={{

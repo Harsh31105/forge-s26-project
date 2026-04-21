@@ -4,7 +4,6 @@ import { useMemo } from "react";
 import { useReviews, useReviewMutations } from "@/src/hooks/useReviews";
 import { useCurrentUser } from "@/src/hooks/useAuth";
 import { MessageCircle, ThumbsUp, Award, TrendingUp, PenLine } from "lucide-react";
-import Navbar from "@/src/components/NavBar";
 import { Review } from "@/src/lib/api/northStarAPI.schemas";
 
 export default function ReviewsPage() {
@@ -52,8 +51,6 @@ export default function ReviewsPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="reviews" />
-
       <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 48px 80px" }}>
         <h1 style={{
           fontFamily: "var(--font-heading)",

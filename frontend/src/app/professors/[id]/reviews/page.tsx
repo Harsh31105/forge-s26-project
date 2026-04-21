@@ -7,7 +7,6 @@ import { useReviews } from "@/src/hooks/useReviews";
 import { useProfThreads, useProfThreadMutations } from "@/src/hooks/useProfThreads";
 import { useMe } from "@/src/hooks/useMe";
 import { ThumbsUp, MessageCircle, PenLine, ChevronUp, ChevronDown } from "lucide-react";
-import Navbar from "@/src/components/NavBar";
 import WriteReviewModal from "@/src/components/WriteReviewModal";
 import { Review } from "@/src/lib/api/northStarAPI.schemas";
 
@@ -43,8 +42,6 @@ export default function ProfessorReviewsPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="professors" />
-
       <div style={{ maxWidth: "800px", margin: "0 auto", padding: "32px 24px 100px" }}>
         {/* Back */}
         <button

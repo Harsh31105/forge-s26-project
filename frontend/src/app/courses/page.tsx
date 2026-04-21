@@ -5,7 +5,6 @@ import { useCourses } from "@/src/hooks/useCourses";
 import { useTraces } from "@/src/hooks/useTraces";
 import { useReviews } from "@/src/hooks/useReviews";
 import { useProfessors } from "@/src/hooks/useProfessors";
-import Navbar from "@/src/components/NavBar";
 import CourseCard from "@/src/components/CourseCard";
 import SearchableSelect from "@/src/components/SearchableSelect";
 import { Course, Trace } from "@/src/lib/api/northStarAPI.schemas";
@@ -139,8 +138,6 @@ export default function CoursesPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="courses" />
-
       <div style={{ display: "flex", padding: "32px 40px", gap: "32px" }}>
         <aside style={{
           width: "260px",

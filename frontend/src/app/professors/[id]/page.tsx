@@ -7,7 +7,6 @@ import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
 import { useTraces } from "@/src/hooks/useTraces";
 import { MapPin } from "lucide-react";
-import Navbar from "@/src/components/NavBar";
 import { Review, Trace } from "@/src/lib/api/northStarAPI.schemas";
 
 type SortOption = "newest" | "oldest" | "popular";
@@ -120,8 +119,6 @@ export default function ProfessorProfilePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="professors" />
-
       <div style={{ padding: "32px 40px" }}>
         <button
           onClick={() => router.push("/professors")}
