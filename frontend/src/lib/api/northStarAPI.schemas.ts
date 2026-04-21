@@ -629,6 +629,24 @@ export interface AcademicSemester {
   year: number;
 }
 
+export type AiSummaryReviewType = (typeof AiSummaryReviewType)[keyof typeof AiSummaryReviewType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AiSummaryReviewType = {
+  course: "course",
+  professor: "professor",
+} as const;
+
+export interface AiSummary {
+  id: string;
+  reviewId: string;
+  reviewType: AiSummaryReviewType;
+  summary: string;
+  score: number;
+  summaryUpdatedAt: string;
+  createdAt: string;
+}
+
 export type GetCourseReviewsIdThreadsParams = {
   /**
    * Page number of pagination
@@ -878,25 +896,6 @@ export const GetTraceSemester = {
   summer_2: "summer_2",
 } as const;
 
-export interface AiSummary {
-  id: string;
-  reviewId: string;
-  reviewType: "course" | "professor";
-  summary: string;
-  score: number;
-  summaryUpdatedAt: string;
-  createdAt: string;
-}
-
-export type GetAiSummariesPopularParams = {
-  /**
-   * Number of popular reviews to return (max 20, default 20)
-   * @minimum 1
-   * @maximum 20
-   */
-  limit?: number;
-};
-
 export type GetTraceOfferHistoryParams = {
   /**
    * Page Number of Pagination
@@ -916,4 +915,13 @@ export type GetTraceOfferHistoryParams = {
    * Filter by Professor ID
    */
   professorId?: string;
+};
+
+export type GetAiSummariesPopularParams = {
+  /**
+   * Number of popular reviews to return (max 20, default 20)
+   * @minimum 1
+   * @maximum 20
+   */
+  limit?: number;
 };
