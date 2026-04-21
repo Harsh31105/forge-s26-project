@@ -122,13 +122,13 @@ function registerRoutes(router: Router, repo: Repository) {
     router.use("/samples", sampleRoutes(sampleHandler));
 
     // Handling Course-Threads - Starting with CourseReviews.
-    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
+    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads, repo.aiSummaries);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 
     const rmpHandler = new RMPHandler(repo.rmp, repo.professors);
     router.use("/rmp", rmpRoutes(rmpHandler));
 
-    const profThreadHandler = new ProfThreadHandler(repo.profThreads);
+    const profThreadHandler = new ProfThreadHandler(repo.profThreads, repo.aiSummaries);
     router.use("/professor-reviews", professorThreadRoutes(profThreadHandler));
 
     const studentHandler = new StudentHandler(repo.students);
@@ -141,5 +141,5 @@ function registerRoutes(router: Router, repo: Repository) {
     router.use("/trace", traceRoutes(traceHandler));
 
     const aiSummaryHandler = new AiSummaryHandler(repo.aiSummaries, repo.courseThreads, repo.profThreads);
-    router.use("/ai-summaries", readOnlyMiddleware, aiSummaryRoutes(aiSummaryHandler));
+    router.use("/ai-summaries", aiSummaryRoutes(aiSummaryHandler));
 }

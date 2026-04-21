@@ -47,6 +47,48 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
         return row;
     }
 
+    async markStaleIfThresholdMet(reviewId: string, reviewType: "course" | "professor", threshold: number): Promise<void> {
+        const existing = await this.getByReviewId(reviewId, reviewType);
+        if (!existing) return;
+
+        const since = existing.summaryUpdatedAt;
+
+        let newCount = 0;
+        let oldCount = 0;
+
+        if (reviewType === "course") {
+            const [result] = await this.db
+                .select({
+                    newCount: sql<number>`cast(count(*) filter (where ${courseThread.createdAt} > ${since}) as int)`,
+                    oldCount: sql<number>`cast(count(*) filter (where ${courseThread.createdAt} <= ${since}) as int)`,
+                })
+                .from(courseThread)
+                .where(eq(courseThread.courseReviewId, reviewId));
+            newCount = result?.newCount ?? 0;
+            oldCount = result?.oldCount ?? 0;
+        } else {
+            const [result] = await this.db
+                .select({
+                    newCount: sql<number>`cast(count(*) filter (where ${profThread.createdAt} > ${since}) as int)`,
+                    oldCount: sql<number>`cast(count(*) filter (where ${profThread.createdAt} <= ${since}) as int)`,
+                })
+                .from(profThread)
+                .where(eq(profThread.professorReviewId, reviewId));
+            newCount = result?.newCount ?? 0;
+            oldCount = result?.oldCount ?? 0;
+        }
+
+        if (newCount / (oldCount + 1) >= threshold) {
+            await this.db
+                .update(aiSummary)
+                .set({ summaryUpdatedAt: new Date(0) })
+                .where(and(
+                    eq(aiSummary.reviewId, reviewId),
+                    eq(aiSummary.reviewType, reviewType),
+                ));
+        }
+    }
+
     async getTopScoredReviews(reviewType: "course" | "professor", limit: number): Promise<ReviewWithScore[]> {
         if (reviewType === "course") {
             const rows = await this.db.execute(sql`
@@ -75,7 +117,7 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
                     (
                         COUNT(pt.id) * 1.0 +
                         COUNT(DISTINCT pt.student_id) * 2.0 +
-                        10.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(pt.created_at), pr.created_at))) / 86400 + 1)
+                        7.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(pt.created_at), pr.created_at))) / 86400 + 1)
                     ) AS score
                 FROM ${profReview} pr
                 LEFT JOIN ${profThread} pt ON pt.professor_review_id = pr.review_id

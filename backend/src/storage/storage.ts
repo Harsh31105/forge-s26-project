@@ -226,4 +226,5 @@ export interface AiSummaryRepository {
   getByReviewId(reviewId: string, reviewType: "course" | "professor"): Promise<AiSummary | null>;
   upsertSummary(data: AiSummaryUpsertInput): Promise<AiSummary>;
   getTopScoredReviews(reviewType: "course" | "professor", limit: number): Promise<ReviewWithScore[]>;
+  markStaleIfThresholdMet(reviewId: string, reviewType: "course" | "professor", threshold: number): Promise<void>;
 }

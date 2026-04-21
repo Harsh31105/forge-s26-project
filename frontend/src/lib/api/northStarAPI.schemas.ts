@@ -878,6 +878,25 @@ export const GetTraceSemester = {
   summer_2: "summer_2",
 } as const;
 
+export interface AiSummary {
+  id: string;
+  reviewId: string;
+  reviewType: "course" | "professor";
+  summary: string;
+  score: number;
+  summaryUpdatedAt: string;
+  createdAt: string;
+}
+
+export type GetAiSummariesPopularParams = {
+  /**
+   * Number of popular reviews to return (max 20, default 20)
+   * @minimum 1
+   * @maximum 20
+   */
+  limit?: number;
+};
+
 export type GetTraceOfferHistoryParams = {
   /**
    * Page Number of Pagination

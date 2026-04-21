@@ -1891,24 +1891,18 @@ paths:
   /ai-summaries/popular:
     get:
       summary: Get popular conversations with AI summaries
-      description: |
-        Returns the top N most popular course and professor reviews ranked by a popularity score
-        based on number of replies, unique repliers, and recency. Each review includes an
-        AI-generated summary of the review text and its discussion threads.
-
-        Summaries are cached for 7 days. If a cached summary exists and is fresh it is returned
-        immediately. Otherwise a new summary is generated via Gemini and stored before returning.
+      description: Returns the top most popular course and professor reviews ranked by a popularity score.
       tags: [AiSummary]
       security: []
       parameters:
         - name: limit
           in: query
-          description: Number of popular reviews to return (max 20, default 5)
+          description: Number of popular reviews to return (max 20, default 20)
           schema:
             type: integer
             minimum: 1
             maximum: 20
-            default: 5
+            default: 20
       responses:
         "200":
           description: List of AI summaries for the most popular reviews
@@ -1924,7 +1918,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
-
+            
 security:
   - bearerAuth: []
 components:
@@ -2789,30 +2783,19 @@ components:
         id:
           type: string
           format: uuid
-          example: "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
         reviewId:
           type: string
           format: uuid
-          description: ID of the course or professor review this summary belongs to
-          example: "d0000001-0000-0000-0000-000000000002"
         reviewType:
           type: string
           enum: [course, professor]
-          description: Whether this summary is for a course review or professor review
-          example: course
         summary:
           type: string
-          description: AI-generated summary of the review and its discussion threads
-          example: "Students find this course challenging but rewarding, praising the hands-on labs and structured feedback."
         score:
           type: number
-          format: float
-          description: Popularity score based on reply count, unique repliers, and recency
-          example: 14.5
         summaryUpdatedAt:
           type: string
           format: date-time
-          description: When the summary was last generated or refreshed
         createdAt:
           type: string
           format: date-time
