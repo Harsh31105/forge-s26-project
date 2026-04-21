@@ -7,7 +7,7 @@ export type RMPApiData = {
     lastName: string;
     ratingAvg: string | null;
     ratingWta: number | null;
-    avgDifficulty: string;
+    avgDifficulty: string | null;
 };
 
 export async function fetchRMPDataForProfessor(
