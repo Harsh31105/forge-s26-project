@@ -54,4 +54,6 @@ backend/coverage/
 
 # Playwright browser profile (TRACE scraper)
 backend/.trace-playwright/
-scripts/output/trace-scrape-manifest.json
+backend/scripts/output/trace-scrape-manifest.json
+backend/bluera-debug-page.html
+backend/venv/

@@ -1,11 +1,17 @@
 import {TraceRepository} from "../../storage";
 import {NodePgDatabase} from "drizzle-orm/node-postgres";
 import {getOffset, PaginationType} from "../../../utils/pagination";
-import {AcademicSemester, Semester, Trace, TraceFilterType} from "../../../models/trace";
+import {
+    AcademicSemester,
+    Trace,
+    TraceFilterType, type TracePatchInputType,
+    type TracePostInputType
+} from "../../../models/trace";
 import {trace} from "../../tables/trace";
 import { and, desc, eq, sql } from "drizzle-orm";
 import { professor } from "../../tables/professor";
 import type { Professor } from "../../../models/professor";
+import {NotFoundError} from "../../../errs/httpError";
 
 export class TraceRepositorySchema implements TraceRepository {
     constructor(private readonly db: NodePgDatabase) {
@@ -24,6 +30,46 @@ export class TraceRepositorySchema implements TraceRepository {
             .where(conditions.length > 0 ? and(...conditions) : undefined)
             .limit(pagination.limit)
             .offset(getOffset(pagination));
+    }
+
+    async getTraceByID(id: number): Promise<Trace> {
+        const [row] = await this.db.select().from(trace).where(eq(trace.id, id));
+        if (!row) throw new NotFoundError("trace with given ID not found");
+        return row;
+    }
+
+    async createTrace(input: TracePostInputType): Promise<Trace> {
+        const [row] = await this.db.insert(trace).values({
+            courseId: input.courseId,
+            professorId: input.professorId,
+            courseName: input.courseName,
+            departmentId: input.departmentId,
+            courseCode: input.courseCode,
+            semester: input.semester,
+            lectureYear: input.lectureYear,
+            section: input.section ?? null,
+            lectureType: input.lectureType ?? null,
+            eval: input.eval ?? null,
+            hoursDevoted: input.hoursDevoted ?? null,
+            professorEfficiency: input.professorEfficiency ?? null,
+            howOftenPercentage: input.howOftenPercentage ?? null,
+        }).returning();
+
+        if (!row) throw new Error("Failed to create trace");
+        return row;
+    }
+
+    async patchTrace(id: number, input: TracePatchInputType): Promise<Trace> {
+        const updates = Object.fromEntries(
+            Object.entries(input).filter(([_, value]) => value !== undefined)
+        );
+        const [row] = await this.db.update(trace).set({ ...updates }).where(eq(trace.id, id)).returning();
+        if (!row) throw new Error();
+        return row;
+    }
+
+    async deleteTrace(id: number): Promise<void> {
+        await this.db.delete(trace).where(eq(trace.id, id)).returning();
     }
 
     async getBestProfessorsByCourseID(courseId: string): Promise<Professor[]> {
