@@ -226,7 +226,7 @@ export default function HomePage() {
           color: "var(--color-text-primary)",
           marginBottom: 20,
         }}>
-          Most-Talked About Course Discussion
+          Most-Talked About Discussions
         </h2>
 
         {summariesLoading && (
