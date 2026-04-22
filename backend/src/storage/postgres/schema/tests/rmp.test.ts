@@ -3,7 +3,6 @@ import {
     setupTestWithCleanup,
     shutdownSharedTestDB
 } from "../../testutil/shared_db";
-// import { ProfessorRepositorySchema } from "../professor";
 import { RMPRepositorySchema } from "../rmp";
 import { rmp } from "../../../tables/rmp";
 import { professor } from "../../../tables/professor";
@@ -57,15 +56,14 @@ describe("RMPRepositorySchema DB Integration", () => {
             });
 
             const result = await repo.getRMPByProfessorID(testProfessorID);
-            expect(result.professorId).toBe(testProfessorID);
-            expect(result.ratingAvg).toBe("4.50");
-            expect(result.ratingWta).toBe(85);
-            expect(result.avgDifficulty).toBe("3.20");
+            expect(result?.professorId).toBe(testProfessorID);
+            expect(result?.ratingAvg).toBe("4.50");
+            expect(result?.ratingWta).toBe(85);
+            expect(result?.avgDifficulty).toBe("3.20");
         });
     });
 
     describe("postRMP", () => {
-        // requires input: RMPPostInputType[] now, so update to fix failing tests?
         test("returns empty array when no input given", async () => {
             const result = await repo.postRMP([]);
             expect(result).toBeInstanceOf(Array);
