@@ -1,12 +1,12 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
-   Sample,
+  Sample,
   SamplePatchInputType,
   SamplePostInputType,
- } from "../models/sample";
+} from "../models/sample";
 import type {
-   CourseReview,
+  CourseReview,
   CreateParentReviewInput,
   ProfessorReview,
   Review,
@@ -246,4 +246,5 @@ export interface AcademicRepository {
   deleteStudentConcentration(studentId: string, concentrationId: number): Promise<void>;
   addStudentMinor(studentId: string, minorId: number): Promise<void>;
   deleteStudentMinor(studentId: string, minorId: number): Promise<void>;
+  getAllTraces(): Promise<Trace[]>; 
 }

@@ -13,6 +13,7 @@
     "lint:fix": "eslint 'src/**/*.{ts,tsx}' --fix",
     "clean": "rm -rf dist coverage",
     "verify-s3": "ts-node scripts/verify-s3.ts",
+    "scrape-trace-to-s3": "ts-node scripts/scrape-trace-to-s3.ts",
     "scrape:degree-requirements": "tsx scripts/scrapeDegreeRequirements.ts"
   },
   "keywords": [],
