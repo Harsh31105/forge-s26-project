@@ -238,6 +238,7 @@ async function createAllTables(db: NodePgDatabase) {
             first_name VARCHAR(100) NOT NULL,
             last_name VARCHAR(100) NOT NULL,
             tags location_tag_enum[],
+            avatar TEXT,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
