@@ -25,7 +25,7 @@ export class RMPRepositorySchema implements RMPRepository {
                 professorId: d.professorId,
                 ratingAvg: d.ratingAvg?.toString() ?? null,
                 ratingWta: d.ratingWta != null ? Math.round(d.ratingWta * 100) : null, // round when mapping
-                avgDifficulty: d.avgDifficulty.toString(),
+                avgDifficulty: d.avgDifficulty?.toString() ?? null,
             }))
         ).onConflictDoUpdate({
             target: rmp.professorId,

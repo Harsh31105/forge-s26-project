@@ -1,0 +1,2 @@
+ALTER TABLE rmp
+    ALTER COLUMN avg_difficulty DROP NOT NULL;

@@ -21,15 +21,17 @@
     "tanstack": "^1.0.3"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.2.3",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "autoprefixer": "^10.5.0",
     "eslint": "^9",
     "eslint-config-next": "16.1.6",
     "orval": "^7.13.2",
+    "postcss": "^8.5.10",
     "prettier": "^3.8.1",
-    "tailwindcss": "^4",
+    "tailwindcss": "^4.2.3",
     "typescript": "^5"
   }
 }
