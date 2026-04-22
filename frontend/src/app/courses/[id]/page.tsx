@@ -1,11 +1,13 @@
 "use client";
 
+import { useEffect } from "react";
 import Link from "next/link";
 import { useParams, useRouter } from "next/navigation";
 import { useCourse, useBestProfessors } from "@/src/hooks/useCourses";
 import { useTraces } from "@/src/hooks/useTraces";
 import { useFavourites, useFavouriteMutations } from "@/src/hooks/useFavourites";
-import { useCurrentUser } from "@/src/hooks/useAuth";
+import { useAuth } from "@/src/context/AuthContext";
+import { useRecentlyViewed } from "@/src/hooks/useRecentlyViewed";
 import { useReviews } from "@/src/hooks/useReviews";
 import { Review, Trace } from "@/src/lib/api/northStarAPI.schemas";
 import { getMockCourseMetrics } from "@/src/lib/mockCourseMetrics";
@@ -119,8 +121,9 @@ export default function CoursePage() {
   const { reviews } = useReviews();
   const { favourites } = useFavourites();
   const { addFavourite, removeFavourite, isAdding, isRemoving } = useFavouriteMutations();
-  const { user: currentUser } = useCurrentUser();
-  const currentUserId = currentUser?.id ?? null;
+  const { student } = useAuth();
+  const currentUserId = student?.id ?? null;
+  const { trackView } = useRecentlyViewed();
 
   const isFavourited = favourites.some((f) => f.courseId === courseId);
 
@@ -129,6 +132,16 @@ export default function CoursePage() {
   const avgRating = courseReviews.length
     ? courseReviews.reduce((sum, review) => sum + (review.rating ?? 0), 0) / courseReviews.length
     : null;
+
+  useEffect(() => {
+    if (!course || !currentUserId) return;
+    trackView({
+      id: course.id,
+      code: `${course.department.name.toUpperCase()} ${course.course_code}`,
+      name: course.name,
+      rating: avgRating,
+    });
+  }, [course, currentUserId, avgRating, trackView]);
 
   const nupathTags = course?.nupath
     ? course.nupath.split(",").map((s) => s.trim()).filter(Boolean)
