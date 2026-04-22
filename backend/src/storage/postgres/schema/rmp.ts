@@ -11,9 +11,9 @@ export class RMPRepositorySchema implements RMPRepository {
         this.db = db;
     }
 
-    async getRMPByProfessorID(professorId: string): Promise<RMP> {
+    async getRMPByProfessorID(professorId: string): Promise<RMP | null> {
         const [row] = await this.db.select().from(rmp).where(eq(rmp.professorId, professorId));
-        if (!row) throw new NotFoundError("RMP data not found for given professor ID");
+        if (!row) return null;
         return row;
     }
 

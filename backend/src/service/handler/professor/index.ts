@@ -127,20 +127,20 @@ export class ProfessorHandler {
         const id = req.params.id as string;
         if (!isUUID(id)) throw BadRequest("invalid professor ID was given");
 
-        let rmpData: RMP;
+        let rmpData: RMP | null;
         try {
             rmpData = await this.rmpRepo.getRMPByProfessorID(id);
         } catch (err) {
             console.log(err);
-            if (err instanceof NotFoundError) {
-                res.status(200).json({
-                    professorId: id,
-                    ratingAvg: null,
-                    ratingWta: null,
-                    avgDifficulty: null,
-                });
-                return;
-            }
+            // if (err instanceof NotFoundError) {
+            //     res.status(200).json({
+            //         professorId: id,
+            //         ratingAvg: null,
+            //         ratingWta: null,
+            //         avgDifficulty: null,
+            //     });
+            //     return;
+            // }
             throw mapDBError(err, "failed to retrieve RMP data");
         }
 

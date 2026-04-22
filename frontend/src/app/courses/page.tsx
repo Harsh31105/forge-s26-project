@@ -6,8 +6,7 @@ import { useCourses } from "@/src/hooks/useCourses";
 import { useTraces } from "@/src/hooks/useTraces";
 import { useReviews } from "@/src/hooks/useReviews";
 import { useProfessors } from "@/src/hooks/useProfessors";
-import Navbar from "@/src/components/NavBar";
-import CourseCard from "@/src/components/CourseCard";
+import CourseCard from "@/src/components/courses/CourseCard";
 import SearchableSelect from "@/src/components/SearchableSelect";
 import { Trace } from "@/src/lib/api/northStarAPI.schemas";
 import { GetTraceSemester } from "@/src/lib/api/northStarAPI.schemas";
@@ -35,7 +34,7 @@ export default function CoursesPage() {
 
   const { traces } = useTraces();
   const { reviews } = useReviews();
-  const { professors } = useProfessors({ limit: 100 });
+  const { professors } = useProfessors({ limit: 6430 });
 
   const professorOptions = useMemo(() =>
     professors.map(p => ({

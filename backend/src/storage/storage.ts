@@ -208,7 +208,7 @@ export interface FavouriteRepository {
 }
 
 export interface RMPRepository {
-    getRMPByProfessorID(professorId: string): Promise<RMP>;
+    getRMPByProfessorID(professorId: string): Promise<RMP | null>;
     postRMP(input: RMPPostInputType[]): Promise<RMP[]>;
 }
 

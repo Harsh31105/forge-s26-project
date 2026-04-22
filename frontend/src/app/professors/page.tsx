@@ -6,7 +6,6 @@ import { useProfessors } from "@/src/hooks/useProfessors";
 import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
 import ProfessorCard from "@/src/components/ProfessorCard";
-import Navbar from "@/src/components/NavBar";
 import { Professor } from "@/src/lib/api/northStarAPI.schemas";
 import { Search, BookOpen } from "lucide-react";
 import SearchableSelect from "@/src/components/SearchableSelect";
@@ -27,13 +26,13 @@ export default function ProfessorsPage() {
   const [selectedCourse, setSelectedCourse] = useState<string>("");
   const { professors, isLoading, error } = useProfessors({
     tags: campusFilters.length > 0 ? campusFilters : undefined,
-    limit: 100,
+    limit: 6380,
     ...(sortBy === "highest" && { sortBy: "firstName", sortOrder: "asc" }),
     ...(sortBy === "lowest" && { sortBy: "firstName", sortOrder: "desc" }),
   });
 
   const { reviews } = useReviews();
-  const { traces } = useTraces();
+  const { traces } = useTraces({ limit: 30240 });
 
   const courseOptions = useMemo(() => {
     const seen = new Set<string>();
