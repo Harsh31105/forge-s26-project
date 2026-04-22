@@ -18,10 +18,16 @@ export async function fetchRMPDataForProfessor(
 
     const cleanNumber = (val: unknown): number | null => {
         if (typeof val !== "number") return null;
-        if (!Number.isFinite(val)) return null;
         if (Number.isNaN(val)) return null;
+        if (!Number.isFinite(val)) return null;
         if (val <= 0) return null;
         return val;
+    };
+
+    const safeDecimal = (val: string | null): string | null => {
+        if (val === null) return null;
+        const n = parseFloat(val);
+        return Number.isNaN(n) ? null : val;
     };
 
     const result = await getProfessorRatingAtSchoolId(
@@ -31,12 +37,10 @@ export async function fetchRMPDataForProfessor(
 
     if (!result) return null;
 
-    // console.log("avgDifficulty raw:", result.avgDifficulty, typeof result.avgDifficulty);
-
     return {
         firstName,
         lastName,
-        ratingAvg: result.avgRating !== 0.0 ? result.avgRating.toString() : null,
+        ratingAvg: result.avgRating !== 0.0 && result.avgRating !== -1.0 ? result.avgRating.toString() : null,
         ratingWta: result.wouldTakeAgainPercent === -1 ? null : Math.round(result.wouldTakeAgainPercent / 100),
         avgDifficulty: cleanNumber(
             typeof result.avgDifficulty === "string"
