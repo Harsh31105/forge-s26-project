@@ -30,6 +30,7 @@ export default function ProfessorsPage() {
     tags: campusFilters.length > 0 ? campusFilters : undefined,
     ...(sortBy === "highest" && { sortBy: "firstName", sortOrder: "asc" }),
     ...(sortBy === "lowest" && { sortBy: "firstName", sortOrder: "desc" }),
+      limit: 6380
   });
 
   const { reviews } = useReviews();
