@@ -24460,4 +24460,4379 @@ key:trace-evaluations/CHEM/all-courses/fall_2021/adao-gomes-leticia-section-04-c
       "60-80%": 70.0
     }
   }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/garcia-matthew-section-01-course-41616-sp-63459-5298-139-02acff2ac1.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/garcia-matthew-section-01-course-41616-sp-63459-5298-139-02acff2ac1.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Geometry",
+    "course_code": "3560",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Geometry",
+    "courseCode": "3560",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 10.0,
+      "5-7": 10.0,
+      "3-4": 30.0,
+      "0-2": 50.0
+    },
+    "proffesorEfficency": 4.6,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/george-prasanth-section-02-course-40147-sp-63105-1482-139-e4eef1b177.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/george-prasanth-section-02-course-40147-sp-63105-1482-139-e4eef1b177.pdf",
+  "professor": {
+    "firstName": "Prasanth",
+    "lastName": "George",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 20.0,
+      "3-4": 20.0,
+      "0-2": 60.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 20.0,
+      "60-80%": 80.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/gibbins-aliska-section-02-course-41209-sp-63388-2318-139-db0ece8e9f.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/gibbins-aliska-section-02-course-41209-sp-63388-2318-139-db0ece8e9f.pdf",
+  "professor": {
+    "firstName": "Aliska",
+    "lastName": "Gibbins",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 1",
+    "course_code": "1241",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 1",
+    "courseCode": "1241",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 14.3,
+      "5-7": 28.6,
+      "3-4": 57.1
+    },
+    "proffesorEfficency": 4.4,
+    "howOftenPercentage": {
+      "80-100%": 28.6,
+      "40-60%": 71.4
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/hoffman-aaron-section-01-course-40447-sp-63215-4755-139-cdb90b75fd.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/hoffman-aaron-section-01-course-40447-sp-63215-4755-139-cdb90b75fd.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Hoffman",
+    "tags": []
+  },
+  "course": {
+    "name": "Complex Variables",
+    "course_code": "4555",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Complex Variables",
+    "courseCode": "4555",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 33.3,
+      "5-7": 33.3,
+      "3-4": 33.3
+    },
+    "proffesorEfficency": 3.7,
+    "howOftenPercentage": {
+      "80-100%": 33.3,
+      "40-60%": 66.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/hower-valerie-section-02-course-40050-sp-63084-4748-139-22eb714e70.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/hower-valerie-section-02-course-40050-sp-63084-4748-139-22eb714e70.pdf",
+  "professor": {
+    "firstName": "Valerie",
+    "lastName": "Hower",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.7,
+      "8-10": 23.1,
+      "5-7": 15.4,
+      "3-4": 23.1,
+      "0-2": 30.8
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 7.7,
+      "60-80%": 7.7,
+      "40-60%": 7.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/jesudason-rajini-section-01-course-40012-sp-63054-312-139-1fa557c098.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/jesudason-rajini-section-01-course-40012-sp-63054-312-139-1fa557c098.pdf",
+  "professor": {
+    "firstName": "Rajini",
+    "lastName": "Jesudason",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 8.3,
+      "8-10": 8.3,
+      "5-7": 33.3,
+      "3-4": 41.7,
+      "0-2": 8.3
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 8.3,
+      "60-80%": 8.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/karapetian-edgar-section-03-course-40125-sp-63097-1109-139-29ea7fc204.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/karapetian-edgar-section-03-course-40125-sp-63097-1109-139-29ea7fc204.pdf",
+  "professor": {
+    "firstName": "Edgar",
+    "lastName": "Karapetian",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "3-4": 100.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/lindhe-john-section-01-course-40002-sp-63044-598-139-2ce18f11b1.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/lindhe-john-section-01-course-40002-sp-63044-598-139-2ce18f11b1.pdf",
+  "professor": {
+    "firstName": "John",
+    "lastName": "Lindhe",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.1,
+      "5-7": 28.6,
+      "3-4": 35.7,
+      "0-2": 28.6
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 7.1,
+      "60-80%": 92.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/lupi-robert-section-01-course-40231-sp-63132-651-139-fe85636d91.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/lupi-robert-section-01-course-40231-sp-63132-651-139-fe85636d91.pdf",
+  "professor": {
+    "firstName": "Robert",
+    "lastName": "Lupi",
+    "tags": []
+  },
+  "course": {
+    "name": "Number Theory 1",
+    "course_code": "3527",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Number Theory 1",
+    "courseCode": "3527",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.7,
+      "8-10": 15.4,
+      "5-7": 38.5,
+      "3-4": 38.5
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 7.7,
+      "60-80%": 7.7,
+      "40-60%": 7.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/marcotte-james-section-01-course-40039-sp-63076-5404-139-cf823dedcf.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/marcotte-james-section-01-course-40039-sp-63076-5404-139-cf823dedcf.pdf",
+  "professor": {
+    "firstName": "James",
+    "lastName": "Marcotte",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 14.3,
+      "5-7": 28.6,
+      "3-4": 28.6,
+      "0-2": 28.6
+    },
+    "proffesorEfficency": 4.3,
+    "howOftenPercentage": {
+      "80-100%": 14.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/ptitsyna-natalia-section-03-course-41620-sp-63461-5359-139-d78ac22c89.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/ptitsyna-natalia-section-03-course-41620-sp-63461-5359-139-d78ac22c89.pdf",
+  "professor": {
+    "firstName": "Natalia",
+    "lastName": "Ptitsyna",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 6.7,
+      "5-7": 26.7,
+      "3-4": 40.0,
+      "0-2": 26.7
+    },
+    "proffesorEfficency": 3.4,
+    "howOftenPercentage": {
+      "80-100%": 6.7,
+      "60-80%": 13.3,
+      "40-60%": 53.3,
+      "20-40%": 26.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/rainho-marco-section-01-course-40113-sp-63089-800-139-7444cb43fb.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/rainho-marco-section-01-course-40113-sp-63089-800-139-7444cb43fb.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 12.5,
+      "5-7": 37.5,
+      "3-4": 12.5,
+      "0-2": 37.5
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 12.5,
+      "60-80%": 87.5
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/rainho-marco-section-02-course-40123-sp-63095-800-139-8c6af5fa3f.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/rainho-marco-section-02-course-40123-sp-63095-800-139-8c6af5fa3f.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "3-4": 42.9,
+      "0-2": 57.1
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 14.3,
+      "60-80%": 14.3,
+      "20-40%": 71.4
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/sadaka-hanai-section-01-course-40575-sp-63269-435-139-7058c5400b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/sadaka-hanai-section-01-course-40575-sp-63269-435-139-7058c5400b.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Interest/Basic Life Insurance1",
+    "course_code": "4682",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Interest/Basic Life Insurance1",
+    "courseCode": "4682",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 33.3,
+      "8-10": 44.4,
+      "5-7": 22.2
+    },
+    "proffesorEfficency": 4.0,
+    "howOftenPercentage": {
+      "80-100%": 11.1,
+      "60-80%": 88.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/sadaka-hanai-section-02-course-40640-sp-63284-435-139-b0342caa88.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/sadaka-hanai-section-02-course-40640-sp-63284-435-139-b0342caa88.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Risks",
+    "course_code": "4681",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Risks",
+    "courseCode": "4681",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 9.1,
+      "8-10": 18.2,
+      "5-7": 18.2,
+      "3-4": 36.4,
+      "0-2": 18.2
+    },
+    "proffesorEfficency": 4.3,
+    "howOftenPercentage": {
+      "80-100%": 18.2,
+      "60-80%": 81.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/seo-sumi-section-03-course-40593-sp-63275-1260-139-ddb69baef8.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/seo-sumi-section-03-course-40593-sp-63275-1260-139-ddb69baef8.pdf",
+  "professor": {
+    "firstName": "Sumi",
+    "lastName": "Seo",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 14.3,
+      "5-7": 42.9,
+      "3-4": 42.9
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 7.1,
+      "60-80%": 85.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/seo-sumi-section-05-course-40579-sp-63272-1260-139-ff4314214c.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/seo-sumi-section-05-course-40579-sp-63272-1260-139-ff4314214c.pdf",
+  "professor": {
+    "firstName": "Sumi",
+    "lastName": "Seo",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 50.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 8.3,
+      "40-60%": 91.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/stover-christopher-section-01-course-40327-sp-63193-5264-139-3e554973d8.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/stover-christopher-section-01-course-40327-sp-63193-5264-139-3e554973d8.pdf",
+  "professor": {
+    "firstName": "Christopher",
+    "lastName": "Stover",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 7.7,
+      "5-7": 7.7,
+      "3-4": 7.7,
+      "0-2": 76.9
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 7.7,
+      "60-80%": 7.7,
+      "20-40%": 84.6
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/toledano-laredo-valerio-section-02-course-40195-sp-63117-2106-139-51a8b20e09.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/toledano-laredo-valerio-section-02-course-40195-sp-63117-2106-139-51a8b20e09.pdf",
+  "professor": {
+    "firstName": "Valerio",
+    "lastName": "Toledano Laredo",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 11.1,
+      "8-10": 22.2,
+      "5-7": 44.4,
+      "3-4": 22.2
+    },
+    "proffesorEfficency": 4.3,
+    "howOftenPercentage": {
+      "80-100%": 11.1,
+      "60-80%": 11.1,
+      "20-40%": 77.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/tzigantchev-dimitre-section-04-course-41622-sp-63462-4757-139-a7f4a52bda.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/tzigantchev-dimitre-section-04-course-41622-sp-63462-4757-139-a7f4a52bda.pdf",
+  "professor": {
+    "firstName": "Dimitre",
+    "lastName": "Tzigantchev",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 11.1,
+      "8-10": 22.2,
+      "5-7": 55.6
+    },
+    "proffesorEfficency": 3.6,
+    "howOftenPercentage": {
+      "80-100%": 11.1,
+      "60-80%": 11.1,
+      "40-60%": 16.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/veetel-bindu-section-02-course-40138-sp-63104-910-139-e1e39df175.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/veetel-bindu-section-02-course-40138-sp-63104-910-139-e1e39df175.pdf",
+  "professor": {
+    "firstName": "Bindu",
+    "lastName": "Veetel",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 12.5,
+      "8-10": 12.5,
+      "5-7": 50.0,
+      "3-4": 25.0
+    },
+    "proffesorEfficency": 3.9,
+    "howOftenPercentage": {
+      "80-100%": 12.5,
+      "60-80%": 12.5,
+      "20-40%": 50.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/veetel-bindu-section-06-course-41623-sp-63463-910-139-17c6bc1180.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/veetel-bindu-section-06-course-41623-sp-63463-910-139-17c6bc1180.pdf",
+  "professor": {
+    "firstName": "Bindu",
+    "lastName": "Veetel",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 22.2,
+      "8-10": 22.2,
+      "5-7": 22.2,
+      "3-4": 33.3
+    },
+    "proffesorEfficency": 3.0,
+    "howOftenPercentage": {
+      "80-100%": 11.1,
+      "60-80%": 22.2,
+      "20-40%": 66.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/wang-he-section-02-course-40620-sp-63279-939-139-8b9e5ac915.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/wang-he-section-02-course-40620-sp-63279-939-139-8b9e5ac915.pdf",
+  "professor": {
+    "firstName": "He",
+    "lastName": "Wang",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 15.4,
+      "8-10": 23.1,
+      "5-7": 38.5,
+      "3-4": 23.1
+    },
+    "proffesorEfficency": 4.6,
+    "howOftenPercentage": {
+      "80-100%": 7.1,
+      "60-80%": 21.4,
+      "40-60%": 50.0,
+      "20-40%": 21.4
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/wang-he-section-04-course-41008-sp-63361-939-139-915e28ee62.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/wang-he-section-04-course-41008-sp-63361-939-139-915e28ee62.pdf",
+  "professor": {
+    "firstName": "He",
+    "lastName": "Wang",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 19.0,
+      "8-10": 38.1,
+      "5-7": 42.9
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 18.2,
+      "60-80%": 59.1,
+      "40-60%": 18.2
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/wilson-elizabeth-section-01-course-40038-sp-63075-3147-139-7e664fe406.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/wilson-elizabeth-section-01-course-40038-sp-63075-3147-139-7e664fe406.pdf",
+  "professor": {
+    "firstName": "Elizabeth",
+    "lastName": "Wilson",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.7,
+      "8-10": 15.4,
+      "5-7": 53.8,
+      "3-4": 23.1
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/wu-shu-shih-section-01-course-40003-sp-63045-654-139-83f0038ddd.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/wu-shu-shih-section-01-course-40003-sp-63045-654-139-83f0038ddd.pdf",
+  "professor": {
+    "firstName": "Shu-Shih",
+    "lastName": "Wu",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 1",
+    "course_code": "1241",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 1",
+    "courseCode": "1241",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 5.0,
+      "8-10": 10.0,
+      "5-7": 10.0,
+      "3-4": 30.0,
+      "0-2": 45.0
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 10.0,
+      "60-80%": 5.0,
+      "40-60%": 5.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2021/wu-shu-shih-section-01-course-41613-sp-63458-654-139-8fd769dc9f.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2021/wu-shu-shih-section-01-course-41613-sp-63458-654-139-8fd769dc9f.pdf",
+  "professor": {
+    "firstName": "Shu-Shih",
+    "lastName": "Wu",
+    "tags": []
+  },
+  "course": {
+    "name": "Combinatorial Mathematics",
+    "course_code": "3533",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Combinatorial Mathematics",
+    "courseCode": "3533",
+    "semester": "summer_1",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 12.5,
+      "8-10": 25.0,
+      "5-7": 12.5,
+      "3-4": 12.5,
+      "0-2": 37.5
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/garcia-matthew-section-01-course-41073-sp-73315-5298-150-202d20f509.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/garcia-matthew-section-01-course-41073-sp-73315-5298-150-202d20f509.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Geometry",
+    "course_code": "3560",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Geometry",
+    "courseCode": "3560",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 25.0,
+      "3-4": 37.5,
+      "0-2": 37.5
+    },
+    "proffesorEfficency": 4.1,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/george-prasanth-section-02-course-40129-sp-73047-1482-150-384a412d55.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/george-prasanth-section-02-course-40129-sp-73047-1482-150-384a412d55.pdf",
+  "professor": {
+    "firstName": "Prasanth",
+    "lastName": "George",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.7,
+      "8-10": 23.1,
+      "5-7": 38.5,
+      "3-4": 7.7,
+      "0-2": 23.1
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 7.7,
+      "60-80%": 92.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/gibbins-aliska-section-02-course-40805-sp-73276-2318-150-45ec906b1d.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/gibbins-aliska-section-02-course-40805-sp-73276-2318-150-45ec906b1d.pdf",
+  "professor": {
+    "firstName": "Aliska",
+    "lastName": "Gibbins",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 1",
+    "course_code": "1241",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 1",
+    "courseCode": "1241",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 10.0,
+      "8-10": 10.0,
+      "5-7": 10.0,
+      "3-4": 20.0,
+      "0-2": 50.0
+    },
+    "proffesorEfficency": 4.2,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/hoffman-aaron-section-05-course-41785-sp-73450-4755-150-ec982ef7cc.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/hoffman-aaron-section-05-course-41785-sp-73450-4755-150-ec982ef7cc.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Hoffman",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 14.3,
+      "5-7": 42.9,
+      "3-4": 42.9
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 14.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/jesudason-rajini-section-01-course-40012-sp-73001-312-150-25070b3c43.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/jesudason-rajini-section-01-course-40012-sp-73001-312-150-25070b3c43.pdf",
+  "professor": {
+    "firstName": "Rajini",
+    "lastName": "Jesudason",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 100.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/karapetian-edgar-section-01-course-40038-sp-73022-1109-150-180c7f3c56.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/karapetian-edgar-section-01-course-40038-sp-73022-1109-150-180c7f3c56.pdf",
+  "professor": {
+    "firstName": "Edgar",
+    "lastName": "Karapetian",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 10.0,
+      "5-7": 20.0,
+      "3-4": 40.0,
+      "0-2": 30.0
+    },
+    "proffesorEfficency": 4.6,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/king-christopher-section-01-course-41081-sp-72929-459-150-111cdefb72.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/king-christopher-section-01-course-41081-sp-72929-459-150-111cdefb72.pdf",
+  "professor": {
+    "firstName": "Christopher",
+    "lastName": "King",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability 2",
+    "course_code": "7341",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability 2",
+    "courseCode": "7341",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 50.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/lindhe-john-section-01-course-40002-sp-72992-598-150-6d1af203bd.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/lindhe-john-section-01-course-40002-sp-72992-598-150-6d1af203bd.pdf",
+  "professor": {
+    "firstName": "John",
+    "lastName": "Lindhe",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 28.6,
+      "5-7": 23.8,
+      "3-4": 42.9
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 9.5,
+      "60-80%": 90.5
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/lindhe-john-section-01-course-40484-sp-73191-598-150-b4d9559b93.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/lindhe-john-section-01-course-40484-sp-73191-598-150-b4d9559b93.pdf",
+  "professor": {
+    "firstName": "John",
+    "lastName": "Lindhe",
+    "tags": []
+  },
+  "course": {
+    "name": "Interest/Basic Life Insurance1",
+    "course_code": "4682",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Interest/Basic Life Insurance1",
+    "courseCode": "4682",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 40.0,
+      "5-7": 60.0
+    },
+    "proffesorEfficency": 4.6,
+    "howOftenPercentage": {
+      "80-100%": 20.0,
+      "20-40%": 80.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/lindhe-john-section-02-course-40529-sp-73202-598-150-5267e2a472.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/lindhe-john-section-02-course-40529-sp-73202-598-150-5267e2a472.pdf",
+  "professor": {
+    "firstName": "John",
+    "lastName": "Lindhe",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Risks",
+    "course_code": "4681",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Risks",
+    "courseCode": "4681",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 100.0
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/lupi-robert-section-01-course-40201-sp-73073-651-150-4a9e8fafe3.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/lupi-robert-section-01-course-40201-sp-73073-651-150-4a9e8fafe3.pdf",
+  "professor": {
+    "firstName": "Robert",
+    "lastName": "Lupi",
+    "tags": []
+  },
+  "course": {
+    "name": "Number Theory 1",
+    "course_code": "3527",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Number Theory 1",
+    "courseCode": "3527",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 25.0,
+      "5-7": 50.0,
+      "3-4": 25.0
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/marian-alina-section-01-course-40284-sp-73130-1245-150-c6ba37d34c.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/marian-alina-section-01-course-40284-sp-73130-1245-150-c6ba37d34c.pdf",
+  "professor": {
+    "firstName": "Alina",
+    "lastName": "Marian",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 12.5,
+      "8-10": 37.5,
+      "5-7": 37.5,
+      "3-4": 12.5
+    },
+    "proffesorEfficency": 3.5,
+    "howOftenPercentage": {
+      "80-100%": 12.5,
+      "60-80%": 87.5
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/marian-alina-section-02-course-40518-sp-73197-1245-150-74beb7af49.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/marian-alina-section-02-course-40518-sp-73197-1245-150-74beb7af49.pdf",
+  "professor": {
+    "firstName": "Alina",
+    "lastName": "Marian",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 14.3,
+      "5-7": 42.9,
+      "3-4": 42.9
+    },
+    "proffesorEfficency": 4.4,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/ptitsyna-natalia-section-03-course-41077-sp-73317-5359-150-57c2400b08.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/ptitsyna-natalia-section-03-course-41077-sp-73317-5359-150-57c2400b08.pdf",
+  "professor": {
+    "firstName": "Natalia",
+    "lastName": "Ptitsyna",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 6.3,
+      "8-10": 6.3,
+      "5-7": 18.8,
+      "3-4": 25.0,
+      "0-2": 43.8
+    },
+    "proffesorEfficency": 3.4,
+    "howOftenPercentage": {
+      "80-100%": 6.3,
+      "40-60%": 93.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/rainho-marco-section-01-course-40105-sp-73033-800-150-5b0e6537b9.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/rainho-marco-section-01-course-40105-sp-73033-800-150-5b0e6537b9.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "0-2": 100.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/rainho-marco-section-02-course-40111-sp-73038-800-150-09980aceb8.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/rainho-marco-section-02-course-40111-sp-73038-800-150-09980aceb8.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "3-4": 25.0,
+      "0-2": 75.0
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/sadaka-hanai-section-01-course-40484-sp-73191-435-150-2ee6bc3187.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/sadaka-hanai-section-01-course-40484-sp-73191-435-150-2ee6bc3187.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Interest/Basic Life Insurance1",
+    "course_code": "4682",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Interest/Basic Life Insurance1",
+    "courseCode": "4682",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 40.0,
+      "5-7": 60.0
+    },
+    "proffesorEfficency": 4.6,
+    "howOftenPercentage": {
+      "80-100%": 20.0,
+      "20-40%": 80.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/sadaka-hanai-section-02-course-40529-sp-73202-435-150-85a0e5e98d.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/sadaka-hanai-section-02-course-40529-sp-73202-435-150-85a0e5e98d.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Risks",
+    "course_code": "4681",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Risks",
+    "courseCode": "4681",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 100.0
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/seo-sumi-section-02-course-40046-sp-73030-1260-150-e6bcb53c5e.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/seo-sumi-section-02-course-40046-sp-73030-1260-150-e6bcb53c5e.pdf",
+  "professor": {
+    "firstName": "Sumi",
+    "lastName": "Seo",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.1,
+      "8-10": 21.4,
+      "5-7": 21.4,
+      "3-4": 7.1,
+      "0-2": 42.9
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/seo-sumi-section-03-course-40113-sp-73040-1260-150-a8b993ad96.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/seo-sumi-section-03-course-40113-sp-73040-1260-150-a8b993ad96.pdf",
+  "professor": {
+    "firstName": "Sumi",
+    "lastName": "Seo",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 18.8,
+      "8-10": 31.3,
+      "5-7": 6.3,
+      "3-4": 43.8
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 6.3,
+      "60-80%": 93.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/todorov-gordana-section-01-course-41757-sp-73442-658-150-2a41360382.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/todorov-gordana-section-01-course-41757-sp-73442-658-150-2a41360382.pdf",
+  "professor": {
+    "firstName": "Gordana",
+    "lastName": "Todorov",
+    "tags": []
+  },
+  "course": {
+    "name": "Group Theory",
+    "course_code": "3175",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Group Theory",
+    "courseCode": "3175",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 100.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/toledano-laredo-valerio-section-01-course-41706-sp-73426-2106-150-830986636a.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/toledano-laredo-valerio-section-01-course-41706-sp-73426-2106-150-830986636a.pdf",
+  "professor": {
+    "firstName": "Valerio",
+    "lastName": "Toledano Laredo",
+    "tags": []
+  },
+  "course": {
+    "name": "Adv Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Adv Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 14.3,
+      "8-10": 28.6,
+      "5-7": 57.1
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/tzigantchev-dimitre-section-03-course-41704-sp-73424-4757-150-6376727b6b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/tzigantchev-dimitre-section-03-course-41704-sp-73424-4757-150-6376727b6b.pdf",
+  "professor": {
+    "firstName": "Dimitre",
+    "lastName": "Tzigantchev",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 16.7,
+      "5-7": 50.0,
+      "3-4": 33.3
+    },
+    "proffesorEfficency": 4.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/tzigantchev-dimitre-section-04-course-41079-sp-73318-4757-150-4beac353ea.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/tzigantchev-dimitre-section-04-course-41079-sp-73318-4757-150-4beac353ea.pdf",
+  "professor": {
+    "firstName": "Dimitre",
+    "lastName": "Tzigantchev",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 6.3,
+      "8-10": 31.3,
+      "5-7": 37.5,
+      "3-4": 25.0
+    },
+    "proffesorEfficency": 3.7,
+    "howOftenPercentage": {
+      "80-100%": 18.8,
+      "60-80%": 81.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/veetel-bindu-section-02-course-40123-sp-73046-910-150-63a217748b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/veetel-bindu-section-02-course-40123-sp-73046-910-150-63a217748b.pdf",
+  "professor": {
+    "firstName": "Bindu",
+    "lastName": "Veetel",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 42.9,
+      "5-7": 42.9,
+      "3-4": 14.3
+    },
+    "proffesorEfficency": 4.4,
+    "howOftenPercentage": {
+      "80-100%": 14.3,
+      "60-80%": 85.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/veetel-bindu-section-04-course-40710-sp-73257-910-150-e388ae9403.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/veetel-bindu-section-04-course-40710-sp-73257-910-150-e388ae9403.pdf",
+  "professor": {
+    "firstName": "Bindu",
+    "lastName": "Veetel",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 12.5,
+      "5-7": 25.0,
+      "3-4": 25.0,
+      "0-2": 37.5
+    },
+    "proffesorEfficency": 4.1,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/wilson-elizabeth-section-01-course-40037-sp-73021-3147-150-b26faa1c3a.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/wilson-elizabeth-section-01-course-40037-sp-73021-3147-150-b26faa1c3a.pdf",
+  "professor": {
+    "firstName": "Elizabeth",
+    "lastName": "Wilson",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 14.3,
+      "8-10": 28.6,
+      "5-7": 28.6,
+      "3-4": 28.6
+    },
+    "proffesorEfficency": 4.1,
+    "howOftenPercentage": {
+      "80-100%": 7.1,
+      "60-80%": 92.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/wu-shu-shih-section-01-course-40003-sp-72993-654-150-73cae8cadf.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/wu-shu-shih-section-01-course-40003-sp-72993-654-150-73cae8cadf.pdf",
+  "professor": {
+    "firstName": "Shu-Shih",
+    "lastName": "Wu",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 1",
+    "course_code": "1241",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 1",
+    "courseCode": "1241",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 11.8,
+      "8-10": 23.5,
+      "5-7": 17.6,
+      "3-4": 17.6,
+      "0-2": 29.4
+    },
+    "proffesorEfficency": 4.6,
+    "howOftenPercentage": {
+      "80-100%": 23.5,
+      "60-80%": 76.5
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2022/wu-shu-shih-section-01-course-41070-sp-73314-654-150-8ac911d94e.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2022/wu-shu-shih-section-01-course-41070-sp-73314-654-150-8ac911d94e.pdf",
+  "professor": {
+    "firstName": "Shu-Shih",
+    "lastName": "Wu",
+    "tags": []
+  },
+  "course": {
+    "name": "Combinatorial Mathematics",
+    "course_code": "3533",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Combinatorial Mathematics",
+    "courseCode": "3533",
+    "semester": "summer_1",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 33.3,
+      "5-7": 66.7
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/george-prasanth-section-05-course-41421-sp-83633-1482-164-7cbc28326e.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/george-prasanth-section-05-course-41421-sp-83633-1482-164-7cbc28326e.pdf",
+  "professor": {
+    "firstName": "Prasanth",
+    "lastName": "George",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 16.7,
+      "5-7": 33.3,
+      "3-4": 44.4
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 94.4
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/gibbins-aliska-section-02-course-40696-sp-83527-2318-164-ca01188b85.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/gibbins-aliska-section-02-course-40696-sp-83527-2318-164-ca01188b85.pdf",
+  "professor": {
+    "firstName": "Aliska",
+    "lastName": "Gibbins",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 1",
+    "course_code": "1241",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 1",
+    "courseCode": "1241",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 9.1,
+      "8-10": 9.1,
+      "5-7": 9.1,
+      "3-4": 27.3,
+      "0-2": 45.5
+    },
+    "proffesorEfficency": 4.2,
+    "howOftenPercentage": {
+      "80-100%": 9.1,
+      "60-80%": 90.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/hoffman-aaron-section-01-course-40875-sp-83554-4755-164-347df2f52b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/hoffman-aaron-section-01-course-40875-sp-83554-4755-164-347df2f52b.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Hoffman",
+    "tags": []
+  },
+  "course": {
+    "name": "Geometry",
+    "course_code": "3560",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Geometry",
+    "courseCode": "3560",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 50.0,
+      "0-2": 50.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/hoffman-aaron-section-04-course-40881-sp-83557-4755-164-9647392245.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/hoffman-aaron-section-04-course-40881-sp-83557-4755-164-9647392245.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Hoffman",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.1,
+      "8-10": 14.3,
+      "5-7": 14.3,
+      "3-4": 28.6,
+      "0-2": 35.7
+    },
+    "proffesorEfficency": 3.6,
+    "howOftenPercentage": {
+      "80-100%": 7.1,
+      "60-80%": 92.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/hower-valerie-section-01-course-40269-sp-83395-4748-164-330e0184c2.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/hower-valerie-section-01-course-40269-sp-83395-4748-164-330e0184c2.pdf",
+  "professor": {
+    "firstName": "Valerie",
+    "lastName": "Hower",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.4,
+      "8-10": 11.1,
+      "5-7": 22.2,
+      "3-4": 33.3,
+      "0-2": 25.9
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 18.5,
+      "60-80%": 11.1,
+      "40-60%": 66.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/karapetian-edgar-section-01-course-40037-sp-83295-1109-164-954e685130.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/karapetian-edgar-section-01-course-40037-sp-83295-1109-164-954e685130.pdf",
+  "professor": {
+    "firstName": "Edgar",
+    "lastName": "Karapetian",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 11.1,
+      "5-7": 22.2,
+      "3-4": 33.3,
+      "0-2": 33.3
+    },
+    "proffesorEfficency": 3.6,
+    "howOftenPercentage": {
+      "80-100%": 11.1,
+      "60-80%": 88.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/karapetian-edgar-section-02-course-40116-sp-83319-1109-164-f85b646b83.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/karapetian-edgar-section-02-course-40116-sp-83319-1109-164-f85b646b83.pdf",
+  "professor": {
+    "firstName": "Edgar",
+    "lastName": "Karapetian",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 16.7,
+      "8-10": 33.3,
+      "3-4": 16.7,
+      "0-2": 33.3
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/lindhe-john-section-04-course-40634-sp-83511-598-164-4da270f0fd.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/lindhe-john-section-04-course-40634-sp-83511-598-164-4da270f0fd.pdf",
+  "professor": {
+    "firstName": "John",
+    "lastName": "Lindhe",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 9.1,
+      "5-7": 36.4,
+      "3-4": 27.3,
+      "0-2": 27.3
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 18.2,
+      "60-80%": 81.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/lupi-robert-section-01-course-40189-sp-83344-651-164-f99b56b6c9.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/lupi-robert-section-01-course-40189-sp-83344-651-164-f99b56b6c9.pdf",
+  "professor": {
+    "firstName": "Robert",
+    "lastName": "Lupi",
+    "tags": []
+  },
+  "course": {
+    "name": "Number Theory 1",
+    "course_code": "3527",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Number Theory 1",
+    "courseCode": "3527",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 22.2,
+      "5-7": 27.8,
+      "3-4": 44.4
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/marcotte-james-section-01-course-40011-sp-83276-5404-164-cc165ae6c6.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/marcotte-james-section-01-course-40011-sp-83276-5404-164-cc165ae6c6.pdf",
+  "professor": {
+    "firstName": "James",
+    "lastName": "Marcotte",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 16.7,
+      "8-10": 50.0,
+      "5-7": 16.7,
+      "3-4": 16.7
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/ptitsyna-natalia-section-01-course-40002-sp-83268-5359-164-7e1dd1b52b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/ptitsyna-natalia-section-01-course-40002-sp-83268-5359-164-7e1dd1b52b.pdf",
+  "professor": {
+    "firstName": "Natalia",
+    "lastName": "Ptitsyna",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 9.1,
+      "8-10": 18.2,
+      "5-7": 45.5,
+      "3-4": 27.3
+    },
+    "proffesorEfficency": 2.9,
+    "howOftenPercentage": {
+      "80-100%": 9.1,
+      "40-60%": 9.1
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/ptitsyna-natalia-section-03-course-40879-sp-83556-5359-164-ca2198195b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/ptitsyna-natalia-section-03-course-40879-sp-83556-5359-164-ca2198195b.pdf",
+  "professor": {
+    "firstName": "Natalia",
+    "lastName": "Ptitsyna",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 25.0,
+      "5-7": 75.0
+    },
+    "proffesorEfficency": 2.3,
+    "howOftenPercentage": {
+      "80-100%": 25.0,
+      "40-60%": 75.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/rainho-marco-section-01-course-40099-sp-83306-800-164-26baa62645.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/rainho-marco-section-01-course-40099-sp-83306-800-164-26baa62645.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {},
+    "proffesorEfficency": 0.0,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/rainho-marco-section-02-course-40105-sp-83311-800-164-2f86e26f10.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/rainho-marco-section-02-course-40105-sp-83311-800-164-2f86e26f10.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 50.0,
+      "5-7": 50.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/sadaka-hanai-section-01-course-40454-sp-83453-435-164-8add14f8d3.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/sadaka-hanai-section-01-course-40454-sp-83453-435-164-8add14f8d3.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Interest/Basic Life Insurance1",
+    "course_code": "4682",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Interest/Basic Life Insurance1",
+    "courseCode": "4682",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "3-4": 50.0,
+      "0-2": 50.0
+    },
+    "proffesorEfficency": 4.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/sadaka-hanai-section-02-course-40493-sp-83461-435-164-3193970157.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/sadaka-hanai-section-02-course-40493-sp-83461-435-164-3193970157.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Risks",
+    "course_code": "4681",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Risks",
+    "courseCode": "4681",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 25.0,
+      "3-4": 50.0,
+      "0-2": 25.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/seo-sumi-section-02-course-40045-sp-83303-1260-164-26b9e8d754.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/seo-sumi-section-02-course-40045-sp-83303-1260-164-26b9e8d754.pdf",
+  "professor": {
+    "firstName": "Sumi",
+    "lastName": "Seo",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.1,
+      "8-10": 7.1,
+      "5-7": 28.6,
+      "3-4": 28.6,
+      "0-2": 28.6
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/seo-sumi-section-03-course-40107-sp-83313-1260-164-260c852848.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/seo-sumi-section-03-course-40107-sp-83313-1260-164-260c852848.pdf",
+  "professor": {
+    "firstName": "Sumi",
+    "lastName": "Seo",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 22.2,
+      "5-7": 33.3,
+      "3-4": 44.4
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 11.1,
+      "60-80%": 11.1,
+      "40-60%": 77.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/tzigantchev-dimitre-section-02-course-40122-sp-83320-4757-164-139a04ca9b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/tzigantchev-dimitre-section-02-course-40122-sp-83320-4757-164-139a04ca9b.pdf",
+  "professor": {
+    "firstName": "Dimitre",
+    "lastName": "Tzigantchev",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 6.7,
+      "5-7": 20.0,
+      "3-4": 40.0,
+      "0-2": 33.3
+    },
+    "proffesorEfficency": 3.8,
+    "howOftenPercentage": {
+      "80-100%": 20.0,
+      "60-80%": 6.7,
+      "40-60%": 73.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/tzigantchev-dimitre-section-02-course-40482-sp-83456-4757-164-a97eaab3a8.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/tzigantchev-dimitre-section-02-course-40482-sp-83456-4757-164-a97eaab3a8.pdf",
+  "professor": {
+    "firstName": "Dimitre",
+    "lastName": "Tzigantchev",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 9.1,
+      "5-7": 9.1,
+      "3-4": 18.2,
+      "0-2": 63.6
+    },
+    "proffesorEfficency": 4.3,
+    "howOftenPercentage": {
+      "80-100%": 9.1,
+      "60-80%": 9.1,
+      "40-60%": 81.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/wilson-elizabeth-section-01-course-40036-sp-83294-3147-164-6b120b0a96.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/wilson-elizabeth-section-01-course-40036-sp-83294-3147-164-6b120b0a96.pdf",
+  "professor": {
+    "firstName": "Elizabeth",
+    "lastName": "Wilson",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 11.1,
+      "8-10": 22.2,
+      "5-7": 22.2,
+      "3-4": 44.4
+    },
+    "proffesorEfficency": 3.9,
+    "howOftenPercentage": {
+      "80-100%": 11.1,
+      "60-80%": 88.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/wu-shu-shih-section-01-course-40003-sp-83269-654-164-e0229faf75.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/wu-shu-shih-section-01-course-40003-sp-83269-654-164-e0229faf75.pdf",
+  "professor": {
+    "firstName": "Shu-Shih",
+    "lastName": "Wu",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 1",
+    "course_code": "1241",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 1",
+    "courseCode": "1241",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 12.5,
+      "5-7": 25.0,
+      "3-4": 37.5,
+      "0-2": 25.0
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 12.5
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2023/wu-shu-shih-section-01-course-40872-sp-83553-654-164-a94eb16ba2.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2023/wu-shu-shih-section-01-course-40872-sp-83553-654-164-a94eb16ba2.pdf",
+  "professor": {
+    "firstName": "Shu-Shih",
+    "lastName": "Wu",
+    "tags": []
+  },
+  "course": {
+    "name": "Combinatorial Mathematics",
+    "course_code": "3533",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Combinatorial Mathematics",
+    "courseCode": "3533",
+    "semester": "summer_1",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 9.1,
+      "8-10": 18.2,
+      "5-7": 18.2,
+      "3-4": 27.3,
+      "0-2": 27.3
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 9.1,
+      "60-80%": 90.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/garcia-matthew-section-01-course-40733-sp-94246-5298-182-f441260e9d.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/garcia-matthew-section-01-course-40733-sp-94246-5298-182-f441260e9d.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Geometry",
+    "course_code": "3560",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Geometry",
+    "courseCode": "3560",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 9.1,
+      "5-7": 18.2,
+      "3-4": 45.5,
+      "0-2": 27.3
+    },
+    "proffesorEfficency": 4.0,
+    "howOftenPercentage": {
+      "80-100%": 18.2,
+      "20-40%": 81.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/gibbins-aliska-section-02-course-40606-sp-94224-2318-182-2e9ec5621a.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/gibbins-aliska-section-02-course-40606-sp-94224-2318-182-2e9ec5621a.pdf",
+  "professor": {
+    "firstName": "Aliska",
+    "lastName": "Gibbins",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 1",
+    "course_code": "1241",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 1",
+    "courseCode": "1241",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 16.7,
+      "8-10": 16.7,
+      "3-4": 33.3,
+      "0-2": 33.3
+    },
+    "proffesorEfficency": 4.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/hoffman-aaron-section-03-course-40736-sp-94248-4755-182-0928b0adec.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/hoffman-aaron-section-03-course-40736-sp-94248-4755-182-0928b0adec.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Hoffman",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 33.3,
+      "8-10": 33.3,
+      "5-7": 8.3,
+      "3-4": 25.0
+    },
+    "proffesorEfficency": 3.4,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/hoffman-aaron-section-04-course-40737-sp-94249-4755-182-4a3d6e78c2.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/hoffman-aaron-section-04-course-40737-sp-94249-4755-182-4a3d6e78c2.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Hoffman",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 17.6,
+      "8-10": 47.1,
+      "5-7": 23.5
+    },
+    "proffesorEfficency": 2.9,
+    "howOftenPercentage": {
+      "80-100%": 17.6,
+      "60-80%": 76.5
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/karapetian-edgar-section-01-course-40032-sp-94018-1109-182-9af11320a5.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/karapetian-edgar-section-01-course-40032-sp-94018-1109-182-9af11320a5.pdf",
+  "professor": {
+    "firstName": "Edgar",
+    "lastName": "Karapetian",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 25.0,
+      "8-10": 50.0,
+      "3-4": 25.0
+    },
+    "proffesorEfficency": 4.3,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/karapetian-edgar-section-02-course-40040-sp-94024-1109-182-617aa31476.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/karapetian-edgar-section-02-course-40040-sp-94024-1109-182-617aa31476.pdf",
+  "professor": {
+    "firstName": "Edgar",
+    "lastName": "Karapetian",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 25.0,
+      "5-7": 50.0,
+      "3-4": 25.0
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/lindhe-john-section-01-course-40002-sp-93993-598-182-97445fe1e4.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/lindhe-john-section-01-course-40002-sp-93993-598-182-97445fe1e4.pdf",
+  "professor": {
+    "firstName": "John",
+    "lastName": "Lindhe",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 10.5,
+      "8-10": 42.1,
+      "5-7": 15.8,
+      "3-4": 26.3
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 15.8,
+      "60-80%": 84.2
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/lupi-robert-section-01-course-40174-sp-94063-651-182-f01e38623f.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/lupi-robert-section-01-course-40174-sp-94063-651-182-f01e38623f.pdf",
+  "professor": {
+    "firstName": "Robert",
+    "lastName": "Lupi",
+    "tags": []
+  },
+  "course": {
+    "name": "Number Theory 1",
+    "course_code": "3527",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Number Theory 1",
+    "courseCode": "3527",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 9.1,
+      "8-10": 9.1,
+      "5-7": 27.3,
+      "3-4": 45.5,
+      "0-2": 9.1
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 9.1,
+      "40-60%": 90.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/rainho-marco-section-02-course-40097-sp-94030-800-182-942db4626d.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/rainho-marco-section-02-course-40097-sp-94030-800-182-942db4626d.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 50.0,
+      "5-7": 50.0
+    },
+    "proffesorEfficency": 3.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/rainho-marco-section-02-course-40561-sp-94209-800-182-4d38e4e195.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/rainho-marco-section-02-course-40561-sp-94209-800-182-4d38e4e195.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 13.3,
+      "5-7": 6.7,
+      "3-4": 40.0,
+      "0-2": 40.0
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 20.0,
+      "60-80%": 80.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/rainho-marco-section-03-course-40099-sp-94032-800-182-316ccdb527.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/rainho-marco-section-03-course-40099-sp-94032-800-182-316ccdb527.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 33.3,
+      "8-10": 40.0,
+      "5-7": 26.7
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 6.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/sadaka-hanai-section-01-course-40010-sp-94001-435-182-2181de4a1c.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/sadaka-hanai-section-01-course-40010-sp-94001-435-182-2181de4a1c.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 50.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 4.3,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/sadaka-hanai-section-01-course-41960-sp-94454-435-182-2af25e4004.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/sadaka-hanai-section-01-course-41960-sp-94454-435-182-2af25e4004.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Statistics Stochastic Procss",
+    "course_code": "4581",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Statistics Stochastic Procss",
+    "courseCode": "4581",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 25.0,
+      "5-7": 25.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/sadaka-hanai-section-02-course-40444-sp-94168-435-182-9329287b78.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/sadaka-hanai-section-02-course-40444-sp-94168-435-182-9329287b78.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Risks",
+    "course_code": "4681",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Risks",
+    "courseCode": "4681",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 25.0,
+      "5-7": 50.0,
+      "3-4": 25.0
+    },
+    "proffesorEfficency": 4.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/seo-sumi-section-01-course-40031-sp-94017-1260-182-5194779b62.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/seo-sumi-section-01-course-40031-sp-94017-1260-182-5194779b62.pdf",
+  "professor": {
+    "firstName": "Sumi",
+    "lastName": "Seo",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 11.8,
+      "8-10": 23.5,
+      "5-7": 41.2,
+      "3-4": 17.6
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 94.1
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/seo-sumi-section-03-course-41959-sp-94453-1260-182-132fbdffee.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/seo-sumi-section-03-course-41959-sp-94453-1260-182-132fbdffee.pdf",
+  "professor": {
+    "firstName": "Sumi",
+    "lastName": "Seo",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 9.1,
+      "8-10": 27.3,
+      "5-7": 27.3,
+      "3-4": 36.4
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 9.1,
+      "40-60%": 9.1,
+      "20-40%": 81.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/veliche-oana-section-01-course-41862-sp-94601-955-182-3d49a6ab13.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/veliche-oana-section-01-course-41862-sp-94601-955-182-3d49a6ab13.pdf",
+  "professor": {
+    "firstName": "Oana",
+    "lastName": "Veliche",
+    "tags": []
+  },
+  "course": {
+    "name": "Optimization and Complexity",
+    "course_code": "7234",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Optimization and Complexity",
+    "courseCode": "7234",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 100.0
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/webber-matthew-section-02-course-40107-sp-94038-3485-182-8cba7465f0.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/webber-matthew-section-02-course-40107-sp-94038-3485-182-8cba7465f0.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Webber",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 50.0,
+      "5-7": 50.0
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/williams-abigail-section-02-course-40434-sp-94163-337-182-36057e2e22.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/williams-abigail-section-02-course-40434-sp-94163-337-182-36057e2e22.pdf",
+  "professor": {
+    "firstName": "Abigail",
+    "lastName": "Williams",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 10.0,
+      "8-10": 20.0,
+      "5-7": 30.0,
+      "3-4": 10.0,
+      "0-2": 30.0
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 10.0,
+      "60-80%": 90.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/williams-abigail-section-03-course-41958-sp-94452-337-182-ddc844b5e8.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/williams-abigail-section-03-course-41958-sp-94452-337-182-ddc844b5e8.pdf",
+  "professor": {
+    "firstName": "Abigail",
+    "lastName": "Williams",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.7,
+      "8-10": 7.7,
+      "5-7": 23.1,
+      "3-4": 23.1,
+      "0-2": 38.5
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 7.7,
+      "60-80%": 7.7,
+      "40-60%": 84.6
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/wilson-elizabeth-section-02-course-40111-sp-94039-3147-182-788524e4f1.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/wilson-elizabeth-section-02-course-40111-sp-94039-3147-182-788524e4f1.pdf",
+  "professor": {
+    "firstName": "Elizabeth",
+    "lastName": "Wilson",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.7,
+      "8-10": 30.8,
+      "5-7": 23.1,
+      "0-2": 38.5
+    },
+    "proffesorEfficency": 3.5,
+    "howOftenPercentage": {
+      "80-100%": 7.7,
+      "60-80%": 92.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/wu-shu-shih-section-01-course-40003-sp-93994-654-182-b580e46a4c.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/wu-shu-shih-section-01-course-40003-sp-93994-654-182-b580e46a4c.pdf",
+  "professor": {
+    "firstName": "Shu-Shih",
+    "lastName": "Wu",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 1",
+    "course_code": "1241",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 1",
+    "courseCode": "1241",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.1,
+      "8-10": 35.7,
+      "5-7": 28.6,
+      "3-4": 28.6
+    },
+    "proffesorEfficency": 4.4,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_1_2024/wu-shu-shih-section-01-course-40732-sp-94245-654-182-fe258b5162.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_1_2024/wu-shu-shih-section-01-course-40732-sp-94245-654-182-fe258b5162.pdf",
+  "professor": {
+    "firstName": "Shu-Shih",
+    "lastName": "Wu",
+    "tags": []
+  },
+  "course": {
+    "name": "Combinatorial Mathematics",
+    "course_code": "3533",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Combinatorial Mathematics",
+    "courseCode": "3533",
+    "semester": "summer_1",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 50.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 50.0,
+      "60-80%": 50.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/bai-rekha-section-01-course-60043-sp-63844-504-142-99ff3278b7.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/bai-rekha-section-01-course-60043-sp-63844-504-142-99ff3278b7.pdf",
+  "professor": {
+    "firstName": "Rekha",
+    "lastName": "Bai",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 50.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/dummit-evan-section-01-course-60411-sp-63948-4747-142-48b3c0e87e.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/dummit-evan-section-01-course-60411-sp-63948-4747-142-48b3c0e87e.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Dummit",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 10.0,
+      "8-10": 30.0,
+      "5-7": 30.0,
+      "3-4": 30.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 5.0,
+      "60-80%": 5.0,
+      "40-60%": 20.0,
+      "20-40%": 55.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/dummit-evan-section-02-course-60188-sp-63878-4747-142-a4aba84e6b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/dummit-evan-section-02-course-60188-sp-63878-4747-142-a4aba84e6b.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Dummit",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 10.0,
+      "8-10": 20.0,
+      "5-7": 15.0,
+      "3-4": 20.0,
+      "0-2": 35.0
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 5.0,
+      "60-80%": 5.0,
+      "40-60%": 10.0,
+      "20-40%": 80.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/garcia-matthew-section-01-course-61315-sp-64142-5298-142-dc76bd13d4.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/garcia-matthew-section-01-course-61315-sp-64142-5298-142-dc76bd13d4.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Number Theory 1",
+    "course_code": "3527",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Number Theory 1",
+    "courseCode": "3527",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 22.2,
+      "8-10": 33.3,
+      "5-7": 11.1,
+      "3-4": 33.3
+    },
+    "proffesorEfficency": 3.9,
+    "howOftenPercentage": {
+      "80-100%": 22.2,
+      "60-80%": 11.1
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/hower-valerie-section-01-course-60042-sp-63843-4748-142-65eef45e87.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/hower-valerie-section-01-course-60042-sp-63843-4748-142-65eef45e87.pdf",
+  "professor": {
+    "firstName": "Valerie",
+    "lastName": "Hower",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 8.6,
+      "8-10": 14.3,
+      "5-7": 20.0,
+      "3-4": 31.4,
+      "0-2": 25.7
+    },
+    "proffesorEfficency": 4.9,
+    "howOftenPercentage": {
+      "80-100%": 11.4,
+      "60-80%": 5.7,
+      "40-60%": 77.1
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/lee-lee-peng-section-01-course-60211-sp-63890-1047-142-91c72c23b9.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/lee-lee-peng-section-01-course-60211-sp-63890-1047-142-91c72c23b9.pdf",
+  "professor": {
+    "firstName": "Lee-Peng",
+    "lastName": "Lee",
+    "tags": []
+  },
+  "course": {
+    "name": "Statistics Stochastic Procss",
+    "course_code": "4581",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Statistics Stochastic Procss",
+    "courseCode": "4581",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 9.1,
+      "8-10": 9.1,
+      "5-7": 27.3,
+      "3-4": 36.4,
+      "0-2": 18.2
+    },
+    "proffesorEfficency": 4.4,
+    "howOftenPercentage": {
+      "80-100%": 9.1,
+      "60-80%": 9.1
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/lee-lee-peng-section-01-course-60366-sp-63941-1047-142-88000c48d3.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/lee-lee-peng-section-01-course-60366-sp-63941-1047-142-88000c48d3.pdf",
+  "professor": {
+    "firstName": "Lee-Peng",
+    "lastName": "Lee",
+    "tags": []
+  },
+  "course": {
+    "name": "Group Theory",
+    "course_code": "3175",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Group Theory",
+    "courseCode": "3175",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.7,
+      "8-10": 23.1,
+      "5-7": 30.8,
+      "3-4": 30.8,
+      "0-2": 7.7
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 15.4,
+      "60-80%": 7.7,
+      "20-40%": 7.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/rainho-marco-section-01-course-60118-sp-63861-800-142-7770068ab8.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/rainho-marco-section-01-course-60118-sp-63861-800-142-7770068ab8.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 33.3,
+      "5-7": 33.3,
+      "3-4": 33.3
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/rainho-marco-section-02-course-60180-sp-63877-800-142-db18e82b5a.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/rainho-marco-section-02-course-60180-sp-63877-800-142-db18e82b5a.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 25.0,
+      "3-4": 75.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2021/sadaka-hanai-section-01-course-61316-sp-64143-435-142-a23e37c05f.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2021/sadaka-hanai-section-01-course-61316-sp-64143-435-142-a23e37c05f.pdf",
+  "professor": {
+    "firstName": "Hanai",
+    "lastName": "Sadaka",
+    "tags": []
+  },
+  "course": {
+    "name": "Financial Derivatives",
+    "course_code": "4683",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Financial Derivatives",
+    "courseCode": "4683",
+    "semester": "summer_2",
+    "lectureYear": 2021,
+    "lectureType": "online",
+    "hoursDevoted": {},
+    "proffesorEfficency": 0.0,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/dummit-evan-section-01-course-60369-sp-73864-4747-152-257c428207.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/dummit-evan-section-01-course-60369-sp-73864-4747-152-257c428207.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Dummit",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 18.8,
+      "8-10": 18.8,
+      "5-7": 31.3,
+      "3-4": 31.3
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 12.5,
+      "60-80%": 87.5
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/dummit-evan-section-02-course-60174-sp-73803-4747-152-91f7c82ae8.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/dummit-evan-section-02-course-60174-sp-73803-4747-152-91f7c82ae8.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Dummit",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 8.3,
+      "8-10": 16.7,
+      "5-7": 37.5,
+      "3-4": 37.5
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 20.8,
+      "60-80%": 70.8
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/garcia-matthew-section-01-course-60911-sp-74006-5298-152-f55b0d35ce.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/garcia-matthew-section-01-course-60911-sp-74006-5298-152-f55b0d35ce.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Number Theory 1",
+    "course_code": "3527",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Number Theory 1",
+    "courseCode": "3527",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 50.0,
+      "5-7": 50.0
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 25.0,
+      "20-40%": 50.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/gibbins-aliska-section-01-course-60041-sp-73770-2318-152-31c95f47bb.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/gibbins-aliska-section-01-course-60041-sp-73770-2318-152-31c95f47bb.pdf",
+  "professor": {
+    "firstName": "Aliska",
+    "lastName": "Gibbins",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 25.0,
+      "5-7": 50.0,
+      "3-4": 25.0
+    },
+    "proffesorEfficency": 3.3,
+    "howOftenPercentage": {
+      "80-100%": 25.0,
+      "60-80%": 75.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/lee-lee-peng-section-01-course-60195-sp-73815-1047-152-2d3d350556.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/lee-lee-peng-section-01-course-60195-sp-73815-1047-152-2d3d350556.pdf",
+  "professor": {
+    "firstName": "Lee-Peng",
+    "lastName": "Lee",
+    "tags": []
+  },
+  "course": {
+    "name": "Statistics Stochastic Procss",
+    "course_code": "4581",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Statistics Stochastic Procss",
+    "courseCode": "4581",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 20.0,
+      "5-7": 40.0,
+      "3-4": 40.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/lee-lee-peng-section-02-course-61445-sp-74114-1047-152-b6137884be.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/lee-lee-peng-section-02-course-61445-sp-74114-1047-152-b6137884be.pdf",
+  "professor": {
+    "firstName": "Lee-Peng",
+    "lastName": "Lee",
+    "tags": []
+  },
+  "course": {
+    "name": "Statistics Stochastic Procss",
+    "course_code": "4581",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Statistics Stochastic Procss",
+    "courseCode": "4581",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 40.0,
+      "3-4": 60.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/marcotte-james-section-01-course-60042-sp-73771-5404-152-06270b8309.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/marcotte-james-section-01-course-60042-sp-73771-5404-152-06270b8309.pdf",
+  "professor": {
+    "firstName": "James",
+    "lastName": "Marcotte",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "3-4": 100.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/rainho-marco-section-01-course-60115-sp-73787-800-152-f7257e3a5a.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/rainho-marco-section-01-course-60115-sp-73787-800-152-f7257e3a5a.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 33.3,
+      "5-7": 33.3,
+      "0-2": 33.3
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/rainho-marco-section-02-course-60171-sp-73802-800-152-404d0ed222.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/rainho-marco-section-02-course-60171-sp-73802-800-152-404d0ed222.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 33.3,
+      "3-4": 33.3,
+      "0-2": 33.3
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2022/suciu-alexandru-section-01-course-60334-sp-73858-727-152-0fdaa76d29.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2022/suciu-alexandru-section-01-course-60334-sp-73858-727-152-0fdaa76d29.pdf",
+  "professor": {
+    "firstName": "Alexandru",
+    "lastName": "Suciu",
+    "tags": []
+  },
+  "course": {
+    "name": "Group Theory",
+    "course_code": "3175",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Group Theory",
+    "courseCode": "3175",
+    "semester": "summer_2",
+    "lectureYear": 2022,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 20.0,
+      "5-7": 20.0,
+      "3-4": 60.0
+    },
+    "proffesorEfficency": 2.2,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/dummit-evan-section-01-course-61276-sp-84525-4747-169-7e15a94f80.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/dummit-evan-section-01-course-61276-sp-84525-4747-169-7e15a94f80.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Dummit",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 15.4,
+      "8-10": 23.1,
+      "5-7": 30.8,
+      "3-4": 30.8
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 7.7,
+      "60-80%": 92.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/dummit-evan-section-01-course-61396-sp-84569-4747-169-7c6e38897a.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/dummit-evan-section-01-course-61396-sp-84569-4747-169-7c6e38897a.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Dummit",
+    "tags": []
+  },
+  "course": {
+    "name": "Dynamics, Chaos, and Fractals",
+    "course_code": "3543",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Dynamics, Chaos, and Fractals",
+    "courseCode": "3543",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 20.0,
+      "8-10": 20.0,
+      "5-7": 60.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 20.0,
+      "60-80%": 80.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/garcia-matthew-section-01-course-60038-sp-84279-5298-169-3fb699b272.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/garcia-matthew-section-01-course-60038-sp-84279-5298-169-3fb699b272.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 15.0,
+      "8-10": 15.0,
+      "5-7": 30.0,
+      "3-4": 40.0
+    },
+    "proffesorEfficency": 4.1,
+    "howOftenPercentage": {
+      "80-100%": 5.0,
+      "60-80%": 5.0,
+      "40-60%": 5.0,
+      "20-40%": 5.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/garcia-matthew-section-01-course-60680-sp-84473-5298-169-53cc22ae16.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/garcia-matthew-section-01-course-60680-sp-84473-5298-169-53cc22ae16.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Number Theory 1",
+    "course_code": "3527",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Number Theory 1",
+    "courseCode": "3527",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 9.1,
+      "5-7": 36.4,
+      "3-4": 54.5
+    },
+    "proffesorEfficency": 4.2,
+    "howOftenPercentage": {
+      "80-100%": 9.1,
+      "60-80%": 90.9
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/gibbins-aliska-section-01-course-60316-sp-84357-2318-169-effcf711e0.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/gibbins-aliska-section-01-course-60316-sp-84357-2318-169-effcf711e0.pdf",
+  "professor": {
+    "firstName": "Aliska",
+    "lastName": "Gibbins",
+    "tags": []
+  },
+  "course": {
+    "name": "Group Theory",
+    "course_code": "3175",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Group Theory",
+    "courseCode": "3175",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "3-4": 100.0
+    },
+    "proffesorEfficency": 4.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/jesudason-rajini-section-02-course-61556-sp-84617-312-169-543e5d0331.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/jesudason-rajini-section-02-course-61556-sp-84617-312-169-543e5d0331.pdf",
+  "professor": {
+    "firstName": "Rajini",
+    "lastName": "Jesudason",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 10.0,
+      "8-10": 40.0,
+      "5-7": 30.0,
+      "3-4": 20.0
+    },
+    "proffesorEfficency": 3.5,
+    "howOftenPercentage": {
+      "80-100%": 10.0,
+      "60-80%": 90.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/lee-lee-peng-section-01-course-60348-sp-84363-1047-169-fc1f6e5082.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/lee-lee-peng-section-01-course-60348-sp-84363-1047-169-fc1f6e5082.pdf",
+  "professor": {
+    "firstName": "Lee-Peng",
+    "lastName": "Lee",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 7.7,
+      "8-10": 23.1,
+      "5-7": 30.8,
+      "3-4": 15.4,
+      "0-2": 23.1
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 7.7,
+      "60-80%": 7.7,
+      "40-60%": 84.6
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/lee-lee-peng-section-02-course-60165-sp-84304-1047-169-dd9038a7e4.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/lee-lee-peng-section-02-course-60165-sp-84304-1047-169-dd9038a7e4.pdf",
+  "professor": {
+    "firstName": "Lee-Peng",
+    "lastName": "Lee",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 13.3,
+      "5-7": 20.0,
+      "3-4": 20.0,
+      "0-2": 46.7
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 6.7,
+      "60-80%": 93.3
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/rainho-marco-section-01-course-60111-sp-84292-800-169-81818892a5.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/rainho-marco-section-01-course-60111-sp-84292-800-169-81818892a5.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Mathematical Thinking",
+    "course_code": "1215",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Mathematical Thinking",
+    "courseCode": "1215",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 33.3,
+      "0-2": 66.7
+    },
+    "proffesorEfficency": 3.7,
+    "howOftenPercentage": {
+      "80-100%": 33.3,
+      "60-80%": 66.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/rainho-marco-section-02-course-60162-sp-84303-800-169-536c612c25.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/rainho-marco-section-02-course-60162-sp-84303-800-169-536c612c25.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 33.3,
+      "0-2": 66.7
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/wang-he-section-01-course-61400-sp-84573-939-169-b85880b783.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/wang-he-section-01-course-61400-sp-84573-939-169-b85880b783.pdf",
+  "professor": {
+    "firstName": "He",
+    "lastName": "Wang",
+    "tags": []
+  },
+  "course": {
+    "name": "Applied Linear Algebra",
+    "course_code": "4571",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Applied Linear Algebra",
+    "courseCode": "4571",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 16.7,
+      "8-10": 33.3,
+      "5-7": 50.0
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 16.7,
+      "60-80%": 16.7,
+      "20-40%": 66.7
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/webber-matthew-section-01-course-60039-sp-84280-3485-169-924f4dc184.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/webber-matthew-section-01-course-60039-sp-84280-3485-169-924f4dc184.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Webber",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 50.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2023/webber-matthew-section-01-course-60185-sp-84315-3485-169-feae558a2e.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2023/webber-matthew-section-01-course-60185-sp-84315-3485-169-feae558a2e.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Webber",
+    "tags": []
+  },
+  "course": {
+    "name": "Statistics Stochastic Procss",
+    "course_code": "4581",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Statistics Stochastic Procss",
+    "courseCode": "4581",
+    "semester": "summer_2",
+    "lectureYear": 2023,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "5-7": 50.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 4.5,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/garcia-matthew-section-01-course-60298-sp-95183-5298-184-82f069b144.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/garcia-matthew-section-01-course-60298-sp-95183-5298-184-82f069b144.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Group Theory",
+    "course_code": "3175",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Group Theory",
+    "courseCode": "3175",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 33.3,
+      "5-7": 66.7
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/garcia-matthew-section-01-course-60605-sp-95300-5298-184-08cfda1253.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/garcia-matthew-section-01-course-60605-sp-95300-5298-184-08cfda1253.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Garcia",
+    "tags": []
+  },
+  "course": {
+    "name": "Number Theory 1",
+    "course_code": "3527",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Number Theory 1",
+    "courseCode": "3527",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {},
+    "proffesorEfficency": 0.0,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/gibbins-aliska-section-01-course-60034-sp-95112-2318-184-e0dfb7886b.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/gibbins-aliska-section-01-course-60034-sp-95112-2318-184-e0dfb7886b.pdf",
+  "professor": {
+    "firstName": "Aliska",
+    "lastName": "Gibbins",
+    "tags": []
+  },
+  "course": {
+    "name": "Linear Algebra",
+    "course_code": "2331",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Linear Algebra",
+    "courseCode": "2331",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 25.0,
+      "5-7": 25.0,
+      "3-4": 25.0,
+      "0-2": 25.0
+    },
+    "proffesorEfficency": 3.5,
+    "howOftenPercentage": {
+      "80-100%": 25.0,
+      "40-60%": 75.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/jesudason-rajini-section-02-course-61219-sp-95422-312-184-c413bf96d4.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/jesudason-rajini-section-02-course-61219-sp-95422-312-184-c413bf96d4.pdf",
+  "professor": {
+    "firstName": "Rajini",
+    "lastName": "Jesudason",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus for Business/Econ",
+    "course_code": "1231",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus for Business/Econ",
+    "courseCode": "1231",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 25.0,
+      "8-10": 50.0,
+      "5-7": 25.0
+    },
+    "proffesorEfficency": 3.3,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/lee-lee-peng-section-01-course-60328-sp-95189-1047-184-9c01b31b37.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/lee-lee-peng-section-01-course-60328-sp-95189-1047-184-9c01b31b37.pdf",
+  "professor": {
+    "firstName": "Lee-Peng",
+    "lastName": "Lee",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 10.0,
+      "5-7": 30.0,
+      "3-4": 60.0
+    },
+    "proffesorEfficency": 4.7,
+    "howOftenPercentage": {
+      "80-100%": 10.0,
+      "40-60%": 90.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/lee-lee-peng-section-02-course-60151-sp-95137-1047-184-dc1876da0e.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/lee-lee-peng-section-02-course-60151-sp-95137-1047-184-dc1876da0e.pdf",
+  "professor": {
+    "firstName": "Lee-Peng",
+    "lastName": "Lee",
+    "tags": []
+  },
+  "course": {
+    "name": "Probability and Statistics",
+    "course_code": "3081",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Probability and Statistics",
+    "courseCode": "3081",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 8.3,
+      "5-7": 16.7,
+      "3-4": 25.0,
+      "0-2": 50.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/rainho-marco-section-01-course-60035-sp-95113-800-184-3deae1a149.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/rainho-marco-section-01-course-60035-sp-95113-800-184-3deae1a149.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 40.0,
+      "5-7": 60.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/rainho-marco-section-02-course-60148-sp-95134-800-184-de0786888f.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/rainho-marco-section-02-course-60148-sp-95134-800-184-de0786888f.pdf",
+  "professor": {
+    "firstName": "Marco",
+    "lastName": "Rainho",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 2 for Sci/Engr",
+    "course_code": "1342",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 2 for Sci/Engr",
+    "courseCode": "1342",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 14.3,
+      "8-10": 28.6,
+      "5-7": 14.3,
+      "3-4": 14.3,
+      "0-2": 28.6
+    },
+    "proffesorEfficency": 4.8,
+    "howOftenPercentage": {
+      "80-100%": 12.5
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/wang-he-section-01-course-61070-sp-95390-939-184-8b03670955.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/wang-he-section-01-course-61070-sp-95390-939-184-8b03670955.pdf",
+  "professor": {
+    "firstName": "He",
+    "lastName": "Wang",
+    "tags": []
+  },
+  "course": {
+    "name": "Applied Linear Algebra",
+    "course_code": "4571",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Applied Linear Algebra",
+    "courseCode": "4571",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 50.0,
+      "3-4": 50.0
+    },
+    "proffesorEfficency": 5.0,
+    "howOftenPercentage": {
+      "80-100%": 50.0,
+      "60-80%": 50.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/webber-matthew-section-01-course-60170-sp-95147-3485-184-2534996423.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/webber-matthew-section-01-course-60170-sp-95147-3485-184-2534996423.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Webber",
+    "tags": []
+  },
+  "course": {
+    "name": "Statistics Stochastic Procss",
+    "course_code": "4581",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Statistics Stochastic Procss",
+    "courseCode": "4581",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "8-10": 20.0,
+      "5-7": 60.0,
+      "3-4": 20.0
+    },
+    "proffesorEfficency": 4.4,
+    "howOftenPercentage": {
+      "80-100%": 100.0
+    }
+  }
+}key:trace-evaluations/MATH/all-courses/summer_2_2024/webber-matthew-section-01-course-60963-sp-95353-3485-184-22ba8569fe.pdf, departmet:MATH, result: {
+  "source": "trace-evaluations/MATH/all-courses/summer_2_2024/webber-matthew-section-01-course-60963-sp-95353-3485-184-22ba8569fe.pdf",
+  "professor": {
+    "firstName": "Matthew",
+    "lastName": "Webber",
+    "tags": []
+  },
+  "course": {
+    "name": "Calculus 3 for Sci/Engr",
+    "course_code": "2321",
+    "num_credits": 4,
+    "lecture_type": "online"
+  },
+  "trace": {
+    "courseName": "Calculus 3 for Sci/Engr",
+    "courseCode": "2321",
+    "semester": "summer_2",
+    "lectureYear": 2024,
+    "lectureType": "online",
+    "hoursDevoted": {
+      "More than 10": 14.3,
+      "8-10": 42.9,
+      "5-7": 28.6,
+      "3-4": 14.3
+    },
+    "proffesorEfficency": 4.3,
+    "howOftenPercentage": {
+      "80-100%": 14.3,
+      "60-80%": 85.7
+    }
+  }
 }

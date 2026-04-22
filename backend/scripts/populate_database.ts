@@ -43,6 +43,20 @@ interface TraceJSON {
   };
 }
 
+function normalizeSemester(semester: string): Semester | null {
+  if (semester === "summer") return "summer_1";
+  if (
+    semester === "fall" ||
+    semester === "spring" ||
+    semester === "summer_1" ||
+    semester === "summer_2"
+  ) {
+    return semester;
+  }
+
+  return null;
+}
+
 async function streamToString(stream: any): Promise<string> {
   const chunks: Buffer[] = [];
   for await (const chunk of stream) chunks.push(Buffer.from(chunk));
@@ -107,7 +121,19 @@ async function main() {
         continue;
       }
 
+      if (!schema.trace.semester.startsWith("summer")) {
+        stats.skipped++;
+        continue;
+      }
+
       try {
+        const normalizedSemester = normalizeSemester(schema.trace.semester);
+        if (!normalizedSemester) {
+          console.warn(`✗ invalid semester "${schema.trace.semester}": ${key}`);
+          stats.failed++;
+          continue;
+        }
+
         // resolve department id
 
         if (!deptCache.has(deptName)) {
@@ -175,7 +201,7 @@ async function main() {
             and(
               eq(trace.courseId, courseRow.id),
               eq(trace.professorId, prof.id),
-              eq(trace.semester, t.semester),
+              eq(trace.semester, normalizedSemester),
               eq(trace.lectureYear, t.lectureYear),
               eq(trace.section, section),
             ),
@@ -188,7 +214,7 @@ async function main() {
             courseName: t.courseName,
             departmentId: deptId,
             courseCode: Number(t.courseCode),
-            semester: t.semester as Semester,
+            semester: normalizedSemester,
             lectureYear: t.lectureYear,
             section: section,
             lectureType: (t.lectureType as any) ?? null,
