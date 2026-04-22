@@ -218,6 +218,37 @@ function SkipLink() {
 
 // ── Nav ───────────────────────────────────────────────────
 
+function Nav() {
+  return (
+    <nav
+      role="navigation"
+      aria-label="Main navigation"
+      style={{
+        display: "flex",
+        alignItems: "center",
+        padding: "0 32px",
+        height: "56px",
+        backgroundColor: C.navy,
+        position: "sticky",
+        top: 0,
+        zIndex: 100,
+      }}
+    >
+      <span
+        style={{
+          fontFamily: FONT_HEADING,
+          fontWeight: 700,
+          fontSize: "18px",
+          color: C.white,
+          letterSpacing: "-0.01em",
+        }}
+      >
+        NorthStar
+      </span>
+    </nav>
+  );
+}
+
 // ── Page shell ────────────────────────────────────────────
 
 function PageShell({ children }: { children: React.ReactNode }) {
@@ -232,6 +263,7 @@ function PageShell({ children }: { children: React.ReactNode }) {
       }}
     >
       <SkipLink />
+      <Nav />
 
       {/* Single husky logomark — bottom-right, barely visible */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -667,7 +699,7 @@ export default function OnboardingPage() {
   });
 
 
-  const { student, isFetching, error: loadError } = useMe();
+  const { student, isFetching, isLoading: studentLoading, error: loadError } = useMe();
 
 
 
@@ -705,11 +737,11 @@ export default function OnboardingPage() {
   // stale React Query cache (e.g. from a previous session after an account
   // delete/recreate) can trigger an incorrect skip.
   useEffect(() => {
-    if (isFetching) return;
+    if (isFetching || studentLoading) return;
     if (student?.graduationYear && student.graduationYear > 0) {
       router.push("/");
     }
-  }, [student, isFetching, router]);
+  }, [student, isFetching, studentLoading, router]);
 
   const toggleCourse = (id: string) => {
     setSelectedCourses((prev) =>
@@ -769,6 +801,7 @@ export default function OnboardingPage() {
         }}
       >
         <SkipLink />
+        <Nav />
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
 
@@ -797,13 +830,7 @@ export default function OnboardingPage() {
             }}
           >
             {/* ── Loading / error ── */}
-            {loadError ? (
-              <p
-                style={{ fontSize: "15px", color: C.error, textAlign: "center", fontFamily: FONT }}
-              >
-                {loadError}
-              </p>
-            ) : !student ? (
+            {(isFetching || studentLoading) ? (
               <p
                 style={{
                   fontSize: "15px",
@@ -826,7 +853,7 @@ export default function OnboardingPage() {
                     margin: "0 0 6px 0",
                   }}
                 >
-                  Welcome, {student.firstName}!
+                  Welcome{student?.firstName ? `, ${student.firstName}` : ""}!
                 </h2>
                 <p
                   style={{

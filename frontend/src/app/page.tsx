@@ -39,14 +39,14 @@ const cardStyle: React.CSSProperties = {
 
 export default function Home() {
   const router = useRouter();
-  const { student, isFetching } = useMe();
+  const { student, isFetching, error } = useMe();
   const { summaries, isLoading: summariesLoading } = useAiSummaries({ limit: 5 });
 
   useEffect(() => {
-    if (!isFetching && !student) {
+    if (!isFetching && !error && !student) {
       router.push("/onboarding");
     }
-  }, [student, isFetching, router]);
+  }, [student, isFetching, error, router]);
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
