@@ -242,9 +242,6 @@ async function createAllTables(db: NodePgDatabase) {
             description VARCHAR(1000) NOT NULL,
             num_credits INT NOT NULL CHECK ( num_credits BETWEEN 1 AND 6),
             lecture_type lecture_type_enum,
-            prereqs VARCHAR(1000),
-            coreqs VARCHAR(1000),
-            nupath nupath_enum[],
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
@@ -360,18 +357,16 @@ async function createAllTables(db: NodePgDatabase) {
             department_id INT NOT NULL,
             course_code INT NOT NULL CHECK (course_code BETWEEN 1000 AND 10000),
             semester semester_enum NOT NULL,
-            lecture_year INT NOT NULL CHECK (lecture_year BETWEEN 2000 AND 10000),
+            lecture_year INT NOT NULL CHECK (lecture_year >= 2000 AND lecture_year <= 10000),
             lecture_type lecture_type_enum,
-            section VARCHAR(10),
-            how_often_percentage JSONB,
-            hours_devoted JSONB,
-            professor_efficiency REAL CHECK (professor_efficiency IS NULL OR professor_efficiency BETWEEN 1.0 AND 5.0),
+            how_often_percentage INT NOT NULL CHECK (how_often_percentage BETWEEN 0 AND 100),
+            hours_devoted INT NOT NULL CHECK (hours_devoted >= 0),
+            professor_efficiency DECIMAL(3,2) NOT NULL CHECK (professor_efficiency BETWEEN 1.00 AND 5.00),
             eval TEXT,
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             FOREIGN KEY (course_id) REFERENCES course(id) ON DELETE CASCADE,
-            FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE,
-            FOREIGN KEY (department_id) REFERENCES department(id) ON DELETE CASCADE
+            FOREIGN KEY (professor_id) REFERENCES professor(id) ON DELETE CASCADE
         );
 
         ALTER TABLE rmp
@@ -399,6 +394,28 @@ async function createAllTables(db: NodePgDatabase) {
 
         ALTER TABLE rmp
             ALTER COLUMN avg_difficulty DROP NOT NULL;
+
+        ALTER TABLE course
+            ADD COLUMN prereqs VARCHAR(1000),
+            ADD COLUMN coreqs VARCHAR(1000),
+            ADD COLUMN nupath VARCHAR(255);
+
+        ALTER TABLE trace DROP CONSTRAINT IF EXISTS hours_devoted_check;
+        ALTER TABLE trace DROP CONSTRAINT IF EXISTS how_often_percentage_check;
+
+        ALTER TABLE trace
+        ALTER COLUMN hours_devoted TYPE jsonb USING
+          CASE
+            WHEN hours_devoted IS NULL THEN NULL
+            ELSE to_jsonb(hours_devoted)
+              END;
+      
+              ALTER TABLE trace
+              ALTER COLUMN how_often_percentage TYPE jsonb USING
+          CASE
+            WHEN how_often_percentage IS NULL THEN NULL
+            ELSE to_jsonb(how_often_percentage)
+              END;
     `);
 }
 
