@@ -37,6 +37,8 @@ const MOCK_DISCUSSIONS = [
   { id: "2", courseCode: "CS 2510", topic: "Best study resources for final exam?", replies: 156 },
   { id: "3", courseCode: "CS 3500", topic: "Tips for the midterm project?", replies: 89 },
 ];
+import { useAiSummaries } from "@/src/hooks/useAiSummaries";
+import ProfilePicture from "@/src/components/ProfilePicture";
 
 const cardStyle: React.CSSProperties = {
   background: "var(--color-surface-light-cream)",
@@ -351,7 +353,6 @@ export default function Home() {
                   {item.replies} replies
                 </p>
               </div>
-            </Link>
           ))}
         </div>
       </main>

@@ -36,6 +36,8 @@ tags:
     description: Academic data endpoints for majors, minors, and concentrations
   - name: Recommendation
     description: API endpoing for the recommendation algorithm for the student
+  - name: AiSummary
+    description: AI-generated summaries of popular course and professor reviews
 
 paths:
   /health:
@@ -2191,6 +2193,38 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
+
+  /ai-summaries/popular:
+    get:
+      summary: Get popular conversations with AI summaries
+      description: Returns the top most popular course and professor reviews ranked by a popularity score.
+      tags: [AiSummary]
+      security: []
+      parameters:
+        - name: limit
+          in: query
+          description: Number of popular reviews to return (max 20, default 5)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 5
+      responses:
+        "200":
+          description: List of AI summaries for the most popular reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AiSummary"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+                
   /recommendations:
     post:
       summary: Rule-based course recommendations
@@ -3247,7 +3281,7 @@ components:
           items:
             $ref: "#/components/schemas/Favourite"
           example: [ ]
-    
+
     RecommendationResult:
       type: object
       required:
@@ -3293,7 +3327,7 @@ components:
           type: number
           format: float
           example: 0.92
-    
+
     MLRecommendResponse:
       type: object
       required:
@@ -3313,3 +3347,39 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/MLPredictionResult"
+
+
+    AiSummary:
+      type: object
+      required:
+        - id
+        - reviewId
+        - reviewType
+        - summary
+        - score
+        - summaryUpdatedAt
+        - createdAt
+        - displayName
+      properties:
+        id:
+          type: string
+          format: uuid
+        reviewId:
+          type: string
+          format: uuid
+        reviewType:
+          type: string
+          enum: [course, professor]
+        summary:
+          type: string
+        score:
+          type: number
+        summaryUpdatedAt:
+          type: string
+          format: date-time
+        createdAt:
+          type: string
+          format: date-time
+        displayName:
+          type: string
+          description: Course code (e.g. "CS 3000") for course reviews, or professor full name for professor reviews

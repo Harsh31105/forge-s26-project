@@ -42,7 +42,7 @@ describe("CourseThreadHandler Endpoints", () => {
       deleteThread: jest.fn(),
     } as unknown as jest.Mocked<CourseThreadRepository>;
 
-    handler = new CourseThreadHandler(repo);
+    handler = new CourseThreadHandler(repo, {} as any);
 
     app = express();
     app.use(express.json());

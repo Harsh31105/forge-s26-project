@@ -731,6 +731,26 @@ export interface MLRecommendResponse {
   low: MLPredictionResult[];
 }
 
+export type AiSummaryReviewType = (typeof AiSummaryReviewType)[keyof typeof AiSummaryReviewType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AiSummaryReviewType = {
+  course: "course",
+  professor: "professor",
+} as const;
+
+export interface AiSummary {
+  id: string;
+  reviewId: string;
+  reviewType: AiSummaryReviewType;
+  summary: string;
+  score: number;
+  summaryUpdatedAt: string;
+  createdAt: string;
+  /** Course code (e.g. "CS 3000") for course reviews, or professor full name for professor reviews */
+  displayName: string;
+}
+
 export type GetCourseReviewsIdThreadsParams = {
   /**
    * Page number of pagination
@@ -1025,4 +1045,13 @@ export type GetTraceOfferHistoryParams = {
    * Filter by Professor ID
    */
   professorId?: string;
+};
+
+export type GetAiSummariesPopularParams = {
+  /**
+   * Number of popular reviews to return (max 20, default 5)
+   * @minimum 1
+   * @maximum 20
+   */
+  limit?: number;
 };
