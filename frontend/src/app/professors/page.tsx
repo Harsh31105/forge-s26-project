@@ -76,6 +76,20 @@ export default function ProfessorsPage() {
         p.tags?.some(tag => campusFilters.includes(tag as CampusFilter))
       );
     }
+    // Uncomment once RMP table is seeded
+  // if (ratingFilter) {
+  //   const min = parseFloat(ratingFilter);
+  //   list = list.filter(p => rmpData[p.id]?.ratingAvg && parseFloat(rmpData[p.id].ratingAvg) >= min);
+  // }
+  // if (wtaFilter) {
+  //   const min = parseInt(wtaFilter);
+  //   list = list.filter(p => rmpData[p.id]?.ratingWta && rmpData[p.id].ratingWta >= min);
+  // }
+  // if (difficultyFilter) {
+  //   const ranges = { easy: [0, 2], medium: [2, 3.5], hard: [3.5, 5] };
+  //   const [lo, hi] = ranges[difficultyFilter];
+  //   list = list.filter(p => rmpData[p.id]?.avgDifficulty && parseFloat(rmpData[p.id].avgDifficulty) >= lo && parseFloat(rmpData[p.id].avgDifficulty) <= hi);
+  // }
     return list;
     }, [professors, search, selectedCourse, traces, campusFilters, ratingFilter, wtaFilter, difficultyFilter]);
 

@@ -54,6 +54,7 @@ export default function CoursesPage() {
     return map;
   }, [traces]);
 
+  // TODO: replace ratingByCourse with a dedicated backend endpoint when available.
   const ratingByCourse = useMemo(() => {
     const map: Record<string, { sum: number; count: number }> = {};
     reviews.forEach(r => {
