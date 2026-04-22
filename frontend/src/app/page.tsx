@@ -4,7 +4,6 @@ import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { useMe } from "@/src/hooks/useMe";
-import NavBar from "../components/NavBar";
 
 const MOCK_COURSES = [
   { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
@@ -37,64 +36,11 @@ const MOCK_DISCUSSIONS = [
   { id: "2", courseCode: "CS 2510", topic: "Best study resources for final exam?", replies: 156 },
   { id: "3", courseCode: "CS 3500", topic: "Tips for the midterm project?", replies: 89 },
 ];
-import { useAiSummaries } from "@/src/hooks/useAiSummaries";
-import ProfilePicture from "@/src/components/ProfilePicture";
 
 const cardStyle: React.CSSProperties = {
   background: "var(--color-surface-light-cream)",
   borderRadius: 16,
 };
-
-function NorthStarLogo() {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      <svg
-        width="56"
-        height="56"
-        viewBox="0 0 56 56"
-        fill="none"
-        xmlns="http://www.w3.org/2000/svg"
-      >
-        <circle cx="28" cy="28" r="24" stroke="#B45309" strokeWidth="6" fill="none" />
-        <path
-          d="M32,14 L46,25 Q50,28 46,31 L32,42 Q28,45 24,42 L10,31 Q6,28 10,25 L24,14 Q28,11 32,14 Z"
-          fill="#B45309"
-          transform="rotate(-35 28 28)"
-        />
-        <circle cx="28" cy="28" r="7" fill="#1D3A8A" />
-        <polygon points="11,28 17,23 17,33" fill="white" transform="rotate(-35 28 28)" />
-        <polygon points="45,28 39,23 39,33" fill="white" transform="rotate(-35 28 28)" />
-      </svg>
-
-      <div>
-        <p
-          style={{
-            fontFamily: "var(--font-logo)",
-            fontWeight: 700,
-            fontSize: 28,
-            letterSpacing: "0.06em",
-            color: "var(--color-text-primary)",
-            margin: 0,
-            lineHeight: 1.1,
-          }}
-        >
-          NorthStar
-        </p>
-        <p
-          style={{
-            fontSize: 12,
-            color: "var(--color-accent-copper)",
-            margin: 0,
-            lineHeight: 1,
-            letterSpacing: "0.22em",
-          }}
-        >
-          ✦ ⊕ ◆ ◉ ◇ ❖ ◆ ✤ ◆
-        </p>
-      </div>
-    </div>
-  );
-}
 
 export default function Home() {
   const router = useRouter();
@@ -353,6 +299,7 @@ export default function Home() {
                   {item.replies} replies
                 </p>
               </div>
+            </Link>
           ))}
         </div>
       </main>
