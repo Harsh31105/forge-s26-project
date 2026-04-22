@@ -31,13 +31,13 @@ export interface TraceDocumentRepository {
  *   trace-evaluations/CS/1200/fall_2025/a1b2c3d4.pdf
  */
 function buildS3Key(key: TraceDocumentKey): string {
-    return [
+    const parts = [
         "trace-evaluations",
         key.department.trim().toUpperCase(),
-        String(key.courseCode),
-        `${key.semester}_${key.lectureYear}`,
-        `${key.professorId}.pdf`,
-    ].join("/");
+    ];
+    parts.push(key.courseCode !== undefined ? String(key.courseCode) : "all-courses");
+    parts.push(`${key.semester}_${key.lectureYear}`, `${key.professorId}.pdf`);
+    return parts.join("/");
 }
 
 export class TraceDocumentRepositoryS3 implements TraceDocumentRepository {
@@ -127,7 +127,7 @@ export class S3StorageError extends Error {
     }
 }
 
-function mapS3Error(err: unknown, context: string): S3StorageError {
+export function mapS3Error(err: unknown, context: string): S3StorageError {
     const name = (err as { name?: string })?.name ?? "";
     const message = (err as { message?: string })?.message ?? "";
 

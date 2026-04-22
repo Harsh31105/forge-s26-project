@@ -18,11 +18,15 @@ export async function fetchAndMatchRMPData(
         const data = await fetchRMPDataForProfessor(prof.firstName, prof.lastName, schoolId);
         if (!data) continue;
 
+        if (data.avgDifficulty === null) continue;
+        const avgDifficulty = parseFloat(data.avgDifficulty);
+        if (!Number.isFinite(avgDifficulty) || avgDifficulty < 1 || avgDifficulty > 5) continue;
+
         results.push({
             professorId: prof.id,
             ratingAvg: safeDecimal(data.ratingAvg),
             ratingWta: data.ratingWta,
-            avgDifficulty: safeDecimal(data.avgDifficulty),
+            avgDifficulty,
         });
     }
 

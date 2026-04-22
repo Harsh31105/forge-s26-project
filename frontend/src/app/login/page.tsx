@@ -2,7 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { TOKEN_KEY } from "@/src/lib/api/apiClient";
+import { getMe } from "@/src/lib/api/me";
 import SignUpPopup from "@/src/components/login/popup";
 import TypewriterBackground from "@/src/components/login/TypewriterBackground";
 
@@ -11,14 +11,12 @@ export default function LoginPage() {
   const [showSignIn, setShowSignIn] = useState(false);
   const [authError, setAuthError]   = useState<string | null>(null);
 
-  // Handle OAuth callback token / errors from URL
+  // Handle OAuth callback errors from URL, then check if already authenticated
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
-    const token  = params.get("token");
     const error  = params.get("error");
 
     if (error) {
-      // Backend redirected back with an error (e.g. non-NEU email)
       if (error === "not_northeastern" || error.includes("northeastern")) {
         setAuthError("Only @husky.neu.edu accounts are supported. Please sign in with your Northeastern email.");
       } else {
@@ -28,19 +26,20 @@ export default function LoginPage() {
       return;
     }
 
-    if (token) {
-      localStorage.setItem(TOKEN_KEY, token);
-      window.history.replaceState({}, "", "/login");
-      // New login — send to onboarding
-      router.push("/onboarding");
-      return;
-    }
-
-    // Already logged in — skip login page
-    const existing = localStorage.getItem(TOKEN_KEY);
-    if (existing) {
-      router.push("/home");
-    }
+    // Check if cookie session is active — if so, route accordingly
+    const meAPI = getMe();
+    meAPI.getAuthMe()
+      .then((student) => {
+        // Already has a session; go to onboarding if not set up, else dashboard
+        if (!student.graduationYear || student.graduationYear === 0) {
+          router.push("/onboarding");
+        } else {
+          router.push("/");
+        }
+      })
+      .catch(() => {
+        // Not authenticated — stay on login page
+      });
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

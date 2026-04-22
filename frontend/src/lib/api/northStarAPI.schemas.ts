@@ -443,6 +443,33 @@ export interface ReviewPatchInput {
   tags?: string[] | null;
 }
 
+export interface Major {
+  id: number;
+  name: string;
+}
+
+export interface Minor {
+  id: number;
+  name: string;
+}
+
+export interface Concentration {
+  id: number;
+  name: string;
+}
+
+export interface StudentMajorPostInput {
+  majorId: number;
+}
+
+export interface StudentConcentrationPostInput {
+  concentrationId: number;
+}
+
+export interface StudentMinorPostInput {
+  minorId: number;
+}
+
 export type StudentPreferencesItem =
   (typeof StudentPreferencesItem)[keyof typeof StudentPreferencesItem];
 
@@ -469,6 +496,14 @@ export interface Student {
   preferences: StudentPreferencesItem[];
   createdAt: string;
   updatedAt: string;
+  /** @nullable */
+  profilePictureUrl?: string | null;
+  /** @nullable */
+  majors?: Major[] | null;
+  /** @nullable */
+  minors?: Minor[] | null;
+  /** @nullable */
+  concentrations?: Concentration[] | null;
 }
 
 export type StudentPostInputPreferencesItem =
@@ -627,6 +662,73 @@ export const AcademicSemesterSemester = {
 export interface AcademicSemester {
   semester: AcademicSemesterSemester;
   year: number;
+}
+
+export interface Department {
+  id: number;
+  name: string;
+}
+
+export type MLRequestSemester = (typeof MLRequestSemester)[keyof typeof MLRequestSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const MLRequestSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+export interface MLRequest {
+  semester: MLRequestSemester;
+}
+
+export type RecommendRequestPreferredSemester =
+  (typeof RecommendRequestPreferredSemester)[keyof typeof RecommendRequestPreferredSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RecommendRequestPreferredSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+export interface RecommendRequest {
+  student_id: string;
+  preferred_semester: RecommendRequestPreferredSemester;
+  /** @nullable */
+  courses?: Course[] | null;
+  /** @nullable */
+  departments?: Department[] | null;
+  /** @nullable */
+  reviews?: CourseReview[] | null;
+  /** @nullable */
+  trace_rows?: Trace[] | null;
+  /** @nullable */
+  favorites?: Favourite[] | null;
+}
+
+export interface RecommendationResult {
+  course: Course;
+  score: number;
+}
+
+export interface RecommendResponse {
+  high: RecommendationResult[];
+  medium: RecommendationResult[];
+  low: RecommendationResult[];
+}
+
+export interface MLPredictionResult {
+  course: Course;
+  probability: number;
+}
+
+export interface MLRecommendResponse {
+  high: MLPredictionResult[];
+  medium: MLPredictionResult[];
+  low: MLPredictionResult[];
 }
 
 export type GetCourseReviewsIdThreadsParams = {
@@ -818,6 +920,32 @@ export type GetStudentsParams = {
    * @maximum 100
    */
   limit?: number;
+};
+
+export type PatchStudentsIdBodyOnePreferencesItem =
+  (typeof PatchStudentsIdBodyOnePreferencesItem)[keyof typeof PatchStudentsIdBodyOnePreferencesItem];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const PatchStudentsIdBodyOnePreferencesItem = {
+  "exam-heavy": "exam-heavy",
+  "project-heavy": "project-heavy",
+  "group-work": "group-work",
+  "attendance-required": "attendance-required",
+  strict_deadlines: "strict_deadlines",
+  flexible_deadlines: "flexible_deadlines",
+  extra_credit: "extra_credit",
+  little_to_no_test: "little_to_no_test",
+  fast_paced: "fast_paced",
+  slow_paced: "slow_paced",
+} as const;
+
+export type PatchStudentsIdBodyOne = {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  graduationYear?: number;
+  preferences?: PatchStudentsIdBodyOnePreferencesItem[];
+  profilePicture?: Blob;
 };
 
 export type GetAuthCallbackParams = {

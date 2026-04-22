@@ -1,60 +1,67 @@
 import { Request, Response } from "express";
-import { eq } from "drizzle-orm";
-import { validate as isUUID } from "uuid";
 import { Repository } from "../../../storage/storage";
-import { course } from "../../../storage/tables/course";
-import { department } from "../../../storage/tables/department";
-import { courseReview } from "../../../storage/tables/courseReview";
-import { trace } from "../../../storage/tables/trace";
-import { favorite } from "../../../storage/tables/favourite";
+import { CourseReview } from "../../../models/review";
 import { BadRequest } from "../../../errs/httpError";
-import type {UserPayload} from "../../../auth/middleware";
+import { RecommendationRequestSchema } from "../../../models/recommendation";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? "http://localhost:8000";
+
+const HOURS_MIDPOINTS: Record<string, number> = {
+    "0-2": 1, "3-4": 3.5, "5-7": 6, "8-10": 9, "More than 10": 12,
+};
+
+const ATTENDANCE_MIDPOINTS: Record<string, number> = {
+    "1-20%": 10, "20-40%": 30, "40-60%": 50, "60-80%": 70, "80-100%": 90, "100%": 100,
+};
+
+function flattenDistribution(value: unknown, midpoints: Record<string, number>): number {
+    if (typeof value === "number") return value;
+    if (!value || typeof value !== "object") return 0;
+    const dist = value as Record<string, number>;
+    return Object.entries(dist).reduce((sum, [key, pct]) => {
+        const mid = midpoints[key] ?? 0;
+        return sum + (mid * (pct / 100));
+    }, 0);
+}
 
 export class RecommendationHandler {
     constructor(private readonly repo: Repository) {}
 
-    async handleGetRecommendations(req: Request, res: Response): Promise<void> {
-        const user = (req as any).user as UserPayload;
-        const studentId = user.id;
-        if (!isUUID(studentId)) throw BadRequest("Invalid student ID");
+    private async _getRecommendations(req: Request, res: Response, useML: boolean): Promise<void> {
+        const studentId = req.user?.id;
+        if (!studentId) throw BadRequest("Student Id not found");
 
-        const semester = req.query.semester as string;
-        if (!semester) throw BadRequest("semester query param is required (fall | spring | summer_1 | summer_2)");
+        const result = RecommendationRequestSchema.safeParse(req.body);
+        if (!result.success) throw BadRequest("semester must be apart of fall/spring/summer_1/summer_2");
+        const {semester } = result.data;
 
-        const db = await this.repo.getDB();
-
-        // Fetch everything in parallel
-        const [courseRows, reviewRows, traceRows, favouriteRows] = await Promise.all([
-            db.select().from(course).innerJoin(department, eq(course.departmentId, department.id)),
-            db.select().from(courseReview),
-            db.select().from(trace),
-            db.select().from(favorite).where(eq(favorite.studentId, studentId)),
+        const [courses, allReviews, traceRows, favouriteRows] = await Promise.all([
+            this.repo.courses.getCourses({ limit: 10000, page: 1 }, { sortOrder: "asc" }),
+            this.repo.reviews.getReviews({ limit: 10000, page: 1 }),
+            this.repo.traces.getAllTraces(),
+            this.repo.favourites.getFavourites(studentId),
         ]);
 
-        // Derive unique departments from the course join results
-        const deptMap = new Map<number, string>();
-        for (const row of courseRows) {
-            deptMap.set(row.department.id, row.department.name);
-        }
+        const courseReviews = allReviews.filter((r): r is CourseReview => "courseId" in r);
 
-        // Filter each payload to exactly what the Python schemas expect
-        const mlCourses = courseRows.map(r => ({
-            id: r.course.id,
-            name: r.course.name,
-            department_id: r.course.departmentId,
-            course_code: r.course.courseCode,
-            description: r.course.description,
-            num_credits: r.course.numCredits,
-            lecture_type: r.course.lectureType,
-            created_at: r.course.createdAt.toISOString(),
-            updated_at: r.course.updatedAt.toISOString(),
+        const deptMap = new Map<number, string>();
+        courses.forEach(c => deptMap.set(c.department.id, c.department.name));
+
+        const mlCourses = courses.map(c => ({
+            id: c.id,
+            name: c.name,
+            department_id: c.department.id,
+            course_code: c.course_code,
+            description: c.description ?? "",
+            num_credits: c.num_credits,
+            lecture_type: c.lecture_type ?? "lecture",
+            created_at: c.created_at.toISOString(),
+            updated_at: c.updated_at.toISOString(),
         }));
 
         const mlDepartments = Array.from(deptMap.entries()).map(([id, name]) => ({ id, name }));
 
-        const mlReviews = reviewRows.map(r => ({
+        const mlReviews = courseReviews.map(r => ({
             review_id: r.reviewId,
             course_id: r.courseId,
             rating: r.rating,
@@ -74,9 +81,9 @@ export class RecommendationHandler {
             semester: r.semester,
             lecture_year: r.lectureYear,
             lecture_type: r.lectureType ?? "",
-            how_often_percentage: r.howOftenPercentage,
-            hours_devoted: r.hoursDevoted,
-            professor_efficiency: r.professorEfficiency,
+            how_often_percentage: flattenDistribution(r.howOftenPercentage, ATTENDANCE_MIDPOINTS),
+            hours_devoted: flattenDistribution(r.hoursDevoted, HOURS_MIDPOINTS),
+            professor_efficiency: r.professorEfficiency ?? 0,
             created_at: r.createdAt.toISOString(),
             updated_at: r.updatedAt.toISOString(),
         }));
@@ -96,30 +103,37 @@ export class RecommendationHandler {
             reviews: mlReviews,
             trace_rows: mlTraceRows,
             favorites: mlFavorites,
-            top_k: 5,
         };
 
-        let mlRes: Response;
+        let fetchRes: globalThis.Response;
         try {
-            mlRes = await fetch(`${ML_SERVICE_URL}/recommend`, {
+            fetchRes = await fetch(`${ML_SERVICE_URL}${useML ? "/recommend/ml" : "/recommend"}`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
-            }) as unknown as Response;
+            });
         } catch (err) {
             console.error("Failed to reach ML service:", err);
             res.status(502).json({ error: "Could not reach recommendation service" });
             return;
         }
 
-        if (!(mlRes as any).ok) {
-            const errText = await (mlRes as any).text();
+        if (!fetchRes.ok) {
+            const errText = await fetchRes.text();
             console.error("ML service returned error:", errText);
             res.status(502).json({ error: "Recommendation service failed" });
             return;
         }
 
-        const recommendations = await (mlRes as any).json();
+        const recommendations = await fetchRes.json();
         res.status(200).json(recommendations);
+    }
+
+    async handleGetRecommendations(req: Request, res: Response): Promise<void> {
+        return this._getRecommendations(req, res, false);
+    }
+
+    async handleGetMLRecommendations(req: Request, res: Response): Promise<void> {
+        return this._getRecommendations(req, res, true);
     }
 }
