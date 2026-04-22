@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useMe } from "@/src/hooks/useMe";
+import { useAuth } from "@/src/context/AuthContext";
+import { useRecentlyViewed } from "@/src/hooks/useRecentlyViewed";
 import { useAiSummaries } from "@/src/hooks/useAiSummaries";
 import ProfilePicture from "@/src/components/ProfilePicture";
 
@@ -11,7 +12,8 @@ const cardStyle: React.CSSProperties = {
 };
 
 export default function Home() {
-  const { student } = useMe();
+  const { student } = useAuth();
+  const { recentlyViewed } = useRecentlyViewed();
   const { summaries, isLoading: summariesLoading } = useAiSummaries({ limit: 5 });
 
   return (
@@ -65,6 +67,73 @@ export default function Home() {
             Browse Courses
           </Link>
         </div>
+
+        {/* Recently Viewed */}
+        <h2 style={{
+          fontFamily: "var(--font-heading)",
+          fontSize: "var(--font-size-xl)",
+          fontWeight: 700,
+          color: "var(--color-text-primary)",
+          marginBottom: 20,
+        }}>
+          Recently Viewed
+        </h2>
+        {recentlyViewed.length === 0 ? (
+          <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", marginBottom: 56 }}>
+            No courses viewed yet. Browse courses to get started.
+          </p>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, marginBottom: 56 }}>
+            {recentlyViewed.map((course) => (
+              <Link key={course.id} href={`/courses/${course.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                <div style={{
+                  ...cardStyle,
+                  padding: "28px 32px",
+                  cursor: "pointer",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  minHeight: 160,
+                }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                      <p style={{
+                        fontFamily: "var(--font-heading)",
+                        fontSize: "var(--font-size-base)",
+                        fontWeight: 700,
+                        color: "var(--color-text-primary)",
+                        margin: 0,
+                      }}>
+                        {course.code}
+                      </p>
+                      <p style={{
+                        fontSize: "var(--font-size-sm)",
+                        color: "var(--color-text-secondary)",
+                        margin: "6px 0 0",
+                      }}>
+                        {course.name}
+                      </p>
+                    </div>
+                    {course.rating !== null && (
+                      <span style={{
+                        fontFamily: "var(--font-heading)",
+                        fontSize: 48,
+                        fontWeight: 700,
+                        color: "var(--color-primary-navy)",
+                        lineHeight: 1,
+                      }}>
+                        {course.rating}
+                      </span>
+                    )}
+                  </div>
+                  <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", margin: 0 }}>
+                    {course.viewed}
+                  </p>
+                </div>
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Most-Talked About Course Discussion */}
         <h2 style={{
