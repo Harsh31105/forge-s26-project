@@ -24,7 +24,7 @@ export default function ProfessorProfilePage() {
   const { professor, isLoading: profLoading, error: profError } = useProfessor(id);
   const { rmpData, isLoading: rmpLoading } = useRMP(id);
   const { reviews, isLoading: reviewsLoading } = useReviews({ limit: 1000 });
-  const { traces } = useTraces({ professorId: id, limit: 1000 });
+  const { traces } = useTraces({ professorId: id, limit: 30240 });
 
   // Group this professor's traces by courseId to build offer history
   const offerHistory = useMemo(() => {
