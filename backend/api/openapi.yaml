@@ -1577,69 +1577,6 @@ paths:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
 
-  /academic/majors:
-    get:
-      summary: Get all majors
-      description: Returns a list of all available majors.
-      tags: [Academic]
-      responses:
-        "200":
-          description: List of majors
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Major"
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerError"
-
-  /academic/concentrations:
-    get:
-      summary: Get all concentrations
-      description: Returns a list of all available concentrations.
-      tags: [Academic]
-      responses:
-        "200":
-          description: List of concentrations
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Concentration"
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerError"
-
-  /academic/minors:
-    get:
-      summary: Get all minors
-      description: Returns a list of all available minors.
-      tags: [Academic]
-      responses:
-        "200":
-          description: List of minors
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/Minor"
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerError"
-
   /students/{id}/majors:
     parameters:
       - name: id
@@ -1849,6 +1786,69 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /academic/majors:
+    get:
+      summary: Get all majors
+      description: Returns a list of all available majors.
+      tags: [Academic]
+      responses:
+        "200":
+          description: List of majors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Major"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /academic/concentrations:
+    get:
+      summary: Get all concentrations
+      description: Returns a list of all available concentrations.
+      tags: [Academic]
+      responses:
+        "200":
+          description: List of concentrations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Concentration"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /academic/minors:
+    get:
+      summary: Get all minors
+      description: Returns a list of all available minors.
+      tags: [Academic]
+      responses:
+        "200":
+          description: List of minors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Minor"
         "500":
           description: Internal server error
           content:

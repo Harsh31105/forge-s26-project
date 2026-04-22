@@ -2,14 +2,13 @@ import { Request, Response } from "express";
 import { googleClient, getAuthUrl } from "../../../auth/authClient";
 import { config } from "../../../config/config";
 import { mapDBError } from "../../../errs/httpError";
-import type { StudentRepository, ProfilePictureRepository } from "../../../storage/storage";
+import type { StudentRepository } from "../../../storage/storage";
 import type { UserPayload } from "../../../auth/middleware";
 import jwt from "jsonwebtoken";
 
 export class AuthHandler {
     constructor(
         private readonly studentRepo: StudentRepository,
-        private readonly profilePictureRepo?: ProfilePictureRepository,
     ) {}
 
     async handleRedirect(_req: Request, res: Response): Promise<void> {
@@ -68,7 +67,7 @@ export class AuthHandler {
 
         const makeToken = (id: string) =>
             jwt.sign(
-                { id, email: payload.email, name: payload.name, picture: payload.picture ?? null },
+                { id, email: payload.email, name: payload.name },
                 config.google.jwtSecret,
                 { expiresIn: "24h" }
             );
@@ -102,20 +101,6 @@ export class AuthHandler {
     async handleMe(req: Request, res: Response): Promise<void> {
         const user = (req as any).user as UserPayload;
         const student = await this.studentRepo.getStudentByEmail(user.email);
-
-        let profilePictureUrl: string | null = null;
-        if (student.profilePictureKey && this.profilePictureRepo) {
-            try {
-                profilePictureUrl = await this.profilePictureRepo.getPresignedUrl(student.profilePictureKey);
-            } catch (err) {
-                console.error("[handleMe] failed to generate presigned URL:", err);
-            }
-        }
-
-        res.status(200).json({
-            ...student,
-            profilePictureUrl,
-            googlePictureUrl: user.picture ?? null,
-        });
+        res.status(200).json(student);
     }
 }

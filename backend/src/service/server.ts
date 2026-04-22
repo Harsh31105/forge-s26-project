@@ -104,7 +104,7 @@ export function initApp(): App {
 }
 
 function registerRoutes(router: Router, repo: Repository) {
-    const authHandler = new AuthHandler(repo.students, repo.profilePictures);
+    const authHandler = new AuthHandler(repo.students);
     router.use("/auth", authRoutes(authHandler));
 
     // Read-only endpoints: accept JWT or ANIMATION_API_KEY (GET only)

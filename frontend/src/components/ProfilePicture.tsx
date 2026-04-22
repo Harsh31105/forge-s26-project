@@ -18,7 +18,8 @@ function PencilIcon() {
     );
 }
 
-export default function ProfilePicture({ studentID, profilePictureUrl, size = 96 }: ProfilePictureProps) {
+export default function ProfilePicture({ studentID, profilePictureUrl: rawUrl, size = 96 }: ProfilePictureProps) {
+    const profilePictureUrl = rawUrl || null;
     const inputRef = useRef<HTMLInputElement>(null);
     const { uploadProfilePicture, isUploading, uploadError } = useUploadProfilePicture(studentID ?? "");
 

@@ -94,6 +94,15 @@ describe("StudentHandler Endpoints", () => {
         app.patch("/students/:id", upload.single("profilePicture"), handler.handlePatch.bind(handler));
         app.delete("/students/:id", handler.handleDelete.bind(handler));
 
+        app.post("/students/:id/majors", handler.handlePostMajor.bind(handler));
+        app.delete("/students/:id/majors/:majorId", handler.handleDeleteMajor.bind(handler));
+
+        app.post("/students/:id/concentrations", handler.handlePostConcentration.bind(handler));
+        app.delete("/students/:id/concentrations/:concentrationId", handler.handleDeleteConcentration.bind(handler));
+
+        app.post("/students/:id/minors", handler.handlePostMinor.bind(handler));
+        app.delete("/students/:id/minors/:minorId", handler.handleDeleteMinor.bind(handler));
+
         app.use(errorHandler);
 
         mockValidate.mockReturnValue(true);
@@ -112,7 +121,7 @@ describe("StudentHandler Endpoints", () => {
     });
 
     describe("GET /students", () => {
-        test("returns students with profilePictureUrl null when no picture", async () => {
+        test("returns students with empty majors, concentrations, minors and no profilePictureUrl", async () => {
             repo.getStudents.mockResolvedValue([makeStudent()]);
 
             const res = await request(app).get("/students");
@@ -123,8 +132,30 @@ describe("StudentHandler Endpoints", () => {
                 lastName: baseStudent.lastName,
                 email: baseStudent.email,
                 profilePictureUrl: null,
+                majors: [],
+                concentrations: [],
+                minors: [],
             });
             expect(typeof res.body[0].createdAt).toBe("string");
+        });
+
+        test("returns students with populated majors, concentrations, minors", async () => {
+            repo.getStudents.mockResolvedValue([makeStudent()]);
+            academicRepo.getMajorsForStudents.mockResolvedValue({
+                [baseStudent.id]: [{ id: 1, name: "Computer Science" }],
+            });
+            academicRepo.getConcentrationsForStudents.mockResolvedValue({
+                [baseStudent.id]: [{ id: 1, name: "Artificial Intelligence" }],
+            });
+            academicRepo.getMinorsForStudents.mockResolvedValue({
+                [baseStudent.id]: [{ id: 1, name: "Mathematics" }],
+            });
+
+            const res = await request(app).get("/students");
+            expect(res.status).toBe(200);
+            expect(res.body[0].majors).toEqual([{ id: 1, name: "Computer Science" }]);
+            expect(res.body[0].concentrations).toEqual([{ id: 1, name: "Artificial Intelligence" }]);
+            expect(res.body[0].minors).toEqual([{ id: 1, name: "Mathematics" }]);
         });
 
         test("returns students with presigned profilePictureUrl when picture exists", async () => {
@@ -209,7 +240,7 @@ describe("StudentHandler Endpoints", () => {
             jest.clearAllMocks();
         });
 
-        test("returns student by email with profilePictureUrl null when no picture", async () => {
+        test("returns student by email with empty majors, concentrations, minors and null profilePictureUrl", async () => {
             emailRepo.getStudentByEmail.mockResolvedValue({ ...emailBaseStudent });
 
             const res = await request(emailApp).get("/students/email/john@test.com");
@@ -220,7 +251,24 @@ describe("StudentHandler Endpoints", () => {
                 firstName: emailBaseStudent.firstName,
                 email: emailBaseStudent.email,
                 profilePictureUrl: null,
+                majors: [],
+                concentrations: [],
+                minors: [],
             });
+        });
+
+        test("returns student by email with populated majors, concentrations, minors", async () => {
+            emailRepo.getStudentByEmail.mockResolvedValue({ ...emailBaseStudent });
+            emailAcademicRepo.getStudentMajors.mockResolvedValue([{ id: 1, name: "Computer Science" }]);
+            emailAcademicRepo.getStudentConcentrations.mockResolvedValue([{ id: 1, name: "Artificial Intelligence" }]);
+            emailAcademicRepo.getStudentMinors.mockResolvedValue([{ id: 1, name: "Mathematics" }]);
+
+            const res = await request(emailApp).get("/students/email/john@test.com");
+
+            expect(res.status).toBe(200);
+            expect(res.body.majors).toEqual([{ id: 1, name: "Computer Science" }]);
+            expect(res.body.concentrations).toEqual([{ id: 1, name: "Artificial Intelligence" }]);
+            expect(res.body.minors).toEqual([{ id: 1, name: "Mathematics" }]);
         });
 
         test("invalid email format returns 400", async () => {
@@ -249,7 +297,7 @@ describe("StudentHandler Endpoints", () => {
     });
 
     describe("GET /students/:id", () => {
-        test("returns student by id with profilePictureUrl null when no picture", async () => {
+        test("returns student with empty majors, concentrations, minors and null profilePictureUrl", async () => {
             repo.getStudentByID.mockResolvedValue(makeStudent());
 
             const res = await request(app).get("/students/1");
@@ -260,10 +308,27 @@ describe("StudentHandler Endpoints", () => {
                 firstName: baseStudent.firstName,
                 email: baseStudent.email,
                 profilePictureUrl: null,
+                majors: [],
+                concentrations: [],
+                minors: [],
             });
         });
 
-        test("returns student by id with presigned profilePictureUrl when picture exists", async () => {
+        test("returns student with populated majors, concentrations, minors", async () => {
+            repo.getStudentByID.mockResolvedValue(makeStudent());
+            academicRepo.getStudentMajors.mockResolvedValue([{ id: 1, name: "Computer Science" }]);
+            academicRepo.getStudentConcentrations.mockResolvedValue([{ id: 1, name: "Artificial Intelligence" }]);
+            academicRepo.getStudentMinors.mockResolvedValue([{ id: 1, name: "Mathematics" }]);
+
+            const res = await request(app).get("/students/1");
+
+            expect(res.status).toBe(200);
+            expect(res.body.majors).toEqual([{ id: 1, name: "Computer Science" }]);
+            expect(res.body.concentrations).toEqual([{ id: 1, name: "Artificial Intelligence" }]);
+            expect(res.body.minors).toEqual([{ id: 1, name: "Mathematics" }]);
+        });
+
+        test("returns student with presigned profilePictureUrl when picture exists", async () => {
             const key = "profile-pictures/550e8400.jpg";
             repo.getStudentByID.mockResolvedValue(makeStudent({ profilePictureKey: key }));
 
@@ -395,6 +460,243 @@ describe("StudentHandler Endpoints", () => {
             mockValidate.mockReturnValue(false);
             const res = await request(app).delete("/students/1");
             expect(res.status).toBe(400);
+        });
+    });
+
+    describe("POST /students/:id/majors", () => {
+        test("adds major to student and returns 204", async () => {
+            academicRepo.addStudentMajor.mockResolvedValue(undefined);
+
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/majors`)
+                .send({ majorId: 1 });
+
+            expect(res.status).toBe(204);
+            expect(academicRepo.addStudentMajor).toHaveBeenCalledWith(baseStudent.id, 1);
+        });
+
+        test("missing majorId returns 400", async () => {
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/majors`)
+                .send({});
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.addStudentMajor).not.toHaveBeenCalled();
+        });
+
+        test("invalid student uuid returns 400", async () => {
+            mockValidate.mockReturnValue(false);
+            const res = await request(app)
+                .post("/students/not-a-uuid/majors")
+                .send({ majorId: 1 });
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.addStudentMajor).not.toHaveBeenCalled();
+        });
+
+        test("repository error returns 500", async () => {
+            academicRepo.addStudentMajor.mockRejectedValue(new Error("DB error"));
+
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/majors`)
+                .send({ majorId: 1 });
+
+            expect(res.status).toBe(500);
+        });
+    });
+
+    describe("DELETE /students/:id/majors/:majorId", () => {
+        test("removes major from student and returns 204", async () => {
+            academicRepo.deleteStudentMajor.mockResolvedValue(undefined);
+
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/majors/1`);
+
+            expect(res.status).toBe(204);
+            expect(academicRepo.deleteStudentMajor).toHaveBeenCalledWith(baseStudent.id, 1);
+        });
+
+        test("invalid student uuid returns 400", async () => {
+            mockValidate.mockReturnValue(false);
+            const res = await request(app).delete("/students/not-a-uuid/majors/1");
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.deleteStudentMajor).not.toHaveBeenCalled();
+        });
+
+        test("non-numeric majorId returns 400", async () => {
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/majors/not-a-number`);
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.deleteStudentMajor).not.toHaveBeenCalled();
+        });
+
+        test("repository error returns 500", async () => {
+            academicRepo.deleteStudentMajor.mockRejectedValue(new Error("DB error"));
+
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/majors/1`);
+
+            expect(res.status).toBe(500);
+        });
+    });
+
+    describe("POST /students/:id/concentrations", () => {
+        test("adds concentration to student and returns 204", async () => {
+            academicRepo.addStudentConcentration.mockResolvedValue(undefined);
+
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/concentrations`)
+                .send({ concentrationId: 1 });
+
+            expect(res.status).toBe(204);
+            expect(academicRepo.addStudentConcentration).toHaveBeenCalledWith(baseStudent.id, 1);
+        });
+
+        test("missing concentrationId returns 400", async () => {
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/concentrations`)
+                .send({});
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.addStudentConcentration).not.toHaveBeenCalled();
+        });
+
+        test("invalid student uuid returns 400", async () => {
+            mockValidate.mockReturnValue(false);
+            const res = await request(app)
+                .post("/students/not-a-uuid/concentrations")
+                .send({ concentrationId: 1 });
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.addStudentConcentration).not.toHaveBeenCalled();
+        });
+
+        test("repository error returns 500", async () => {
+            academicRepo.addStudentConcentration.mockRejectedValue(new Error("DB error"));
+
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/concentrations`)
+                .send({ concentrationId: 1 });
+
+            expect(res.status).toBe(500);
+        });
+    });
+
+    describe("DELETE /students/:id/concentrations/:concentrationId", () => {
+        test("removes concentration from student and returns 204", async () => {
+            academicRepo.deleteStudentConcentration.mockResolvedValue(undefined);
+
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/concentrations/1`);
+
+            expect(res.status).toBe(204);
+            expect(academicRepo.deleteStudentConcentration).toHaveBeenCalledWith(baseStudent.id, 1);
+        });
+
+        test("invalid student uuid returns 400", async () => {
+            mockValidate.mockReturnValue(false);
+            const res = await request(app).delete("/students/not-a-uuid/concentrations/1");
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.deleteStudentConcentration).not.toHaveBeenCalled();
+        });
+
+        test("non-numeric concentrationId returns 400", async () => {
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/concentrations/not-a-number`);
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.deleteStudentConcentration).not.toHaveBeenCalled();
+        });
+
+        test("repository error returns 500", async () => {
+            academicRepo.deleteStudentConcentration.mockRejectedValue(new Error("DB error"));
+
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/concentrations/1`);
+
+            expect(res.status).toBe(500);
+        });
+    });
+
+    describe("POST /students/:id/minors", () => {
+        test("adds minor to student and returns 204", async () => {
+            academicRepo.addStudentMinor.mockResolvedValue(undefined);
+
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/minors`)
+                .send({ minorId: 1 });
+
+            expect(res.status).toBe(204);
+            expect(academicRepo.addStudentMinor).toHaveBeenCalledWith(baseStudent.id, 1);
+        });
+
+        test("missing minorId returns 400", async () => {
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/minors`)
+                .send({});
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.addStudentMinor).not.toHaveBeenCalled();
+        });
+
+        test("invalid student uuid returns 400", async () => {
+            mockValidate.mockReturnValue(false);
+            const res = await request(app)
+                .post("/students/not-a-uuid/minors")
+                .send({ minorId: 1 });
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.addStudentMinor).not.toHaveBeenCalled();
+        });
+
+        test("repository error returns 500", async () => {
+            academicRepo.addStudentMinor.mockRejectedValue(new Error("DB error"));
+
+            const res = await request(app)
+                .post(`/students/${baseStudent.id}/minors`)
+                .send({ minorId: 1 });
+
+            expect(res.status).toBe(500);
+        });
+    });
+
+    describe("DELETE /students/:id/minors/:minorId", () => {
+        test("removes minor from student and returns 204", async () => {
+            academicRepo.deleteStudentMinor.mockResolvedValue(undefined);
+
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/minors/1`);
+
+            expect(res.status).toBe(204);
+            expect(academicRepo.deleteStudentMinor).toHaveBeenCalledWith(baseStudent.id, 1);
+        });
+
+        test("invalid student uuid returns 400", async () => {
+            mockValidate.mockReturnValue(false);
+            const res = await request(app).delete("/students/not-a-uuid/minors/1");
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.deleteStudentMinor).not.toHaveBeenCalled();
+        });
+
+        test("non-numeric minorId returns 400", async () => {
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/minors/not-a-number`);
+
+            expect(res.status).toBe(400);
+            expect(academicRepo.deleteStudentMinor).not.toHaveBeenCalled();
+        });
+
+        test("repository error returns 500", async () => {
+            academicRepo.deleteStudentMinor.mockRejectedValue(new Error("DB error"));
+
+            const res = await request(app)
+                .delete(`/students/${baseStudent.id}/minors/1`);
+
+            expect(res.status).toBe(500);
         });
     });
 });

@@ -66,7 +66,6 @@ function NorthStarLogo() {
 
 export default function Home() {
   const { student } = useMe();
-  const googlePictureUrl = (student as any)?.googlePictureUrl ?? null;
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
@@ -138,7 +137,7 @@ export default function Home() {
           <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
             <ProfilePicture
               studentID={student?.id ?? null}
-              profilePictureUrl={student?.profilePictureUrl ?? googlePictureUrl}
+              profilePictureUrl={student?.profilePictureUrl ?? null}
               size={72}
             />
             <div>
