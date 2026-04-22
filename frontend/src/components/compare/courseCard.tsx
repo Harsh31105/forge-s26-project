@@ -35,8 +35,9 @@ export function CourseCard({
     onRemove: () => void;
 }) {
     // fetch TRACE records for this course to compute averages
-    const { traces, isLoading } = useTraces({ limit: 1000, courseId: course.id });
+    const { traces, isLoading } = useTraces({ limit: 30000, courseId: course.id });
 
+    // TODO: @Biak
     const avgEfficiency = traces.length > 0
         ? (traces.reduce((sum, t) => sum + Number(t.professorEfficiency), 0) / traces.length).toFixed(2)
         : "N/A";
