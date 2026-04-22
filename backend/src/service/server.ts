@@ -35,6 +35,8 @@ import { ProfThreadHandler } from "./handler/professorThreads";
 import { professorThreadRoutes } from "./handler/professorThreads/routes";
 import { TraceHandler } from "./handler/trace";
 import { traceRoutes } from "./handler/trace/routes";
+import { RecommendationHandler } from "./handler/recommendation";
+import { recommendationRoutes } from "./handler/recommendation/routes";
 
 class App {
     public server: Express;
@@ -137,4 +139,7 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const traceHandler = new TraceHandler(repo.traces);
     router.use("/trace", traceRoutes(traceHandler));
+
+    const recHandler = new RecommendationHandler(repo);
+    router.use("/recommendations", recommendationRoutes(recHandler));
 }

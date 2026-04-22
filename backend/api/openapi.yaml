@@ -32,6 +32,8 @@ tags:
     description: Favourite CRUD Operations
   - name: Trace
     description: API Endpoints to directly do with TRACE Evaluations
+  - name: Recommendation
+    description: API endpoing for the recommendation algorithm for the student
 
 paths:
   /health:
@@ -1885,6 +1887,55 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
+  /recommendations:
+    post:
+      summary: Rule-based course recommendations
+      description: Returns recommended courses for a student using a rule-based algorithm, scored and bucketed into high/medium/low tiers.
+      tags: [ Recommendation ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MLRequest"
+      responses:
+        "200":
+          description: Recommended courses bucketed by score tier
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/RecommendResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /recommendations/ml:
+    post:
+      summary: ML-based course recommendations
+      description: Returns recommended courses for a student using a trained ML model, bucketed into high/medium/low tiers by probability.
+      tags: [ Recommendation ]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/MLRequest"
+      responses:
+        "200":
+          description: Recommended courses bucketed by probability tier
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MLRecommendResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
 
 security:
   - bearerAuth: []
@@ -2735,3 +2786,142 @@ components:
         year:
           type: integer
           example: 2025
+    
+    Department:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "CS"
+
+    MLRequest:
+      type: object
+      required:
+        - semester
+      properties:
+        semester:
+          type: enum
+          enum: ["fall", "spring", "summer_1", "summer_2"]
+
+    RecommendRequest:
+      type: object
+      required:
+        - student_id
+        - preferred_semester
+      properties:
+        student_id:
+          type: string
+          format: uuid
+          example: "804e8180-299f-4ad3-a93f-3d9c1a70acf8"
+
+        preferred_semester:
+          type: string
+          enum: [ fall, spring, summer_1, summer_2 ]
+          example: fall
+
+        courses:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Course"
+          example: [ ]
+
+        departments:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Department"
+          example: [ ]
+
+        reviews:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/CourseReview"
+          example: [ ]
+
+        trace_rows:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Trace"
+          example: [ ]
+
+        favorites:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Favourite"
+          example: [ ]
+    
+    RecommendationResult:
+      type: object
+      required:
+        - course
+        - score
+      properties:
+        course:
+          $ref: "#/components/schemas/Course"
+        score:
+          type: number
+          format: float
+          example: 0.85
+
+    RecommendResponse:
+      type: object
+      required:
+        - high
+        - medium
+        - low
+      properties:
+        high:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecommendationResult"
+        medium:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecommendationResult"
+        low:
+          type: array
+          items:
+            $ref: "#/components/schemas/RecommendationResult"
+
+    MLPredictionResult:
+      type: object
+      required:
+        - course
+        - probability
+      properties:
+        course:
+          $ref: "#/components/schemas/Course"
+        probability:
+          type: number
+          format: float
+          example: 0.92
+    
+    MLRecommendResponse:
+      type: object
+      required:
+        - high
+        - medium
+        - low
+      properties:
+        high:
+          type: array
+          items:
+            $ref: "#/components/schemas/MLPredictionResult"
+        medium:
+          type: array
+          items:
+            $ref: "#/components/schemas/MLPredictionResult"
+        low:
+          type: array
+          items:
+            $ref: "#/components/schemas/MLPredictionResult"
