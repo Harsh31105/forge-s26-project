@@ -6,6 +6,24 @@ import { BadRequest } from "../../../errs/httpError";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? "http://localhost:8000";
 
+const HOURS_MIDPOINTS: Record<string, number> = {
+    "0-2": 1, "3-4": 3.5, "5-7": 6, "8-10": 9, "More than 10": 12,
+};
+
+const ATTENDANCE_MIDPOINTS: Record<string, number> = {
+    "1-20%": 10, "20-40%": 30, "40-60%": 50, "60-80%": 70, "80-100%": 90, "100%": 100,
+};
+
+function flattenDistribution(value: unknown, midpoints: Record<string, number>): number {
+    if (typeof value === "number") return value;
+    if (!value || typeof value !== "object") return 0;
+    const dist = value as Record<string, number>;
+    return Object.entries(dist).reduce((sum, [key, pct]) => {
+        const mid = midpoints[key] ?? 0;
+        return sum + (mid * (pct / 100));
+    }, 0);
+}
+
 const RecommendationRequestSchema = z.object({
     semester: z.enum(["fall", "spring", "summer_1", "summer_2"]),
 });
@@ -70,9 +88,9 @@ export class RecommendationHandler {
             semester: r.semester,
             lecture_year: r.lectureYear,
             lecture_type: r.lectureType ?? "",
-            how_often_percentage: r.howOftenPercentage,
-            hours_devoted: r.hoursDevoted,
-            professor_efficiency: parseFloat(r.professorEfficiency),
+            how_often_percentage: flattenDistribution(r.howOftenPercentage, ATTENDANCE_MIDPOINTS),
+            hours_devoted: flattenDistribution(r.hoursDevoted, HOURS_MIDPOINTS),
+            professor_efficiency: parseFloat(r.professorEfficiency) || 0,
             created_at: r.createdAt.toISOString(),
             updated_at: r.updatedAt.toISOString(),
         }));
