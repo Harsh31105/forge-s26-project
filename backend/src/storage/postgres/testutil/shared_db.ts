@@ -489,7 +489,6 @@ async function createAllTables(db: NodePgDatabase) {
         -- Unique constraint so upserts work correctly
         CREATE UNIQUE INDEX IF NOT EXISTS ai_summary_review_id_type_idx
             ON ai_summary (review_id, review_type);
-    `);
 
         ALTER TABLE trace DROP CONSTRAINT IF EXISTS trace_hours_devoted_check;
         ALTER TABLE trace DROP CONSTRAINT IF EXISTS trace_how_often_percentage_check;
