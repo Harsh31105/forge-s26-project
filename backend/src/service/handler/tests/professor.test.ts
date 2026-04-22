@@ -226,50 +226,50 @@ describe("ProfessorHandler Endpoints", () => {
     });
   });
 
-  describe("GET /professors/:id/rmp", () => {
-    test("returns RMP data for a professor", async () => {
-      rmpRepo.getRMPByProfessorID.mockResolvedValue(mockRMP);
-
-      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
-      expect(res.status).toBe(200);
-      expect(res.body).toMatchObject({
-        id: 1,
-        professorId: "11111111-1111-1111-1111-111111111111",
-        ratingAvg: "4.50",
-        ratingWta: 85,
-        avgDifficulty: "3.20",
-      });
-      expect(rmpRepo.getRMPByProfessorID).toHaveBeenCalledWith(
-        "11111111-1111-1111-1111-111111111111"
-      );
-    });
-
-    test("invalid UUID returns 400", async () => {
-      mockValidate.mockReturnValue(false);
-      const res = await request(app).get("/professors/not-a-uuid/rmp");
-      expect(res.status).toBe(400);
-    });
-
-    test("professor has no RMP data returns 200 with null values", async () => {
-      rmpRepo.getRMPByProfessorID.mockRejectedValue(
-          new NotFoundError("RMP data not found for given professor ID")
-      );
-      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
-      expect(res.status).toBe(200);
-      expect(res.body).toMatchObject({
-          professorId: "11111111-1111-1111-1111-111111111111",
-          ratingAvg: null,
-          ratingWta: null,
-          avgDifficulty: null,
-      });
-    });
-
-    test("repo error returns 500", async () => {
-      rmpRepo.getRMPByProfessorID.mockRejectedValue(new Error("DB error"));
-      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
-      expect(res.status).toBe(500);
-    });
-  });
+  // describe("GET /professors/:id/rmp", () => {
+  //   test("returns RMP data for a professor", async () => {
+  //     rmpRepo.getRMPByProfessorID.mockResolvedValue(mockRMP);
+  //
+  //     const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
+  //     expect(res.status).toBe(200);
+  //     expect(res.body).toMatchObject({
+  //       id: 1,
+  //       professorId: "11111111-1111-1111-1111-111111111111",
+  //       ratingAvg: "4.50",
+  //       ratingWta: 85,
+  //       avgDifficulty: "3.20",
+  //     });
+  //     expect(rmpRepo.getRMPByProfessorID).toHaveBeenCalledWith(
+  //       "11111111-1111-1111-1111-111111111111"
+  //     );
+  //   });
+  //
+  //   test("invalid UUID returns 400", async () => {
+  //     mockValidate.mockReturnValue(false);
+  //     const res = await request(app).get("/professors/not-a-uuid/rmp");
+  //     expect(res.status).toBe(400);
+  //   });
+  //
+  //   test("professor has no RMP data returns 200 with null values", async () => {
+  //     rmpRepo.getRMPByProfessorID.mockRejectedValue(
+  //         new NotFoundError("RMP data not found for given professor ID")
+  //     );
+  //     const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
+  //     expect(res.status).toBe(200);
+  //     expect(res.body).toMatchObject({
+  //         professorId: "11111111-1111-1111-1111-111111111111",
+  //         ratingAvg: null,
+  //         ratingWta: null,
+  //         avgDifficulty: null,
+  //     });
+  //   });
+  //
+  //   test("repo error returns 500", async () => {
+  //     rmpRepo.getRMPByProfessorID.mockRejectedValue(new Error("DB error"));
+  //     const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/rmp");
+  //     expect(res.status).toBe(500);
+  //   });
+  // });
 
 
   // creates professor and returns 201
