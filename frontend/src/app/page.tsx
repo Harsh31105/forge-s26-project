@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMe } from "@/src/hooks/useMe";
+import ProfilePicture from "@/src/components/ProfilePicture";
 import NavBar from "../components/NavBar";
 
 const MOCK_COURSES = [
@@ -136,19 +137,26 @@ export default function Home() {
           justifyContent: "space-between",
           marginBottom: 48,
         }}>
-          <div>
-            <h1 style={{
-              fontFamily: "var(--font-heading)",
-              fontSize: "var(--font-size-xl)",
-              fontWeight: 700,
-              color: "var(--color-text-primary)",
-              margin: 0,
-            }}>
-              Welcome Back{student ? `, ${student.firstName}` : ""}!
-            </h1>
-            <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", marginTop: 8, marginBottom: 0 }}>
-              Continue planning your semester
-            </p>
+          <div style={{ display: "flex", alignItems: "center", gap: 20 }}>
+            <ProfilePicture
+              studentID={student?.id ?? null}
+              profilePictureUrl={student?.profilePictureUrl ?? null}
+              size={72}
+            />
+            <div>
+              <h1 style={{
+                fontFamily: "var(--font-heading)",
+                fontSize: "var(--font-size-xl)",
+                fontWeight: 700,
+                color: "var(--color-text-primary)",
+                margin: 0,
+              }}>
+                Welcome Back{student ? `, ${student.firstName}` : ""}!
+              </h1>
+              <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", marginTop: 8, marginBottom: 0 }}>
+                Continue planning your semester
+              </p>
+            </div>
           </div>
           <Link href="/courses" style={{
             background: "var(--color-primary-navy)",

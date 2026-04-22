@@ -1,9 +1,11 @@
 "use client";
 
 import { useState } from "react";
+import { useQuery } from "@tanstack/react-query";
 import { Student } from "@/src/lib/api/northStarAPI.schemas";
+import { getAcademic } from "@/src/lib/api/academic";
 
-const MAJORS_WITH_CONCENTRATIONS: Record<string, string[]> = {
+const MAJOR_CONCENTRATIONS: Record<string, string[]> = {
     "Architecture": [],
     "Biology": ["Biochemistry", "Cell & Molecular Biology", "Ecology & Evolutionary Biology", "Marine Biology"],
     "Business Administration": ["Accounting", "Entrepreneurship", "Finance", "Management", "Marketing", "Supply Chain Management"],
@@ -22,28 +24,50 @@ const MAJORS_WITH_CONCENTRATIONS: Record<string, string[]> = {
     "Psychology": ["Clinical", "Cognitive", "Experimental", "Health Psychology"],
 };
 
-const MAJORS = Object.keys(MAJORS_WITH_CONCENTRATIONS);
 const GRAD_YEARS = [2025, 2026, 2027, 2028, 2029, 2030];
 
 type EditProfileModalProps = {
     student: Student;
-    onSave: (data: { firstName: string; lastName: string; graduationYear: number }) => Promise<void>;
+    onSave: (data: {
+        firstName: string;
+        lastName: string;
+        graduationYear: number;
+        majorId: number | null;
+        concentrationId: number | null;
+    }) => Promise<void>;
     onClose: () => void;
     isSaving: boolean;
 };
 
 export function EditProfileModal({ student, onSave, onClose, isSaving }: EditProfileModalProps) {
+    const academicAPI = getAcademic();
+
+    const { data: allMajors = [] } = useQuery({
+        queryKey: ["academic", "majors"],
+        queryFn: () => academicAPI.getAcademicMajors(),
+    });
+
+    const { data: allConcentrations = [] } = useQuery({
+        queryKey: ["academic", "concentrations"],
+        queryFn: () => academicAPI.getAcademicConcentrations(),
+    });
+
     const [firstName, setFirstName] = useState(student.firstName ?? "");
     const [lastName, setLastName] = useState(student.lastName ?? "");
     const [graduationYear, setGraduationYear] = useState<number | "">(student.graduationYear ?? "");
-    const [major, setMajor] = useState("");
-    const concentrations = major ? (MAJORS_WITH_CONCENTRATIONS[major] ?? []) : [];
-    const [concentration, setConcentration] = useState("");
+    const [majorId, setMajorId] = useState<number | null>(student.majors?.[0]?.id ?? null);
+    const [concentrationId, setConcentrationId] = useState<number | null>(student.concentrations?.[0]?.id ?? null);
+
+    const selectedMajorName = allMajors.find((m) => m.id === majorId)?.name ?? null;
+    const allowedConcentrationNames = selectedMajorName ? (MAJOR_CONCENTRATIONS[selectedMajorName] ?? []) : [];
+    const filteredConcentrations = allowedConcentrationNames.length > 0
+        ? allConcentrations.filter((c) => allowedConcentrationNames.includes(c.name))
+        : [];
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!graduationYear) return;
-        await onSave({ firstName, lastName, graduationYear: Number(graduationYear) });
+        await onSave({ firstName, lastName, graduationYear: Number(graduationYear), majorId, concentrationId });
     };
 
     return (
@@ -92,28 +116,28 @@ export function EditProfileModal({ student, onSave, onClose, isSaving }: EditPro
                     <div className="flex flex-col gap-1">
                         <label className="font-body text-[14px] font-semibold text-foreground">Major</label>
                         <select
-                            value={major}
-                            onChange={(e) => { setMajor(e.target.value); setConcentration(""); }}
+                            value={majorId ?? ""}
+                            onChange={(e) => { setMajorId(e.target.value ? Number(e.target.value) : null); setConcentrationId(null); }}
                             className="rounded-[8px] border border-border px-3 py-2 font-body text-[16px] text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                         >
                             <option value="">Select a major</option>
-                            {MAJORS.map((m) => (
-                                <option key={m} value={m}>{m}</option>
+                            {allMajors.map((m) => (
+                                <option key={m.id} value={m.id}>{m.name}</option>
                             ))}
                         </select>
                     </div>
 
-                    {concentrations.length > 0 && (
+                    {filteredConcentrations.length > 0 && (
                         <div className="flex flex-col gap-1">
                             <label className="font-body text-[14px] font-semibold text-foreground">Concentration</label>
                             <select
-                                value={concentration}
-                                onChange={(e) => setConcentration(e.target.value)}
+                                value={concentrationId ?? ""}
+                                onChange={(e) => setConcentrationId(e.target.value ? Number(e.target.value) : null)}
                                 className="rounded-[8px] border border-border px-3 py-2 font-body text-[16px] text-foreground focus:outline-none focus:ring-2 focus:ring-primary"
                             >
                                 <option value="">Select a concentration</option>
-                                {concentrations.map((c) => (
-                                    <option key={c} value={c}>{c}</option>
+                                {filteredConcentrations.map((c) => (
+                                    <option key={c.id} value={c.id}>{c.name}</option>
                                 ))}
                             </select>
                         </div>
