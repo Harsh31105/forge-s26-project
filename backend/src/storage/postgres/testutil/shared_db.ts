@@ -485,22 +485,6 @@ async function createAllTables(db: NodePgDatabase) {
                 created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
             );
 
-        CREATE OR REPLACE FUNCTION update_ai_summary_updated_at_column()
-            RETURNS TRIGGER AS $$
-                    BEGIN
-                NEW.summary_updated_at
-                    = now();
-                    RETURN NEW;
-                    END;
-            $$
-        language 'plpgsql';
-
-        -- Create triggers for automatic updated_at timestamp updates
-        CREATE TRIGGER update_ai_summary_updated_at
-            BEFORE UPDATE
-            ON ai_summary
-            FOR EACH ROW EXECUTE FUNCTION update_ai_summary_updated_at_column();
-
         -- Unique constraint so upserts work correctly
         CREATE UNIQUE INDEX IF NOT EXISTS ai_summary_review_id_type_idx
             ON ai_summary (review_id, review_type);
