@@ -8,9 +8,9 @@ export const PaginationSchema = z.object({
 export type PaginationType = z.infer<typeof PaginationSchema>;
 
 export function newPagination(): PaginationType {
-    return { limit: 10, page: 1 };
+    return { page: 1, limit: 10 };
 }
 
-export function getOffset(p:PaginationType): number {
-    return(p.page - 1) * p.limit;
+export function getOffset(p: PaginationType): number {
+    return (p.page - 1) * (p.limit ?? 0);
 }
