@@ -117,7 +117,7 @@ export class S3StorageError extends Error {
     }
 }
 
-function mapS3Error(err: unknown, context: string): S3StorageError {
+export function mapS3Error(err: unknown, context: string): S3StorageError {
     const name = (err as { name?: string })?.name ?? "";
     const message = (err as { message?: string })?.message ?? "";
 
