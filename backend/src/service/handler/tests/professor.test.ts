@@ -5,7 +5,8 @@
 import request from "supertest";
 import express, { type Express } from "express";
 import { ProfessorHandler } from "../professor";
-import type { ProfessorRepository, RMPRepository } from "../../../storage/storage";
+import type { ProfessorRepository, RMPRepository, ProfessorReviewRepository, TraceRepository } from "../../../storage/storage";
+import type { ProfessorAvatarRepository } from "../../../storage/s3/professorAvatars";
 import type { Professor } from "../../../models/professor";
 // import { ProfessorPostInputType, ProfessorPatchInputType } from "../../../models/professor";
 import type { RMP } from "../../../models/rmp";
@@ -40,6 +41,9 @@ describe("ProfessorHandler Endpoints", () => {
   let app: Express;
   let repo: jest.Mocked<ProfessorRepository>;
   let rmpRepo: jest.Mocked<RMPRepository>;
+  let profReviewsRepo: jest.Mocked<ProfessorReviewRepository>;
+  let tracesRepo: jest.Mocked<TraceRepository>;
+  let avatarRepo: jest.Mocked<ProfessorAvatarRepository>;
   let handler: ProfessorHandler;
 
   beforeEach(() => {
@@ -59,7 +63,22 @@ describe("ProfessorHandler Endpoints", () => {
         postRMP: jest.fn(),
     } as unknown as jest.Mocked<RMPRepository>;
 
-    handler = new ProfessorHandler(repo, rmpRepo);
+    profReviewsRepo = {
+        getTopTagsByProfessorId: jest.fn().mockResolvedValue([]),
+        getRatingsByProfessorId: jest.fn().mockResolvedValue({ averageRating: null, totalRatings: 0 }),
+    } as unknown as jest.Mocked<ProfessorReviewRepository>;
+
+    tracesRepo = {
+        getTraces: jest.fn().mockResolvedValue([]),
+        getOfferHistory: jest.fn().mockResolvedValue([]),
+    } as unknown as jest.Mocked<TraceRepository>;
+
+    avatarRepo = {
+        getRandomAvatarKey: jest.fn().mockReturnValue("professor-avatars/1.png"),
+        getPresignedUrl: jest.fn().mockResolvedValue("https://s3.example.com/professor-avatars/1.png"),
+    } as unknown as jest.Mocked<ProfessorAvatarRepository>;
+
+    handler = new ProfessorHandler(repo, rmpRepo, profReviewsRepo, tracesRepo, avatarRepo);
 
     app = express();
     app.use(express.json());
@@ -81,6 +100,12 @@ describe("ProfessorHandler Endpoints", () => {
     );
     app.delete("/professors/:id", (req, res, next) =>
       handler.handleDelete(req, res).catch(next)
+    );
+    app.get("/professors/:id/top-tags", (req, res, next) =>
+      handler.handleGetTopTags(req, res).catch(next)
+    );
+    app.get("/professors/:id/ratings", (req, res, next) =>
+      handler.handleGetRatings(req, res).catch(next)
     );
 
     app.use(errorHandler);
@@ -387,6 +412,106 @@ describe("ProfessorHandler Endpoints", () => {
     test("repo error returns 500", async () => {
       repo.deleteProfessor.mockRejectedValue(new Error("DB error"));
       const res = await request(app).delete("/professors/11111111-1111-1111-1111-111111111111");
+      expect(res.status).toBe(500);
+    });
+  });
+
+  describe("GET /professors/:id/top-tags", () => {
+    test("returns top tags for a professor", async () => {
+      const tags = [
+        { tag: "engaging", count: 5 },
+        { tag: "clear", count: 3 },
+        { tag: "helpful", count: 2 },
+      ];
+      profReviewsRepo.getTopTagsByProfessorId.mockResolvedValue(tags);
+
+      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/top-tags");
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual(tags);
+      expect(profReviewsRepo.getTopTagsByProfessorId).toHaveBeenCalledWith(
+        "11111111-1111-1111-1111-111111111111"
+      );
+    });
+
+    test("returns empty array when professor has no reviews", async () => {
+      profReviewsRepo.getTopTagsByProfessorId.mockResolvedValue([]);
+
+      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/top-tags");
+      expect(res.status).toBe(200);
+      expect(res.body).toEqual([]);
+    });
+
+    test("invalid UUID returns 400", async () => {
+      mockValidate.mockReturnValue(false);
+      const res = await request(app).get("/professors/not-a-uuid/top-tags");
+      expect(res.status).toBe(400);
+    });
+
+    test("repo error returns 500", async () => {
+      profReviewsRepo.getTopTagsByProfessorId.mockRejectedValue(new Error("DB error"));
+      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/top-tags");
+      expect(res.status).toBe(500);
+    });
+  });
+
+  describe("GET /professors/:id/ratings", () => {
+    test("returns northstar and trace ratings for a professor", async () => {
+      profReviewsRepo.getRatingsByProfessorId.mockResolvedValue({
+        averageRating: 4.2,
+        totalRatings: 10,
+      });
+      tracesRepo.getTraces.mockResolvedValue([
+        { professorEfficiency: "4.0" } as any,
+        { professorEfficiency: "4.5" } as any,
+      ]);
+
+      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/ratings");
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({
+        northstar: { averageRating: 4.2, totalRatings: 10 },
+        trace: { averageEfficiency: 4.25, totalTraceRows: 2 },
+      });
+    });
+
+    test("returns null trace average when no trace data exists", async () => {
+      profReviewsRepo.getRatingsByProfessorId.mockResolvedValue({
+        averageRating: 3.8,
+        totalRatings: 5,
+      });
+      tracesRepo.getTraces.mockResolvedValue([]);
+
+      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/ratings");
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({
+        northstar: { averageRating: 3.8, totalRatings: 5 },
+        trace: { averageEfficiency: null, totalTraceRows: 0 },
+      });
+    });
+
+    test("returns null northstar average when professor has no reviews", async () => {
+      profReviewsRepo.getRatingsByProfessorId.mockResolvedValue({
+        averageRating: null,
+        totalRatings: 0,
+      });
+      tracesRepo.getTraces.mockResolvedValue([]);
+
+      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/ratings");
+      expect(res.status).toBe(200);
+      expect(res.body).toMatchObject({
+        northstar: { averageRating: null, totalRatings: 0 },
+        trace: { averageEfficiency: null, totalTraceRows: 0 },
+      });
+    });
+
+    test("invalid UUID returns 400", async () => {
+      mockValidate.mockReturnValue(false);
+      const res = await request(app).get("/professors/not-a-uuid/ratings");
+      expect(res.status).toBe(400);
+    });
+
+    test("repo error returns 500", async () => {
+      profReviewsRepo.getRatingsByProfessorId.mockRejectedValue(new Error("DB error"));
+      const res = await request(app).get("/professors/11111111-1111-1111-1111-111111111111/ratings");
       expect(res.status).toBe(500);
     });
   });

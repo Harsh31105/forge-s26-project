@@ -119,7 +119,7 @@ function registerRoutes(router: Router, repo: Repository) {
     const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 
-    const professorHandler = new ProfessorHandler(repo.professors, repo.rmp);
+    const professorHandler = new ProfessorHandler(repo.professors, repo.rmp, repo.profReviews, repo.traces, repo.professorAvatars);
     router.use("/professors", professorRoutes(professorHandler));
 
     const rmpHandler = new RMPHandler(repo.rmp, repo.professors);

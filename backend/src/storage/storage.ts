@@ -37,6 +37,8 @@ import type {
 import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
+import type { ProfessorAvatarRepository } from "./s3/professorAvatars";
+import { ProfessorAvatarRepositoryS3 } from "./s3/professorAvatars";
 import type { S3 as S3Config } from "../config/s3";
 import {
   Student,
@@ -57,6 +59,7 @@ import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 import {AcademicSemester, OfferHistoryFilterType, Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/traces";
+import {ProfReviewHelper} from "./postgres/schema/profReviews";
 
 export class Repository {
   public readonly samples: SampleRepository;
@@ -65,28 +68,32 @@ export class Repository {
   public readonly courseThreads: CourseThreadRepository;
   public readonly profThreads: ProfThreadRepository;
   public readonly traceDocuments: TraceDocumentRepository;
+  public readonly professorAvatars: ProfessorAvatarRepository;
   public readonly rmp: RMPRepository;
   public readonly reviews: ReviewRepository;
   public readonly students: StudentRepository;
   public readonly favourites: FavouriteRepository;
   public readonly traces: TraceRepository;
+  public readonly profReviews: ProfessorReviewRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
 
   constructor(pool: Pool, db: NodePgDatabase, s3Config: S3Config) {
     this.pool = pool;
     this.db = db;
+    this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+    this.professorAvatars = new ProfessorAvatarRepositoryS3(s3Config);
     this.samples = new SampleRepositorySchema(db);
     this.courses = new CourseRepositorySchema(db);
     this.courseThreads = new CourseThreadRepositorySchema(db);
-    this.professors = new ProfessorRepositorySchema(db);
+    this.professors = new ProfessorRepositorySchema(db, this.professorAvatars);
     this.profThreads = new ProfThreadRepositorySchema(db);
     this.reviews = new ReviewRepositorySchema(db);
-    this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
     this.students = new StudentRepositorySchema(db);
     this.favourites = new FavouriteRepositorySchema(db);
     this.rmp = new RMPRepositorySchema(db);
     this.traces = new TraceRepositorySchema(db);
+    this.profReviews = new ProfReviewHelper(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -211,4 +218,9 @@ export interface RMPRepository {
 export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
+}
+
+export interface ProfessorReviewRepository {
+  getTopTagsByProfessorId(professorId: string): Promise<{ tag: string; count: number }[]>;
+  getRatingsByProfessorId(professorId: string): Promise<{ averageRating: number | null; totalRatings: number }>;
 }

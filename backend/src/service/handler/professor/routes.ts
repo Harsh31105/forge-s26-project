@@ -9,6 +9,8 @@ export function professorRoutes(handler: ProfessorHandler): Router {
     router.post("/", handler.handlePost.bind(handler));
     router.patch("/:id", handler.handlePatch.bind(handler));
     router.delete("/:id", handler.handleDelete.bind(handler));
+    router.get("/:id/top-tags", handler.handleGetTopTags.bind(handler));
+    router.get("/:id/ratings", handler.handleGetRatings.bind(handler));
     router.get("/:id/rmp", handler.handleGetRMP.bind(handler));
 
     return router;

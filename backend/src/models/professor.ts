@@ -31,6 +31,7 @@ export interface Professor {
     firstName: string;
     lastName: string;
     tags: LocationTag[] | null;
+    avatar: string | null;
     createdAt: Date;
     updatedAt: Date;
 }

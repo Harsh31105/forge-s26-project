@@ -1,6 +1,7 @@
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type { Professor, ProfessorFilterType, ProfessorPatchInputType, ProfessorPostInputType } from "../../../models/professor";
 import { ProfessorRepository } from "../../storage";
+import type { ProfessorAvatarRepository } from "../../s3/professorAvatars";
 import { professor } from "../../tables/professor";
 import { rmp } from "../../tables/rmp";
 import { NotFoundError } from "../../../errs/httpError";
@@ -10,9 +11,10 @@ import { getOffset, PaginationType } from "../../../utils/pagination";
 import type { RMP } from "../../../models/rmp";
 
 export class ProfessorRepositorySchema implements ProfessorRepository {
-    constructor(private readonly db: NodePgDatabase) {
-        this.db = db;
-    }
+    constructor(
+        private readonly db: NodePgDatabase,
+        private readonly avatarRepo: ProfessorAvatarRepository,
+    ) {}
 
     async getProfessors(pagination: PaginationType, filters: ProfessorFilterType): Promise<Professor[]> {
             const conditions = [];
@@ -46,6 +48,7 @@ export class ProfessorRepositorySchema implements ProfessorRepository {
             firstName: input.firstName,
             lastName: input.lastName,
             tags: (input.tags ?? null) as LocationTag[] | null,
+            avatar: this.avatarRepo.getRandomAvatarKey(),
         }).returning();
         if (!row) throw Error();
         return row;
