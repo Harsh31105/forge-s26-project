@@ -192,6 +192,7 @@ async function createAllTables(db: NodePgDatabase) {
             email VARCHAR(255) NOT NULL UNIQUE,
             graduation_year INT CHECK ( graduation_year >= 2025 ),
             preferences pref_enum[],
+            profile_picture_key VARCHAR(500),
             created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
@@ -357,6 +358,93 @@ async function createAllTables(db: NodePgDatabase) {
         ALTER TABLE rmp
         ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
 
+        -- Seed majors from onboarding data
+                INSERT INTO major (name)
+                VALUES ('Architecture'),
+                       ('Biology'),
+                       ('Business Administration'),
+                       ('Chemistry'),
+                       ('Communication Studies'),
+                       ('Computer Science'),
+                       ('Criminal Justice'),
+                       ('Data Science'),
+                       ('Electrical & Computer Engineering'),
+                       ('Environmental Science'),
+                       ('International Business'),
+                       ('Mathematics'),
+                       ('Mechanical Engineering'),
+                       ('Nursing'),
+                       ('Physics'),
+                       ('Political Science'),
+                       ('Psychology')
+                    ON CONFLICT (name) DO NOTHING;
+        
+        -- Seed concentrations (deduplicated across all majors)
+                INSERT INTO concentration (name)
+                VALUES
+        -- Biology
+        ('Biochemistry'),
+        ('Cell & Molecular Biology'),
+        ('Ecology & Evolutionary Biology'),
+        ('Marine Biology'),
+        -- Business Administration
+        ('Accounting'),
+        ('Entrepreneurship'),
+        ('Finance'),
+        ('Management'),
+        ('Marketing'),
+        ('Supply Chain Management'),
+        -- Chemistry
+        ('Medicinal Chemistry'),
+        ('Organic Chemistry'),
+        -- Communication Studies
+        ('Advertising'),
+        ('Digital Media'),
+        ('Journalism'),
+        ('Public Relations'),
+        -- Computer Science
+        ('Artificial Intelligence'),
+        ('Cybersecurity'),
+        ('Data Science'),
+        ('Game Development'),
+        ('Human-Computer Interaction'),
+        ('Software'),
+        ('Systems'),
+        -- Criminal Justice
+        ('Corrections'),
+        ('Law Enforcement'),
+        ('Policy & Planning'),
+        -- Data Science
+        ('Business Analytics'),
+        ('Machine Learning'),
+        ('Statistics'),
+        -- Electrical & Computer Engineering
+        ('Computer Engineering'),
+        ('Electrical Engineering'),
+        -- Environmental Science
+        ('Climate Science'),
+        ('Ecology'),
+        ('Environmental Policy'),
+        -- Mathematics
+        ('Applied Mathematics'),
+        ('Pure Mathematics'),
+        -- Mechanical Engineering
+        ('Manufacturing & Design'),
+        ('Robotics & Control'),
+        -- Physics
+        ('Astrophysics'),
+        ('Condensed Matter'),
+        -- Political Science
+        ('American Politics'),
+        ('International Relations'),
+        ('Law & Politics'),
+        -- Psychology
+        ('Clinical'),
+        ('Cognitive'),
+        ('Experimental'),
+        ('Health Psychology')
+                    ON CONFLICT (name) DO NOTHING;
+
         DO $$ BEGIN
             CREATE TYPE semester_enum AS ENUM ('fall', 'spring', 'summer_1', 'summer_2');
             EXCEPTION
@@ -379,6 +467,27 @@ async function createAllTables(db: NodePgDatabase) {
 
         ALTER TABLE rmp
             ALTER COLUMN avg_difficulty DROP NOT NULL;
+
+        DO $$ BEGIN
+            CREATE TYPE review_type AS ENUM ('course', 'professor');
+            EXCEPTION
+        WHEN duplicate_object THEN null;
+            END $$;
+
+        -- Create ai_summary table
+            CREATE TABLE IF NOT EXISTS ai_summary (
+                                                      id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                review_id           UUID NOT NULL REFERENCES review(id) ON DELETE CASCADE,
+                review_type         review_type NOT NULL,
+                summary             TEXT NOT NULL,
+                score               REAL NOT NULL DEFAULT 0,
+                summary_updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
+
+        -- Unique constraint so upserts work correctly
+        CREATE UNIQUE INDEX IF NOT EXISTS ai_summary_review_id_type_idx
+            ON ai_summary (review_id, review_type);
     `);
 
 }

@@ -11,7 +11,7 @@ interface BaseReview {
 }
 
 export interface CreateParentReviewInput {
-  studentId?: string | null ;
+  studentId?: string | null | undefined;
   semester?: string | null | undefined;
   year?: number | null | undefined;
 }
@@ -102,7 +102,7 @@ export const courseTags = [
 // Input schemas
 export const ReviewPostInputSchema = z
   .object({
-    studentId: z.uuid(),
+    studentId: z.string().uuid().optional().nullable(),
     rating: z.number().int().min(1).max(5),
     reviewText: z.string().min(1, "Content cannot be empty").max(2000),
     courseId: z.uuid().optional().nullable(),

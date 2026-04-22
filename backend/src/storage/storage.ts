@@ -1,12 +1,12 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
-   Sample,
+  Sample,
   SamplePatchInputType,
   SamplePostInputType,
- } from "../models/sample";
+} from "../models/sample";
 import type {
-   CourseReview,
+  CourseReview,
   CreateParentReviewInput,
   ProfessorReview,
   Review,
@@ -38,13 +38,19 @@ import type {
 import { ProfessorRepositorySchema } from "./postgres/schema/professor";
 import type { TraceDocumentRepository } from "./s3/traceDocuments";
 import { TraceDocumentRepositoryS3 } from "./s3/traceDocuments";
+import type { ProfilePictureRepository } from "./s3/profilePictures";
+import { ProfilePictureRepositoryS3 } from "./s3/profilePictures";
 import type { S3 as S3Config } from "../config/s3";
 import {
   Student,
+  Major,
+  Minor,
+  Concentration,
   StudentPatchInputType,
   StudentPostInputType
 } from "../models/student";
 import { StudentRepositorySchema } from "./postgres/schema/students";
+import { AcademicRepositorySchema } from "./postgres/schema/academic";
 
 import type {
   ProfThread,
@@ -58,6 +64,8 @@ import {Favourite, FavouritePostInputType} from "../models/favourite";
 import {FavouriteRepositorySchema} from "./postgres/schema/favourites";
 import {AcademicSemester, OfferHistoryFilterType, Trace, TraceFilterType} from "../models/trace";
 import {TraceRepositorySchema} from "./postgres/schema/traces";
+import type { AiSummary, AiSummaryUpsertInput, ReviewWithScore } from "../models/aiSummary";
+import { AiSummaryRepositorySchema } from "./postgres/schema/aiSummaries";
 
 
 export class Repository {
@@ -67,11 +75,14 @@ export class Repository {
   public readonly courseThreads: CourseThreadRepository;
   public readonly profThreads: ProfThreadRepository;
   public readonly traceDocuments: TraceDocumentRepository;
+  public readonly profilePictures: ProfilePictureRepository;
   public readonly rmp: RMPRepository;
   public readonly reviews: ReviewRepository;
   public readonly students: StudentRepository;
   public readonly favourites: FavouriteRepository;
   public readonly traces: TraceRepository;
+  public readonly aiSummaries: AiSummaryRepository;
+  public readonly academic: AcademicRepository;
   private readonly pool: Pool;
   private readonly db: NodePgDatabase;
 
@@ -85,10 +96,13 @@ export class Repository {
     this.profThreads = new ProfThreadRepositorySchema(db);
     this.reviews = new ReviewRepositorySchema(db);
     this.traceDocuments = new TraceDocumentRepositoryS3(s3Config);
+    this.profilePictures = new ProfilePictureRepositoryS3(s3Config);
     this.students = new StudentRepositorySchema(db);
     this.favourites = new FavouriteRepositorySchema(db);
     this.rmp = new RMPRepositorySchema(db);
     this.traces = new TraceRepositorySchema(db);
+    this.aiSummaries = new AiSummaryRepositorySchema(db);
+    this.academic = new AcademicRepositorySchema(db);
   }
 
   async getDB(): Promise<NodePgDatabase> {
@@ -216,4 +230,32 @@ export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
   getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
+  getAllTraces(): Promise<Trace[]>; 
+}
+
+export interface AiSummaryRepository {
+  getByReviewId(reviewId: string, reviewType: "course" | "professor"): Promise<AiSummary | null>;
+  upsertSummary(data: AiSummaryUpsertInput): Promise<AiSummary>;
+  getTopScoredReviews(reviewType: "course" | "professor", limit: number): Promise<ReviewWithScore[]>;
+  markStaleIfThresholdMet(reviewId: string, reviewType: "course" | "professor", threshold: number): Promise<void>;
+}
+
+export type { ProfilePictureRepository } from "./s3/profilePictures";
+
+export interface AcademicRepository {
+  getMajors(): Promise<Major[]>;
+  getConcentrations(): Promise<Concentration[]>;
+  getMinors(): Promise<Minor[]>;
+  getStudentMajors(studentId: string): Promise<Major[]>;
+  getStudentConcentrations(studentId: string): Promise<Concentration[]>;
+  getStudentMinors(studentId: string): Promise<Minor[]>;
+  getMajorsForStudents(studentIds: string[]): Promise<Record<string, Major[]>>;
+  getConcentrationsForStudents(studentIds: string[]): Promise<Record<string, Concentration[]>>;
+  getMinorsForStudents(studentIds: string[]): Promise<Record<string, Minor[]>>;
+  addStudentMajor(studentId: string, majorId: number): Promise<void>;
+  deleteStudentMajor(studentId: string, majorId: number): Promise<void>;
+  addStudentConcentration(studentId: string, concentrationId: number): Promise<void>;
+  deleteStudentConcentration(studentId: string, concentrationId: number): Promise<void>;
+  addStudentMinor(studentId: string, minorId: number): Promise<void>;
+  deleteStudentMinor(studentId: string, minorId: number): Promise<void>;
 }

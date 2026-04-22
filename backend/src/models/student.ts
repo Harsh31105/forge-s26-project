@@ -37,12 +37,32 @@ export interface Student {
     email: string;
     graduationYear: number | null;
     preferences: StudentPreference[];
-    majors?: Major[]; // optional
-    concentrations?: Concentration[]; // optional
-    minors?: Minor[]; // optional
+    profilePictureKey?: string | null;
+    majors?: Major[];
+    concentrations?: Concentration[];
+    minors?: Minor[];
     createdAt: Date;
     updatedAt: Date;
 }
+
+// Bridge table POST
+export const StudentMajorPostInputSchema = z.object({
+    majorId: z.number().int().positive(),
+});
+
+export type StudentMajorPostInputType = z.infer<typeof StudentMajorPostInputSchema>;
+
+export const StudentConcentrationPostInputSchema = z.object({
+    concentrationId: z.number().int().positive(),
+});
+
+export type StudentConcentrationPostInputType = z.infer<typeof StudentConcentrationPostInputSchema>;
+
+export const StudentMinorPostInputSchema = z.object({
+    minorId: z.number().int().positive(),
+});
+
+export type StudentMinorPostInputType = z.infer<typeof StudentMinorPostInputSchema>;
 
 // POST
 export const StudentPostInputSchema = z.object({
@@ -55,5 +75,8 @@ export const StudentPostInputSchema = z.object({
 export type StudentPostInputType = z.infer<typeof StudentPostInputSchema>;
 
 // PATCH
-export const StudentPatchInputSchema = StudentPostInputSchema.partial();
+export const StudentPatchInputSchema = StudentPostInputSchema.partial().extend({
+    graduationYear: z.coerce.number().int().positive().optional(),
+    profilePictureKey: z.string().nullable().optional(),
+});
 export type StudentPatchInputType = z.infer<typeof StudentPatchInputSchema>;

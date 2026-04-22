@@ -27,6 +27,8 @@ import { authMiddleware, readOnlyMiddleware } from "../auth/middleware";
 import cookieParser from "cookie-parser";
 import { StudentHandler } from "./handler/student";
 import { studentRoutes } from "./handler/student/routes";
+import { AcademicHandler } from "./handler/academic";
+import { academicRoutes } from "./handler/academic/routes";
 import {FavouriteHandler} from "./handler/favourite";
 import {favouriteRoutes} from "./handler/favourite/routes";
 import { RMPHandler } from "./handler/rmp";
@@ -35,7 +37,10 @@ import { ProfThreadHandler } from "./handler/professorThreads";
 import { professorThreadRoutes } from "./handler/professorThreads/routes";
 import { TraceHandler } from "./handler/trace";
 import { traceRoutes } from "./handler/trace/routes";
-
+import { AiSummaryHandler } from "./handler/aiSummaries";
+import { aiSummaryRoutes } from "./handler/aiSummaries/routes";
+import { RecommendationHandler } from "./handler/recommendation";
+import { recommendationRoutes } from "./handler/recommendation/routes";
 class App {
     public server: Express;
     public repo: Repository;
@@ -55,6 +60,7 @@ class App {
                 "http://localhost:8080",
                 "http://127.0.0.1:8080",
                 "http://127.0.0.1:3000",
+                "http://127.0.0.1:3001",
             ],
             methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
             allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization", "X-Api-Key"],
@@ -120,21 +126,31 @@ function registerRoutes(router: Router, repo: Repository) {
     router.use("/samples", sampleRoutes(sampleHandler));
 
     // Handling Course-Threads - Starting with CourseReviews.
-    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads);
+    const courseThreadHandler = new CourseThreadHandler(repo.courseThreads, repo.aiSummaries);
     router.use("/course-reviews", courseThreadRoutes(courseThreadHandler));
 
     const rmpHandler = new RMPHandler(repo.rmp, repo.professors);
     router.use("/rmp", rmpRoutes(rmpHandler));
 
-    const profThreadHandler = new ProfThreadHandler(repo.profThreads);
+    const profThreadHandler = new ProfThreadHandler(repo.profThreads, repo.aiSummaries);
     router.use("/professor-reviews", professorThreadRoutes(profThreadHandler));
 
-    const studentHandler = new StudentHandler(repo.students);
+    const studentHandler = new StudentHandler(repo.students, repo.academic, repo.profilePictures);
     router.use("/students", studentRoutes(studentHandler));
+
+    const academicHandler = new AcademicHandler(repo.academic);
+    router.use("/academic", academicRoutes(academicHandler));
 
     const favouritesHandler = new FavouriteHandler(repo.favourites);
     router.use("/favourites", favouriteRoutes(favouritesHandler));
 
     const traceHandler = new TraceHandler(repo.traces);
     router.use("/trace", traceRoutes(traceHandler));
+
+    const aiSummaryHandler = new AiSummaryHandler(repo.aiSummaries, repo.courseThreads, repo.profThreads);
+    router.use("/ai-summaries", aiSummaryRoutes(aiSummaryHandler));
+
+    const recHandler = new RecommendationHandler(repo);
+    router.use("/recommendations", recommendationRoutes(recHandler));
+
 }
