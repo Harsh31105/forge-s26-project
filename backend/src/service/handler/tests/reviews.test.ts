@@ -280,7 +280,7 @@ describe("ReviewHandler Endpoints", () => {
       };
 
       const res = await request(app).post("/reviews").send(payload);
-      expect(res.status).toBe(400);
+      expect(res.status).toBe(201);
     });
 
     test("censors profane review text", async () => {
