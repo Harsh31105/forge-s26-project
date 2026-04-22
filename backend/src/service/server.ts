@@ -39,7 +39,6 @@ import { AiSummaryHandler } from "./handler/aiSummaries";
 import { aiSummaryRoutes } from "./handler/aiSummaries/routes";
 import { RecommendationHandler } from "./handler/recommendation";
 import { recommendationRoutes } from "./handler/recommendation/routes";
-
 class App {
     public server: Express;
     public repo: Repository;
@@ -147,4 +146,5 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const recHandler = new RecommendationHandler(repo);
     router.use("/recommendations", recommendationRoutes(recHandler));
+
 }

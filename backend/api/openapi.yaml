@@ -1920,7 +1920,7 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
-                
+
 /recommendations:
     post:
       summary: Rule-based course recommendations
@@ -1964,6 +1964,37 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MLRecommendResponse"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /ai-summaries/popular:
+    get:
+      summary: Get popular conversations with AI summaries
+      description: Returns the top most popular course and professor reviews ranked by a popularity score.
+      tags: [AiSummary]
+      security: []
+      parameters:
+        - name: limit
+          in: query
+          description: Number of popular reviews to return (max 20, default 5)
+          schema:
+            type: integer
+            minimum: 1
+            maximum: 20
+            default: 5
+      responses:
+        "200":
+          description: List of AI summaries for the most popular reviews
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/AiSummary"
         "500":
           description: Internal server error
           content:
@@ -2893,7 +2924,7 @@ components:
           items:
             $ref: "#/components/schemas/Favourite"
           example: [ ]
-    
+
     RecommendationResult:
       type: object
       required:
@@ -2939,7 +2970,7 @@ components:
           type: number
           format: float
           example: 0.92
-    
+
     MLRecommendResponse:
       type: object
       required:
