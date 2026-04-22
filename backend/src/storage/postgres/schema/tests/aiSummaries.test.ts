@@ -177,6 +177,72 @@ describe("AiSummaryRepositorySchema DB Integration", () => {
 
             expect(results.length).toBeLessThanOrEqual(1);
         });
+
+        test("returns only the top-scored review per course when multiple reviews exist for the same course", async () => {
+            const secondReviewId = uuidv4();
+            const threadStudentId = uuidv4();
+
+            await db.execute(`
+                INSERT INTO student (id, first_name, last_name, email)
+                VALUES ('${threadStudentId}', 'Thread', 'User', '${threadStudentId}@test.com');
+
+                INSERT INTO review (id, student_id) VALUES ('${secondReviewId}', '${testStudentId}');
+                INSERT INTO course_review (review_id, course_id, rating, review_text)
+                VALUES ('${secondReviewId}', (SELECT course_id FROM course_review WHERE review_id = '${testCourseReviewId}'), 4, 'Hot take');
+
+                INSERT INTO course_thread (student_id, course_review_id, content)
+                VALUES ('${threadStudentId}', '${secondReviewId}', 'discussion');
+            `);
+
+            const results = await repo.getTopScoredReviews("course", 10);
+
+            const reviewIds = results.map(r => r.reviewId);
+            expect(reviewIds).toContain(secondReviewId);
+            expect(reviewIds).not.toContain(testCourseReviewId);
+        });
+
+        test("returns only the top-scored review per professor when multiple reviews exist for the same professor", async () => {
+            const secondReviewId = uuidv4();
+            const threadStudentId = uuidv4();
+
+            await db.execute(`
+                INSERT INTO student (id, first_name, last_name, email)
+                VALUES ('${threadStudentId}', 'Thread', 'User', '${threadStudentId}@test.com');
+
+                INSERT INTO review (id, student_id) VALUES ('${secondReviewId}', '${testStudentId}');
+                INSERT INTO professor_review (review_id, professor_id, rating, review_text)
+                VALUES ('${secondReviewId}', (SELECT professor_id FROM professor_review WHERE review_id = '${testProfReviewId}'), 4, 'Hot take');
+
+                INSERT INTO professor_thread (student_id, professor_review_id, content)
+                VALUES ('${threadStudentId}', '${secondReviewId}', 'discussion');
+            `);
+
+            const results = await repo.getTopScoredReviews("professor", 10);
+
+            const reviewIds = results.map(r => r.reviewId);
+            expect(reviewIds).toContain(secondReviewId);
+            expect(reviewIds).not.toContain(testProfReviewId);
+        });
+
+        test("returns reviews from different courses without collapsing them", async () => {
+            const otherCourseId = uuidv4();
+            const otherReviewId = uuidv4();
+
+            await db.execute(`
+                INSERT INTO course (id, name, department_id, course_code, description, num_credits)
+                VALUES ('${otherCourseId}', 'Other Course', 1, 9002, 'Another test course', 3);
+
+                INSERT INTO review (id, student_id) VALUES ('${otherReviewId}', '${testStudentId}');
+                INSERT INTO course_review (review_id, course_id, rating, review_text)
+                VALUES ('${otherReviewId}', '${otherCourseId}', 5, 'Other course review');
+            `);
+
+            const results = await repo.getTopScoredReviews("course", 10);
+            const reviewIds = results.map(r => r.reviewId);
+
+            expect(reviewIds).toContain(testCourseReviewId);
+            expect(reviewIds).toContain(otherReviewId);
+        });
     });
 
     describe("markStaleIfThresholdMet", () => {
