@@ -2,14 +2,7 @@
 
 import Link from "next/link";
 import { useCurrentUser } from "@/src/hooks/useAuth";
-
-const MOCK_COURSES = [
-  { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
-  { id: "2", code: "CS 2510", name: "Fundamentals of CS 2", rating: 4.2, viewed: "Viewed 5 days ago" },
-  { id: "3", code: "CS 3500", name: "Object-Oriented Design", rating: 3.8, viewed: "Viewed 1 week ago" },
-  { id: "4", code: "CS 1800", name: "Discrete Structures", rating: 4.5, viewed: "Viewed 1 week ago" },
-  { id: "5", code: "CS 3200", name: "Database Design", rating: 3.6, viewed: "Viewed 2 weeks ago" },
-];
+import { useCourses } from "@/src/hooks/useCourses";
 
 const MOCK_DISCUSSIONS = [
   { id: "1", courseCode: "CS 3000", topic: "How to survive Akshar Verma's class?", replies: 200 },
@@ -65,6 +58,7 @@ function NorthStarLogo() {
 
 export default function Home() {
   const { firstName } = useCurrentUser();
+  const { courses } = useCourses({ limit: 5 });
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
@@ -175,7 +169,7 @@ export default function Home() {
           Recently Viewed
         </h2>
         <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 20, marginBottom: 56 }}>
-          {MOCK_COURSES.map((course) => (
+          {courses.map((course) => (
             <Link key={course.id} href={`/courses/${course.id}`} style={{ textDecoration: "none", color: "inherit" }}>
               <div style={{
                 ...cardStyle,
@@ -195,7 +189,7 @@ export default function Home() {
                       color: "var(--color-text-primary)",
                       margin: 0,
                     }}>
-                      {course.code}
+                      {course.department.name} {course.course_code}
                     </p>
                     <p style={{
                       fontSize: "var(--font-size-xs)",
@@ -205,18 +199,9 @@ export default function Home() {
                       {course.name}
                     </p>
                   </div>
-                  <span style={{
-                    fontFamily: "var(--font-heading)",
-                    fontSize: 28,
-                    fontWeight: 700,
-                    color: "var(--color-primary-navy)",
-                    lineHeight: 1,
-                  }}>
-                    {course.rating}
-                  </span>
                 </div>
                 <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-xs)", margin: 0 }}>
-                  {course.viewed}
+                  {course.num_credits} credits
                 </p>
               </div>
             </Link>

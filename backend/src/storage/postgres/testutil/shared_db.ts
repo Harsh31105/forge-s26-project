@@ -394,6 +394,11 @@ async function createAllTables(db: NodePgDatabase) {
               WHEN how_often_percentage IS NULL THEN NULL
               ELSE to_jsonb(how_often_percentage)
         END;
+
+        ALTER TABLE course
+            ADD COLUMN IF NOT EXISTS prereqs VARCHAR(1000),
+            ADD COLUMN IF NOT EXISTS coreqs VARCHAR(1000),
+            ADD COLUMN IF NOT EXISTS nupath VARCHAR(255);
     `);
 }
 

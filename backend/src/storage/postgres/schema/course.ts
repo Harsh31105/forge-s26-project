@@ -18,6 +18,7 @@ export class CourseRepositorySchema implements CourseRepository {
         if (filters.course_code !== undefined) conditions.push(eq(course.courseCode, filters.course_code));
         if (filters.num_credits !== undefined) conditions.push(eq(course.numCredits, filters.num_credits));
         if (filters.lecture_type !== undefined) conditions.push(eq(course.lectureType, filters.lecture_type));
+        if (filters.nupath !== undefined) conditions.push(eq(course.nupath, filters.nupath));
 
         const orderColMap = {
             course_code: course.courseCode,
@@ -44,6 +45,9 @@ export class CourseRepositorySchema implements CourseRepository {
             description: row.course.description,
             num_credits: row.course.numCredits,
             lecture_type: row.course.lectureType,
+            prereqs: row.course.prereqs ?? null,
+            coreqs: row.course.coreqs ?? null,
+            nupath: row.course.nupath ?? null,
             created_at: row.course.createdAt,
             updated_at: row.course.updatedAt
         }));
@@ -54,7 +58,7 @@ export class CourseRepositorySchema implements CourseRepository {
         
         if (!row) throw new NotFoundError("Course with given ID not found");
         
-        return { 
+        return {
             id : row.course.id,
             name: row.course.name,
             department: {
@@ -65,6 +69,9 @@ export class CourseRepositorySchema implements CourseRepository {
             description: row.course.description,
             num_credits: row.course.numCredits,
             lecture_type: row.course.lectureType,
+            prereqs: row.course.prereqs ?? null,
+            coreqs: row.course.coreqs ?? null,
+            nupath: row.course.nupath ?? null,
             created_at: row.course.createdAt,
             updated_at: row.course.updatedAt
         };
@@ -77,7 +84,10 @@ export class CourseRepositorySchema implements CourseRepository {
             courseCode: input.course_code,
             description: input.description,
             numCredits: input.num_credits,
-            lectureType: input.lecture_type
+            lectureType: input.lecture_type,
+            prereqs: input.prereqs,
+            coreqs: input.coreqs,
+            nupath: input.nupath,
         }).returning();
         if (!row) throw Error();
 
@@ -94,6 +104,9 @@ export class CourseRepositorySchema implements CourseRepository {
         if (input.description !== undefined) updates.description = input.description;
         if (input.num_credits !== undefined) updates.numCredits = input.num_credits;
         if (input.lecture_type !== undefined) updates.lectureType = input.lecture_type;
+        if (input.prereqs !== undefined) updates.prereqs = input.prereqs;
+        if (input.coreqs !== undefined) updates.coreqs = input.coreqs;
+        if (input.nupath !== undefined) updates.nupath = input.nupath;
 
         const [row] = await this.db.update(course).set(updates).where(eq(course.id, id)).returning();
         if (!row) throw new Error();

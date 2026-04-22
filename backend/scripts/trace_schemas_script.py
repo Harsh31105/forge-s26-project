@@ -172,12 +172,18 @@ def parse_course_info(text):
     info = {}
 
     # Course name and semester: "Technology and Human Values (Fall 2024)"
-    m = re.search(r"^(.+?)\s*\((Fall|Spring|Summer)\s*(\d{4})\)", text, re.MULTILINE)
+    m = re.search(r"^(.+?)\s*\((Fall|Spring|Summer\s*[12]?)\s*(\d{4})\)", text, re.MULTILINE)
     if m:
         info["name"] = m.group(1).strip()
-        semester_raw = m.group(2).lower()
-        info["semester"] = {"fall": "fall", "spring": "spring", "summer": "summer_1"}[semester_raw]
-
+        semester_raw = m.group(2).lower().strip()
+        semester_map = {
+            "fall": "fall",
+            "spring": "spring",
+            "summer": "summer_1",
+            "summer 1": "summer_1",
+            "summer 2": "summer_2",
+        }
+        info["semester"] = semester_map.get(semester_raw, "summer_1")
         info["year"] = int(m.group(3))
 
     # Instructor: "Instructor: Stubbs, Alec"
@@ -253,7 +259,7 @@ def parse_instructor_ratings(tables):
     return None
 
 
-def build_schemas_from_bytes(pdf_bytes, source_key, department, threshold=80):
+def build_schemas_from_bytes(pdf_bytes, source_key, department, threshold=70):
     """Extract professor/course/trace schemas from raw PDF bytes."""
     tables = extract_tables(pdf_bytes)
 
@@ -360,6 +366,9 @@ def process_bucket(folder=None):
 
             # key shape: trace-evaluations/<DEPARTMENT>/...
             parts = key.split("/")
+            if parts[3] == "fall_2025" or parts[3] ==  "summer_2_2025" or parts[3] == "summer_1_2025":
+                continue
+            print(parts[2])
             department = parts[1] if len(parts) > 1 else None
             if department and department not in courses:
                 scrape_course_information(department)
@@ -467,9 +476,9 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) > 1 and sys.argv[1] == "--s3":
-        process_bucket() # To scrape specific bucket, add path fro root trace-evaluations/
+        process_bucket("MATH/") # Only process CS department
     else:
-        scrape_course_information("CS")
+        scrape_course_information("MATH")
         output = build_schemas("data/example2.pdf")
         print(json.dumps(output, indent=2))
 

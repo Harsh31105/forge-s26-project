@@ -74,6 +74,21 @@ export interface Course {
    * @nullable
    */
   lecture_type?: CourseLectureType;
+  /**
+   * Prerequisite courses for this course
+   * @nullable
+   */
+  prereqs?: string | null;
+  /**
+   * Co-requisite courses for this course
+   * @nullable
+   */
+  coreqs?: string | null;
+  /**
+   * NUPath requirement(s) this course satisfies
+   * @nullable
+   */
+  nupath?: string | null;
   created_at: string;
   updated_at: string;
 }
@@ -117,6 +132,12 @@ export interface CoursePostInput {
    * @nullable
    */
   lecture_type?: CoursePostInputLectureType;
+  /** Prerequisite courses for this course */
+  prereqs?: string;
+  /** Co-requisite courses for this course */
+  coreqs?: string;
+  /** NUPath requirement(s) this course satisfies */
+  nupath?: string;
 }
 
 /**
@@ -153,6 +174,12 @@ export interface CoursePatchInput {
   num_credits?: number;
   /** The type of lecture format for the course */
   lecture_type?: CoursePatchInputLectureType;
+  /** Prerequisite courses for this course */
+  prereqs?: string;
+  /** Co-requisite courses for this course */
+  coreqs?: string;
+  /** NUPath requirement(s) this course satisfies */
+  nupath?: string;
 }
 
 export interface CourseThread {
@@ -695,6 +722,10 @@ export type GetCoursesParams = {
    * Filter by lecture type
    */
   lecture_type?: GetCoursesLectureType;
+  /**
+   * Filter by NUPath requirement
+   */
+  nupath?: string;
   /**
    * Field to sort by
    */
