@@ -226,6 +226,7 @@ export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
   getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
+  getAllTraces(): Promise<Trace[]>;
 }
 
 export type { ProfilePictureRepository } from "./s3/profilePictures";
@@ -246,5 +247,4 @@ export interface AcademicRepository {
   deleteStudentConcentration(studentId: string, concentrationId: number): Promise<void>;
   addStudentMinor(studentId: string, minorId: number): Promise<void>;
   deleteStudentMinor(studentId: string, minorId: number): Promise<void>;
-  getAllTraces(): Promise<Trace[]>; 
 }
