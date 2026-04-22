@@ -20,7 +20,7 @@ def recommend(body: RecommendRequest) -> RecommendResponse:
             reviews=[r.model_dump() for r in body.reviews],
             trace_rows=[t.model_dump() for t in body.trace_rows],
             favorites=[f.model_dump() for f in body.favorites],
-            top_k=body.top_k,
+            top_k=5,
         )
     except Exception as exc:
         raise HTTPException(status_code=500, detail=str(exc)) from exc
