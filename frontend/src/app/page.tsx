@@ -4,61 +4,11 @@ import Link from "next/link";
 import { useMe } from "@/src/hooks/useMe";
 import { useAiSummaries } from "@/src/hooks/useAiSummaries";
 import ProfilePicture from "@/src/components/ProfilePicture";
-import NavBar from "../components/NavBar";
-
-const MOCK_COURSES = [
-  { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
-  { id: "2", code: "CS 2510", name: "Fundamentals of CS 2", rating: 4.2, viewed: "Viewed 5 days ago" },
-  { id: "3", code: "CS 3500", name: "Object-Oriented Design", rating: 3.8, viewed: "Viewed 1 week ago" },
-  { id: "4", code: "CS 1800", name: "Discrete Structures", rating: 4.5, viewed: "Viewed 1 week ago" },
-  { id: "5", code: "CS 3200", name: "Database Design", rating: 3.6, viewed: "Viewed 2 weeks ago" },
-];
 
 const cardStyle: React.CSSProperties = {
   background: "var(--color-surface-light-cream)",
   borderRadius: 16,
 };
-
-function NorthStarLogo() {
-  return (
-    <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-      <svg width="56" height="56" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="28" cy="28" r="24" stroke="#B45309" strokeWidth="6" fill="none" />
-        <path
-          d="M32,14 L46,25 Q50,28 46,31 L32,42 Q28,45 24,42 L10,31 Q6,28 10,25 L24,14 Q28,11 32,14 Z"
-          fill="#B45309"
-          transform="rotate(-35 28 28)"
-        />
-        <circle cx="28" cy="28" r="7" fill="#1D3A8A" />
-        <polygon points="11,28 17,23 17,33" fill="white" transform="rotate(-35 28 28)" />
-        <polygon points="45,28 39,23 39,33" fill="white" transform="rotate(-35 28 28)" />
-      </svg>
-
-      <div>
-        <p style={{
-          fontFamily: "var(--font-logo)",
-          fontWeight: 700,
-          fontSize: 28,
-          letterSpacing: "0.06em",
-          color: "var(--color-text-primary)",
-          margin: 0,
-          lineHeight: 1.1,
-        }}>
-          NorthStar
-        </p>
-        <p style={{
-          fontSize: 12,
-          color: "var(--color-accent-copper)",
-          margin: 0,
-          lineHeight: 1,
-          letterSpacing: "0.22em",
-        }}>
-          ✦ ⊕ ◆ ◉ ◇ ❖ ◆ ✤ ◆
-        </p>
-      </div>
-    </div>
-  );
-}
 
 export default function Home() {
   const { student } = useMe();
@@ -114,65 +64,6 @@ export default function Home() {
           }}>
             Browse Courses
           </Link>
-        </div>
-
-        {/* Recently Viewed */}
-        <h2 style={{
-          fontFamily: "var(--font-heading)",
-          fontSize: "var(--font-size-xl)",
-          fontWeight: 700,
-          color: "var(--color-text-primary)",
-          marginBottom: 20,
-        }}>
-          Recently Viewed
-        </h2>
-        <div style={{ display: "grid", gridTemplateColumns: "repeat(5, 1fr)", gap: 20, marginBottom: 56 }}>
-          {MOCK_COURSES.map((course) => (
-            <Link key={course.id} href={`/courses/${course.id}`} style={{ textDecoration: "none", color: "inherit" }}>
-              <div style={{
-                ...cardStyle,
-                padding: "20px 24px",
-                cursor: "pointer",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                minHeight: 150,
-              }}>
-                <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
-                  <div>
-                    <p style={{
-                      fontFamily: "var(--font-heading)",
-                      fontSize: "var(--font-size-sm)",
-                      fontWeight: 700,
-                      color: "var(--color-text-primary)",
-                      margin: 0,
-                    }}>
-                      {course.code}
-                    </p>
-                    <p style={{
-                      fontSize: "var(--font-size-xs)",
-                      color: "var(--color-text-secondary)",
-                      margin: "4px 0 0",
-                    }}>
-                      {course.name}
-                    </p>
-                  </div>
-                  <span style={{
-                    fontFamily: "var(--font-heading)",
-                    fontSize: 28,
-                    fontWeight: 700,
-                    color: "var(--color-primary-navy)",
-                    lineHeight: 1,
-                  }}>
-                    {course.rating}
-                  </span>
-                </div>
-                <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-xs)", margin: 0 }}>
-                  {course.viewed}
-                </p>
-              </div>
-            </Link>
-          ))}
         </div>
 
         {/* Most-Talked About Course Discussion */}
