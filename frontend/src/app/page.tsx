@@ -3,7 +3,8 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useCurrentUser } from "@/src/hooks/useAuth";
+import { useMe } from "@/src/hooks/useMe";
+import NavBar from "../components/NavBar";
 
 const MOCK_COURSES = [
   { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
@@ -95,16 +96,19 @@ function NorthStarLogo() {
 
 export default function Home() {
   const router = useRouter();
-  const { firstName, isLoading } = useCurrentUser();
+  const { student, isFetching } = useMe();
 
   useEffect(() => {
-    if (!isLoading && !firstName) {
+    if (!isFetching && !student) {
       router.push("/onboarding");
     }
-  }, [firstName, isLoading, router]);
+  }, [student, isFetching, router]);
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
+
+      {/* <NavBar /> */}
+
       {/* Navbar - commented out for now
       <nav style={{ background: "var(--color-surface-light-cream)", borderBottom: "1px solid var(--color-border-tan)" }}>
         <div style={{
@@ -180,7 +184,7 @@ export default function Home() {
                 margin: 0,
               }}
             >
-              Welcome Back{firstName ? `, ${firstName}` : ""}!
+              Welcome Back{student?.firstName ? `, ${student.firstName}` : ""}!
             </h1>
             <p
               style={{

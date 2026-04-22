@@ -376,6 +376,9 @@ async function createAllTables(db: NodePgDatabase) {
         ALTER TABLE professor
             ADD CONSTRAINT professor_name_unique
                 UNIQUE (first_name, last_name);
+
+        ALTER TABLE rmp
+            ALTER COLUMN avg_difficulty DROP NOT NULL;
     `);
 
 }
