@@ -47,14 +47,13 @@ export type CourseDepartment = {
  * The type of lecture format for the course
  * @nullable
  */
-export type CourseLectureType = typeof CourseLectureType[keyof typeof CourseLectureType] | null;
-
+export type CourseLectureType = (typeof CourseLectureType)[keyof typeof CourseLectureType] | null;
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CourseLectureType = {
-  lecture: 'lecture',
-  lab: 'lab',
-  online: 'online',
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
 } as const;
 
 export interface Course {
@@ -83,14 +82,15 @@ export interface Course {
  * The type of lecture format for the course
  * @nullable
  */
-export type CoursePostInputLectureType = typeof CoursePostInputLectureType[keyof typeof CoursePostInputLectureType] | null;
-
+export type CoursePostInputLectureType =
+  | (typeof CoursePostInputLectureType)[keyof typeof CoursePostInputLectureType]
+  | null;
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePostInputLectureType = {
-  lecture: 'lecture',
-  lab: 'lab',
-  online: 'online',
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
 } as const;
 
 export interface CoursePostInput {
@@ -122,14 +122,14 @@ export interface CoursePostInput {
 /**
  * The type of lecture format for the course
  */
-export type CoursePatchInputLectureType = typeof CoursePatchInputLectureType[keyof typeof CoursePatchInputLectureType];
-
+export type CoursePatchInputLectureType =
+  (typeof CoursePatchInputLectureType)[keyof typeof CoursePatchInputLectureType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const CoursePatchInputLectureType = {
-  lecture: 'lecture',
-  lab: 'lab',
-  online: 'online',
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
 } as const;
 
 export interface CoursePatchInput {
@@ -193,14 +193,13 @@ export interface SamplePatchInput {
   updated_at?: string;
 }
 
-export type ProfessorTagsItem = typeof ProfessorTagsItem[keyof typeof ProfessorTagsItem];
-
+export type ProfessorTagsItem = (typeof ProfessorTagsItem)[keyof typeof ProfessorTagsItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ProfessorTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
 } as const;
 
 export interface Professor {
@@ -219,14 +218,14 @@ export interface Professor {
   updatedAt: string;
 }
 
-export type ProfessorPostInputTagsItem = typeof ProfessorPostInputTagsItem[keyof typeof ProfessorPostInputTagsItem];
-
+export type ProfessorPostInputTagsItem =
+  (typeof ProfessorPostInputTagsItem)[keyof typeof ProfessorPostInputTagsItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ProfessorPostInputTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
 } as const;
 
 export interface ProfessorPostInput {
@@ -238,14 +237,14 @@ export interface ProfessorPostInput {
   tags?: ProfessorPostInputTagsItem[] | null;
 }
 
-export type ProfessorPatchInputTagsItem = typeof ProfessorPatchInputTagsItem[keyof typeof ProfessorPatchInputTagsItem];
-
+export type ProfessorPatchInputTagsItem =
+  (typeof ProfessorPatchInputTagsItem)[keyof typeof ProfessorPatchInputTagsItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ProfessorPatchInputTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
 } as const;
 
 export interface ProfessorPatchInput {
@@ -273,15 +272,16 @@ export interface Rmp {
  * The semester the review is referring to
  * @nullable
  */
-export type BaseReviewSemester = typeof BaseReviewSemester[keyof typeof BaseReviewSemester] | null;
-
+export type BaseReviewSemester =
+  | (typeof BaseReviewSemester)[keyof typeof BaseReviewSemester]
+  | null;
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const BaseReviewSemester = {
-  fall: 'fall',
-  spring: 'spring',
-  summer_1: 'summer_1',
-  summer_2: 'summer_2',
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
 } as const;
 
 export interface BaseReview {
@@ -343,15 +343,16 @@ export type Review = CourseReview | ProfessorReview;
  * The semester the review is referring to
  * @nullable
  */
-export type ReviewPostInputSemester = typeof ReviewPostInputSemester[keyof typeof ReviewPostInputSemester] | null;
-
+export type ReviewPostInputSemester =
+  | (typeof ReviewPostInputSemester)[keyof typeof ReviewPostInputSemester]
+  | null;
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ReviewPostInputSemester = {
-  fall: 'fall',
-  spring: 'spring',
-  summer_1: 'summer_1',
-  summer_2: 'summer_2',
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
 } as const;
 
 export interface ReviewPostInput {
@@ -400,15 +401,16 @@ export interface ReviewPostInput {
  * The semester the review is referring to
  * @nullable
  */
-export type ReviewPatchInputSemester = typeof ReviewPatchInputSemester[keyof typeof ReviewPatchInputSemester] | null;
-
+export type ReviewPatchInputSemester =
+  | (typeof ReviewPatchInputSemester)[keyof typeof ReviewPatchInputSemester]
+  | null;
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const ReviewPatchInputSemester = {
-  fall: 'fall',
-  spring: 'spring',
-  summer_1: 'summer_1',
-  summer_2: 'summer_2',
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
 } as const;
 
 export interface ReviewPatchInput {
@@ -441,21 +443,21 @@ export interface ReviewPatchInput {
   tags?: string[] | null;
 }
 
-export type StudentPreferencesItem = typeof StudentPreferencesItem[keyof typeof StudentPreferencesItem];
-
+export type StudentPreferencesItem =
+  (typeof StudentPreferencesItem)[keyof typeof StudentPreferencesItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const StudentPreferencesItem = {
-  'exam-heavy': 'exam-heavy',
-  'project-heavy': 'project-heavy',
-  'group-work': 'group-work',
-  'attendance-required': 'attendance-required',
-  strict_deadlines: 'strict_deadlines',
-  flexible_deadlines: 'flexible_deadlines',
-  extra_credit: 'extra_credit',
-  little_to_no_test: 'little_to_no_test',
-  fast_paced: 'fast_paced',
-  slow_paced: 'slow_paced',
+  "exam-heavy": "exam-heavy",
+  "project-heavy": "project-heavy",
+  "group-work": "group-work",
+  "attendance-required": "attendance-required",
+  strict_deadlines: "strict_deadlines",
+  flexible_deadlines: "flexible_deadlines",
+  extra_credit: "extra_credit",
+  little_to_no_test: "little_to_no_test",
+  fast_paced: "fast_paced",
+  slow_paced: "slow_paced",
 } as const;
 
 export interface Student {
@@ -469,21 +471,21 @@ export interface Student {
   updatedAt: string;
 }
 
-export type StudentPostInputPreferencesItem = typeof StudentPostInputPreferencesItem[keyof typeof StudentPostInputPreferencesItem];
-
+export type StudentPostInputPreferencesItem =
+  (typeof StudentPostInputPreferencesItem)[keyof typeof StudentPostInputPreferencesItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const StudentPostInputPreferencesItem = {
-  'exam-heavy': 'exam-heavy',
-  'project-heavy': 'project-heavy',
-  'group-work': 'group-work',
-  'attendance-required': 'attendance-required',
-  strict_deadlines: 'strict_deadlines',
-  flexible_deadlines: 'flexible_deadlines',
-  extra_credit: 'extra_credit',
-  little_to_no_test: 'little_to_no_test',
-  fast_paced: 'fast_paced',
-  slow_paced: 'slow_paced',
+  "exam-heavy": "exam-heavy",
+  "project-heavy": "project-heavy",
+  "group-work": "group-work",
+  "attendance-required": "attendance-required",
+  strict_deadlines: "strict_deadlines",
+  flexible_deadlines: "flexible_deadlines",
+  extra_credit: "extra_credit",
+  little_to_no_test: "little_to_no_test",
+  fast_paced: "fast_paced",
+  slow_paced: "slow_paced",
 } as const;
 
 /**
@@ -497,21 +499,21 @@ export interface StudentPostInput {
   preferences?: StudentPostInputPreferencesItem[];
 }
 
-export type StudentPatchInputPreferencesItem = typeof StudentPatchInputPreferencesItem[keyof typeof StudentPatchInputPreferencesItem];
-
+export type StudentPatchInputPreferencesItem =
+  (typeof StudentPatchInputPreferencesItem)[keyof typeof StudentPatchInputPreferencesItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const StudentPatchInputPreferencesItem = {
-  'exam-heavy': 'exam-heavy',
-  'project-heavy': 'project-heavy',
-  'group-work': 'group-work',
-  'attendance-required': 'attendance-required',
-  strict_deadlines: 'strict_deadlines',
-  flexible_deadlines: 'flexible_deadlines',
-  extra_credit: 'extra_credit',
-  little_to_no_test: 'little_to_no_test',
-  fast_paced: 'fast_paced',
-  slow_paced: 'slow_paced',
+  "exam-heavy": "exam-heavy",
+  "project-heavy": "project-heavy",
+  "group-work": "group-work",
+  "attendance-required": "attendance-required",
+  strict_deadlines: "strict_deadlines",
+  flexible_deadlines: "flexible_deadlines",
+  extra_credit: "extra_credit",
+  little_to_no_test: "little_to_no_test",
+  fast_paced: "fast_paced",
+  slow_paced: "slow_paced",
 } as const;
 
 /**
@@ -563,28 +565,26 @@ export interface FavoritePostInput {
   course_id: UuidParam;
 }
 
-export type TraceSemester = typeof TraceSemester[keyof typeof TraceSemester];
-
+export type TraceSemester = (typeof TraceSemester)[keyof typeof TraceSemester];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TraceSemester = {
-  fall: 'fall',
-  spring: 'spring',
-  summer_1: 'summer_1',
-  summer_2: 'summer_2',
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
 } as const;
 
 /**
  * @nullable
  */
-export type TraceLectureType = typeof TraceLectureType[keyof typeof TraceLectureType] | null;
-
+export type TraceLectureType = (typeof TraceLectureType)[keyof typeof TraceLectureType] | null;
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const TraceLectureType = {
-  lecture: 'lecture',
-  lab: 'lab',
-  online: 'online',
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
 } as const;
 
 export interface Trace {
@@ -613,15 +613,15 @@ export interface Trace {
   updatedAt: string;
 }
 
-export type AcademicSemesterSemester = typeof AcademicSemesterSemester[keyof typeof AcademicSemesterSemester];
-
+export type AcademicSemesterSemester =
+  (typeof AcademicSemesterSemester)[keyof typeof AcademicSemesterSemester];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const AcademicSemesterSemester = {
-  fall: 'fall',
-  spring: 'spring',
-  summer_1: 'summer_1',
-  summer_2: 'summer_2',
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
 } as const;
 
 export interface AcademicSemester {
@@ -634,25 +634,44 @@ export interface Department {
   name: string;
 }
 
+export type MLRequestSemester = (typeof MLRequestSemester)[keyof typeof MLRequestSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const MLRequestSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+export interface MLRequest {
+  semester: MLRequestSemester;
+}
+
+export type RecommendRequestPreferredSemester =
+  (typeof RecommendRequestPreferredSemester)[keyof typeof RecommendRequestPreferredSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RecommendRequestPreferredSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
 export interface RecommendRequest {
   student_id: string;
-  preferred_semester: string;
-  /**
-   * List of courses
-   * @nullable
-   */
-  courses: Course[] | null;
-  /**
-   * List of departments
-   * @nullable
-   */
-  departments: Department[] | null;
+  preferred_semester: RecommendRequestPreferredSemester;
   /** @nullable */
-  reviews: CourseReview[] | null;
+  courses?: Course[] | null;
   /** @nullable */
-  trace_rows: Trace[] | null;
+  departments?: Department[] | null;
   /** @nullable */
-  favorites: Favourite[] | null;
+  reviews?: CourseReview[] | null;
+  /** @nullable */
+  trace_rows?: Trace[] | null;
+  /** @nullable */
+  favorites?: Favourite[] | null;
 }
 
 export interface RecommendationResult {
@@ -678,204 +697,201 @@ export interface MLRecommendResponse {
 }
 
 export type GetCourseReviewsIdThreadsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetProfessorReviewsIdThreadsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetSamplesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
 };
 
 export type GetCoursesParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
-/**
- * Filter by department ID
- */
-department_id?: number;
-/**
- * Filter by course code
- */
-course_code?: number;
-/**
- * Filter by number of credits
- */
-num_credits?: number;
-/**
- * Filter by lecture type
- */
-lecture_type?: GetCoursesLectureType;
-/**
- * Field to sort by
- */
-sortBy?: GetCoursesSortBy;
-/**
- * Sort direction
- */
-sortOrder?: GetCoursesSortOrder;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
+  /**
+   * Filter by department ID
+   */
+  department_id?: number;
+  /**
+   * Filter by course code
+   */
+  course_code?: number;
+  /**
+   * Filter by number of credits
+   */
+  num_credits?: number;
+  /**
+   * Filter by lecture type
+   */
+  lecture_type?: GetCoursesLectureType;
+  /**
+   * Field to sort by
+   */
+  sortBy?: GetCoursesSortBy;
+  /**
+   * Sort direction
+   */
+  sortOrder?: GetCoursesSortOrder;
 };
 
-export type GetCoursesLectureType = typeof GetCoursesLectureType[keyof typeof GetCoursesLectureType];
-
+export type GetCoursesLectureType =
+  (typeof GetCoursesLectureType)[keyof typeof GetCoursesLectureType];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetCoursesLectureType = {
-  lecture: 'lecture',
-  lab: 'lab',
-  online: 'online',
+  lecture: "lecture",
+  lab: "lab",
+  online: "online",
 } as const;
 
-export type GetCoursesSortBy = typeof GetCoursesSortBy[keyof typeof GetCoursesSortBy];
-
+export type GetCoursesSortBy = (typeof GetCoursesSortBy)[keyof typeof GetCoursesSortBy];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetCoursesSortBy = {
-  name: 'name',
-  course_code: 'course_code',
-  num_credits: 'num_credits',
-  created_at: 'created_at',
+  name: "name",
+  course_code: "course_code",
+  num_credits: "num_credits",
+  created_at: "created_at",
 } as const;
 
-export type GetCoursesSortOrder = typeof GetCoursesSortOrder[keyof typeof GetCoursesSortOrder];
-
+export type GetCoursesSortOrder = (typeof GetCoursesSortOrder)[keyof typeof GetCoursesSortOrder];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetCoursesSortOrder = {
-  asc: 'asc',
-  desc: 'desc',
+  asc: "asc",
+  desc: "desc",
 } as const;
 
 export type GetReviewsParams = {
-/**
- * Number of items to return (1–100)
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
-/**
- * Number of items to skip
- * @minimum 0
- */
-offset?: number;
+  /**
+   * Number of items to return (1–100)
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
+  /**
+   * Number of items to skip
+   * @minimum 0
+   */
+  offset?: number;
 };
 
 export type GetProfessorsParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page in pagination
- * @minimum 1
- */
-limit?: number;
-/**
- * Filter by first name
- */
-firstName?: string;
-/**
- * Filter by last name
- */
-lastName?: string;
-/**
- * Filter by location tags
- */
-tags?: GetProfessorsTagsItem[];
-/**
- * Field to sort by
- */
-sortBy?: GetProfessorsSortBy;
-/**
- * Sort direction
- */
-sortOrder?: GetProfessorsSortOrder;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page in pagination
+   * @minimum 1
+   */
+  limit?: number;
+  /**
+   * Filter by first name
+   */
+  firstName?: string;
+  /**
+   * Filter by last name
+   */
+  lastName?: string;
+  /**
+   * Filter by location tags
+   */
+  tags?: GetProfessorsTagsItem[];
+  /**
+   * Field to sort by
+   */
+  sortBy?: GetProfessorsSortBy;
+  /**
+   * Sort direction
+   */
+  sortOrder?: GetProfessorsSortOrder;
 };
 
-export type GetProfessorsTagsItem = typeof GetProfessorsTagsItem[keyof typeof GetProfessorsTagsItem];
-
+export type GetProfessorsTagsItem =
+  (typeof GetProfessorsTagsItem)[keyof typeof GetProfessorsTagsItem];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetProfessorsTagsItem = {
-  boston: 'boston',
-  oakland: 'oakland',
-  london: 'london',
+  boston: "boston",
+  oakland: "oakland",
+  london: "london",
 } as const;
 
-export type GetProfessorsSortBy = typeof GetProfessorsSortBy[keyof typeof GetProfessorsSortBy];
-
+export type GetProfessorsSortBy = (typeof GetProfessorsSortBy)[keyof typeof GetProfessorsSortBy];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetProfessorsSortBy = {
-  firstName: 'firstName',
-  lastName: 'lastName',
-  createdAt: 'createdAt',
+  firstName: "firstName",
+  lastName: "lastName",
+  createdAt: "createdAt",
 } as const;
 
-export type GetProfessorsSortOrder = typeof GetProfessorsSortOrder[keyof typeof GetProfessorsSortOrder];
-
+export type GetProfessorsSortOrder =
+  (typeof GetProfessorsSortOrder)[keyof typeof GetProfessorsSortOrder];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetProfessorsSortOrder = {
-  asc: 'asc',
-  desc: 'desc',
+  asc: "asc",
+  desc: "desc",
 } as const;
 
 export type GetStudentsParams = {
-/**
- * @minimum 1
- */
-page?: number;
-/**
- * @minimum 1
- * @maximum 100
- */
-limit?: number;
+  /**
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * @minimum 1
+   * @maximum 100
+   */
+  limit?: number;
 };
 
 export type GetAuthCallbackParams = {
-/**
- * Authorization code from Google OAuth 2.0
- */
-code: string;
+  /**
+   * Authorization code from Google OAuth 2.0
+   */
+  code: string;
 };
 
 export type GetAuthCallback200 = {
@@ -891,63 +907,61 @@ export type GetAuthCallback201 = {
 };
 
 export type GetTraceParams = {
-/**
- * Page number of pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page
- * @minimum 1
- */
-limit?: number;
-/**
- * Filter by course ID
- */
-courseId?: string;
-/**
- * Filter by professor ID
- */
-professorId?: string;
-/**
- * Filter by department ID
- */
-departmentId?: number;
-/**
- * Filter by semester
- */
-semester?: GetTraceSemester;
+  /**
+   * Page number of pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page
+   * @minimum 1
+   */
+  limit?: number;
+  /**
+   * Filter by course ID
+   */
+  courseId?: string;
+  /**
+   * Filter by professor ID
+   */
+  professorId?: string;
+  /**
+   * Filter by department ID
+   */
+  departmentId?: number;
+  /**
+   * Filter by semester
+   */
+  semester?: GetTraceSemester;
 };
 
-export type GetTraceSemester = typeof GetTraceSemester[keyof typeof GetTraceSemester];
-
+export type GetTraceSemester = (typeof GetTraceSemester)[keyof typeof GetTraceSemester];
 
 // eslint-disable-next-line @typescript-eslint/no-redeclare
 export const GetTraceSemester = {
-  fall: 'fall',
-  spring: 'spring',
-  summer_1: 'summer_1',
-  summer_2: 'summer_2',
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
 } as const;
 
 export type GetTraceOfferHistoryParams = {
-/**
- * Page Number of Pagination
- * @minimum 1
- */
-page?: number;
-/**
- * Number of items per page
- * @minimum 1
- */
-limit?: number;
-/**
- * Filter by Course ID
- */
-courseId?: string;
-/**
- * Filter by Professor ID
- */
-professorId?: string;
+  /**
+   * Page Number of Pagination
+   * @minimum 1
+   */
+  page?: number;
+  /**
+   * Number of items per page
+   * @minimum 1
+   */
+  limit?: number;
+  /**
+   * Filter by Course ID
+   */
+  courseId?: string;
+  /**
+   * Filter by Professor ID
+   */
+  professorId?: string;
 };
-

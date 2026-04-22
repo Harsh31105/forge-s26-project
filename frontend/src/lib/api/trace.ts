@@ -8,41 +8,31 @@ import type {
   AcademicSemester,
   GetTraceOfferHistoryParams,
   GetTraceParams,
-  Trace
-} from './northStarAPI.schemas';
+  Trace,
+} from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getTrace = () => {
-/**
- * Retrieves a paginated list of TRACE data with optional filtering.
- * @summary Get all TRACE records
- */
-const getTrace = (
-    params?: GetTraceParams,
- ) => {
-      return customAxios<Trace[]>(
-      {url: `/trace`, method: 'GET',
-        params
-    },
-      );
-    }
+export const getTrace = () => {
   /**
- * Retrieves paginated list of offer-history.
- * @summary Get the Offer History offered by the TRACE Records
- */
-const getTraceOfferHistory = (
-    params?: GetTraceOfferHistoryParams,
- ) => {
-      return customAxios<AcademicSemester[]>(
-      {url: `/trace/offer-history`, method: 'GET',
-        params
-    },
-      );
-    }
-  return {getTrace,getTraceOfferHistory}};
-export type GetTraceResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTrace>['getTrace']>>>
-export type GetTraceOfferHistoryResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getTrace>['getTraceOfferHistory']>>>
+   * Retrieves a paginated list of TRACE data with optional filtering.
+   * @summary Get all TRACE records
+   */
+  const getTrace = (params?: GetTraceParams) => {
+    return customAxios<Trace[]>({ url: `/trace`, method: "GET", params });
+  };
+  /**
+   * Retrieves paginated list of offer-history.
+   * @summary Get the Offer History offered by the TRACE Records
+   */
+  const getTraceOfferHistory = (params?: GetTraceOfferHistoryParams) => {
+    return customAxios<AcademicSemester[]>({ url: `/trace/offer-history`, method: "GET", params });
+  };
+  return { getTrace, getTraceOfferHistory };
+};
+export type GetTraceResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getTrace>["getTrace"]>>
+>;
+export type GetTraceOfferHistoryResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getTrace>["getTraceOfferHistory"]>>
+>;

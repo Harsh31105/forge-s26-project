@@ -8,53 +8,45 @@ import type {
   GetAuthCallback200,
   GetAuthCallback201,
   GetAuthCallbackParams,
-  Student
-} from './northStarAPI.schemas';
+  Student,
+} from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getAuth = () => {
-/**
- * Redirects the user to Google's OAuth consent screen for authentication
- * @summary Signin Feature with Google
- */
-const getAuthSignin = (
-    
- ) => {
-      return customAxios<unknown>(
-      {url: `/auth/signin`, method: 'GET'
-    },
-      );
-    }
+export const getAuth = () => {
   /**
- * Handles redirect from Google after authentication, validating Northeastern email, and creating or finding student
- * @summary Google OAuth callback
- */
-const getAuthCallback = (
-    params: GetAuthCallbackParams,
- ) => {
-      return customAxios<GetAuthCallback200 | GetAuthCallback201>(
-      {url: `/auth/callback`, method: 'GET',
-        params
-    },
-      );
-    }
+   * Redirects the user to Google's OAuth consent screen for authentication
+   * @summary Signin Feature with Google
+   */
+  const getAuthSignin = () => {
+    return customAxios<unknown>({ url: `/auth/signin`, method: "GET" });
+  };
   /**
- * Returns the currently authenticated student from the JWT cookie
- * @summary Get current user
- */
-const getAuthMe = (
-    
- ) => {
-      return customAxios<Student>(
-      {url: `/auth/me`, method: 'GET'
-    },
-      );
-    }
-  return {getAuthSignin,getAuthCallback,getAuthMe}};
-export type GetAuthSigninResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAuth>['getAuthSignin']>>>
-export type GetAuthCallbackResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAuth>['getAuthCallback']>>>
-export type GetAuthMeResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getAuth>['getAuthMe']>>>
+   * Handles redirect from Google after authentication, validating Northeastern email, and creating or finding student
+   * @summary Google OAuth callback
+   */
+  const getAuthCallback = (params: GetAuthCallbackParams) => {
+    return customAxios<GetAuthCallback200 | GetAuthCallback201>({
+      url: `/auth/callback`,
+      method: "GET",
+      params,
+    });
+  };
+  /**
+   * Returns the currently authenticated student from the JWT cookie
+   * @summary Get current user
+   */
+  const getAuthMe = () => {
+    return customAxios<Student>({ url: `/auth/me`, method: "GET" });
+  };
+  return { getAuthSignin, getAuthCallback, getAuthMe };
+};
+export type GetAuthSigninResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["getAuthSignin"]>>
+>;
+export type GetAuthCallbackResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["getAuthCallback"]>>
+>;
+export type GetAuthMeResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getAuth>["getAuthMe"]>>
+>;

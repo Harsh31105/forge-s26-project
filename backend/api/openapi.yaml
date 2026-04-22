@@ -1897,7 +1897,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RecommendRequest"
+              $ref: "#/components/schemas/MLRequest"
       responses:
         "200":
           description: Recommended courses bucketed by score tier
@@ -1922,7 +1922,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/RecommendRequest"
+              $ref: "#/components/schemas/MLRequest"
       responses:
         "200":
           description: Recommended courses bucketed by probability tier
@@ -1936,9 +1936,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
-
-  
-
 
 security:
   - bearerAuth: []
@@ -2803,56 +2800,65 @@ components:
           type: string
           example: "CS"
 
+    MLRequest:
+      type: object
+      required:
+        - semester
+      properties:
+        semester:
+          type: enum
+          enum: ["fall", "spring", "summer_1", "summer_2"]
+
     RecommendRequest:
       type: object
       required:
         - student_id
         - preferred_semester
-        - courses
-        - departments
-        - reviews
-        - trace_rows
-        - favorites
-      properties: 
-        student_id: 
+      properties:
+        student_id:
           type: string
           format: uuid
-          example: 
+          example: "804e8180-299f-4ad3-a93f-3d9c1a70acf8"
+
         preferred_semester:
           type: string
-          example:
-        courses: 
+          enum: [ fall, spring, summer_1, summer_2 ]
+          example: fall
+
+        courses:
           type: array
           nullable: true
-          items: 
+          items:
             $ref: "#/components/schemas/Course"
-          description: List of courses   
-          example: [""]
-        departments: 
+          example: [ ]
+
+        departments:
           type: array
           nullable: true
-          items: 
-            $ref: "#/components/schemas/Department"  
-          description: List of departments 
-          example: 
-        reviews: 
+          items:
+            $ref: "#/components/schemas/Department"
+          example: [ ]
+
+        reviews:
           type: array
           nullable: true
-          items: 
+          items:
             $ref: "#/components/schemas/CourseReview"
-          example: 
-        trace_rows: 
+          example: [ ]
+
+        trace_rows:
           type: array
           nullable: true
-          items: 
+          items:
             $ref: "#/components/schemas/Trace"
-          example: 
-        favorites: 
+          example: [ ]
+
+        favorites:
           type: array
           nullable: true
-          items: 
+          items:
             $ref: "#/components/schemas/Favourite"
-          example: 
+          example: [ ]
     
     RecommendationResult:
       type: object

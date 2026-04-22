@@ -4,46 +4,40 @@
  * NorthStar API
  * OpenAPI spec version: 0.1.0
  */
-import type {
-  MLRecommendResponse,
-  RecommendRequest,
-  RecommendResponse
-} from './northStarAPI.schemas';
+import type { MLRecommendResponse, MLRequest, RecommendResponse } from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getRecommendation = () => {
-/**
- * Returns recommended courses for a student using a rule-based algorithm, scored and bucketed into high/medium/low tiers.
- * @summary Rule-based course recommendations
- */
-const postRecommendations = (
-    recommendRequest: RecommendRequest,
- ) => {
-      return customAxios<RecommendResponse>(
-      {url: `/recommendations`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: recommendRequest
-    },
-      );
-    }
+export const getRecommendation = () => {
   /**
- * Returns recommended courses for a student using a trained ML model, bucketed into high/medium/low tiers by probability.
- * @summary ML-based course recommendations
- */
-const postRecommendationsMl = (
-    recommendRequest: RecommendRequest,
- ) => {
-      return customAxios<MLRecommendResponse>(
-      {url: `/recommendations/ml`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: recommendRequest
-    },
-      );
-    }
-  return {postRecommendations,postRecommendationsMl}};
-export type PostRecommendationsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getRecommendation>['postRecommendations']>>>
-export type PostRecommendationsMlResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getRecommendation>['postRecommendationsMl']>>>
+   * Returns recommended courses for a student using a rule-based algorithm, scored and bucketed into high/medium/low tiers.
+   * @summary Rule-based course recommendations
+   */
+  const postRecommendations = (mLRequest: MLRequest) => {
+    return customAxios<RecommendResponse>({
+      url: `/recommendations`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: mLRequest,
+    });
+  };
+  /**
+   * Returns recommended courses for a student using a trained ML model, bucketed into high/medium/low tiers by probability.
+   * @summary ML-based course recommendations
+   */
+  const postRecommendationsMl = (mLRequest: MLRequest) => {
+    return customAxios<MLRecommendResponse>({
+      url: `/recommendations/ml`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: mLRequest,
+    });
+  };
+  return { postRecommendations, postRecommendationsMl };
+};
+export type PostRecommendationsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getRecommendation>["postRecommendations"]>>
+>;
+export type PostRecommendationsMlResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getRecommendation>["postRecommendationsMl"]>>
+>;

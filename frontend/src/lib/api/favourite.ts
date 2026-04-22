@@ -4,56 +4,45 @@
  * NorthStar API
  * OpenAPI spec version: 0.1.0
  */
-import type {
-  FavoritePostInput,
-  Favourite
-} from './northStarAPI.schemas';
+import type { FavoritePostInput, Favourite } from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getFavourite = () => {
-/**
- * Returns all the favourites for this particular student
- * @summary Gets all the favourites for this student
- */
-const getFavourites = (
-    
- ) => {
-      return customAxios<Favourite[]>(
-      {url: `/favourites`, method: 'GET'
-    },
-      );
-    }
+export const getFavourite = () => {
   /**
- * Returns the favourite that was created.
- * @summary Adds a favourite to your list
- */
-const postFavourites = (
-    favoritePostInput: FavoritePostInput,
- ) => {
-      return customAxios<Favourite>(
-      {url: `/favourites`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: favoritePostInput
-    },
-      );
-    }
+   * Returns all the favourites for this particular student
+   * @summary Gets all the favourites for this student
+   */
+  const getFavourites = () => {
+    return customAxios<Favourite[]>({ url: `/favourites`, method: "GET" });
+  };
   /**
- * Removes a favourited course by a student.
- * @summary Deletes the favourite.
- */
-const deleteFavouritesId = (
-    id: string,
- ) => {
-      return customAxios<void>(
-      {url: `/favourites/${id}`, method: 'DELETE'
-    },
-      );
-    }
-  return {getFavourites,postFavourites,deleteFavouritesId}};
-export type GetFavouritesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getFavourite>['getFavourites']>>>
-export type PostFavouritesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getFavourite>['postFavourites']>>>
-export type DeleteFavouritesIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getFavourite>['deleteFavouritesId']>>>
+   * Returns the favourite that was created.
+   * @summary Adds a favourite to your list
+   */
+  const postFavourites = (favoritePostInput: FavoritePostInput) => {
+    return customAxios<Favourite>({
+      url: `/favourites`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: favoritePostInput,
+    });
+  };
+  /**
+   * Removes a favourited course by a student.
+   * @summary Deletes the favourite.
+   */
+  const deleteFavouritesId = (id: string) => {
+    return customAxios<void>({ url: `/favourites/${id}`, method: "DELETE" });
+  };
+  return { getFavourites, postFavourites, deleteFavouritesId };
+};
+export type GetFavouritesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getFavourite>["getFavourites"]>>
+>;
+export type PostFavouritesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getFavourite>["postFavourites"]>>
+>;
+export type DeleteFavouritesIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getFavourite>["deleteFavouritesId"]>>
+>;

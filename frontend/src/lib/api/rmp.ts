@@ -4,27 +4,18 @@
  * NorthStar API
  * OpenAPI spec version: 0.1.0
  */
-import type {
-  Rmp
-} from './northStarAPI.schemas';
+import type { Rmp } from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getRmp = () => {
-/**
- * Pings the external RMP API, matches data to professors in our DB, and bulk inserts
- * @summary Fetch and save RMP data for all professors
- */
-const postRmp = (
-    
- ) => {
-      return customAxios<Rmp>(
-      {url: `/rmp`, method: 'POST'
-    },
-      );
-    }
-  return {postRmp}};
-export type PostRmpResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getRmp>['postRmp']>>>
+export const getRmp = () => {
+  /**
+   * Pings the external RMP API, matches data to professors in our DB, and bulk inserts
+   * @summary Fetch and save RMP data for all professors
+   */
+  const postRmp = () => {
+    return customAxios<Rmp>({ url: `/rmp`, method: "POST" });
+  };
+  return { postRmp };
+};
+export type PostRmpResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getRmp>["postRmp"]>>>;

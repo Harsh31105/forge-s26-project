@@ -10,110 +10,99 @@ import type {
   CoursePostInput,
   Favourite,
   GetCoursesParams,
-  Professor
-} from './northStarAPI.schemas';
+  Professor,
+} from "./northStarAPI.schemas";
 
-import { customAxios } from './apiClient';
+import { customAxios } from "./apiClient";
 
-
-
-
-  export const getCourse = () => {
-/**
- * This endpoint retrieves all available courses as a list
- * @summary Getting All Courses
- */
-const getCourses = (
-    params?: GetCoursesParams,
- ) => {
-      return customAxios<Course[]>(
-      {url: `/courses`, method: 'GET',
-        params
-    },
-      );
-    }
+export const getCourse = () => {
   /**
- * This endpoint creates a new course with the provided details
- * @summary Create a New Course
- */
-const postCourses = (
-    coursePostInput: CoursePostInput,
- ) => {
-      return customAxios<Course>(
-      {url: `/courses`, method: 'POST',
-      headers: {'Content-Type': 'application/json', },
-      data: coursePostInput
-    },
-      );
-    }
+   * This endpoint retrieves all available courses as a list
+   * @summary Getting All Courses
+   */
+  const getCourses = (params?: GetCoursesParams) => {
+    return customAxios<Course[]>({ url: `/courses`, method: "GET", params });
+  };
   /**
- * This endpoint retrieves a specific course by its ID
- * @summary Get Course by ID
- */
-const getCoursesId = (
-    id: string,
- ) => {
-      return customAxios<Course>(
-      {url: `/courses/${id}`, method: 'GET'
-    },
-      );
-    }
+   * This endpoint creates a new course with the provided details
+   * @summary Create a New Course
+   */
+  const postCourses = (coursePostInput: CoursePostInput) => {
+    return customAxios<Course>({
+      url: `/courses`,
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      data: coursePostInput,
+    });
+  };
   /**
- * This endpoint updates the details of a specific course by its ID
- * @summary Update Course by ID
- */
-const patchCoursesId = (
-    id: string,
-    coursePatchInput: CoursePatchInput,
- ) => {
-      return customAxios<Course>(
-      {url: `/courses/${id}`, method: 'PATCH',
-      headers: {'Content-Type': 'application/json', },
-      data: coursePatchInput
-    },
-      );
-    }
+   * This endpoint retrieves a specific course by its ID
+   * @summary Get Course by ID
+   */
+  const getCoursesId = (id: string) => {
+    return customAxios<Course>({ url: `/courses/${id}`, method: "GET" });
+  };
   /**
- * This endpoint deletes a specific course by its ID
- * @summary Delete Course by ID
- */
-const deleteCoursesId = (
-    id: string,
- ) => {
-      return customAxios<void>(
-      {url: `/courses/${id}`, method: 'DELETE'
-    },
-      );
-    }
+   * This endpoint updates the details of a specific course by its ID
+   * @summary Update Course by ID
+   */
+  const patchCoursesId = (id: string, coursePatchInput: CoursePatchInput) => {
+    return customAxios<Course>({
+      url: `/courses/${id}`,
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      data: coursePatchInput,
+    });
+  };
   /**
- * Returns professors who have taught this course, sorted by their average efficiency rating from TRACE data (descending)
- * @summary Get best professors for a course
- */
-const getCoursesIdBestProfessors = (
-    id: string,
- ) => {
-      return customAxios<Professor[]>(
-      {url: `/courses/${id}/best-professors`, method: 'GET'
-    },
-      );
-    }
+   * This endpoint deletes a specific course by its ID
+   * @summary Delete Course by ID
+   */
+  const deleteCoursesId = (id: string) => {
+    return customAxios<void>({ url: `/courses/${id}`, method: "DELETE" });
+  };
   /**
- * Returns a list of all Favourites corresponding to this Course.
- * @summary Getting Favourites for this Course
- */
-const getCoursesIdFavourites = (
-    id: string,
- ) => {
-      return customAxios<Favourite[]>(
-      {url: `/courses/${id}/favourites`, method: 'GET'
-    },
-      );
-    }
-  return {getCourses,postCourses,getCoursesId,patchCoursesId,deleteCoursesId,getCoursesIdBestProfessors,getCoursesIdFavourites}};
-export type GetCoursesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourse>['getCourses']>>>
-export type PostCoursesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourse>['postCourses']>>>
-export type GetCoursesIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourse>['getCoursesId']>>>
-export type PatchCoursesIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourse>['patchCoursesId']>>>
-export type DeleteCoursesIdResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourse>['deleteCoursesId']>>>
-export type GetCoursesIdBestProfessorsResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourse>['getCoursesIdBestProfessors']>>>
-export type GetCoursesIdFavouritesResult = NonNullable<Awaited<ReturnType<ReturnType<typeof getCourse>['getCoursesIdFavourites']>>>
+   * Returns professors who have taught this course, sorted by their average efficiency rating from TRACE data (descending)
+   * @summary Get best professors for a course
+   */
+  const getCoursesIdBestProfessors = (id: string) => {
+    return customAxios<Professor[]>({ url: `/courses/${id}/best-professors`, method: "GET" });
+  };
+  /**
+   * Returns a list of all Favourites corresponding to this Course.
+   * @summary Getting Favourites for this Course
+   */
+  const getCoursesIdFavourites = (id: string) => {
+    return customAxios<Favourite[]>({ url: `/courses/${id}/favourites`, method: "GET" });
+  };
+  return {
+    getCourses,
+    postCourses,
+    getCoursesId,
+    patchCoursesId,
+    deleteCoursesId,
+    getCoursesIdBestProfessors,
+    getCoursesIdFavourites,
+  };
+};
+export type GetCoursesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["getCourses"]>>
+>;
+export type PostCoursesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["postCourses"]>>
+>;
+export type GetCoursesIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["getCoursesId"]>>
+>;
+export type PatchCoursesIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["patchCoursesId"]>>
+>;
+export type DeleteCoursesIdResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["deleteCoursesId"]>>
+>;
+export type GetCoursesIdBestProfessorsResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["getCoursesIdBestProfessors"]>>
+>;
+export type GetCoursesIdFavouritesResult = NonNullable<
+  Awaited<ReturnType<ReturnType<typeof getCourse>["getCoursesIdFavourites"]>>
+>;

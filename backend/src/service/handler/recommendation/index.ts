@@ -1,8 +1,8 @@
 import { Request, Response } from "express";
-import { z } from "zod";
 import { Repository } from "../../../storage/storage";
 import { CourseReview } from "../../../models/review";
 import { BadRequest } from "../../../errs/httpError";
+import { RecommendationRequestSchema } from "../../../models/recommendation";
 
 const ML_SERVICE_URL = process.env.ML_SERVICE_URL ?? "http://localhost:8000";
 
@@ -24,10 +24,6 @@ function flattenDistribution(value: unknown, midpoints: Record<string, number>):
     }, 0);
 }
 
-const RecommendationRequestSchema = z.object({
-    semester: z.enum(["fall", "spring", "summer_1", "summer_2"]),
-});
-
 export class RecommendationHandler {
     constructor(private readonly repo: Repository) {}
 
@@ -39,9 +35,6 @@ export class RecommendationHandler {
         if (!result.success) throw BadRequest("semester must be apart of fall/spring/summer_1/summer_2");
         const {semester } = result.data;
 
-        // NOTE: getCourses and getReviews require pagination params, but the ML service needs all records
-        // to compute recommendations. We use a large limit to fetch everything in one shot since no
-        // getAllCourses/getAllCourseReviews repo methods exist yet.
         const [courses, allReviews, traceRows, favouriteRows] = await Promise.all([
             this.repo.courses.getCourses({ limit: 10000, page: 1 }, { sortOrder: "asc" }),
             this.repo.reviews.getReviews({ limit: 10000, page: 1 }),
