@@ -4,8 +4,16 @@ import { z } from "zod";
 interface BaseReview {
   reviewId: string;
   studentId: string | null;
+  semester?: string | null;
+  year?: number | null;
   createdAt: Date;
   updatedAt: Date;
+}
+
+export interface CreateParentReviewInput {
+  studentId?: string | null | undefined;
+  semester?: string | null | undefined;
+  year?: number | null | undefined;
 }
 
 export interface CourseReview extends BaseReview {
@@ -94,12 +102,14 @@ export const courseTags = [
 // Input schemas
 export const ReviewPostInputSchema = z
   .object({
-    studentId: z.uuid(),
+    studentId: z.string().uuid().optional().nullable(),
     rating: z.number().int().min(1).max(5),
     reviewText: z.string().min(1, "Content cannot be empty").max(2000),
     courseId: z.uuid().optional().nullable(),
     professorId: z.uuid().optional().nullable(),
     tags: z.array(z.string()).optional(),
+    semester: z.enum(["fall", "spring", "summer_1", "summer_2"]).optional().nullable(),
+    year: z.number().int().optional().nullable(),
   })
   .refine(
     (data) => !!data.courseId !== !!data.professorId,
@@ -127,5 +137,7 @@ export const ReviewPatchInputSchema = z.object({
   rating: z.number().int().min(1).max(5).optional(),
   reviewText: z.string().min(1, "Content cannot be empty").max(2000).optional(),
   tags: z.array(z.string()).optional().nullable(),
+  semester: z.enum(["fall", "spring", "summer_1", "summer_2"]).optional().nullable(),
+  year: z.number().int().optional().nullable(),
 });
 export type ReviewPatchInputType = z.infer<typeof ReviewPatchInputSchema>;

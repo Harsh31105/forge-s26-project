@@ -1,5 +1,12 @@
 import type { Metadata } from "next";
-import { Libre_Baskerville, Merriweather, Vollkorn_SC } from "next/font/google";
+import NavbarWrapper from "@/src/components/navbarWrapper";
+
+import {
+  Libre_Baskerville,
+  Merriweather,
+  Fredericka_the_Great,
+  Vollkorn_SC,
+} from "next/font/google";
 import "./globals.css";
 import ReactQueryProvider from "@/src/lib/ReactQueryProvider";
 
@@ -13,6 +20,12 @@ const merriweather = Merriweather({
   variable: "--font-body",
   subsets: ["latin"],
   weight: ["300", "400", "700"],
+});
+
+const frederickaTheGreat = Fredericka_the_Great({
+  variable: "--font-display",
+  subsets: ["latin"],
+  weight: "400",
 });
 
 const vollkornSC = Vollkorn_SC({
@@ -37,7 +50,9 @@ export default function RootLayout({
         className={`${libreBaskerville.variable} ${merriweather.variable} ${vollkornSC.variable} antialiased`}
       >
         <ReactQueryProvider>
-          {children}
+          <NavbarWrapper>
+            {children}
+          </NavbarWrapper>
         </ReactQueryProvider>
       </body>
     </html>

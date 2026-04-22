@@ -22,6 +22,8 @@ const mockCourseReview: CourseReview = {
   rating: 4,
   reviewText: "Great course, highly recommend!",
   tags: ["challenging", "rewarding"],
+  semester: "fall",
+  year: 2026,
   createdAt: new Date("2026-01-15T10:30:00Z"),
   updatedAt: new Date("2026-01-15T10:30:00Z"),
 };
@@ -33,6 +35,8 @@ const mockProfReview: ProfessorReview = {
   rating: 5,
   reviewText: "Excellent professor, very clear explanations.",
   tags: ["engaging"],
+  semester: "spring",
+  year: 2025,
   createdAt: new Date("2026-01-18T10:30:00Z"),
   updatedAt: new Date("2026-01-18T10:30:00Z"),
 };
@@ -112,7 +116,7 @@ describe("ReviewHandler Endpoints", () => {
     });
 
     test("invalid pagination - limit too high", async () => {
-      const res = await request(app).get("/reviews?limit=101");
+      const res = await request(app).get("/reviews?limit=1001");
       expect(res.status).toBe(400);
     });
 
@@ -206,7 +210,7 @@ describe("ReviewHandler Endpoints", () => {
         rating: 4,
         reviewText: "Great course, highly recommend!",
       });
-      expect(repo.createParentReview).toHaveBeenCalledWith(payload.studentId);
+      expect(repo.createParentReview).toHaveBeenCalledWith({ studentId: payload.studentId, semester: undefined, year: undefined });
       expect(repo.createCourseReview).toHaveBeenCalledWith(parentId, {
         courseId: payload.courseId,
         rating: payload.rating,
@@ -234,7 +238,7 @@ describe("ReviewHandler Endpoints", () => {
         professorId: "c3d4e5f6-a7b8-4012-8def-123456789012",
         rating: 5,
       });
-      expect(repo.createParentReview).toHaveBeenCalledWith(payload.studentId);
+      expect(repo.createParentReview).toHaveBeenCalledWith({ studentId: payload.studentId, semester: undefined, year: undefined });
       expect(repo.createProfessorReview).toHaveBeenCalledWith(parentId, {
         professorId: payload.professorId,
         rating: payload.rating,
@@ -266,17 +270,6 @@ describe("ReviewHandler Endpoints", () => {
         rating: payload.rating,
         reviewText: payload.reviewText,
       });
-    });
-
-    test("creates review without studentId returns 400", async () => {
-      const payload = {
-        courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
-        rating: 4,
-        reviewText: "Great course!",
-      };
-
-      const res = await request(app).post("/reviews").send(payload);
-      expect(res.status).toBe(400);
     });
 
     test("censors profane review text", async () => {
@@ -392,6 +385,114 @@ describe("ReviewHandler Endpoints", () => {
       const res = await request(app).post("/reviews").send(payload);
       expect(res.status).toBe(500);
     });
+
+    test("duplicate course review throws error", async () => {
+      const parentId = "parent-uuid-1234-5678-abcd-ef1234567890";
+      repo.createParentReview.mockResolvedValue(parentId);
+      repo.createCourseReview.mockRejectedValue(
+        new Error("Student has already submitted a review for this course"),
+      );
+
+      const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
+        rating: 4,
+        reviewText: "Duplicate course review.",
+      };
+
+      const res = await request(app).post("/reviews").send(payload);
+      expect(res.status).toBe(500);
+    });
+
+    test("duplicate professor review returns 500", async () => {
+      const parentId = "parent-uuid-5678-1234-abcd-ef1234567890";
+      repo.createParentReview.mockResolvedValue(parentId);
+      repo.createProfessorReview.mockRejectedValue(
+        new Error("student has already submitted a review for this professor"),
+      );
+
+      const payload = {
+        studentId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        professorId: "c3d4e5f6-a7b8-4012-8def-123456789012",
+        rating: 5,
+        reviewText: "Duplicate professor review.",
+      };
+
+      const res = await request(app).post("/reviews").send(payload);
+      expect(res.status).toBe(500);
+    });
+
+    test("creates a course review with semester and year", async () => {
+      const parentId = "parent-uuid-sem-year-abcd-ef1234567890";
+      repo.createParentReview.mockResolvedValue(parentId);
+      repo.createCourseReview.mockResolvedValue(mockCourseReview);
+
+      const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
+        rating: 4,
+        reviewText: "Great course!",
+        semester: "fall",
+        year: 2026,
+      };
+
+      const res = await request(app).post("/reviews").send(payload);
+      expect(res.status).toBe(201);
+      expect(repo.createParentReview).toHaveBeenCalledWith( {
+        studentId: payload.studentId,
+        semester: payload.semester,
+        year: payload.year,
+      });
+    });
+
+    test("creates a professor review with semester and year", async () => {
+      const parentId = "parent-uuid-prof-sem-abcd-ef1234567890";
+      repo.createParentReview.mockResolvedValue(parentId);
+      repo.createProfessorReview.mockResolvedValue(mockProfReview);
+
+      const payload = {
+        studentId: "b2c3d4e5-f6a7-8901-bcde-f12345678901",
+        professorId: "c3d4e5f6-a7b8-4012-8def-123456789012",
+        rating: 5,
+        reviewText: "Excellent professor!",
+        semester: "spring",
+        year: 2025,
+      };
+
+      const res = await request(app).post("/reviews").send(payload);
+      expect(res.status).toBe(201);
+      expect(repo.createParentReview).toHaveBeenCalledWith( {
+        studentId: payload.studentId,
+        semester: "spring",
+        year: 2025, }
+      );
+    });
+
+    test("invalid semester value returns 400", async () => {
+      const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
+        rating: 3,
+        reviewText: "Good course.",
+        semester: "winter",
+      };
+
+      const res = await request(app).post("/reviews").send(payload);
+      expect(res.status).toBe(400);
+    });
+
+    test("non-integer year returns 400", async () => {
+      const payload = {
+        studentId: "a1b2c3d4-e5f6-7890-abcd-ef1234567890",
+        courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
+        rating: 3,
+        reviewText: "Good course.",
+        year: 2026.5,
+      };
+
+      const res = await request(app).post("/reviews").send(payload);
+      expect(res.status).toBe(400);
+    });
   });
 
   describe("PATCH /reviews/:id", () => {
@@ -499,6 +600,55 @@ describe("ReviewHandler Endpoints", () => {
         .patch(`/reviews/${mockCourseReview.reviewId}`)
         .send({ rating: 3 });
       expect(res.status).toBe(500);
+    });
+
+    test("patches semester", async () => {
+      const updated: CourseReview = { ...mockCourseReview, semester: "spring" };
+      repo.patchReview.mockResolvedValue(updated);
+      mockValidate.mockReturnValue(true);
+
+      const res = await request(app)
+        .patch(`/reviews/${mockCourseReview.reviewId}`)
+        .send({ semester: "spring" });
+      expect(res.status).toBe(200);
+      expect(res.body.semester).toBe("spring");
+    });
+
+    test("patches year", async () => {
+      const updated: CourseReview = { ...mockCourseReview, year: 2025 };
+      repo.patchReview.mockResolvedValue(updated);
+      mockValidate.mockReturnValue(true);
+
+      const res = await request(app)
+        .patch(`/reviews/${mockCourseReview.reviewId}`)
+        .send({ year: 2025 });
+      expect(res.status).toBe(200);
+      expect(res.body.year).toBe(2025);
+    });
+
+    test("patches semester and year together", async () => {
+      const updated: CourseReview = {
+        ...mockCourseReview,
+        semester: "summer_1",
+        year: 2024,
+      };
+      repo.patchReview.mockResolvedValue(updated);
+      mockValidate.mockReturnValue(true);
+
+      const res = await request(app)
+        .patch(`/reviews/${mockCourseReview.reviewId}`)
+        .send({ semester: "summer_1", year: 2024 });
+      expect(res.status).toBe(200);
+      expect(res.body.semester).toBe("summer_1");
+      expect(res.body.year).toBe(2024);
+    });
+
+    test("invalid semester in patch returns 400", async () => {
+      mockValidate.mockReturnValue(true);
+      const res = await request(app)
+        .patch(`/reviews/${mockCourseReview.reviewId}`)
+        .send({ semester: "winter" });
+      expect(res.status).toBe(400);
     });
   });
 

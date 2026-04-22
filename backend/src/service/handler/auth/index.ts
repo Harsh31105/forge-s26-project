@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 
 export class AuthHandler {
     constructor(
-        private readonly studentRepo: StudentRepository
+        private readonly studentRepo: StudentRepository,
     ) {}
 
     async handleRedirect(_req: Request, res: Response): Promise<void> {
@@ -17,9 +17,28 @@ export class AuthHandler {
     }
 
     async handleCallback(req: Request, res: Response): Promise<void> {
+        const wantsHtml = req.accepts(["html", "json"]) === "html";
+        const redirectWithError = (code: string, status: number, message: string) => {
+            if (wantsHtml) {
+                res.redirect(`${config.application.frontendUrl}/login?error=${encodeURIComponent(code)}`);
+                return;
+            }
+            res.status(status).json({ error: message });
+        };
+
+        const redirectWithToken = (token: string) => {
+            res.cookie("token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "lax",
+            });
+
+            res.redirect(`${config.application.frontendUrl}/login`);
+        };
+
         const code = req.query.code as string;
         if (!code) {
-            res.status(400).json({ error: "Missing authorization code" });
+            redirectWithError("missing_code", 400, "Missing authorization code");
             return;
         }
 
@@ -33,12 +52,16 @@ export class AuthHandler {
         const payload = ticket.getPayload();
 
         if (!payload || !payload.email) {
-            res.status(400).json({ error: "Failed to get user information" });
+            redirectWithError("auth_failed", 400, "Failed to get user information");
             return;
         }
 
         if (!payload.email.endsWith("@husky.neu.edu")) {
-            res.status(403).json({ error: "Only Northeastern email addresses are allowed" });
+            redirectWithError(
+                "not_northeastern",
+                403,
+                "Only Northeastern email addresses are allowed"
+            );
             return;
         }
 
@@ -57,7 +80,7 @@ export class AuthHandler {
             });
 
             const token = makeToken(student.id);
-            res.redirect(`${config.application.frontendUrl}/onboarding?token=${token}`);
+            redirectWithToken(token);
         } catch (error) {
             if (error instanceof Error) {
                 if (
@@ -66,7 +89,7 @@ export class AuthHandler {
                 ) {
                     const student = await this.studentRepo.getStudentByEmail(payload.email);
                     const token = makeToken(student.id);
-                    res.redirect(`${config.application.frontendUrl}/?token=${token}`);
+                    redirectWithToken(token);
                     return;
                 }
 
