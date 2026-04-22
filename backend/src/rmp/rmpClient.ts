@@ -7,7 +7,7 @@ export type RMPApiData = {
     lastName: string;
     ratingAvg: string | null;
     ratingWta: number | null;
-    avgDifficulty: string;
+    avgDifficulty: string | null;
 };
 
 export async function fetchRMPDataForProfessor(
@@ -15,6 +15,21 @@ export async function fetchRMPDataForProfessor(
     lastName: string,
     schoolId: string
 ): Promise<RMPApiData | null> {
+
+    const cleanNumber = (val: unknown): number | null => {
+        if (typeof val !== "number") return null;
+        if (Number.isNaN(val)) return null;
+        if (!Number.isFinite(val)) return null;
+        if (val <= 0) return null;
+        return val;
+    };
+
+    const safeDecimal = (val: string | null): string | null => {
+        if (val === null) return null;
+        const n = parseFloat(val);
+        return Number.isNaN(n) ? null : val;
+    };
+
     const result = await getProfessorRatingAtSchoolId(
         `${firstName} ${lastName}`,
         schoolId
@@ -25,9 +40,13 @@ export async function fetchRMPDataForProfessor(
     return {
         firstName,
         lastName,
-        ratingAvg: result.avgRating !== 0 ? result.avgRating.toString() : null,
-        ratingWta: result.wouldTakeAgainPercent === -1 ? null : result.wouldTakeAgainPercent,
-        avgDifficulty: result.avgDifficulty.toString(),
+        ratingAvg: result.avgRating !== 0.0 && result.avgRating !== -1.0 ? result.avgRating.toString() : null,
+        ratingWta: result.wouldTakeAgainPercent === -1 ? null : Math.round(result.wouldTakeAgainPercent / 100),
+        avgDifficulty: cleanNumber(
+            typeof result.avgDifficulty === "string"
+                ? parseFloat(result.avgDifficulty)
+                : result.avgDifficulty
+        )?.toString() ?? null
     };
 }
 
