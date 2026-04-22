@@ -30,12 +30,27 @@ function StatRow({
 export function CourseCard({
     course,
     onRemove,
+    recommendation
 }: {
     course: Course;
     onRemove: () => void;
+    recommendation: string | null;
 }) {
     // fetch TRACE records for this course to compute averages
     const { traces, isLoading } = useTraces({ limit: 30000, courseId: course.id });
+
+    const compatibilityStyle: React.CSSProperties = (() => {
+        switch (recommendation) {
+            case "HIGH":
+                return { color: "#16a34a" }; // green
+            case "MEDIUM":
+                return { color: "#ca8a04" }; // yellow
+            case "LOW":
+                return { color: "#dc2626" }; // red
+            default:
+                return { color: "#555" }; // fallback
+        }
+    })();
 
     // TODO: @Biak
     const avgEfficiency = traces.length > 0
@@ -127,8 +142,12 @@ export function CourseCard({
             <StatRow label="Credits" value={course.num_credits} />
             {/* TODO: NUPath @itaischwarz */}
             <StatRow label="NUPath" value="N/A" />
-            {/* TODO: Compatibility @shokahuskies */}
-            <StatRow label="Compatibility" value="N/A" isLast />
+            <StatRow
+                label="Compatibility"
+                value={recommendation ?? "N/A"}
+                valueStyle={compatibilityStyle}
+                isLast
+            />
         </div>
     );
 }
