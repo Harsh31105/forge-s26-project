@@ -37,7 +37,7 @@ export function CourseCard({
     recommendation: string | null;
 }) {
     // fetch TRACE records for this course to compute averages
-    const { traces, isLoading } = useTraces({ limit: 30000, courseId: course.id });
+    const { traces, isLoading } = useTraces({ limit: 1000, courseId: course.id });
 
     const compatibilityStyle: React.CSSProperties = (() => {
         switch (recommendation) {

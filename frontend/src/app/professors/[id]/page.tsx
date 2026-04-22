@@ -3,6 +3,7 @@
 import { useParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
 import { useQueries } from "@tanstack/react-query";
+import Link from "next/link";
 import { useProfessor } from "@/src/hooks/useProfessors";
 import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
@@ -388,41 +389,56 @@ export default function ProfessorProfilePage() {
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
               {offerHistory.map((course) => (
-                <div
+                <Link
                   key={course.courseId}
-                  style={{
-                    padding: "16px 20px",
-                    background: "var(--color-surface-light-cream)",
-                    borderRadius: "var(--border-radius-sm)",
-                    border: "1px solid var(--color-border-tan)",
-                  }}
+                  href={`/courses/${course.courseId}`}
+                  style={{ textDecoration: "none" }}
                 >
-                  <div style={{
-                    fontFamily: "var(--font-heading)",
-                    fontWeight: "var(--font-weight-bold)",
-                    fontSize: "var(--font-size-md)",
-                    color: "var(--color-text-primary)",
-                    marginBottom: "8px",
-                  }}>
-                    {course.courseCode}: {course.courseName}
+                  <div
+                    style={{
+                      padding: "16px 20px",
+                      background: "var(--color-surface-light-cream)",
+                      borderRadius: "var(--border-radius-sm)",
+                      border: "1px solid var(--color-border-tan)",
+                      cursor: "pointer",
+                      transition: "border-color 0.15s, background 0.15s",
+                    }}
+                    onMouseEnter={e => {
+                      (e.currentTarget as HTMLDivElement).style.borderColor = "var(--color-brand-primary, #c8a96e)";
+                      (e.currentTarget as HTMLDivElement).style.background = "var(--color-white)";
+                    }}
+                    onMouseLeave={e => {
+                      (e.currentTarget as HTMLDivElement).style.borderColor = "var(--color-border-tan)";
+                      (e.currentTarget as HTMLDivElement).style.background = "var(--color-surface-light-cream)";
+                    }}
+                  >
+                    <div style={{
+                      fontFamily: "var(--font-heading)",
+                      fontWeight: "var(--font-weight-bold)",
+                      fontSize: "var(--font-size-md)",
+                      color: "var(--color-text-primary)",
+                      marginBottom: "8px",
+                    }}>
+                      {course.courseCode}: {course.courseName}
+                    </div>
+                    <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
+                      {course.offerings.map((o, i) => (
+                        <span
+                          key={`${o.semester}-${o.year}-${i}`}
+                          style={{
+                            padding: "4px 12px",
+                            background: "var(--color-border-tan)",
+                            borderRadius: "999px",
+                            fontSize: "var(--font-size-xs)",
+                            color: "var(--color-text-primary)",
+                          }}
+                        >
+                          {formatSemester(o.semester, o.year)}
+                        </span>
+                      ))}
+                    </div>
                   </div>
-                  <div style={{ display: "flex", flexWrap: "wrap", gap: "8px" }}>
-                    {course.offerings.map((o, i) => (
-                      <span
-                        key={`${o.semester}-${o.year}-${i}`}
-                        style={{
-                          padding: "4px 12px",
-                          background: "var(--color-border-tan)",
-                          borderRadius: "999px",
-                          fontSize: "var(--font-size-xs)",
-                          color: "var(--color-text-primary)",
-                        }}
-                      >
-                        {formatSemester(o.semester, o.year)}
-                      </span>
-                    ))}
-                  </div>
-                </div>
+                </Link>
               ))}
             </div>
           )}

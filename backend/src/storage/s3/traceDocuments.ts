@@ -2,6 +2,7 @@ import {
     S3Client,
     PutObjectCommand,
     GetObjectCommand,
+    HeadObjectCommand,
     type PutObjectCommandInput,
     type GetObjectCommandInput,
 } from "@aws-sdk/client-s3";
@@ -56,6 +57,15 @@ export class TraceDocumentRepositoryS3 implements TraceDocumentRepository {
 
     async uploadPdf(key: TraceDocumentKey, pdfBuffer: Buffer): Promise<string> {
         const s3Key = buildS3Key(key);
+
+        // Skip upload if the object already exists in S3 — makes the script
+        // safe to run concurrently from multiple machines.
+        try {
+            await this.client.send(new HeadObjectCommand({ Bucket: this.bucketName, Key: s3Key }));
+            return s3Key; // already exists
+        } catch {
+            // not found — proceed with upload
+        }
 
         const params: PutObjectCommandInput = {
             Bucket: this.bucketName,

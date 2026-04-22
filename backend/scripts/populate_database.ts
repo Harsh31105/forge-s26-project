@@ -9,14 +9,14 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { eq, and } from "drizzle-orm";
 import { dbConfig, getConnectionString } from "../src/config/db";
 import { ProfessorRepositorySchema } from "../src/storage/postgres/schema/professor";
-import { CourseRepositorySchema } from "../src/storage/postgres/schema/course";
 import { TraceRepositorySchema } from "../src/storage/postgres/schema/trace";
 import { professor } from "../src/storage/tables/professor";
 import { course } from "../src/storage/tables/course";
 import { department } from "../src/storage/tables/department";
-import { SemesterType } from "../src/models/trace";
+import { Semester } from "../src/models/trace";
+import { trace } from "../src/storage/tables/trace";
 
-const s3 = new S3Client({ region: "us-east-1" });
+const s3 = new S3Client({ region: process.env.AWS_REGION ?? "us-east-2" });
 const BUCKET = "forge-s26-trace-evaluations";
 const PREFIX = "extracted/trace-evaluations/";
 
@@ -34,11 +34,26 @@ interface TraceJSON {
     courseCode: string | number;
     semester: string;
     lectureYear: number;
+    section: string | null;
     lectureType: string | null;
     hoursDevoted: Record<string, number>;
     proffesorEfficency: number | null;
     howOftenPercentage: Record<string, number>;
   };
+}
+
+function normalizeSemester(semester: string): Semester | null {
+  if (semester === "summer") return "summer_1";
+  if (
+    semester === "fall" ||
+    semester === "spring" ||
+    semester === "summer_1" ||
+    semester === "summer_2"
+  ) {
+    return semester;
+  }
+
+  return null;
 }
 
 async function streamToString(stream: any): Promise<string> {
@@ -51,7 +66,6 @@ async function main() {
   const pool = new Pool({ connectionString: getConnectionString(dbConfig) });
   const db = drizzle(pool);
   const profRepo = new ProfessorRepositorySchema(db);
-  const courseRepo = new CourseRepositorySchema(db);
   const traceRepo = new TraceRepositorySchema(db);
   const stats = { success: 0, skipped: 0, failed: 0 };
 
@@ -75,7 +89,9 @@ async function main() {
       // key shape: extracted/trace-evaluations/<DEPT>/undefined/<semester>/file.json
       const parts = key.split("/");
       const deptName = parts[2];
-
+      const filename = key.split("/").pop()!;
+      const sectionMatch = filename.match(/section-(\w+)/);
+      const section = sectionMatch ? sectionMatch[1] : null;
       // download
       let raw: string;
       try {
@@ -104,18 +120,29 @@ async function main() {
       }
 
       try {
+        const normalizedSemester = normalizeSemester(schema.trace.semester);
+        if (!normalizedSemester) {
+          console.warn(`✗ invalid semester "${schema.trace.semester}": ${key}`);
+          stats.failed++;
+          continue;
+        }
+
         // resolve department id
+
         if (!deptCache.has(deptName)) {
-          const [row] = await db
+          let [row] = await db
             .select()
             .from(department)
             .where(eq(department.name, deptName));
           if (!row) {
-            console.warn(`⚠ unknown dept "${deptName}", skipping`);
-            stats.skipped++;
-            continue;
+            console.log(`⚠ unknown dept "${deptName}", creating new record`);
+            [row] = await db
+              .insert(department)
+              .values({ name: deptName })
+              .returning();
           }
-          deptCache.set(deptName, row.id);
+
+          deptCache.set(deptName, row!.id);
         }
         const deptId = deptCache.get(deptName)!;
 
@@ -147,32 +174,49 @@ async function main() {
               eq(course.departmentId, deptId),
             ),
           );
-        const courseRow =
-          existingCourses[0] ??
-          (await courseRepo.createCourse({
-            name: schema.course.name,
-            department_id: deptId,
-            course_code: courseCode,
-            description: "",
-            num_credits: schema.course.num_credits ?? 4,
-            lecture_type: (schema.course.lecture_type as any) ?? undefined,
-          }));
+        const courseRow = existingCourses[0];
+        if (!courseRow) {
+          console.warn(
+            `✗ course not found in DB, skipping trace to avoid blank description: ${deptName} ${courseCode} ${schema.course.name}`,
+          );
+          stats.skipped++;
+          continue;
+        }
 
         // insert trace using TraceRepositorySchema
         const t = schema.trace;
-        await traceRepo.createTrace({
-          courseId: courseRow.id,
-          professorId: prof.id,
-          courseName: t.courseName,
-          departmentId: deptId,
-          courseCode: Number(t.courseCode),
-          semester: t.semester as SemesterType,
-          lectureYear: t.lectureYear,
-          lectureType: (t.lectureType as any) ?? null,
-          hoursDevoted: t.hoursDevoted ?? null,
-          professorEfficiency: t.proffesorEfficency ?? null,
-          howOftenPercentage: t.howOftenPercentage ?? null,
-        });
+        const existingTrace = await db
+          .select()
+          .from(trace)
+          .where(
+            and(
+              eq(trace.courseId, courseRow.id),
+              eq(trace.professorId, prof.id),
+              eq(trace.semester, normalizedSemester),
+              eq(trace.lectureYear, t.lectureYear),
+              eq(trace.section, section),
+            ),
+          );
+
+        if (existingTrace.length === 0) {
+          await traceRepo.createTrace({
+            courseId: courseRow.id,
+            professorId: prof.id,
+            courseName: t.courseName,
+            departmentId: deptId,
+            courseCode: Number(t.courseCode),
+            semester: normalizedSemester,
+            lectureYear: t.lectureYear,
+            section: section,
+            lectureType: (t.lectureType as any) ?? null,
+            hoursDevoted: t.hoursDevoted ?? null,
+            professorEfficiency: t.proffesorEfficency ?? null,
+            howOftenPercentage: t.howOftenPercentage ?? null,
+          });
+        } else {
+          console.log(`⏭ duplicate trace, skipping ${key}`);
+          stats.skipped++;
+        }
 
         console.log(`✓ ${key}`);
         stats.success++;

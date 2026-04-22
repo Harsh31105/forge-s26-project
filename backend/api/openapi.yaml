@@ -629,6 +629,11 @@ paths:
           schema:
             type: string
             enum: [lecture, lab, online]
+        - name: nupath
+          in: query
+          description: Filter by NUPath requirement
+          schema:
+            type: string
         - name: sortBy
           in: query
           description: Field to sort by
@@ -2399,6 +2404,21 @@ components:
           nullable: true
           description: The type of lecture format for the course
           example: "online"
+        prereqs:
+          type: string
+          nullable: true
+          description: Prerequisite courses for this course
+          example: "CS 2510 OR CS2100"
+        coreqs:
+          type: string
+          nullable: true
+          description: Co-requisite courses for this course
+          example: "MATH 2321"
+        nupath:
+          type: string
+          nullable: true
+          description: NUPath requirement(s) this course satisfies
+          example: "Writing Intensive"
         created_at:
           type: string
           format: date-time
@@ -2447,6 +2467,18 @@ components:
           nullable: true
           description: The type of lecture format for the course
           example: "online"
+        prereqs:
+          type: string
+          description: Prerequisite courses for this course
+          example: "CS 2510 OR CS2100"
+        coreqs:
+          type: string
+          description: Co-requisite courses for this course
+          example: "MATH 2321"
+        nupath:
+          type: string
+          description: NUPath requirement(s) this course satisfies
+          example: "Writing Intensive"
 
     CoursePatchInput:
       type: object
@@ -2480,6 +2512,18 @@ components:
           enum: [lecture, lab, online]
           description: The type of lecture format for the course
           example: "online"
+        prereqs:
+          type: string
+          description: Prerequisite courses for this course
+          example: "CS 2510 OR CS2100"
+        coreqs:
+          type: string
+          description: Co-requisite courses for this course
+          example: "MATH 2321"
+        nupath:
+          type: string
+          description: NUPath requirement(s) this course satisfies
+          example: "Writing Intensive"
 
     CourseThread:
       type: object

@@ -1,8 +1,8 @@
 "use client";
-import { useState, useRef, useEffect } from "react";
-import { useRouter } from "next/navigation";
+import { Suspense, useState, useRef, useEffect } from "react";
+import { useRouter, useSearchParams } from "next/navigation";
 import { ArrowRight, Search } from "lucide-react";
-import { useCourses } from "../../hooks/useCourses";
+import { useCourse, useCourses } from "../../hooks/useCourses";
 import { CourseCard } from "../../components/compare/courseCard";
 import {Course, MLRecommendResponse} from "../../lib/api/northStarAPI.schemas";
 import {useRecommendations} from "@/src/hooks/useRecommendations";
@@ -21,7 +21,7 @@ function SearchDropdown({
     const [query, setQuery] = useState("");
     const inputRef = useRef<HTMLInputElement>(null);
 
-    const { courses, isLoading } = useCourses({ limit: 4000 });
+    const { courses, isLoading } = useCourses({ limit: 1000 });
 
     useEffect(() => {
         inputRef.current?.focus();
@@ -140,10 +140,14 @@ function SearchDropdown({
 
 // compare page
 
-export default function ComparePage() {
+function ComparePageContent() {
     const router = useRouter();
-    const [courses, setCourses] = useState<Course[]>([]);
+    const searchParams = useSearchParams();
+    const initialCourseId = searchParams.get("courseId");
+    const [addedCourses, setAddedCourses] = useState<Course[]>([]);
+    const [dismissedCourseIds, setDismissedCourseIds] = useState<Set<string>>(new Set());
     const [showSearch, setShowSearch] = useState(false);
+    const { course: initialCourse } = useCourse(initialCourseId ?? "");
 
 
     const { getMLRecommendations } = useRecommendations();
@@ -151,7 +155,7 @@ export default function ComparePage() {
 
     useEffect(() => {
         getMLRecommendations("fall").then(setRecommendations);
-    }, []);
+    }, [getMLRecommendations]);
 
     const getRecommendationLevel = (courseId: string) => {
         if (!recommendations) return null;
@@ -170,17 +174,26 @@ export default function ComparePage() {
     };
 
     const handleAddCourse = (course: Course) => {
-        setCourses((prev) => [...prev, course]);
+        if (selectedIds.has(course.id) || courses.length >= MAX_COURSES) return;
+
+        setAddedCourses((prev) => [...prev, course]);
     };
 
     const handleRemoveCourse = (id: string) => {
-        setCourses((prev) => prev.filter((c) => c.id !== id));
+        setDismissedCourseIds((prev) => new Set(prev).add(id));
+        setAddedCourses((prev) => prev.filter((c) => c.id !== id));
     };
 
     const handleBack = () => {
         router.back();
     };
 
+    const initialCourses =
+        initialCourse && !dismissedCourseIds.has(initialCourse.id) ? [initialCourse] : [];
+    const courses = [
+        ...initialCourses,
+        ...addedCourses.filter((course) => !initialCourses.some((initial) => initial.id === course.id)),
+    ].slice(0, MAX_COURSES);
     const selectedIds = new Set(courses.map((c) => c.id));
 
     return (
@@ -309,5 +322,13 @@ export default function ComparePage() {
                 />
             )}
         </div>
+    );
+}
+
+export default function ComparePage() {
+    return (
+        <Suspense fallback={null}>
+            <ComparePageContent />
+        </Suspense>
     );
 }

@@ -1,7 +1,20 @@
 {
   "permissions": {
     "allow": [
-      "Bash(netstat -ano)"
+      "Bash(netstat -ano)",
+      "Bash(curl -s -I https://searchneu.com/graphql)",
+      "Bash(curl -s -X POST https://searchneu.com/api/graphql -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"query\": \"{ search\\(query: \\\\\"\\\\\", subject: \\\\\"CS\\\\\", termId: \\\\\"202530\\\\\"\\) { results { ... on ClassOccurrence { name subject classId desc } } } }\"}')",
+      "Bash(curl -sv https://searchneu.com/graphql)",
+      "Bash(curl -s \"https://searchneu.com/graphql?query=%7B%20search\\(query%3A%20%22%22%2C%20subject%3A%20%22CS%22%2C%20termId%3A%20%22202530%22\\)%20%7B%20results%20%7B%20...%20on%20ClassOccurrence%20%7B%20name%20subject%20classId%20desc%20%7D%20%7D%20%7D%20%7D\" -H \"Accept: application/json\")",
+      "Bash(curl -s https://api.searchneu.com/graphql -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"query\": \"{ __schema { queryType { fields { name description args { name type { name kind ofType { name kind } } } } } } }\"}')",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f['name'], '-', f['description'][:80] if f['description'] else '', [a['name'] for a in f['args']]\\) for f in d['data']['__schema']['queryType']['fields']]\")",
+      "Bash(curl -s https://api.searchneu.com/graphql -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"query\": \"{ __type\\(name: \\\\\"SearchResultItemConnection\\\\\"\\) { fields { name type { name kind ofType { name kind } } } } }\"}')",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); [print\\(f['name']\\) for f in d['data']['__type']['fields']]\")",
+      "Bash(curl -s https://api.searchneu.com/graphql -X POST -H 'Content-Type: application/json' -H 'Accept: application/json' -d '{\"query\": \"{ search\\(query: \\\\\"\\\\\", subject: \\\\\"CS\\\\\", termId: \\\\\"202530\\\\\", first: 5\\) { nodes { ... on ClassOccurrence { name subject classId desc } } } }\"}')",
+      "Bash(python3 -c \"import sys,json; d=json.load\\(sys.stdin\\); print\\(json.dumps\\(d, indent=2\\)\\)\")",
+      "Read(//private/tmp/**)",
+      "Bash(python3)",
+      "Bash(python3 -c ' *)"
     ]
   }
 }
