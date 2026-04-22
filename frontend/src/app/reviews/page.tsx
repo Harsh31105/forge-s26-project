@@ -52,7 +52,7 @@ export default function ReviewsPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="reviews" />
+      <Navbar />
 
       <main style={{ maxWidth: "1100px", margin: "0 auto", padding: "40px 48px 80px" }}>
         <h1 style={{

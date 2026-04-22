@@ -1,8 +1,9 @@
 "use client";
 
 import { useState, useMemo } from "react";
-import { useProfessors } from "@/src/hooks/useProfessors";
 import { useCourses } from "@/src/hooks/useCourses";
+import { useTraces } from "@/src/hooks/useTraces";
+import { useProfessors } from "@/src/hooks/useProfessors";
 import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
 import { useFavourites, useFavouriteMutations } from "@/src/hooks/useFavourites";
@@ -35,6 +36,8 @@ export default function ProfessorsPage() {
   const { reviews } = useReviews();
   const { favourites } = useFavourites();
   const { addFavourite, removeFavourite } = useFavouriteMutations();
+  const { traces } = useTraces({ limit: 30240 });
+
   const reviewCountMap = useMemo(() => {
     const map: Record<string, number> = {};
     reviews.forEach(r => {
@@ -59,8 +62,21 @@ export default function ProfessorsPage() {
           `${p.firstName} ${p.lastName}`.toLowerCase().includes(q)
       );
     }
+    if (selectedCourse) {
+      const profIdsForCourse = new Set(
+        traces.filter(t => t.courseId === selectedCourse).map(t => t.professorId)
+      );
+      list = list.filter(p => profIdsForCourse.has(p.id));
+    }
+    if (campusFilters.length > 0) {
+      list = list.filter(p =>
+        p.tags?.some(tag => campusFilters.includes(tag as CampusFilter))
+      );
+    }
     return list;
-  }, [professors, search, ratingFilter, wtaFilter, difficultyFilter]);
+  }, [professors, search, selectedCourse, traces, campusFilters, ratingFilter, wtaFilter, difficultyFilter]);
+
+
 
   const handleToggleCampus = (tag: CampusFilter) => {
     setCampusFilters(prev =>
@@ -79,8 +95,7 @@ export default function ProfessorsPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="professors" />
-
+      <Navbar />
       <div style={{ display: "flex", padding: "32px 40px", gap: "32px" }}>
         <aside
           style={{

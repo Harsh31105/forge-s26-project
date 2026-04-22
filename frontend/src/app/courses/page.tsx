@@ -139,8 +139,7 @@ export default function CoursesPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="courses" />
-
+      <Navbar />
       <div style={{ display: "flex", padding: "32px 40px", gap: "32px" }}>
         <aside style={{
           width: "260px",
