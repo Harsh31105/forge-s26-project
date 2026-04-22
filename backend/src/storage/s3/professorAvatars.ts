@@ -3,15 +3,15 @@ import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 import type { S3 as S3Config } from "../../config/s3";
 
 const AVATAR_KEYS = [
-    "professor-avatars/1.png",
-    "professor-avatars/2.png",
-    "professor-avatars/3.png",
-    "professor-avatars/4.png",
-    "professor-avatars/5.png",
-    "professor-avatars/6.png",
-    "professor-avatars/7.png",
-    "professor-avatars/8.png",
-    "professor-avatars/9.png",
+    "professor-avatars/1.jpeg",
+    "professor-avatars/2.webp",
+    "professor-avatars/3.jpeg",
+    "professor-avatars/4.webp",
+    "professor-avatars/5.jpeg",
+    "professor-avatars/6.jpeg",
+    "professor-avatars/7.jpg",
+    "professor-avatars/8.webp",
+    "professor-avatars/9.jpeg",
     "professor-avatars/10.png",
 ];
 
@@ -36,11 +36,16 @@ export class ProfessorAvatarRepositoryS3 implements ProfessorAvatarRepository {
     }
 
     getRandomAvatarKey(): string {
-        return AVATAR_KEYS[Math.floor(Math.random() * AVATAR_KEYS.length)];
+        return AVATAR_KEYS[Math.floor(Math.random() * AVATAR_KEYS.length)]!;
     }
 
     async getPresignedUrl(key: string): Promise<string> {
-        const command = new GetObjectCommand({ Bucket: this.bucketName, Key: key });
-        return getSignedUrl(this.client, command, { expiresIn: 3600 });
+        try {
+            const command = new GetObjectCommand({ Bucket: this.bucketName, Key: key });
+            return await getSignedUrl(this.client, command, { expiresIn: 3600 });
+        } catch (err: unknown) {
+            const message = (err as { message?: string })?.message ?? "unknown error";
+            throw new Error(`Failed to generate presigned URL for ${key}: ${message}`);
+        }
     }
 }
