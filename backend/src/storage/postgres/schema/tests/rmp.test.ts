@@ -8,7 +8,6 @@ import { rmp } from "../../../tables/rmp";
 import { professor } from "../../../tables/professor";
 import { v4 as uuid } from "uuid";
 import { NodePgDatabase } from "drizzle-orm/node-postgres";
-import { NotFoundError } from "../../../../errs/httpError";
 
 describe("RMPRepositorySchema DB Integration", () => {
     let db!: NodePgDatabase;
@@ -41,9 +40,12 @@ describe("RMPRepositorySchema DB Integration", () => {
     }, 30000);
 
     describe("getRMPByProfessorID", () => {
-        test("invalid professor ID first, valid ID next", async () => {
+        test("invalid professor ID returns null, valid ID returns data", async () => {
             const invalidId = uuid();
-            await expect(repo.getRMPByProfessorID(invalidId)).rejects.toThrow(NotFoundError);
+
+            // ✅ Updated: expect null instead of throw
+            const invalidResult = await repo.getRMPByProfessorID(invalidId);
+            expect(invalidResult).toBeNull();
 
             // insert RMP data for the professor
             await db.insert(rmp).values({
@@ -56,10 +58,17 @@ describe("RMPRepositorySchema DB Integration", () => {
             });
 
             const result = await repo.getRMPByProfessorID(testProfessorID);
+
+            expect(result).not.toBeNull();
             expect(result?.professorId).toBe(testProfessorID);
             expect(result?.ratingAvg).toBe("4.50");
             expect(result?.ratingWta).toBe(85);
             expect(result?.avgDifficulty).toBe("3.20");
+        });
+
+        test("valid professor with no RMP returns null", async () => {
+            const result = await repo.getRMPByProfessorID(testProfessorID);
+            expect(result).toBeNull();
         });
     });
 
