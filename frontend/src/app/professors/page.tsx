@@ -5,7 +5,6 @@ import { useProfessors } from "@/src/hooks/useProfessors";
 import { useCourses } from "@/src/hooks/useCourses";
 import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
-import { useFavourites, useFavouriteMutations } from "@/src/hooks/useFavourites";
 import ProfessorCard from "@/src/components/ProfessorCard";
 import { Professor } from "@/src/lib/api/northStarAPI.schemas";
 
@@ -33,8 +32,6 @@ export default function ProfessorsPage() {
   });
 
   const { reviews } = useReviews({ limit: 1000 });
-  const { favourites } = useFavourites();
-  const { addFavourite, removeFavourite } = useFavouriteMutations();
   const reviewCountMap = useMemo(() => {
     const map: Record<string, number> = {};
     reviews.forEach(r => {
@@ -44,10 +41,6 @@ export default function ProfessorsPage() {
     return map;
   }, [reviews]);
 
-  const favouritedIds = useMemo(
-    () => new Set(favourites.map(f => (f as any).professorId ?? (f as any).courseId)),
-    [favourites]
-  );
   const filtered = useMemo(() => {
     let list = professors;
     if (search.trim()) {
@@ -66,15 +59,6 @@ export default function ProfessorsPage() {
     setCampusFilters(prev =>
       prev.includes(tag) ? prev.filter(t => t !== tag) : [...prev, tag]
     );
-  };
-
-  const handleToggleFavourite = async (professorId: string) => {
-    if (favouritedIds.has(professorId)) {
-      await removeFavourite(professorId);
-    } else {
-      // @ts-expect-error — professor_id not yet in schema;
-      await addFavourite({ professor_id: professorId });
-    }
   };
 
   return (
@@ -339,8 +323,6 @@ export default function ProfessorsPage() {
                   key={prof.id}
                   professor={prof}
                   reviewCount={reviewCountMap[prof.id] ?? 0}
-                  isFavourited={favouritedIds.has(prof.id)}
-                  onToggleFavourite={handleToggleFavourite}
                 />
               ))}
             </div>
@@ -354,13 +336,9 @@ export default function ProfessorsPage() {
 function ProfessorCardWrapper({
   professor,
   reviewCount,
-  isFavourited,
-  onToggleFavourite,
 }: {
   professor: Professor;
   reviewCount: number;
-  isFavourited: boolean;
-  onToggleFavourite: (id: string) => void;
 }) {
   const { rmpData } = useRMP(professor.id);
   return (
@@ -368,8 +346,6 @@ function ProfessorCardWrapper({
       professor={professor}
       rmpData={rmpData}
       reviewCount={reviewCount}
-      isFavourited={isFavourited}
-      onToggleFavourite={onToggleFavourite}
     />
   );
 }

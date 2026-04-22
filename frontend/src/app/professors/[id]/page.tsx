@@ -2,12 +2,21 @@
 
 import { useParams, useRouter } from "next/navigation";
 import { useMemo, useState } from "react";
+import { useQueries } from "@tanstack/react-query";
 import { useProfessor } from "@/src/hooks/useProfessors";
 import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
 import { useTraces } from "@/src/hooks/useTraces";
 import { MapPin } from "lucide-react";
 import { Review, Trace } from "@/src/lib/api/northStarAPI.schemas";
+import { getProfessorReview } from "@/src/lib/api/professor-review";
+
+const SEMESTER_ORDER: Record<string, number> = {
+  spring: 1,
+  summer_1: 2,
+  summer_2: 3,
+  fall: 4,
+};
 
 type SortOption = "newest" | "oldest" | "popular";
 const formatTag = (tag: string) =>
@@ -24,7 +33,6 @@ export default function ProfessorProfilePage() {
   const { reviews, isLoading: reviewsLoading } = useReviews({ limit: 1000 });
   const { traces } = useTraces({ professorId: id, limit: 1000 });
 
-  // Group this professor's traces by courseId to build offer history
   const offerHistory = useMemo(() => {
     const byCourse = new Map<string, {
       courseId: string;
@@ -36,7 +44,6 @@ export default function ProfessorProfilePage() {
       const existing = byCourse.get(t.courseId);
       const offering = { semester: t.semester, year: t.lectureYear };
       if (existing) {
-        // Dedupe offerings (multiple sections per term)
         const has = existing.offerings.some(
           (o) => o.semester === offering.semester && o.year === offering.year,
         );
@@ -50,7 +57,20 @@ export default function ProfessorProfilePage() {
         });
       }
     }
-    return Array.from(byCourse.values());
+
+    const offeringScore = (o: { semester: string; year: number }) =>
+      o.year * 10 + (SEMESTER_ORDER[o.semester] ?? 0);
+
+    const courses = Array.from(byCourse.values());
+    for (const c of courses) {
+      c.offerings.sort((a, b) => offeringScore(b) - offeringScore(a));
+    }
+    courses.sort((a, b) => {
+      const aNewest = a.offerings[0] ? offeringScore(a.offerings[0]) : 0;
+      const bNewest = b.offerings[0] ? offeringScore(b.offerings[0]) : 0;
+      return bNewest - aNewest;
+    });
+    return courses;
   }, [traces]);
 
   const formatSemester = (sem: string, year: number) => {
@@ -67,6 +87,22 @@ export default function ProfessorProfilePage() {
     () => reviews.filter(r => (r as any).professorId === id),
     [reviews, id]
   );
+
+  const professorReviewAPI = useMemo(() => getProfessorReview(), []);
+  const threadQueries = useQueries({
+    queries: profReviews.map(r => ({
+      queryKey: ["profThreads", r.id, { limit: 100 }],
+      queryFn: () => professorReviewAPI.getProfessorReviewsIdThreads(r.id, { limit: 100 }),
+      enabled: !!r.id,
+    })),
+  });
+  const threadCountByReviewId = useMemo(() => {
+    const map: Record<string, number> = {};
+    profReviews.forEach((r, i) => {
+      map[r.id] = threadQueries[i]?.data?.length ?? 0;
+    });
+    return map;
+  }, [profReviews, threadQueries]);
 
   const tagCounts = useMemo(() => {
     const map: Record<string, number> = {};
@@ -97,13 +133,14 @@ export default function ProfessorProfilePage() {
     } else if (reviewSort === "oldest") {
       list = [...list].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
     } else if (reviewSort === "popular") {
-      list = [...list].sort((a, b) => (b.rating ?? 0) - (a.rating ?? 0));
+      list = [...list].sort((a, b) =>
+        (threadCountByReviewId[b.id] ?? 0) - (threadCountByReviewId[a.id] ?? 0)
+      );
     }
     return list;
-  }, [profReviews, reviewSort, activeTagFilter]);
+  }, [profReviews, reviewSort, activeTagFilter, threadCountByReviewId]);
 
   const rating = rmpData?.ratingAvg ? parseFloat(rmpData.ratingAvg) : null;
-  const difficulty = rmpData?.avgDifficulty ? parseFloat(rmpData.avgDifficulty) : null;
   const wta = rmpData?.ratingWta ?? null;
   const maxTagCount = Math.max(...Object.values(tagCounts), 1);
   const maxRatingCount = Math.max(...Object.values(ratingDist), 1);
@@ -190,35 +227,17 @@ export default function ProfessorProfilePage() {
             {!rmpLoading && (
               <div style={{
                 display: "flex",
-                gap: "28px",
+                gap: "32px",
                 marginTop: "14px",
                 flexWrap: "wrap",
-                alignItems: "center",
+                alignItems: "flex-end",
               }}>
                 {rating !== null && (
-                  <div style={{ display: "flex", alignItems: "baseline", gap: "8px" }}>
-                    <p style={{
-                      fontFamily: "var(--font-heading)",
-                      fontSize: "var(--font-size-display)",
-                      fontWeight: "var(--font-weight-bold)",
-                      color: "var(--color-primary-navy)",
-                      lineHeight: 1,
-                      margin: 0,
-                    }}>
-                      {rating.toFixed(1)}
-                    </p>
-                    <p style={{ fontSize: "var(--font-size-base)", color: "var(--color-text-secondary)", margin: 0 }}>
-                      Overall Rating
-                    </p>
-                  </div>
+                  <StatBlock value={rating.toFixed(1)} label="Overall Rating" />
                 )}
-                <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", margin: 0 }}>
-                  {profReviews.length} Reviews
-                </p>
+                <StatBlock value={String(profReviews.length)} label="Reviews" />
                 {wta !== null && (
-                  <p style={{ fontSize: "var(--font-size-sm)", color: "var(--color-text-secondary)", margin: 0 }}>
-                    Would Take Again {wta}%
-                  </p>
+                  <StatBlock value={`${wta}%`} label="Would Take Again" />
                 )}
               </div>
             )}
@@ -312,7 +331,7 @@ export default function ProfessorProfilePage() {
               <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
                 {Object.entries(tagCounts)
                   .sort((a, b) => b[1] - a[1])
-                  .slice(0, 6)
+                  .slice(0, 5)
                   .map(([tag, count]) => (
                     <div key={tag} style={{ display: "flex", alignItems: "center", gap: "10px" }}>
                       <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", width: "100px", textTransform: "capitalize", margin: 0 }}>
@@ -630,6 +649,30 @@ function ReviewItem({ review, isLast }: { review: Review; isLast: boolean }) {
           </div>
         )}
       </div>
+    </div>
+  );
+}
+
+function StatBlock({ value, label }: { value: string; label: string }) {
+  return (
+    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+      <span style={{
+        fontFamily: "var(--font-heading)",
+        fontSize: "var(--font-size-display)",
+        fontWeight: "var(--font-weight-bold)",
+        color: "var(--color-primary-navy)",
+        lineHeight: 1,
+      }}>
+        {value}
+      </span>
+      <span style={{
+        fontSize: "var(--font-size-xs)",
+        color: "var(--color-text-secondary)",
+        letterSpacing: "0.04em",
+        textTransform: "uppercase",
+      }}>
+        {label}
+      </span>
     </div>
   );
 }

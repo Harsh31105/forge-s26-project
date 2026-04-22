@@ -214,13 +214,11 @@ function slugify(value: string): string {
 function normalizeSemester(termLabel: string): string {
   const normalized = termLabel.trim().toLowerCase();
 
-  if (normalized.startsWith("spring a")) return "spring_a";
   if (normalized.startsWith("spring")) return "spring";
-  if (normalized.startsWith("full summer")) return "summer_full";
+  if (normalized.startsWith("full summer")) return "summer_1";
   if (normalized.startsWith("summer 1")) return "summer_1";
   if (normalized.startsWith("summer 2")) return "summer_2";
-  if (normalized.startsWith("summer")) return "summer";
-  if (normalized.startsWith("fall a")) return "fall_a";
+  if (normalized.startsWith("summer")) return "summer_1";
   if (normalized.startsWith("fall")) return "fall";
 
   return slugify(termLabel).replace(/-/g, "_");
