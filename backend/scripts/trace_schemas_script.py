@@ -172,11 +172,15 @@ def parse_course_info(text):
     info = {}
 
     # Course name and semester: "Technology and Human Values (Fall 2024)"
-    m = re.search(r"^(.+?)\s*\((Fall|Spring|Summer)\s*(\d{4})\)", text, re.MULTILINE)
+    m = re.search(r"^(.+?)\s*\((Fall|Spring|Summer\s*[12]?)\s*(\d{4})\)", text, re.MULTILINE)
     if m:
         info["name"] = m.group(1).strip()
-        semester_raw = m.group(2).lower()
-        info["semester"] = {"fall": "fall", "spring": "spring", "summer": "summer_1"}[semester_raw]
+        semester_raw = m.group(2).lower().strip()
+        semester_map = {
+            "fall": "fall", "spring": "spring",
+            "summer": "summer_1", "summer 1": "summer_1", "summer 2": "summer_2",
+        }
+        info["semester"] = semester_map.get(semester_raw, "summer_1")
 
         info["year"] = int(m.group(3))
 
@@ -261,12 +265,10 @@ def build_schemas_from_bytes(pdf_bytes, source_key, department, threshold=80):
     with pdfplumber.open(io.BytesIO(pdf_bytes)) as pdf:
         first_page_text = pdf.pages[0].extract_text() or ""
 
-    # Skip Fall 2025 PDFs (new trace format, not supported yet)
-    if "fall_2025" in source_key:
-        print(f"  ⚠ skipping {source_key} due to unsupported Fall 2025 format")
-        return
-
     course_info = parse_course_info(first_page_text)
+    if not course_info.get("semester"):
+        print(f"  ⚠ skipping {source_key}: could not parse semester from title")
+        return None
 
     if scrape_claude:
         charts_data = extract_charts_with_claude(pdf_bytes)
@@ -348,7 +350,7 @@ def build_schemas(pdf_path, department="CS"):
 def process_bucket(folder=None):
     """Process all PDFs in S3 bucket and save extracted schemas as JSON."""
     paginator = s3.get_paginator("list_objects_v2")
-    stats = {"success": 0, "failed": 0}
+    stats = {"success": 0, "failed": 0, "skipped": 0}
 
     prefix = "trace-evaluations/"
     if folder: prefix += folder 
@@ -379,6 +381,7 @@ def process_bucket(folder=None):
             try:
                 result = build_schemas_from_bytes(pdf_bytes, key, department)
                 if result is None:
+                    stats["skipped"] += 1
                     continue
 
                 s3.put_object(
@@ -467,7 +470,8 @@ if __name__ == "__main__":
     import sys
 
     if len(sys.argv) > 1 and sys.argv[1] == "--s3":
-        process_bucket() # To scrape specific bucket, add path fro root trace-evaluations/
+        folder = sys.argv[2] if len(sys.argv) > 2 else None
+        process_bucket(folder)
     else:
         scrape_course_information("CS")
         output = build_schemas("data/example2.pdf")
