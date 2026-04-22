@@ -8,15 +8,21 @@ export async function fetchAndMatchRMPData(
 ): Promise<RMPPostInputType[]> {
     const results: RMPPostInputType[] = [];
 
+    const safeDecimal = (val: string | null): number | null => {
+        if (val === null) return null;
+        const n = parseFloat(val);
+        return Number.isNaN(n) ? null : n;
+    };
+
     for (const prof of professors) {
         const data = await fetchRMPDataForProfessor(prof.firstName, prof.lastName, schoolId);
         if (!data) continue;
 
         results.push({
             professorId: prof.id,
-            ratingAvg: data.ratingAvg ? parseFloat(data.ratingAvg) : null,
+            ratingAvg: safeDecimal(data.ratingAvg),
             ratingWta: data.ratingWta,
-            avgDifficulty: parseFloat(data.avgDifficulty),
+            avgDifficulty: safeDecimal(data.avgDifficulty),
         });
     }
 
