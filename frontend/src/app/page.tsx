@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { useMe } from "@/src/hooks/useMe";
+import NavBar from "../components/NavBar";
 
 const MOCK_COURSES = [
   { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
@@ -69,7 +70,9 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
 
-      {/* Navbar - commented out for now
+      {/* <NavBar /> */}
+
+      {/* NavBar - commented out for now
       <nav style={{ background: "var(--color-surface-light-cream)", borderBottom: "1px solid var(--color-border-tan)" }}>
         <div style={{
           maxWidth: 1280,

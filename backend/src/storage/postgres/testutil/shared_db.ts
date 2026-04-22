@@ -392,6 +392,9 @@ async function createAllTables(db: NodePgDatabase) {
             created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             CONSTRAINT ai_summary_review_id_type_idx UNIQUE (review_id, review_type)
         );
+
+        ALTER TABLE rmp
+            ALTER COLUMN avg_difficulty DROP NOT NULL;
     `);
 
 }

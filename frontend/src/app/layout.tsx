@@ -1,4 +1,6 @@
 import type { Metadata } from "next";
+import NavbarWrapper from "@/src/components/navbarWrapper";
+
 import {
   Libre_Baskerville,
   Merriweather,
@@ -47,7 +49,11 @@ export default function RootLayout({
       <body
         className={`${libreBaskerville.variable} ${merriweather.variable} ${vollkornSC.variable} antialiased`}
       >
-        <ReactQueryProvider>{children}</ReactQueryProvider>
+        <ReactQueryProvider>
+          <NavbarWrapper>
+            {children}
+          </NavbarWrapper>
+        </ReactQueryProvider>
       </body>
     </html>
   );
