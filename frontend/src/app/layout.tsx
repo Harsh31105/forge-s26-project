@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import NavbarWrapper from "@/src/components/navbarWrapper";
+import { AuthProvider } from "@/src/context/AuthContext";
 
 import {
   Libre_Baskerville,
@@ -52,9 +53,11 @@ export default function RootLayout({
       >
         <ReactQueryProvider>
           <AuthGuard>
+            <AuthProvider>
               <NavbarWrapper>
-                  {children}
+                {children}
               </NavbarWrapper>
+            </AuthProvider>
           </AuthGuard>
         </ReactQueryProvider>
       </body>

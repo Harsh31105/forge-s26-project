@@ -3,34 +3,9 @@
 import { useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { useMe } from "@/src/hooks/useMe";
+import { useAuth } from "@/src/context/AuthContext";
+import { useRecentlyViewed } from "@/src/hooks/useRecentlyViewed";
 import { useAiSummaries } from "@/src/hooks/useAiSummaries";
-
-const MOCK_COURSES = [
-  { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
-  {
-    id: "2",
-    code: "CS 2510",
-    name: "Fundamentals of CS 2",
-    rating: 4.2,
-    viewed: "Viewed 5 days ago",
-  },
-  {
-    id: "3",
-    code: "CS 3500",
-    name: "Object-Oriented Design",
-    rating: 3.8,
-    viewed: "Viewed 1 week ago",
-  },
-  {
-    id: "4",
-    code: "CS 1800",
-    name: "Discrete Structures",
-    rating: 4.5,
-    viewed: "Viewed 1 week ago",
-  },
-  { id: "5", code: "CS 3200", name: "Database Design", rating: 3.6, viewed: "Viewed 2 weeks ago" },
-];
 
 const cardStyle: React.CSSProperties = {
   background: "var(--color-surface-light-cream)",
@@ -39,14 +14,15 @@ const cardStyle: React.CSSProperties = {
 
 export default function Home() {
   const router = useRouter();
-  const { student, isFetching, error } = useMe();
+  const { student, isLoading } = useAuth();
+  const { recentlyViewed } = useRecentlyViewed();
   const { summaries, isLoading: summariesLoading } = useAiSummaries({ limit: 5 });
 
   useEffect(() => {
-    if (!isFetching && !error && !student) {
+    if (!isLoading && !student) {
       router.push("/onboarding");
     }
-  }, [student, isFetching, error, router]);
+  }, [student, isLoading, router]);
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
@@ -107,96 +83,71 @@ export default function Home() {
         </div>
 
         {/* Recently Viewed */}
-        <h2
-          style={{
-            fontFamily: "var(--font-heading)",
-            fontSize: "var(--font-size-xl)",
-            fontWeight: 700,
-            color: "var(--color-text-primary)",
-            marginBottom: 20,
-          }}
-        >
+        <h2 style={{
+          fontFamily: "var(--font-heading)",
+          fontSize: "var(--font-size-xl)",
+          fontWeight: 700,
+          color: "var(--color-text-primary)",
+          marginBottom: 20,
+        }}>
           Recently Viewed
         </h2>
-        <div
-          style={{
-            display: "grid",
-            gridTemplateColumns: "repeat(5, 1fr)",
-            gap: 20,
-            marginBottom: 56,
-          }}
-        >
-          {MOCK_COURSES.map((course) => (
-            <Link
-              key={course.id}
-              href={`/courses/${course.id}`}
-              style={{ textDecoration: "none", color: "inherit" }}
-            >
-              <div
-                style={{
+        {recentlyViewed.length === 0 ? (
+          <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", marginBottom: 56 }}>
+            No courses viewed yet. Browse courses to get started.
+          </p>
+        ) : (
+          <div style={{ display: "grid", gridTemplateColumns: "repeat(3, 1fr)", gap: 24, marginBottom: 56 }}>
+            {recentlyViewed.map((course) => (
+              <Link key={course.id} href={`/courses/${course.id}`} style={{ textDecoration: "none", color: "inherit" }}>
+                <div style={{
                   ...cardStyle,
-                  padding: "20px 24px",
+                  padding: "28px 32px",
                   cursor: "pointer",
                   display: "flex",
                   flexDirection: "column",
                   justifyContent: "space-between",
-                  minHeight: 150,
-                }}
-              >
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "flex-start",
-                  }}
-                >
-                  <div>
-                    <p
-                      style={{
+                  minHeight: 160,
+                }}>
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "flex-start" }}>
+                    <div>
+                      <p style={{
                         fontFamily: "var(--font-heading)",
-                        fontSize: "var(--font-size-sm)",
+                        fontSize: "var(--font-size-base)",
                         fontWeight: 700,
                         color: "var(--color-text-primary)",
                         margin: 0,
-                      }}
-                    >
-                      {course.code}
-                    </p>
-                    <p
-                      style={{
-                        fontSize: "var(--font-size-xs)",
+                      }}>
+                        {course.code}
+                      </p>
+                      <p style={{
+                        fontSize: "var(--font-size-sm)",
                         color: "var(--color-text-secondary)",
-                        margin: "4px 0 0",
-                      }}
-                    >
-                      {course.name}
-                    </p>
+                        margin: "6px 0 0",
+                      }}>
+                        {course.name}
+                      </p>
+                    </div>
+                    {course.rating !== null && (
+                      <span style={{
+                        fontFamily: "var(--font-heading)",
+                        fontSize: 48,
+                        fontWeight: 700,
+                        color: "var(--color-primary-navy)",
+                        lineHeight: 1,
+                      }}>
+                        {course.rating}
+                      </span>
+                    )}
                   </div>
-                  <span
-                    style={{
-                      fontFamily: "var(--font-heading)",
-                      fontSize: 28,
-                      fontWeight: 700,
-                      color: "var(--color-primary-navy)",
-                      lineHeight: 1,
-                    }}
-                  >
-                    {course.rating}
-                  </span>
+                  <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", margin: 0 }}>
+                    {course.viewed}
+                  </p>
                 </div>
-                <p
-                  style={{
-                    color: "var(--color-text-secondary)",
-                    fontSize: "var(--font-size-xs)",
-                    margin: 0,
-                  }}
-                >
-                  {course.viewed}
-                </p>
-              </div>
-            </Link>
-          ))}
-        </div>
+              </Link>
+            ))}
+          </div>
+        )}
 
         {/* Most-Talked About Course Discussion */}
         <h2
