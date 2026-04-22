@@ -121,8 +121,6 @@ export default function ProfessorProfilePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar />
-
       <div style={{ padding: "32px 40px" }}>
         <button
           onClick={() => router.push("/professors")}

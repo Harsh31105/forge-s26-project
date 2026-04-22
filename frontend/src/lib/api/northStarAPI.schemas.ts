@@ -804,7 +804,6 @@ export type GetReviewsParams = {
   /**
    * Number of items to return (1–100)
    * @minimum 1
-   * @maximum 100
    */
   limit?: number;
   /**

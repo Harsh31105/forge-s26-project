@@ -11,7 +11,7 @@ export async function connectDatabase(dbConfig: DB): Promise<Pool> {
 
     const poolConfig: PoolConfig = {
         connectionString: getConnectionString(dbConfig),
-        max: dbConfig.maxOpenConns || 10,
+        max: dbConfig.maxOpenConns || 20,
         idleTimeoutMillis: (dbConfig.maxConnIdleTime || 5 * 60) * 1000,
     };
     const pool = new Pool(poolConfig);
