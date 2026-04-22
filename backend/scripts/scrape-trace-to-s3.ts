@@ -677,7 +677,9 @@ async function extractMetadataFromContext(
   const bodyText = await getBodyText(reportContext);
   const headingText =
     (await reportContext.locator("h3").first().textContent())?.trim() ?? "";
-  const termMatch = headingText.match(/\(([^)]+)\)/);
+  // Find parens containing a year — skip things like "(HON)" or "(CRN 12345)"
+  const allParens = [...headingText.matchAll(/\(([^)]+)\)/g)];
+  const termMatch = allParens.find((m) => /(19|20)\d{2}/.test(m[1] ?? ""));
   const termLabel = termMatch?.[1]?.trim() ?? "";
   if (!termLabel) {
     throw new Error(
@@ -1096,6 +1098,10 @@ async function main(): Promise<void> {
         processedReportUrls.add(reportUrl);
         console.log(
           `Uploaded ${metadata.termLabel} report for ${metadata.instructor || "unknown instructor"} -> ${s3Key}`,
+        );
+      } catch (err) {
+        console.error(
+          `  Skipping report ${idx + 1}: ${err instanceof Error ? err.message : String(err)}`,
         );
       } finally {
         if (!isFirstSingleReport) {
