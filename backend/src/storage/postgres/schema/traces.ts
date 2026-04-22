@@ -55,6 +55,7 @@ export class TraceRepositorySchema implements TraceRepository {
             firstName: row.firstName,
             lastName: row.lastName,
             tags: row.tags,
+            avatar: null,
             createdAt: row.createdAt,
             updatedAt: row.updatedAt,
         }));

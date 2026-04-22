@@ -22,7 +22,10 @@ describe("ProfessorRepositorySchema DB Integration", () => {
 
     beforeAll(async () => {
         db = await setupTestWithCleanup();
-        repo = new ProfessorRepositorySchema(db);
+        repo = new ProfessorRepositorySchema(db, {
+            getRandomAvatarKey: () => "professor-avatars/1.jpeg",
+            getPresignedUrl: async (key: string) => `https://s3.example.com/${key}`,
+        });
     }, 30000);
 
     beforeEach(async () => {
