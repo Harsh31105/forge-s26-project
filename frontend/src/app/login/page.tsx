@@ -2,12 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 import SignUpPopup from "@/src/components/login/popup";
 import TypewriterBackground from "@/src/components/login/TypewriterBackground";
 
 export default function LoginPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [showSignIn, setShowSignIn] = useState(false);
   const [authError, setAuthError]   = useState<string | null>(null);
 
@@ -30,16 +32,20 @@ export default function LoginPage() {
 
     if (token) {
       localStorage.setItem(TOKEN_KEY, token);
+      // Wipe any stale cache (e.g. previous session's onboarded student)
+      // so the onboarding page always sees a fresh /auth/me response.
+      queryClient.clear();
       window.history.replaceState({}, "", "/login");
       // New login — send to onboarding
       router.push("/onboarding");
       return;
     }
 
-    // Already logged in — skip login page
+    // Token exists — let onboarding verify it and decide where to send the user.
+    // Going directly to / would skip the /auth/me check that detects deleted accounts.
     const existing = localStorage.getItem(TOKEN_KEY);
     if (existing) {
-      router.push("/");
+      router.push("/onboarding");
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);

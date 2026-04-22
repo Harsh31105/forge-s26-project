@@ -4,10 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 export function useMe() {
     const meAPI = getMe();
 
-    const { data: student, isLoading, error } = useQuery({
+    const { data: student, isLoading, isFetching, error } = useQuery({
         queryKey: ["me"],
         queryFn: () => meAPI.getAuthMe(),
+        staleTime: 0,
     });
 
-    return { student, isLoading, error: error?.message || null };
+    return { student, isLoading, isFetching, error: error?.message || null };
 }

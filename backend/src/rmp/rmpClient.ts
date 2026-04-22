@@ -7,8 +7,15 @@ export type RMPApiData = {
     lastName: string;
     ratingAvg: string | null;
     ratingWta: number | null;
-    avgDifficulty: string;
+    avgDifficulty: string | null;
 };
+
+function cleanNumber(val: unknown): number | null {
+    if (typeof val !== "number") return null;
+    if (!Number.isFinite(val) || Number.isNaN(val)) return null;
+    if (val <= 0) return null;
+    return val;
+}
 
 export async function fetchRMPDataForProfessor(
     firstName: string,
@@ -22,12 +29,18 @@ export async function fetchRMPDataForProfessor(
 
     if (!result) return null;
 
+    const rawDifficulty = typeof result.avgDifficulty === "string"
+        ? parseFloat(result.avgDifficulty)
+        : result.avgDifficulty;
+
     return {
         firstName,
         lastName,
-        ratingAvg: result.avgRating !== 0 ? result.avgRating.toString() : null,
-        ratingWta: result.wouldTakeAgainPercent === -1 ? null : result.wouldTakeAgainPercent,
-        avgDifficulty: result.avgDifficulty.toString(),
+        ratingAvg: cleanNumber(result.avgRating)?.toString() ?? null,
+        ratingWta: result.wouldTakeAgainPercent === -1
+            ? null
+            : cleanNumber(result.wouldTakeAgainPercent),
+        avgDifficulty: cleanNumber(rawDifficulty)?.toString() ?? null,
     };
 }
 

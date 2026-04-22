@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { getStudent } from "@/src/lib/api/student";
 import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 import { useMe } from "@/src/hooks/useMe";
@@ -681,8 +682,11 @@ function CourseSelector({
 
 export default function OnboardingPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
 
-  // Save token from URL synchronously before hooks fire
+  // Save token from URL synchronously before hooks fire. If a fresh token
+  // arrived in the URL, also clear cached queries so stale /auth/me data from
+  // a previous session (e.g. deleted-and-recreated account) can't leak.
   const [tokenReady] = useState(() => {
     if (typeof window === "undefined") return false;
     const params = new URLSearchParams(window.location.search);
@@ -690,11 +694,13 @@ export default function OnboardingPage() {
     if (token) {
       localStorage.setItem(TOKEN_KEY, token);
       window.history.replaceState({}, "", "/onboarding");
+      queryClient.clear();
     }
     return Boolean(localStorage.getItem(TOKEN_KEY));
   });
 
-  const { student, isLoading, error: loadError } = useMe();
+  const { student, isFetching, error: loadError } = useMe();
+
   const studentAPI = getStudent(); // kept for PATCH only
 
   const [step, setStep] = useState<1 | 2>(1);
@@ -724,12 +730,16 @@ export default function OnboardingPage() {
     }
   }, [tokenReady, router]);
 
-  // Redirect to homepage if onboarding is already complete
+  // Redirect to homepage if onboarding is already complete.
+  // Wait for the fresh /auth/me fetch to land before deciding — otherwise a
+  // stale React Query cache (e.g. from a previous session after an account
+  // delete/recreate) can trigger an incorrect skip.
   useEffect(() => {
+    if (isFetching) return;
     if (student?.graduationYear && student.graduationYear > 0) {
       router.push("/");
     }
-  }, [student, router]);
+  }, [student, isFetching, router]);
 
   const toggleCourse = (id: string) => {
     setSelectedCourses((prev) =>

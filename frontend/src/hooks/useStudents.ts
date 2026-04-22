@@ -5,6 +5,7 @@ import {
     StudentPostInput,
     StudentPatchInput
 } from "@/src/lib/api/northStarAPI.schemas";
+import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 
 export function useStudents(params?: GetStudentsParams) {
     const studentAPI = getStudent();
@@ -80,9 +81,15 @@ export function useStudentMutations() {
 
     const deleteMutation = useMutation({
         mutationFn: (studentID: string) => studentAPI.deleteStudentsId(studentID),
-        onSuccess: (_, studentID) => {
-            queryClient.invalidateQueries({ queryKey: ["students"] });
-            queryClient.removeQueries({ queryKey: ["students", studentID] });
+        onSuccess: () => {
+            if (typeof window !== "undefined") {
+                localStorage.removeItem(TOKEN_KEY);
+                // Hard reload to /login so ALL JS state (React Query cache,
+                // in-flight refetches, cookies) is wiped before the next
+                // OAuth login. A soft router.push would leave stale cache
+                // that could cause the onboarding page to skip itself.
+                window.location.href = "/login";
+            }
         }
     });
 

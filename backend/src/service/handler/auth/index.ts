@@ -33,7 +33,11 @@ export class AuthHandler {
                 sameSite: "lax",
             });
 
-            res.redirect(`${config.application.frontendUrl}/login`);
+            // Include token in URL so the login page can detect a fresh OAuth
+            // login and route to /onboarding. Without this, any stale
+            // localStorage token (e.g. from a deleted account) causes the
+            // login page to skip onboarding and go straight to /.
+            res.redirect(`${config.application.frontendUrl}/login?token=${token}`);
         };
 
         const code = req.query.code as string;
@@ -100,7 +104,14 @@ export class AuthHandler {
 
     async handleMe(req: Request, res: Response): Promise<void> {
         const user = (req as any).user as UserPayload;
-        const student = await this.studentRepo.getStudentByEmail(user.email);
-        res.status(200).json(student);
+        try {
+            const student = await this.studentRepo.getStudentByEmail(user.email);
+            res.status(200).json(student);
+        } catch {
+            // JWT is valid but the student row is gone (e.g. deleted account).
+            // Return 401 so the frontend's forceLogout() clears the stale token
+            // and redirects to /login, forcing a clean re-auth.
+            res.status(401).json({ error: "Student not found" });
+        }
     }
 }
