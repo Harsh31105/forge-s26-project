@@ -24,7 +24,7 @@ export default function ProfessorsPage() {
   const [ratingFilter, setRatingFilter] = useState<RatingFilter>(null);
   const [selectedCourse, setSelectedCourse] = useState<string>("");
 
-  const { courses } = useCourses();
+  const { courses } = useCourses({ limit: 1000 });
   const { professors, isLoading, error } = useProfessors({
     limit: 1000,
     tags: campusFilters.length > 0 ? campusFilters : undefined,

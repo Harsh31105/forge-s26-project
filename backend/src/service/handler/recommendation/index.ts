@@ -83,7 +83,7 @@ export class RecommendationHandler {
             lecture_type: r.lectureType ?? "",
             how_often_percentage: flattenDistribution(r.howOftenPercentage, ATTENDANCE_MIDPOINTS),
             hours_devoted: flattenDistribution(r.hoursDevoted, HOURS_MIDPOINTS),
-            professor_efficiency: parseFloat(r.professorEfficiency) || 0,
+            professor_efficiency: Number(r.professorEfficiency) || 0,
             created_at: r.createdAt.toISOString(),
             updated_at: r.updatedAt.toISOString(),
         }));

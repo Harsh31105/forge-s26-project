@@ -6,7 +6,9 @@ import { useCourse, useBestProfessors } from "@/src/hooks/useCourses";
 import { useTraces } from "@/src/hooks/useTraces";
 import { useFavourites, useFavouriteMutations } from "@/src/hooks/useFavourites";
 import { useCurrentUser } from "@/src/hooks/useAuth";
-import { Trace } from "@/src/lib/api/northStarAPI.schemas";
+import { useReviews } from "@/src/hooks/useReviews";
+import { Review, Trace } from "@/src/lib/api/northStarAPI.schemas";
+import { getMockCourseMetrics } from "@/src/lib/mockCourseMetrics";
 
 function HeartIcon({ filled }: { filled: boolean }) {
   return (
@@ -76,6 +78,10 @@ function StatCard({ label, value }: { label: string; value: string | number }) {
   );
 }
 
+function isCourseReview(review: Review): review is Review & { courseId: string } {
+  return "courseId" in review;
+}
+
 function computeTraceAverages(traces: Trace[]) {
   if (!traces.length) return { hoursDistribution: {} as Record<string, number>, courseQuality: null, instructorRating: null };
 
@@ -110,6 +116,7 @@ export default function CoursePage() {
   const { course, isLoading } = useCourse(courseId);
   const { professors } = useBestProfessors(courseId);
   const { traces } = useTraces({ courseId });
+  const { reviews } = useReviews();
   const { favourites } = useFavourites();
   const { addFavourite, removeFavourite, isAdding, isRemoving } = useFavouriteMutations();
   const { user: currentUser } = useCurrentUser();
@@ -118,6 +125,10 @@ export default function CoursePage() {
   const isFavourited = favourites.some((f) => f.courseId === courseId);
 
   const traceStats = computeTraceAverages(traces as Trace[]);
+  const courseReviews = reviews.filter((review) => isCourseReview(review) && review.courseId === courseId);
+  const avgRating = courseReviews.length
+    ? courseReviews.reduce((sum, review) => sum + (review.rating ?? 0), 0) / courseReviews.length
+    : null;
 
   const nupathTags = course?.nupath
     ? course.nupath.split(",").map((s) => s.trim()).filter(Boolean)
@@ -154,6 +165,7 @@ export default function CoursePage() {
 
   const deptCode = course.department.name.toUpperCase();
   const fullCode = `${deptCode} ${course.course_code}`;
+  const courseMetrics = getMockCourseMetrics(course);
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
@@ -238,9 +250,9 @@ export default function CoursePage() {
           {/* Aggregate ratings */}
           <div style={{ background: "var(--color-surface-light-cream)", borderRadius: "var(--border-radius-md)", padding: "28px 32px" }}>
             <div style={{ display: "flex", justifyContent: "space-around", gap: 16 }}>
-              <StatCard label="Overall Rating" value="—" />
-              <StatCard label="Difficulty" value="—" />
-              <StatCard label="Relevance to Degree" value="—" />
+              <StatCard label="Overall Rating" value={`${(avgRating ?? courseMetrics.overallRating).toFixed(1)}/5`} />
+              <StatCard label="Difficulty" value={`${courseMetrics.difficulty.toFixed(1)}/5`} />
+              <StatCard label="Relevance to Degree" value={`${courseMetrics.relevanceToDegree.toFixed(1)}/5`} />
             </div>
           </div>
 

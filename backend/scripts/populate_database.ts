@@ -9,7 +9,6 @@ import { drizzle } from "drizzle-orm/node-postgres";
 import { eq, and } from "drizzle-orm";
 import { dbConfig, getConnectionString } from "../src/config/db";
 import { ProfessorRepositorySchema } from "../src/storage/postgres/schema/professor";
-import { CourseRepositorySchema } from "../src/storage/postgres/schema/course";
 import { TraceRepositorySchema } from "../src/storage/postgres/schema/trace";
 import { professor } from "../src/storage/tables/professor";
 import { course } from "../src/storage/tables/course";
@@ -67,7 +66,6 @@ async function main() {
   const pool = new Pool({ connectionString: getConnectionString(dbConfig) });
   const db = drizzle(pool);
   const profRepo = new ProfessorRepositorySchema(db);
-  const courseRepo = new CourseRepositorySchema(db);
   const traceRepo = new TraceRepositorySchema(db);
   const stats = { success: 0, skipped: 0, failed: 0 };
 
@@ -118,11 +116,6 @@ async function main() {
       } catch {
         console.warn(`✗ invalid JSON: ${key}`);
         stats.failed++;
-        continue;
-      }
-
-      if (!schema.trace.semester.startsWith("summer")) {
-        stats.skipped++;
         continue;
       }
 
@@ -181,16 +174,14 @@ async function main() {
               eq(course.departmentId, deptId),
             ),
           );
-        const courseRow =
-          existingCourses[0] ??
-          (await courseRepo.createCourse({
-            name: schema.course.name,
-            department_id: deptId,
-            course_code: courseCode,
-            description: "",
-            num_credits: schema.course.num_credits ?? 4,
-            lecture_type: (schema.course.lecture_type as any) ?? undefined,
-          }));
+        const courseRow = existingCourses[0];
+        if (!courseRow) {
+          console.warn(
+            `✗ course not found in DB, skipping trace to avoid blank description: ${deptName} ${courseCode} ${schema.course.name}`,
+          );
+          stats.skipped++;
+          continue;
+        }
 
         // insert trace using TraceRepositorySchema
         const t = schema.trace;

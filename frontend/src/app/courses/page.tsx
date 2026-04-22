@@ -8,6 +8,7 @@ import { useProfessors } from "@/src/hooks/useProfessors";
 import CourseCard from "@/src/components/CourseCard";
 import SearchableSelect from "@/src/components/SearchableSelect";
 import { Review, Trace } from "@/src/lib/api/northStarAPI.schemas";
+import { getMockCourseMetrics } from "@/src/lib/mockCourseMetrics";
 
 type SortOption = "relevance" | "highest" | "lowest" | "name";
 type RatingFilter = "4" | "3" | null;
@@ -41,6 +42,7 @@ export default function CoursesPage() {
   const [timeSlotFilter, setTimeSlotFilter] = useState<TimeSlotFilter>(null);
 
   const { courses, isLoading, error } = useCourses({
+    limit: 1000,
     num_credits: creditsFilter ? parseInt(creditsFilter) : undefined,
     ...(sortBy === "name" && { sortBy: "name", sortOrder: "asc" }),
     ...(sortBy === "highest" && { sortBy: "name", sortOrder: "asc" }),
@@ -115,17 +117,19 @@ export default function CoursesPage() {
     if (ratingFilter) {
       const min = parseFloat(ratingFilter);
       list = list.filter(c => {
-        const r = ratingByCourse[c.id];
-        return r !== undefined && r >= min;
+        const r = ratingByCourse[c.id] ?? getMockCourseMetrics(c).overallRating;
+        return r >= min;
       });
     }
 
     if (sortBy === "highest") {
-      list = [...list].sort((a, b) => (ratingByCourse[b.id] ?? 0) - (ratingByCourse[a.id] ?? 0));
+      list = [...list].sort((a, b) => (ratingByCourse[b.id] ?? getMockCourseMetrics(b).overallRating) - (ratingByCourse[a.id] ?? getMockCourseMetrics(a).overallRating));
     } else if (sortBy === "lowest") {
-      list = [...list].sort((a, b) => (ratingByCourse[a.id] ?? 0) - (ratingByCourse[b.id] ?? 0));
+      list = [...list].sort((a, b) => (ratingByCourse[a.id] ?? getMockCourseMetrics(a).overallRating) - (ratingByCourse[b.id] ?? getMockCourseMetrics(b).overallRating));
     } else if (sortBy === "name") {
       list = [...list].sort((a, b) => a.name.localeCompare(b.name));
+    } else if (sortBy === "relevance") {
+      list = [...list].sort((a, b) => getMockCourseMetrics(b).relevanceToDegree - getMockCourseMetrics(a).relevanceToDegree);
     }
 
     return list;

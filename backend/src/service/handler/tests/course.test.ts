@@ -22,6 +22,9 @@ const mockCourse1: Course = {
     description: "Learn how to design software using object-oriented principles.",
     num_credits: 4,
     lecture_type: "lecture",
+    prereqs: null,
+    coreqs: null,
+    nupath: null,
     created_at: new Date("2026-01-15T10:30:00Z"),
     updated_at: new Date("2026-01-15T10:30:00Z")
 };
@@ -37,6 +40,9 @@ const mockCourse2: Course = {
     description: "Introduction to mathematical concepts for the BIG 4.",
     num_credits: 4,
     lecture_type: "online",
+    prereqs: null,
+    coreqs: null,
+    nupath: null,
     created_at: new Date("2026-01-18T10:30:00Z"),
     updated_at: new Date("2026-01-18T10:30:00Z")
 };
@@ -52,6 +58,9 @@ const mockCourse3: Course = {
     description: "Learn fundamental algorithms and data structures in lab.",
     num_credits:  1,
     lecture_type: "lab",
+    prereqs: null,
+    coreqs: null,
+    nupath: null,
     created_at: new Date("2026-01-19T10:30:00Z"),
     updated_at: new Date("2026-01-19T10:30:00Z")
 };
