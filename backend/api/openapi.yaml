@@ -32,6 +32,8 @@ tags:
     description: Favourite CRUD Operations
   - name: Trace
     description: API Endpoints to directly do with TRACE Evaluations
+  - name: Academic
+    description: Academic data endpoints for majors, minors, and concentrations
   - name: Recommendation
     description: API endpoing for the recommendation algorithm for the student
 
@@ -1506,11 +1508,34 @@ paths:
 
     patch:
       summary: Update a student
-      description: Update a student's information using their UUID.
+      description: Update a student's information using their UUID. Supports optional profile picture upload via multipart/form-data.
       tags: [Student]
       requestBody:
         required: true
         content:
+          multipart/form-data:
+            schema:
+              type: object
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                email:
+                  type: string
+                  format: email
+                graduationYear:
+                  type: integer
+                preferences:
+                  type: array
+                  items:
+                    type: string
+                    enum:
+                      [exam-heavy, project-heavy, group-work, attendance-required, strict_deadlines,
+                       flexible_deadlines, extra_credit, little_to_no_test, fast_paced, slow_paced]
+                profilePicture:
+                  type: string
+                  format: binary
           application/json:
             schema:
               $ref: "#/components/schemas/StudentPatchInput"
@@ -1547,6 +1572,285 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}/majors:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+
+    post:
+      summary: Add a major to a student
+      description: Associates a major with the specified student.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentMajorPostInput"
+      responses:
+        "204":
+          description: Major added successfully
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}/majors/{majorId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+      - name: majorId
+        in: path
+        required: true
+        description: Major ID
+        schema:
+          type: integer
+
+    delete:
+      summary: Remove a major from a student
+      description: Removes the association between a student and a major.
+      tags: [Student]
+      responses:
+        "204":
+          description: Major removed successfully
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}/concentrations:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+
+    post:
+      summary: Add a concentration to a student
+      description: Associates a concentration with the specified student.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentConcentrationPostInput"
+      responses:
+        "204":
+          description: Concentration added successfully
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}/concentrations/{concentrationId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+      - name: concentrationId
+        in: path
+        required: true
+        description: Concentration ID
+        schema:
+          type: integer
+
+    delete:
+      summary: Remove a concentration from a student
+      description: Removes the association between a student and a concentration.
+      tags: [Student]
+      responses:
+        "204":
+          description: Concentration removed successfully
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}/minors:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+
+    post:
+      summary: Add a minor to a student
+      description: Associates a minor with the specified student.
+      tags: [Student]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/StudentMinorPostInput"
+      responses:
+        "204":
+          description: Minor added successfully
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /students/{id}/minors/{minorId}:
+    parameters:
+      - name: id
+        in: path
+        required: true
+        description: Student UUID
+        schema:
+          type: string
+          format: uuid
+      - name: minorId
+        in: path
+        required: true
+        description: Minor ID
+        schema:
+          type: integer
+
+    delete:
+      summary: Remove a minor from a student
+      description: Removes the association between a student and a minor.
+      tags: [Student]
+      responses:
+        "204":
+          description: Minor removed successfully
+        "400":
+          description: Invalid input
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BadRequestError"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /academic/majors:
+    get:
+      summary: Get all majors
+      description: Returns a list of all available majors.
+      tags: [Academic]
+      responses:
+        "200":
+          description: List of majors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Major"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /academic/concentrations:
+    get:
+      summary: Get all concentrations
+      description: Returns a list of all available concentrations.
+      tags: [Academic]
+      responses:
+        "200":
+          description: List of concentrations
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Concentration"
+        "500":
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/InternalServerError"
+
+  /academic/minors:
+    get:
+      summary: Get all minors
+      description: Returns a list of all available minors.
+      tags: [Academic]
+      responses:
+        "200":
+          description: List of minors
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/Minor"
         "500":
           description: Internal server error
           content:
@@ -2540,6 +2844,72 @@ components:
           description: Updated tags (null clears all tags)
           example: ["rewarding"]
 
+    Major:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Computer Science"
+
+    Minor:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Mathematics"
+
+    Concentration:
+      type: object
+      required:
+        - id
+        - name
+      properties:
+        id:
+          type: integer
+          example: 1
+        name:
+          type: string
+          example: "Artificial Intelligence"
+
+    StudentMajorPostInput:
+      type: object
+      required:
+        - majorId
+      properties:
+        majorId:
+          type: integer
+          example: 1
+
+    StudentConcentrationPostInput:
+      type: object
+      required:
+        - concentrationId
+      properties:
+        concentrationId:
+          type: integer
+          example: 1
+
+    StudentMinorPostInput:
+      type: object
+      required:
+        - minorId
+      properties:
+        minorId:
+          type: integer
+          example: 1
+
     Student:
       type: object
       required:
@@ -2577,6 +2947,24 @@ components:
         updatedAt:
           type: string
           format: date-time
+        profilePictureUrl:
+          type: string
+          nullable: true
+        majors:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Major"
+        minors:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Minor"
+        concentrations:
+          type: array
+          nullable: true
+          items:
+            $ref: "#/components/schemas/Concentration"
 
     StudentPostInput:
       type: object
