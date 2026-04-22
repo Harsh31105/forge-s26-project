@@ -9,6 +9,7 @@ import type { Student, StudentPatchInputPreferencesItem } from "@/src/lib/api/no
 import { StudentPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import AmbientReviews from "@/src/components/onboarding/AmbientReviews";
 import { Check, ChevronDown } from "lucide-react";
+import {useStudentMutations} from "@/src/hooks/useStudents";
 
 // ── Static data ───────────────────────────────────────────
 
@@ -694,8 +695,8 @@ export default function OnboardingPage() {
     return Boolean(localStorage.getItem(TOKEN_KEY));
   });
 
-  const { student, isLoading, error: loadError } = useMe();
-  const studentAPI = getStudent(); // kept for PATCH only
+  const { student, error: loadError } = useMe();
+  const { updateStudent } = useStudentMutations();
 
   const [step, setStep] = useState<1 | 2>(1);
 
@@ -749,14 +750,17 @@ export default function OnboardingPage() {
     setSaveError(null);
 
     try {
-      await studentAPI.patchStudentsId(student.id, {
-        graduationYear: Number(graduationYear),
-        preferences: selectedPreferences,
-        // TODO: send major, concentration once Major/Concentration endpoints exist (tag Biak's PR)
-        // TODO: send minors once Minor endpoints exist (tag Biak's PR)
-        // TODO: send selectedCourses once course-history endpoints exist
-      });
-      router.push("/");
+        await updateStudent({
+            studentID: student.id,
+            input: {
+                graduationYear: Number(graduationYear),
+                preferences: selectedPreferences
+                // TODO: send major, concentration once Major/Concentration endpoints exist (tag Biak's PR)
+                // TODO: send minors once Minor endpoints exist (tag Biak's PR)
+                // TODO: send selectedCourses once course-history endpoints exist
+            }
+        });
+        router.push("/");
     } catch {
       setSaveError("Failed to save. Please try again.");
       setSaving(false);
