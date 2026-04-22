@@ -1,3 +1,4 @@
+
 "use client";
 
 import { useParams, useRouter } from "next/navigation";
@@ -63,7 +64,7 @@ export default function ProfessorProfilePage() {
     };
     return `${map[sem] ?? sem} ${year}`;
   };
-  
+
   const profReviews = useMemo(
     () => reviews.filter(r => (r as any).professorId === id),
     [reviews, id]
