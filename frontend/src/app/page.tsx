@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useCourses } from "@/src/hooks/useCourses";
 import { useMe } from "@/src/hooks/useMe";
+import { useAiSummaries } from "@/src/hooks/useAiSummaries";
 import ProfilePicture from "@/src/components/ProfilePicture";
 
 const MOCK_DISCUSSIONS = [
@@ -16,10 +17,10 @@ const cardStyle: React.CSSProperties = {
   borderRadius: 16,
 };
 
-
 export default function Home() {
   const { student } = useMe();
   const { courses } = useCourses({ limit: 5 });
+  const { summaries, isLoading: summariesLoading } = useAiSummaries({ limit: 5 });
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
@@ -209,7 +210,6 @@ export default function Home() {
                   {item.replies} replies
                 </p>
               </div>
-            </Link>
           ))}
         </div>
       </main>

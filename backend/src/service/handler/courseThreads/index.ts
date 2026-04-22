@@ -1,4 +1,4 @@
-import type { CourseThreadRepository } from "../../../storage/storage";
+import type { AiSummaryRepository, CourseThreadRepository } from "../../../storage/storage";
 import {
   CourseThread,
   CourseThreadPatchInputSchema,
@@ -12,8 +12,13 @@ import { validate as isUUID } from "uuid";
 import { PaginationSchema } from "../../../utils/pagination";
 import { assessCensorship, CensorshipResult } from "../../../utils/censorship";
 
+const STALE_THRESHOLD = 0.25;
+
 export class CourseThreadHandler {
-  constructor(private readonly repo: CourseThreadRepository) {}
+  constructor(
+    private readonly repo: CourseThreadRepository,
+    private readonly aiSummaryRepo: AiSummaryRepository,
+  ) {}
 
   async handleGet(req: Request, res: Response): Promise<void> {
     const courseReviewId = req.params.id as string;
@@ -48,6 +53,9 @@ export class CourseThreadHandler {
     try {
       const created = await this.repo.createThread(courseReviewId, input);
       res.status(201).json(created);
+      this.aiSummaryRepo
+        .markStaleIfThresholdMet(courseReviewId, "course", STALE_THRESHOLD)
+        .catch(err => console.error("Failed to check AI summary staleness:", err));
     } catch (err) {
       console.error("DB error in handlePost (courseThreads):", err);
       throw mapDBError(err, "failed to create thread");

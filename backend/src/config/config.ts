@@ -8,6 +8,8 @@ import type { Supabase } from "./supabase";
 import { supabaseConfig } from "./supabase";
 import { googleConfig } from "./google";
 import type { Google } from "./google";
+import type { Gemini } from "./gemini";
+import { geminiConfig } from "./gemini";
 
 
 export interface configuration {
@@ -15,7 +17,8 @@ export interface configuration {
     db: DB,
     s3: S3,
     supabase: Supabase,
-    google : Google
+    google: Google,
+    gemini: Gemini,
 }
 
 export const config = Object.freeze({
@@ -23,7 +26,8 @@ export const config = Object.freeze({
     db: dbConfig,
     s3: s3Config,
     supabase: supabaseConfig,
-    google: googleConfig
+    google: googleConfig,
+    gemini: geminiConfig,
 });
 
 //Test
