@@ -3,7 +3,7 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { getStudent } from "@/src/lib/api/student";
-import { TOKEN_KEY } from "@/src/lib/api/apiClient";
+import { getMe } from "@/src/lib/api/me";
 import type { Student, StudentPatchInputPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import { StudentPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import AmbientReviews from "@/src/components/onboarding/AmbientReviews";
@@ -730,35 +730,19 @@ export default function OnboardingPage() {
       return;
     }
 
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-    if (token) {
-      localStorage.setItem(TOKEN_KEY, token);
-      window.history.replaceState({}, "", "/onboarding");
-    }
-
-    const storedToken = token || localStorage.getItem(TOKEN_KEY);
-    if (!storedToken) {
-      router.push("/login");
-      return;
-    }
-
-    try {
-      const payload = JSON.parse(atob(storedToken.split(".")[1]));
-      studentAPI
-        .getStudentsId(payload.id)
-        .then((s) => {
-          // Already completed onboarding — skip to homepage
-          if (s.graduationYear && s.graduationYear > 0) {
-            router.push("/home");
-            return;
-          }
-          setStudent(s);
-        })
-        .catch(() => setLoadError("Failed to load your profile."));
-    } catch {
-      router.push("/login");
-    }
+    const meAPI = getMe();
+    meAPI.getAuthMe()
+      .then((s) => {
+        // Already completed onboarding — skip to homepage
+        if (s.graduationYear && s.graduationYear > 0) {
+          router.push("/");
+          return;
+        }
+        setStudent(s);
+      })
+      .catch(() => {
+        router.push("/login");
+      });
   }, []);
 
   const toggleCourse = (id: string) => {
@@ -786,8 +770,7 @@ export default function OnboardingPage() {
         // TODO: send minors once Minor endpoints exist (tag Biak's PR)
         // TODO: send selectedCourses once course-history endpoints exist
       });
-      // TODO: route to the real homepage URL once agreed upon with other contributors
-      router.push("/home");
+      router.push("/");
     } catch {
       setSaveError("Failed to save. Please try again.");
       setSaving(false);

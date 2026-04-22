@@ -5,7 +5,7 @@ import {course} from "../../tables/course";
 import {NotFoundError} from "../../../errs/httpError";
 import { department } from "../../tables/department";
 import { getOffset, PaginationType } from "../../../utils/pagination";
-import { and, asc, desc, eq, sql } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 
 export class CourseRepositorySchema implements CourseRepository {
     constructor(private readonly db: NodePgDatabase) {
@@ -29,13 +29,16 @@ export class CourseRepositorySchema implements CourseRepository {
         const orderCol = orderColMap[filters.sortBy ?? "name"] ?? course.name;
         const order = filters.sortOrder === "desc" ? desc(orderCol) : asc(orderCol);
 
-        const rows = await this.db.select()
+        const baseQuery = this.db.select()
             .from(course)
             .innerJoin(department, eq(course.departmentId, department.id))
             .where(conditions.length > 0 ? and(...conditions) : undefined)
             .orderBy(order)
-            .limit(pagination.limit)
-            .offset(getOffset(pagination));
+            .$dynamic();
+
+        const rows = await (pagination.limit !== undefined
+            ? baseQuery.limit(pagination.limit).offset(getOffset(pagination))
+            : baseQuery);
 
         return rows.map((row) => ({
             id: row.course.id,

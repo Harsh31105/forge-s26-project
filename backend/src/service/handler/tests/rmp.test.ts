@@ -13,6 +13,9 @@ describe("RMPHandler Endpoints", () => {
 
     beforeEach(() => {
         jest.spyOn(console, "error").mockImplementation(() => {});
+        jest.mock("../../../rmp/rmpClient", () => ({
+            fetchAndMatchRMPData: jest.fn().mockResolvedValue([]),
+        }));
 
         rmpRepo = {
             getRMPByProfessorID: jest.fn(),

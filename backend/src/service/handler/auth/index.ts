@@ -8,7 +8,7 @@ import jwt from "jsonwebtoken";
 
 export class AuthHandler {
     constructor(
-        private readonly studentRepo: StudentRepository
+        private readonly studentRepo: StudentRepository,
     ) {}
 
     async handleRedirect(_req: Request, res: Response): Promise<void> {
@@ -29,7 +29,7 @@ export class AuthHandler {
         const redirectWithToken = (token: string) => {
             res.cookie("token", token, {
                 httpOnly: true,
-                secure: true,
+                secure: process.env.NODE_ENV === "production",
                 sameSite: "lax",
             });
 

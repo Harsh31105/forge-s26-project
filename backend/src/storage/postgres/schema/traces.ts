@@ -97,4 +97,7 @@ export class TraceRepositorySchema implements TraceRepository {
 
         return results.slice(0, pagination.limit);
     }
+    async getAllTraces(): Promise<Trace[]> {
+        return this.db.select().from(trace);
+    }
 }

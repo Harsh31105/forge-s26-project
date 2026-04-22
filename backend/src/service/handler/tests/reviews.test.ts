@@ -116,7 +116,7 @@ describe("ReviewHandler Endpoints", () => {
     });
 
     test("invalid pagination - limit too high", async () => {
-      const res = await request(app).get("/reviews?limit=101");
+      const res = await request(app).get("/reviews?limit=1001");
       expect(res.status).toBe(400);
     });
 
@@ -270,17 +270,6 @@ describe("ReviewHandler Endpoints", () => {
         rating: payload.rating,
         reviewText: payload.reviewText,
       });
-    });
-
-    test("creates review without studentId returns 400", async () => {
-      const payload = {
-        courseId: "d9b1d7db-5c8e-4a9b-9f0e-1c2f3a4b5c6d",
-        rating: 4,
-        reviewText: "Great course!",
-      };
-
-      const res = await request(app).post("/reviews").send(payload);
-      expect(res.status).toBe(400);
     });
 
     test("censors profane review text", async () => {

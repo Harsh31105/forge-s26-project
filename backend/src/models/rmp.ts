@@ -5,7 +5,7 @@ export interface RMP {
     professorId: string;
     ratingAvg: string | null;
     ratingWta: number | null;
-    avgDifficulty: string;
+    avgDifficulty: string | null;
     createdAt: Date;
     updatedAt: Date;
 }
@@ -15,5 +15,5 @@ export interface RMPPostInputType {
     professorId: string;
     ratingAvg: number | null;
     ratingWta: number | null;
-    avgDifficulty: number;
+    avgDifficulty: number | null;
 }

@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import { useCourse, useBestProfessors } from "@/src/hooks/useCourses";
 import { useTraces } from "@/src/hooks/useTraces";
 import { useFavourites, useFavouriteMutations } from "@/src/hooks/useFavourites";
@@ -104,6 +104,7 @@ function computeTraceAverages(traces: Trace[]) {
 
 export default function CoursePage() {
   const params = useParams();
+  const router = useRouter();
   const courseId = params.id as string;
 
   const { course, isLoading } = useCourse(courseId);
@@ -131,6 +132,10 @@ export default function CoursePage() {
     }
   };
 
+  const handleCompare = () => {
+    router.push(`/compare?courseId=${encodeURIComponent(courseId)}`);
+  };
+
   if (isLoading) {
     return (
       <div style={{ minHeight: "100vh", background: "var(--color-background-cream)", display: "flex", alignItems: "center", justifyContent: "center" }}>
@@ -152,41 +157,6 @@ export default function CoursePage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-
-      {/* Navbar */}
-      <nav style={{ background: "var(--color-surface-light-cream)", borderBottom: "1px solid var(--color-border-tan)" }}>
-        <div style={{ maxWidth: 1280, margin: "0 auto", padding: "0 48px", height: 68, display: "flex", alignItems: "center", justifyContent: "space-between" }}>
-          <div style={{ display: "flex", alignItems: "center", gap: 10 }}>
-            <svg width="40" height="40" viewBox="0 0 56 56" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="28" cy="28" r="24" stroke="#B45309" strokeWidth="6" fill="none" />
-              <path d="M32,14 L46,25 Q50,28 46,31 L32,42 Q28,45 24,42 L10,31 Q6,28 10,25 L24,14 Q28,11 32,14 Z" fill="#B45309" transform="rotate(-35 28 28)" />
-              <circle cx="28" cy="28" r="7" fill="#1D3A8A" />
-            </svg>
-            <span style={{ fontFamily: "var(--font-heading)", fontWeight: 700, fontSize: 22, color: "var(--color-text-primary)" }}>NorthStar</span>
-          </div>
-
-          <div style={{ display: "flex", gap: 40 }}>
-            {[
-              { label: "Home", href: "/home" },
-              { label: "Courses", href: "/courses", active: true },
-              { label: "Professors", href: "/professors" },
-              { label: "Profile", href: "/profile" },
-            ].map(({ label, href, active }) => (
-              <Link key={label} href={href} style={{ fontFamily: "var(--font-body)", fontSize: "var(--font-size-sm)", color: active ? "var(--color-primary-navy)" : "var(--color-text-primary)", textDecoration: active ? "underline" : "none", fontWeight: active ? 600 : 400 }}>
-                {label}
-              </Link>
-            ))}
-          </div>
-
-          <div style={{ width: 36, height: 36, borderRadius: "50%", background: "var(--color-primary-navy)", display: "flex", alignItems: "center", justifyContent: "center" }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </div>
-        </div>
-      </nav>
-
       {/* Main content */}
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "32px 48px 80px" }}>
 
@@ -245,7 +215,7 @@ export default function CoursePage() {
               >
                 <HeartIcon filled={isFavourited} />
               </button>
-              <button style={{ background: "white", border: "1px solid var(--color-border-tan)", borderRadius: "var(--border-radius-sm)", padding: "8px 20px", fontSize: "var(--font-size-xs)", fontFamily: "var(--font-body)", fontWeight: 600, cursor: "pointer", color: "var(--color-text-primary)" }}>
+              <button onClick={handleCompare} style={{ background: "white", border: "1px solid var(--color-border-tan)", borderRadius: "var(--border-radius-sm)", padding: "8px 20px", fontSize: "var(--font-size-xs)", fontFamily: "var(--font-body)", fontWeight: 600, cursor: "pointer", color: "var(--color-text-primary)" }}>
                 Compare
               </button>
             </div>
@@ -322,9 +292,10 @@ export default function CoursePage() {
                 const avgRating = effArr.length ? (effArr.reduce((a, b) => a + b, 0) / effArr.length).toFixed(1) : null;
 
                 return (
-                  <div
+                  <Link
                     key={prof.id}
-                    style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", background: "var(--color-surface-extra-light)", borderRadius: "var(--border-radius-sm)", border: "1px solid var(--color-border-tan)" }}
+                    href={`/professors/${prof.id}`}
+                    style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "16px 20px", background: "var(--color-surface-extra-light)", borderRadius: "var(--border-radius-sm)", border: "1px solid var(--color-border-tan)", textDecoration: "none", color: "inherit", cursor: "pointer" }}
                   >
                     <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
                       <div style={{ width: 44, height: 44, borderRadius: "50%", background: "var(--color-primary-navy)", display: "flex", alignItems: "center", justifyContent: "center", flexShrink: 0 }}>
@@ -351,7 +322,7 @@ export default function CoursePage() {
                         </p>
                       </div>
                     )}
-                  </div>
+                  </Link>
                 );
               })}
             </div>

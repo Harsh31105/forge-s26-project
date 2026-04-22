@@ -27,6 +27,8 @@ import { authMiddleware, readOnlyMiddleware } from "../auth/middleware";
 import cookieParser from "cookie-parser";
 import { StudentHandler } from "./handler/student";
 import { studentRoutes } from "./handler/student/routes";
+import { AcademicHandler } from "./handler/academic";
+import { academicRoutes } from "./handler/academic/routes";
 import {FavouriteHandler} from "./handler/favourite";
 import {favouriteRoutes} from "./handler/favourite/routes";
 import { RMPHandler } from "./handler/rmp";
@@ -35,6 +37,8 @@ import { ProfThreadHandler } from "./handler/professorThreads";
 import { professorThreadRoutes } from "./handler/professorThreads/routes";
 import { TraceHandler } from "./handler/trace";
 import { traceRoutes } from "./handler/trace/routes";
+import { RecommendationHandler } from "./handler/recommendation";
+import { recommendationRoutes } from "./handler/recommendation/routes";
 
 class App {
     public server: Express;
@@ -55,9 +59,10 @@ class App {
                 "http://localhost:8080",
                 "http://127.0.0.1:8080",
                 "http://127.0.0.1:3000",
+                "http://127.0.0.1:3001",
             ],
             methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-            allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization"],
+            allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization", "X-Api-Key"],
             credentials: true,
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));
@@ -129,12 +134,18 @@ function registerRoutes(router: Router, repo: Repository) {
     const profThreadHandler = new ProfThreadHandler(repo.profThreads);
     router.use("/professor-reviews", professorThreadRoutes(profThreadHandler));
 
-    const studentHandler = new StudentHandler(repo.students);
+    const studentHandler = new StudentHandler(repo.students, repo.academic, repo.profilePictures);
     router.use("/students", studentRoutes(studentHandler));
+
+    const academicHandler = new AcademicHandler(repo.academic);
+    router.use("/academic", academicRoutes(academicHandler));
 
     const favouritesHandler = new FavouriteHandler(repo.favourites);
     router.use("/favourites", favouriteRoutes(favouritesHandler));
 
     const traceHandler = new TraceHandler(repo.traces);
     router.use("/trace", traceRoutes(traceHandler));
+
+    const recHandler = new RecommendationHandler(repo);
+    router.use("/recommendations", recommendationRoutes(recHandler));
 }

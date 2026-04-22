@@ -84,7 +84,7 @@ async function createAllTables(db: NodePgDatabase) {
           'prereq',
           'coreq'
         );
-        
+
         CREATE TYPE location_tag_enum AS ENUM (
           'boston',
           'oakland',
@@ -192,6 +192,7 @@ async function createAllTables(db: NodePgDatabase) {
             email VARCHAR(255) NOT NULL UNIQUE,
             graduation_year INT CHECK ( graduation_year >= 2025 ),
             preferences pref_enum[],
+            profile_picture_key VARCHAR(500),
             created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
             updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
         );
@@ -358,6 +359,93 @@ async function createAllTables(db: NodePgDatabase) {
         ALTER TABLE rmp
         ADD CONSTRAINT rmp_professor_id_unique UNIQUE (professor_id);
 
+        -- Seed majors from onboarding data
+                INSERT INTO major (name)
+                VALUES ('Architecture'),
+                       ('Biology'),
+                       ('Business Administration'),
+                       ('Chemistry'),
+                       ('Communication Studies'),
+                       ('Computer Science'),
+                       ('Criminal Justice'),
+                       ('Data Science'),
+                       ('Electrical & Computer Engineering'),
+                       ('Environmental Science'),
+                       ('International Business'),
+                       ('Mathematics'),
+                       ('Mechanical Engineering'),
+                       ('Nursing'),
+                       ('Physics'),
+                       ('Political Science'),
+                       ('Psychology')
+                    ON CONFLICT (name) DO NOTHING;
+
+        -- Seed concentrations (deduplicated across all majors)
+                INSERT INTO concentration (name)
+                VALUES
+        -- Biology
+        ('Biochemistry'),
+        ('Cell & Molecular Biology'),
+        ('Ecology & Evolutionary Biology'),
+        ('Marine Biology'),
+        -- Business Administration
+        ('Accounting'),
+        ('Entrepreneurship'),
+        ('Finance'),
+        ('Management'),
+        ('Marketing'),
+        ('Supply Chain Management'),
+        -- Chemistry
+        ('Medicinal Chemistry'),
+        ('Organic Chemistry'),
+        -- Communication Studies
+        ('Advertising'),
+        ('Digital Media'),
+        ('Journalism'),
+        ('Public Relations'),
+        -- Computer Science
+        ('Artificial Intelligence'),
+        ('Cybersecurity'),
+        ('Data Science'),
+        ('Game Development'),
+        ('Human-Computer Interaction'),
+        ('Software'),
+        ('Systems'),
+        -- Criminal Justice
+        ('Corrections'),
+        ('Law Enforcement'),
+        ('Policy & Planning'),
+        -- Data Science
+        ('Business Analytics'),
+        ('Machine Learning'),
+        ('Statistics'),
+        -- Electrical & Computer Engineering
+        ('Computer Engineering'),
+        ('Electrical Engineering'),
+        -- Environmental Science
+        ('Climate Science'),
+        ('Ecology'),
+        ('Environmental Policy'),
+        -- Mathematics
+        ('Applied Mathematics'),
+        ('Pure Mathematics'),
+        -- Mechanical Engineering
+        ('Manufacturing & Design'),
+        ('Robotics & Control'),
+        -- Physics
+        ('Astrophysics'),
+        ('Condensed Matter'),
+        -- Political Science
+        ('American Politics'),
+        ('International Relations'),
+        ('Law & Politics'),
+        -- Psychology
+        ('Clinical'),
+        ('Cognitive'),
+        ('Experimental'),
+        ('Health Psychology')
+                    ON CONFLICT (name) DO NOTHING;
+
         DO $$ BEGIN
             CREATE TYPE semester_enum AS ENUM ('fall', 'spring', 'summer_1', 'summer_2');
             EXCEPTION
@@ -377,6 +465,9 @@ async function createAllTables(db: NodePgDatabase) {
         ALTER TABLE professor
             ADD CONSTRAINT professor_name_unique
                 UNIQUE (first_name, last_name);
+
+        ALTER TABLE rmp
+            ALTER COLUMN avg_difficulty DROP NOT NULL;
 
         ALTER TABLE trace DROP CONSTRAINT IF EXISTS trace_hours_devoted_check;
         ALTER TABLE trace DROP CONSTRAINT IF EXISTS trace_how_often_percentage_check;
@@ -408,7 +499,7 @@ export async function cleanupTestData() {
   const { db } = sharedTestDB;
 
   await db.execute(`
-    TRUNCATE TABLE 
+    TRUNCATE TABLE
       trace,
       course,
       department,

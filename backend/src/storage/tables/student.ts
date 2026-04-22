@@ -25,6 +25,7 @@ export const student = pgTable("student", {
       .array()
       .default(sql`ARRAY[]::pref_enum[]`)
       .notNull(),
+  profilePictureKey: varchar("profile_picture_key", { length: 500 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [
