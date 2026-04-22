@@ -188,7 +188,24 @@ export default function ProfessorProfilePage() {
             background: "var(--color-white)",
             border: "var(--border-width) solid var(--color-border-tan)",
             flexShrink: 0,
-          }} />
+            overflow: "hidden",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}>
+            {professor?.avatar ? (
+              <img
+                src={professor.avatar}
+                alt={`Professor ${professor.firstName} ${professor.lastName}`}
+                style={{ width: "100%", height: "100%", objectFit: "cover" }}
+              />
+            ) : (
+              <svg width="40" height="40" viewBox="0 0 24 24" fill="none">
+                <circle cx="12" cy="8" r="4" fill="#9CA3AF"/>
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7" fill="#9CA3AF"/>
+              </svg>
+            )}
+          </div>
 
           <div style={{ flex: 1 }}>
             <h1 style={{

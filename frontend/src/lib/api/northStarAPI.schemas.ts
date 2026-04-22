@@ -214,6 +214,8 @@ export interface Professor {
    * @nullable
    */
   tags?: ProfessorTagsItem[] | null;
+  /** presigned S3 URL for the professor's avatar */
+  avatar?: string | null;
   createdAt: string;
   updatedAt: string;
 }
