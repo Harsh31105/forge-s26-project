@@ -1,0 +1,57 @@
+[
+    {
+      "id": "a3f1c2d4-9b6e-4c1a-8f2d-1e3a5b7c9d01",
+      "name": "Mobile Robotics",
+      "department_id": 2,
+      "course_code": 3500,
+      "description": "Localization, SLAM, and navigation for robots.",
+      "num_credits": 4,
+      "lecture_type": "lecture",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "b4e2d3c5-7a8f-4d2b-9a1c-2f4e6d8c0b12",
+      "name": "Artificial Intelligence",
+      "department_id": 1,
+      "course_code": 4100,
+      "description": "Search, planning, and AI fundamentals.",
+      "num_credits": 4,
+      "lecture_type": "lecture",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "c5f3e4d6-6b9c-4e3d-8b2e-3a5c7d9e1f23",
+      "name": "Database Design",
+      "department_id": 1,
+      "course_code": 3200,
+      "description": "SQL, schema design, backend systems.",
+      "num_credits": 4,
+      "lecture_type": "lab",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "d6a4f5e7-5c1d-4f4e-9c3f-4b6d8e0f2a34",
+      "name": "Human Robot Interaction",
+      "department_id": 2,
+      "course_code": 4200,
+      "description": "Designing human-centered robot systems.",
+      "num_credits": 4,
+      "lecture_type": "seminar",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    },
+    {
+      "id": "e7b5a6f8-4d2e-4a5f-8d4a-5c7e9f1b3c45",
+      "name": "Mathematical Reasoning",
+      "department_id": 3,
+      "course_code": 1365,
+      "description": "Proofs, logic, and reasoning.",
+      "num_credits": 4,
+      "lecture_type": "lecture",
+      "created_at": "2026-01-01T00:00:00Z",
+      "updated_at": "2026-01-01T00:00:00Z"
+    }
+  ]
