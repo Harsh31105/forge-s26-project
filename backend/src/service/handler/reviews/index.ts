@@ -25,8 +25,6 @@ export class ReviewHandler {
     const pagination = PaginationSchema.safeParse(req.query);
     if (!pagination.success) throw BadRequest("invalid pagination parameters");
 
-    if (pagination.data.limit > 100) throw BadRequest("Pagination limit must be between 1 and 100");
-
     let reviews: Review[];
 
     try {
