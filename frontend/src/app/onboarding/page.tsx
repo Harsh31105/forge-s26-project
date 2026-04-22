@@ -218,39 +218,6 @@ function SkipLink() {
 
 // ── Nav ───────────────────────────────────────────────────
 
-function Nav() {
-  return (
-    <nav
-      role="navigation"
-      aria-label="Main navigation"
-      style={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "space-between",
-        padding: "0 32px",
-        height: "56px",
-        backgroundColor: C.navy,
-        position: "sticky",
-        top: 0,
-        zIndex: 100,
-      }}
-    >
-      <span
-        style={{
-          fontFamily: FONT_HEADING,
-          fontWeight: 700,
-          fontSize: "18px",
-          color: C.white,
-          letterSpacing: "-0.01em",
-        }}
-      >
-        NorthStar
-      </span>
-      {/* Nav links intentionally empty during onboarding — main nav appears on homepage */}
-    </nav>
-  );
-}
-
 // ── Page shell ────────────────────────────────────────────
 
 function PageShell({ children }: { children: React.ReactNode }) {
@@ -265,7 +232,6 @@ function PageShell({ children }: { children: React.ReactNode }) {
       }}
     >
       <SkipLink />
-      <Nav />
 
       {/* Single husky logomark — bottom-right, barely visible */}
       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -803,7 +769,6 @@ export default function OnboardingPage() {
         }}
       >
         <SkipLink />
-        <Nav />
 
         {/* eslint-disable-next-line @next/next/no-img-element */}
 
