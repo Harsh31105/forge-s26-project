@@ -1920,8 +1920,8 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/InternalServerError"
-
-/recommendations:
+                
+  /recommendations:
     post:
       summary: Rule-based course recommendations
       description: Returns recommended courses for a student using a rule-based algorithm, scored and bucketed into high/medium/low tiers.
@@ -1964,37 +1964,6 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/MLRecommendResponse"
-        "500":
-          description: Internal server error
-          content:
-            application/json:
-              schema:
-                $ref: "#/components/schemas/InternalServerError"
-
-  /ai-summaries/popular:
-    get:
-      summary: Get popular conversations with AI summaries
-      description: Returns the top most popular course and professor reviews ranked by a popularity score.
-      tags: [AiSummary]
-      security: []
-      parameters:
-        - name: limit
-          in: query
-          description: Number of popular reviews to return (max 20, default 5)
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 20
-            default: 5
-      responses:
-        "200":
-          description: List of AI summaries for the most popular reviews
-          content:
-            application/json:
-              schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/AiSummary"
         "500":
           description: Internal server error
           content:

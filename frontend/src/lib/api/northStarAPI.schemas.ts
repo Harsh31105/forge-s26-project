@@ -629,27 +629,7 @@ export interface AcademicSemester {
   year: number;
 }
 
-export type AiSummaryReviewType = (typeof AiSummaryReviewType)[keyof typeof AiSummaryReviewType];
-
-// eslint-disable-next-line @typescript-eslint/no-redeclare
-export const AiSummaryReviewType = {
-  course: "course",
-  professor: "professor",
-} as const;
-
-export interface AiSummary {
-  id: string;
-  reviewId: string;
-  reviewType: AiSummaryReviewType;
-  summary: string;
-  score: number;
-  summaryUpdatedAt: string;
-  createdAt: string;
-  /** Course code (e.g. "CS 3000") for course reviews, or professor full name for professor reviews */
-  displayName: string;
-}
-
- export interface Department {
+export interface Department {
   id: number;
   name: string;
 }
@@ -714,6 +694,26 @@ export interface MLRecommendResponse {
   high: MLPredictionResult[];
   medium: MLPredictionResult[];
   low: MLPredictionResult[];
+}
+
+export type AiSummaryReviewType = (typeof AiSummaryReviewType)[keyof typeof AiSummaryReviewType];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const AiSummaryReviewType = {
+  course: "course",
+  professor: "professor",
+} as const;
+
+export interface AiSummary {
+  id: string;
+  reviewId: string;
+  reviewType: AiSummaryReviewType;
+  summary: string;
+  score: number;
+  summaryUpdatedAt: string;
+  createdAt: string;
+  /** Course code (e.g. "CS 3000") for course reviews, or professor full name for professor reviews */
+  displayName: string;
 }
 
 export type GetCourseReviewsIdThreadsParams = {
