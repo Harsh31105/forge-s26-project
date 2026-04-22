@@ -5,6 +5,7 @@ import {
     StudentPostInput,
     StudentPatchInput
 } from "@/src/lib/api/northStarAPI.schemas";
+import { customAxios } from "@/src/lib/api/apiClient";
 
 export function useStudents(params?: GetStudentsParams) {
     const studentAPI = getStudent();
@@ -98,5 +99,41 @@ export function useStudentMutations() {
         createError: createMutation.error?.message || null,
         updateError: updateMutation.error?.message || null,
         deleteError: deleteMutation.error?.message || null,
+    };
+}
+
+export function useUploadProfilePicture(studentID: string) {
+    const queryClient = useQueryClient();
+
+    const mutation = useMutation({
+        mutationFn: (file: File) => {
+            const formData = new FormData();
+            formData.append("profilePicture", file);
+            return customAxios<{ profilePictureUrl?: string | null }>({
+                url: `/students/${studentID}`,
+                method: "PATCH",
+                headers: { "Content-Type": undefined },
+                data: formData,
+            });
+        },
+        onSuccess: (data) => {
+            queryClient.invalidateQueries({ queryKey: ["students", studentID] });
+            queryClient.invalidateQueries({ queryKey: ["currentUser"] });
+            // Directly patch the ["me"] cache with the presigned URL from the PATCH response
+            // instead of relying on /auth/me to regenerate it
+            if (data?.profilePictureUrl) {
+                queryClient.setQueryData(["me"], (old: any) =>
+                    old ? { ...old, profilePictureUrl: data.profilePictureUrl } : old
+                );
+            } else {
+                queryClient.invalidateQueries({ queryKey: ["me"] });
+            }
+        },
+    });
+
+    return {
+        uploadProfilePicture: mutation.mutateAsync,
+        isUploading: mutation.isPending,
+        uploadError: mutation.error?.message || null,
     };
 }

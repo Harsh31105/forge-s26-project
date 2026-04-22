@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import { ArrowRight, Search } from "lucide-react";
 import { useCourses } from "../../hooks/useCourses";
 import { CourseCard } from "../../components/compare/courseCard";
-import { Course } from "../../lib/api/northStarAPI.schemas";
+import {Course, MLRecommendResponse} from "../../lib/api/northStarAPI.schemas";
+import {useRecommendations} from "@/src/hooks/useRecommendations";
 
 const MAX_COURSES = 4;
 
@@ -144,6 +145,30 @@ export default function ComparePage() {
     const [courses, setCourses] = useState<Course[]>([]);
     const [showSearch, setShowSearch] = useState(false);
 
+
+    const { getMLRecommendations } = useRecommendations();
+    const [recommendations, setRecommendations] = useState<MLRecommendResponse | null>(null);
+
+    useEffect(() => {
+        getMLRecommendations("fall").then(setRecommendations);
+    }, []);
+
+    const getRecommendationLevel = (courseId: string) => {
+        if (!recommendations) return null;
+
+        if (recommendations.high.some((r) => r.course.id === courseId)) {
+            return "HIGH";
+        }
+        if (recommendations.medium.some((r) => r.course.id === courseId)) {
+            return "MEDIUM";
+        }
+        if (recommendations.low.some((r) => r.course.id === courseId)) {
+            return "LOW";
+        }
+
+        return null;
+    };
+
     const handleAddCourse = (course: Course) => {
         setCourses((prev) => [...prev, course]);
     };
@@ -218,6 +243,7 @@ export default function ComparePage() {
                                 key={course.id}
                                 course={course}
                                 onRemove={() => handleRemoveCourse(course.id)}
+                                recommendation={getRecommendationLevel(course.id)}
                             />
                         ))
                     )}
