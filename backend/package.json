@@ -22,7 +22,7 @@
   "description": "",
   "dependencies": {
     "@aws-sdk/client-s3": "^3.1004.0",
-    "@aws-sdk/s3-request-presigner": "^3.1035.0",
+    "@aws-sdk/s3-request-presigner": "^3.1034.0",
     "@google/generative-ai": "^0.24.1",
     "@jest/globals": "^30.2.0",
     "cheerio": "^1.2.0",

@@ -95,22 +95,36 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
     async getTopScoredReviews(reviewType: "course" | "professor", limit: number): Promise<ReviewWithScore[]> {
         if (reviewType === "course") {
             const rows = await this.db.execute(sql`
+                WITH per_review AS (
+                    SELECT
+                        cr.review_id AS "reviewId",
+                        cr.review_text AS "reviewText",
+                        cr.course_id,
+                        cr.created_at,
+                        (
+                            COUNT(ct.id) * 2.5 +
+                            COUNT(DISTINCT ct.student_id) * 2.5 +
+                            2.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(ct.created_at), cr.created_at))) / 86400 + 1)
+                        ) AS score
+                    FROM ${courseReview} cr
+                    LEFT JOIN ${courseThread} ct ON ct.course_review_id = cr.review_id
+                    GROUP BY cr.review_id, cr.review_text, cr.course_id, cr.created_at
+                ),
+                top_per_course AS (
+                    SELECT DISTINCT ON (course_id) *
+                    FROM per_review
+                    ORDER BY course_id, score DESC
+                )
                 SELECT
-                    cr.review_id       AS "reviewId",
-                    'course'           AS "reviewType",
-                    cr.review_text     AS "reviewText",
+                    tp."reviewId",
+                    'course' AS "reviewType",
+                    tp."reviewText",
                     d.name || ' ' || c.course_code AS "displayName",
-                    (
-                        COUNT(ct.id) * 2.5 +
-                        COUNT(DISTINCT ct.student_id) * 2.5 +
-                        2.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(ct.created_at), cr.created_at))) / 86400 + 1)
-                    ) AS score
-                FROM ${courseReview} cr
-                LEFT JOIN ${courseThread} ct ON ct.course_review_id = cr.review_id
-                JOIN ${course} c ON c.id = cr.course_id
+                    tp.score
+                FROM top_per_course tp
+                JOIN ${course} c ON c.id = tp.course_id
                 JOIN ${department} d ON d.id = c.department_id
-                GROUP BY cr.review_id, cr.review_text, cr.created_at, d.name, c.course_code
-                ORDER BY score DESC
+                ORDER BY tp.score DESC
                 LIMIT ${limit}
             `);
 
@@ -124,21 +138,35 @@ export class AiSummaryRepositorySchema implements AiSummaryRepository {
 
         } else {
             const rows = await this.db.execute(sql`
+                WITH per_review AS (
+                    SELECT
+                        pr.review_id AS "reviewId",
+                        pr.review_text AS "reviewText",
+                        pr.professor_id,
+                        pr.created_at,
+                        (
+                            COUNT(pt.id) * 2.5 +
+                            COUNT(DISTINCT pt.student_id) * 2.5 +
+                            2.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(pt.created_at), pr.created_at))) / 86400 + 1)
+                        ) AS score
+                    FROM ${profReview} pr
+                    LEFT JOIN ${profThread} pt ON pt.professor_review_id = pr.review_id
+                    GROUP BY pr.review_id, pr.review_text, pr.professor_id, pr.created_at
+                ),
+                top_per_prof AS (
+                    SELECT DISTINCT ON (professor_id) *
+                    FROM per_review
+                    ORDER BY professor_id, score DESC
+                )
                 SELECT
-                    pr.review_id       AS "reviewId",
-                    'professor'        AS "reviewType",
-                    pr.review_text     AS "reviewText",
+                    tp."reviewId",
+                    'professor' AS "reviewType",
+                    tp."reviewText",
                     p.first_name || ' ' || p.last_name AS "displayName",
-                    (
-                        COUNT(pt.id) * 2.5 +
-                        COUNT(DISTINCT pt.student_id) * 2.5 +
-                        2.0 / (EXTRACT(EPOCH FROM (NOW() - COALESCE(MAX(pt.created_at), pr.created_at))) / 86400 + 1)
-                    ) AS score
-                FROM ${profReview} pr
-                LEFT JOIN ${profThread} pt ON pt.professor_review_id = pr.review_id
-                JOIN ${professor} p ON p.id = pr.professor_id
-                GROUP BY pr.review_id, pr.review_text, pr.created_at, p.first_name, p.last_name
-                ORDER BY score DESC
+                    tp.score
+                FROM top_per_prof tp
+                JOIN ${professor} p ON p.id = tp.professor_id
+                ORDER BY tp.score DESC
                 LIMIT ${limit}
             `);
             return (rows.rows as Array<Record<string, unknown>>).map(row => ({
