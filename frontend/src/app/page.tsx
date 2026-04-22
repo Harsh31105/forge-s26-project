@@ -1,7 +1,8 @@
 "use client";
 
 import Link from "next/link";
-import { useCurrentUser } from "@/src/hooks/useAuth";
+import { useMe } from "@/src/hooks/useMe";
+import NavBar from "../components/NavBar";
 
 const MOCK_COURSES = [
   { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
@@ -64,12 +65,14 @@ function NorthStarLogo() {
 }
 
 export default function Home() {
-  const { firstName } = useCurrentUser();
+  const { student } = useMe();
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
 
-      {/* Navbar - commented out for now
+      {/* <NavBar /> */}
+
+      {/* NavBar - commented out for now
       <nav style={{ background: "var(--color-surface-light-cream)", borderBottom: "1px solid var(--color-border-tan)" }}>
         <div style={{
           maxWidth: 1280,
@@ -141,7 +144,7 @@ export default function Home() {
               color: "var(--color-text-primary)",
               margin: 0,
             }}>
-              Welcome Back{firstName ? `, ${firstName}` : ""}!
+              Welcome Back{student ? `, ${student.firstName}` : ""}!
             </h1>
             <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)", marginTop: 8, marginBottom: 0 }}>
               Continue planning your semester

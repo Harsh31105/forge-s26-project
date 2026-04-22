@@ -59,7 +59,7 @@ class App {
                 "http://127.0.0.1:3000",
             ],
             methods: ["GET", "POST", "PUT", "PATCH", "DELETE", "OPTIONS"],
-            allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization"],
+            allowedHeaders: ["Origin", "Content-Type", "Accept", "Authorization", "X-Api-Key"],
             credentials: true,
             exposedHeaders: ["Content-Length", "X-Request-ID"],
         }));

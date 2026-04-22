@@ -27,13 +27,7 @@ export class AuthHandler {
         };
 
         const redirectWithToken = (token: string) => {
-            res.cookie("token", token, {
-                httpOnly: true,
-                secure: true,
-                sameSite: "lax",
-            });
-
-            res.redirect(`${config.application.frontendUrl}/login`);
+            res.redirect(`${config.application.frontendUrl}/login?token=${encodeURIComponent(token)}`);
         };
 
         const code = req.query.code as string;
