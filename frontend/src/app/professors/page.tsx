@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useMemo } from "react";
+import { useCourses } from "@/src/hooks/useCourses";
 import { useTraces } from "@/src/hooks/useTraces";
 import { useProfessors } from "@/src/hooks/useProfessors";
 import { useRMP } from "@/src/hooks/useRMP";
@@ -34,21 +35,15 @@ export default function ProfessorsPage() {
   const { reviews } = useReviews();
   const { traces } = useTraces({ limit: 30240 });
 
-  const courseOptions = useMemo(() => {
-    const seen = new Set<string>();
-    return traces
-      .filter(t => {
-        if (seen.has(t.courseId)) return false;
-        seen.add(t.courseId);
-        return true;
-      })
-      .map(t => ({
-        value: t.courseId,
-        label: t.courseName,
-        sublabel: `${t.courseCode}`,
-      }))
-      .sort((a, b) => a.label.localeCompare(b.label));
-  }, [traces]);
+  const { courses: allCourses } = useCourses({ limit: 2690 });
+
+  const courseOptions = useMemo(() =>
+    allCourses.map(c => ({
+      value: c.id,
+      label: c.name,
+      sublabel: `${c.department.name} ${c.course_code}`,
+    })).sort((a, b) => a.label.localeCompare(b.label)),
+  [allCourses]);
 
   const reviewCountMap = useMemo(() => {
     const map: Record<string, number> = {};
@@ -76,8 +71,15 @@ export default function ProfessorsPage() {
       );
       list = list.filter(p => profIdsForCourse.has(p.id));
     }
+    if (campusFilters.length > 0) {
+      list = list.filter(p =>
+        p.tags?.some(tag => campusFilters.includes(tag as CampusFilter))
+      );
+    }
     return list;
-  }, [professors, search, selectedCourse, traces, ratingFilter, wtaFilter, difficultyFilter]);
+    }, [professors, search, selectedCourse, traces, campusFilters, ratingFilter, wtaFilter, difficultyFilter]);
+
+
 
   const handleToggleCampus = (tag: CampusFilter) => {
     setCampusFilters(prev =>

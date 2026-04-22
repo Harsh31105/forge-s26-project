@@ -43,7 +43,7 @@ export default function CourseReviewsPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-      <Navbar activePage="courses" />
+      <Navbar />
 
       <div style={{ maxWidth: "800px", margin: "0 auto", padding: "32px 24px 100px" }}>
         <button
