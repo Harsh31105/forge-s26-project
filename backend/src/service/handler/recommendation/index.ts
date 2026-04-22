@@ -76,7 +76,7 @@ export class RecommendationHandler {
             lecture_type: r.lectureType ?? "",
             how_often_percentage: r.howOftenPercentage,
             hours_devoted: r.hoursDevoted,
-            professor_efficiency: parseFloat(r.professorEfficiency),
+            professor_efficiency: r.professorEfficiency,
             created_at: r.createdAt.toISOString(),
             updated_at: r.updatedAt.toISOString(),
         }));

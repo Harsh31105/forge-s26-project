@@ -400,8 +400,6 @@ async function createAllTables(db: NodePgDatabase) {
         ALTER TABLE rmp
             ALTER COLUMN avg_difficulty DROP NOT NULL;
     `);
-
-    `);
 }
 
 export async function cleanupTestData() {
