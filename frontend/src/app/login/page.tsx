@@ -2,21 +2,25 @@
 
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
-import { getMe } from "@/src/lib/api/me";
+import { useQueryClient } from "@tanstack/react-query";
+import { TOKEN_KEY } from "@/src/lib/api/apiClient";
 import SignUpPopup from "@/src/components/login/popup";
 import TypewriterBackground from "@/src/components/login/TypewriterBackground";
 
 export default function LoginPage() {
   const router = useRouter();
+  const queryClient = useQueryClient();
   const [showSignIn, setShowSignIn] = useState(false);
   const [authError, setAuthError]   = useState<string | null>(null);
 
-  // Handle OAuth callback errors from URL, then check if already authenticated
+  // Handle OAuth callback token / errors from URL
   useEffect(() => {
     const params = new URLSearchParams(window.location.search);
+    const token  = params.get("token");
     const error  = params.get("error");
 
     if (error) {
+      // Backend redirected back with an error (e.g. non-NEU email)
       if (error === "not_northeastern" || error.includes("northeastern")) {
         setAuthError("Only @husky.neu.edu accounts are supported. Please sign in with your Northeastern email.");
       } else {
@@ -26,20 +30,23 @@ export default function LoginPage() {
       return;
     }
 
-    // Check if cookie session is active — if so, route accordingly
-    const meAPI = getMe();
-    meAPI.getAuthMe()
-      .then((student) => {
-        // Already has a session; go to onboarding if not set up, else dashboard
-        if (!student.graduationYear || student.graduationYear === 0) {
-          router.push("/onboarding");
-        } else {
-          router.push("/");
-        }
-      })
-      .catch(() => {
-        // Not authenticated — stay on login page
-      });
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      // Wipe any stale cache (e.g. previous session's onboarded student)
+      // so the onboarding page always sees a fresh /auth/me response.
+      queryClient.clear();
+      window.history.replaceState({}, "", "/login");
+      // New login — send to onboarding
+      router.push("/onboarding");
+      return;
+    }
+
+    // Token exists — let onboarding verify it and decide where to send the user.
+    // Going directly to / would skip the /auth/me check that detects deleted accounts.
+    const existing = localStorage.getItem(TOKEN_KEY);
+    if (existing) {
+      router.push("/onboarding");
+    }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

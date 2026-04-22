@@ -2,11 +2,15 @@
 
 import { useCallback, useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
+import { useQueryClient } from "@tanstack/react-query";
 import { getStudent } from "@/src/lib/api/student";
-import { getMe } from "@/src/lib/api/me";
+import { TOKEN_KEY } from "@/src/lib/api/apiClient";
+import { useMe } from "@/src/hooks/useMe";
 import type { Student, StudentPatchInputPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import { StudentPreferencesItem } from "@/src/lib/api/northStarAPI.schemas";
 import AmbientReviews from "@/src/components/onboarding/AmbientReviews";
+import { Check, ChevronDown } from "lucide-react";
+import {useStudentMutations} from "@/src/hooks/useStudents";
 
 // ── Static data ───────────────────────────────────────────
 
@@ -168,26 +172,16 @@ function Checkmark() {
 
 function Chevron({ open }: { open: boolean }) {
   return (
-    <svg
-      width="16"
-      height="16"
-      viewBox="0 0 16 16"
-      fill="none"
+    <ChevronDown
+      size={16}
+      color={C.textSecondary}
       aria-hidden="true"
       style={{
         transform: open ? "rotate(180deg)" : "none",
         transition: "transform 0.12s",
         flexShrink: 0,
       }}
-    >
-      <path
-        d="M3 6L8 11L13 6"
-        stroke={C.textSecondary}
-        strokeWidth="1.5"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      />
-    </svg>
+    />
   );
 }
 
@@ -232,7 +226,6 @@ function Nav() {
       style={{
         display: "flex",
         alignItems: "center",
-        justifyContent: "space-between",
         padding: "0 32px",
         height: "56px",
         backgroundColor: C.navy,
@@ -252,7 +245,6 @@ function Nav() {
       >
         NorthStar
       </span>
-      {/* Nav links intentionally empty during onboarding — main nav appears on homepage */}
     </nav>
   );
 }
@@ -689,10 +681,30 @@ function CourseSelector({
 
 export default function OnboardingPage() {
   const router = useRouter();
-  const studentAPI = getStudent();
+  const queryClient = useQueryClient();
 
-  const [student, setStudent] = useState<Student | null>(null);
-  const [loadError, setLoadError] = useState<string | null>(null);
+  // Save token from URL synchronously before hooks fire. If a fresh token
+  // arrived in the URL, also clear cached queries so stale /auth/me data from
+  // a previous session (e.g. deleted-and-recreated account) can't leak.
+  const [tokenReady] = useState(() => {
+    if (typeof window === "undefined") return false;
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    if (token) {
+      localStorage.setItem(TOKEN_KEY, token);
+      window.history.replaceState({}, "", "/onboarding");
+      queryClient.clear();
+    }
+    return Boolean(localStorage.getItem(TOKEN_KEY));
+  });
+
+
+  const { student, isFetching, isLoading: studentLoading, error: loadError } = useMe();
+
+
+
+  const { updateStudent } = useStudentMutations();
+
   const [step, setStep] = useState<1 | 2>(1);
 
   // Step 1 state
@@ -713,37 +725,23 @@ export default function OnboardingPage() {
 
   const concentrations = major ? (MAJORS_WITH_CONCENTRATIONS[major] ?? []) : [];
 
+  // Redirect if not authenticated
   useEffect(() => {
-    // DEV_PREVIEW: set to true to bypass auth and view the page locally
-    const DEV_PREVIEW = false;
-    if (DEV_PREVIEW) {
-      setStudent({
-        id: "dev",
-        firstName: "Alex",
-        lastName: "Chen",
-        email: "alex.chen@husky.neu.edu",
-        graduationYear: 0, // 0 = not yet set, so onboarding form shows
-        preferences: [],
-        createdAt: "",
-        updatedAt: "",
-      });
-      return;
+    if (!tokenReady) {
+      router.push("/login");
     }
+  }, [tokenReady, router]);
 
-    const meAPI = getMe();
-    meAPI.getAuthMe()
-      .then((s) => {
-        // Already completed onboarding — skip to homepage
-        if (s.graduationYear && s.graduationYear > 0) {
-          router.push("/");
-          return;
-        }
-        setStudent(s);
-      })
-      .catch(() => {
-        router.push("/login");
-      });
-  }, []);
+  // Redirect to homepage if onboarding is already complete.
+  // Wait for the fresh /auth/me fetch to land before deciding — otherwise a
+  // stale React Query cache (e.g. from a previous session after an account
+  // delete/recreate) can trigger an incorrect skip.
+  useEffect(() => {
+    if (isFetching || studentLoading) return;
+    if (student?.graduationYear && student.graduationYear > 0) {
+      router.push("/");
+    }
+  }, [student, isFetching, studentLoading, router]);
 
   const toggleCourse = (id: string) => {
     setSelectedCourses((prev) =>
@@ -763,14 +761,17 @@ export default function OnboardingPage() {
     setSaveError(null);
 
     try {
-      await studentAPI.patchStudentsId(student.id, {
-        graduationYear: Number(graduationYear),
-        preferences: selectedPreferences,
-        // TODO: send major, concentration once Major/Concentration endpoints exist (tag Biak's PR)
-        // TODO: send minors once Minor endpoints exist (tag Biak's PR)
-        // TODO: send selectedCourses once course-history endpoints exist
-      });
-      router.push("/");
+        await updateStudent({
+            studentID: student.id,
+            input: {
+                graduationYear: Number(graduationYear),
+                preferences: selectedPreferences
+                // TODO: send major, concentration once Major/Concentration endpoints exist (tag Biak's PR)
+                // TODO: send minors once Minor endpoints exist (tag Biak's PR)
+                // TODO: send selectedCourses once course-history endpoints exist
+            }
+        });
+        router.push("/");
     } catch {
       setSaveError("Failed to save. Please try again.");
       setSaving(false);
@@ -829,13 +830,7 @@ export default function OnboardingPage() {
             }}
           >
             {/* ── Loading / error ── */}
-            {loadError ? (
-              <p
-                style={{ fontSize: "15px", color: C.error, textAlign: "center", fontFamily: FONT }}
-              >
-                {loadError}
-              </p>
-            ) : !student ? (
+            {(isFetching || studentLoading) ? (
               <p
                 style={{
                   fontSize: "15px",
@@ -858,7 +853,7 @@ export default function OnboardingPage() {
                     margin: "0 0 6px 0",
                   }}
                 >
-                  Welcome, {student.firstName}!
+                  Welcome{student?.firstName ? `, ${student.firstName}` : ""}!
                 </h2>
                 <p
                   style={{
@@ -1097,15 +1092,15 @@ export default function OnboardingPage() {
                     margin: "0 0 28px 0",
                   }}
                 >
-                  Tell us about your learning style and any courses you&apos;ve taken — we&apos;ll
-                  use this to tailor your recommendations.
+                  Tell us about your learning style — we&apos;ll use this to tailor your
+                  recommendations.
                 </p>
 
                 <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
-                  {/* Courses taken — optional
-                      TODO: replace MOCK_COURSES with a real API call when the course-history
-                            endpoint is ready */}
+                  {/* TODO: re-enable CourseSelector once a course-history backend endpoint exists.
+                      Commented out for now per PR review — no endpoint to persist these selections.
                   <CourseSelector selectedCourses={selectedCourses} onToggle={toggleCourse} />
+                  */}
 
                   {/* TODO: search-based course discovery (commented out until search endpoint ready)
                   <CourseSearch onSelect={...} /> */}

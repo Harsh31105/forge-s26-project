@@ -5,7 +5,7 @@ import NavBar from "./NavBar";
 export default function NavbarWrapper({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
 
-  // Login and onboarding own their page chrome.
+  // Hide full navbar on login and onboarding — those pages have their own nav
   if (pathname === "/login" || pathname === "/onboarding") {
     return <>{children}</>;
   }
