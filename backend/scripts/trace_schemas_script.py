@@ -171,24 +171,40 @@ def parse_course_info(text):
     """Extract course metadata from the first page text."""
     info = {}
 
-    # Course name and semester: "Technology and Human Values (Fall 2024)"
-    m = re.search(r"^(.+?)\s*\((Fall|Spring|Summer\s*[12]?)\s*(\d{4})\)", text, re.MULTILINE)
-    if m:
-        info["name"] = m.group(1).strip()
-        semester_raw = m.group(2).lower().strip()
-        semester_map = {
-            "fall": "fall", "spring": "spring",
-            "summer": "summer_1", "summer 1": "summer_1", "summer 2": "summer_2",
-        }
+    semester_map = {
+        "fall": "fall", "spring": "spring",
+        "summer": "summer_1", "summer 1": "summer_1", "summer 2": "summer_2",
+    }
+
+    # Format A: "TRACE report for BIOL1111-01 General Biology 1 (Aaron Roth)"
+    # with semester on its own line: "Summer 2 2025" or "Fall 2024"
+    m_sem_line = re.search(r"^\s*(Fall|Spring|Summer\s*[12]?)\s+(\d{4})\s*$", text, re.MULTILINE | re.IGNORECASE)
+    m_trace = re.search(r"TRACE report for [A-Z]+\d+[A-Z]?-\d+\s+(.+?)\s+\(([^)]+)\)", text)
+    if m_sem_line and m_trace:
+        semester_raw = m_sem_line.group(1).lower().strip()
         info["semester"] = semester_map.get(semester_raw, "summer_1")
+        info["year"] = int(m_sem_line.group(2))
+        info["name"] = m_trace.group(1).strip()
+        full_name = m_trace.group(2).strip().split()
+        if len(full_name) >= 2:
+            info["instructor_first"] = full_name[0]
+            info["instructor_last"] = " ".join(full_name[1:])
 
-        info["year"] = int(m.group(3))
+    # Format B (applyweb): "Technology and Human Values (Fall 2024)"
+    if not info.get("semester"):
+        m = re.search(r"^(.+?)\s*\((Fall|Spring|Summer\s*[12]?)\s*(\d{4})\)", text, re.MULTILINE)
+        if m:
+            info["name"] = m.group(1).strip()
+            semester_raw = m.group(2).lower().strip()
+            info["semester"] = semester_map.get(semester_raw, "summer_1")
+            info["year"] = int(m.group(3))
 
-    # Instructor: "Instructor: Stubbs, Alec"
-    m = re.search(r"Instructor:\s*([A-Za-z\-']+(?:\s[A-Za-z\-']+)*),\s*([A-Za-z\-']+)", text)
-    if m:
-        info["instructor_last"] = m.group(1).strip()
-        info["instructor_first"] = m.group(2).strip()
+    # Instructor: "Instructor: Stubbs, Alec" (applyweb format)
+    if not info.get("instructor_last"):
+        m = re.search(r"Instructor:\s*([A-Za-z\-']+(?:\s[A-Za-z\-']+)*),\s*([A-Za-z\-']+)", text)
+        if m:
+            info["instructor_last"] = m.group(1).strip()
+            info["instructor_first"] = m.group(2).strip()
 
     # Course ID (used as course_code)
     m = re.search(r"Course ID:\s*(\d+)", text)

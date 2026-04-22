@@ -1,0 +1,5935 @@
+key:trace-evaluations/BIOL/1107/fall_2025/melissa-mcelligott-40b31389df.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1107/fall_2025/melissa-mcelligott-40b31389df.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Foundations of Biology",
+    "course_code": "1107",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Foundations of Biology",
+    "courseCode": "1107",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-0d1860afdc.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-0d1860afdc.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-2f598e838f.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-2f598e838f.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-5d47b85725.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-5d47b85725.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-67bf6ad80f.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-67bf6ad80f.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-af58536ca6.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-af58536ca6.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-b366708dc5.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-b366708dc5.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-c5619adf9b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-c5619adf9b.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-d1d399ca4d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-d1d399ca4d.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-e07c356236.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-e07c356236.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/kari-jensen-f376a08a8f.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/kari-jensen-f376a08a8f.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-22d854aaba.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-22d854aaba.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-2d22258ced.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-2d22258ced.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-2f3d980bb1.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-2f3d980bb1.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-3ff9fd526f.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-3ff9fd526f.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-55a568ae3d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-55a568ae3d.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-5c92978ae2.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-5c92978ae2.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-859472d44e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-859472d44e.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-a26d7a8e37.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-a26d7a8e37.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-ac8d94bec4.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-ac8d94bec4.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-be31947781.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1108/fall_2025/melissa-mcelligott-be31947781.pdf",
+  "professor": {
+    "firstName": "Melissa",
+    "lastName": "McElligott",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1107",
+    "course_code": "1108",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1107",
+    "courseCode": "1108",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1111/fall_2025/ana-otero-df078eb7ff.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1111/fall_2025/ana-otero-df078eb7ff.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "General Biology 1",
+    "course_code": "1111",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "General Biology 1",
+    "courseCode": "1111",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1111/fall_2025/connie-phong-c5ec683462.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1111/fall_2025/connie-phong-c5ec683462.pdf",
+  "professor": {
+    "firstName": "Connie",
+    "lastName": "Phong",
+    "tags": []
+  },
+  "course": {
+    "name": "General Biology 1",
+    "course_code": "1111",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "General Biology 1",
+    "courseCode": "1111",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1111/fall_2025/mary-susan-potts-santone-4c02a2562c.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1111/fall_2025/mary-susan-potts-santone-4c02a2562c.pdf",
+  "professor": {
+    "firstName": "Mary-Susan",
+    "lastName": "Potts-Santone",
+    "tags": []
+  },
+  "course": {
+    "name": "General Biology 1",
+    "course_code": "1111",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "General Biology 1",
+    "courseCode": "1111",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1111/fall_2025/melinda-fowler-797b25d13d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1111/fall_2025/melinda-fowler-797b25d13d.pdf",
+  "professor": {
+    "firstName": "Melinda",
+    "lastName": "Fowler",
+    "tags": []
+  },
+  "course": {
+    "name": "General Biology 1",
+    "course_code": "1111",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "General Biology 1",
+    "courseCode": "1111",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1111/fall_2025/melinda-fowler-894321ba11.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1111/fall_2025/melinda-fowler-894321ba11.pdf",
+  "professor": {
+    "firstName": "Melinda",
+    "lastName": "Fowler",
+    "tags": []
+  },
+  "course": {
+    "name": "General Biology 1",
+    "course_code": "1111",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "General Biology 1",
+    "courseCode": "1111",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1111/summer_2_2025/aaron-roth-ed38dd01be.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1111/summer_2_2025/aaron-roth-ed38dd01be.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Roth",
+    "tags": []
+  },
+  "course": {
+    "name": "General Biology 1",
+    "course_code": "1111",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "General Biology 1",
+    "courseCode": "1111",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-393a7de942.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-393a7de942.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-4438148516.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-4438148516.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-58bfb1728f.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-58bfb1728f.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-62ec0f50e1.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-62ec0f50e1.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-854dd46aba.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-854dd46aba.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-8adc7813d6.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-8adc7813d6.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-98ff883e52.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-98ff883e52.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-a27d46c12b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-a27d46c12b.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-b7e0e1ad55.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-b7e0e1ad55.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-b9f76928da.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-b9f76928da.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-bf5316ff6b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-bf5316ff6b.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-d7d26da5fc.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-d7d26da5fc.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-e554dfa7fc.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-e554dfa7fc.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-f422039d5d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-f422039d5d.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-f5ff7ab8c1.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-f5ff7ab8c1.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/ana-otero-f6e8a7cac5.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/ana-otero-f6e8a7cac5.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-13e909494c.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-13e909494c.pdf",
+  "professor": {
+    "firstName": "Charlene",
+    "lastName": "Betts-Ng",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-44688ff242.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-44688ff242.pdf",
+  "professor": {
+    "firstName": "Charlene",
+    "lastName": "Betts-Ng",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-730e6eb798.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-730e6eb798.pdf",
+  "professor": {
+    "firstName": "Charlene",
+    "lastName": "Betts-Ng",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-81de598c5b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-81de598c5b.pdf",
+  "professor": {
+    "firstName": "Charlene",
+    "lastName": "Betts-Ng",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-82ae0e1b3c.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-82ae0e1b3c.pdf",
+  "professor": {
+    "firstName": "Charlene",
+    "lastName": "Betts-Ng",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-85ba3e28c0.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-85ba3e28c0.pdf",
+  "professor": {
+    "firstName": "Charlene",
+    "lastName": "Betts-Ng",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-e94b0e9d9b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/charlene-betts-ng-e94b0e9d9b.pdf",
+  "professor": {
+    "firstName": "Charlene",
+    "lastName": "Betts-Ng",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-04315836f3.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-04315836f3.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-04ec68f167.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-04ec68f167.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-2a1c7c47cb.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-2a1c7c47cb.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-434b585f48.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-434b585f48.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-45e80009bd.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-45e80009bd.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-55182db41d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-55182db41d.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-601d227868.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-601d227868.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-62bbb17871.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-62bbb17871.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-708323fb39.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-708323fb39.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-7531caa3c6.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-7531caa3c6.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-9123d4bb52.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-9123d4bb52.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-9459cbe0f5.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-9459cbe0f5.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-95faca5b02.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-95faca5b02.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-a725e2c2ab.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-a725e2c2ab.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-de204b583d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-de204b583d.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/fall_2025/kari-jensen-e2f3ca1e48.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/fall_2025/kari-jensen-e2f3ca1e48.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/summer_2_2025/aaron-roth-f4a250b158.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/summer_2_2025/aaron-roth-f4a250b158.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Roth",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1112/summer_2_2025/kari-jensen-3149b6a6fd.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1112/summer_2_2025/kari-jensen-3149b6a6fd.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1111",
+    "course_code": "1112",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1111",
+    "courseCode": "1112",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1113/fall_2025/mary-susan-potts-santone-2d947467a9.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1113/fall_2025/mary-susan-potts-santone-2d947467a9.pdf",
+  "professor": {
+    "firstName": "Mary-Susan",
+    "lastName": "Potts-Santone",
+    "tags": []
+  },
+  "course": {
+    "name": "General Biology 2",
+    "course_code": "1113",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "General Biology 2",
+    "courseCode": "1113",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/kari-jensen-2cd30e4472.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/kari-jensen-2cd30e4472.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/kari-jensen-3eb7d6c2f7.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/kari-jensen-3eb7d6c2f7.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/kari-jensen-6f0a4e1744.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/kari-jensen-6f0a4e1744.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/kari-jensen-86f6d9e61a.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/kari-jensen-86f6d9e61a.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/kari-jensen-efa1dfa325.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/kari-jensen-efa1dfa325.pdf",
+  "professor": {
+    "firstName": "Kari",
+    "lastName": "Jensen",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-2c8b0cceb5.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-2c8b0cceb5.pdf",
+  "professor": {
+    "firstName": "Mary-Susan",
+    "lastName": "Potts-Santone",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-a3f4fa2919.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-a3f4fa2919.pdf",
+  "professor": {
+    "firstName": "Mary-Susan",
+    "lastName": "Potts-Santone",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-cc7fbe96c2.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-cc7fbe96c2.pdf",
+  "professor": {
+    "firstName": "Mary-Susan",
+    "lastName": "Potts-Santone",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-e7d7330ee0.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-e7d7330ee0.pdf",
+  "professor": {
+    "firstName": "Mary-Susan",
+    "lastName": "Potts-Santone",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-ef5f508460.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1114/fall_2025/mary-susan-potts-santone-ef5f508460.pdf",
+  "professor": {
+    "firstName": "Mary-Susan",
+    "lastName": "Potts-Santone",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 1113",
+    "course_code": "1114",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 1113",
+    "courseCode": "1114",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1141/summer_2_2025/diana-belanger-4c59585578.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1141/summer_2_2025/diana-belanger-4c59585578.pdf",
+  "professor": {
+    "firstName": "Diana",
+    "lastName": "Belanger",
+    "tags": []
+  },
+  "course": {
+    "name": "Microbes and Society",
+    "course_code": "1141",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Microbes and Society",
+    "courseCode": "1141",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1143/fall_2025/diana-belanger-c35fb875a3.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1143/fall_2025/diana-belanger-c35fb875a3.pdf",
+  "professor": {
+    "firstName": "Diana",
+    "lastName": "Belanger",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology and Society",
+    "course_code": "1143",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology and Society",
+    "courseCode": "1143",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1147/fall_2025/patricia-hampf-c03c421803.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1147/fall_2025/patricia-hampf-c03c421803.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "The Human Organism",
+    "course_code": "1147",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "The Human Organism",
+    "courseCode": "1147",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/1149/fall_2025/dori-woods-0607c26d9d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/1149/fall_2025/dori-woods-0607c26d9d.pdf",
+  "professor": {
+    "firstName": "Dori",
+    "lastName": "Woods",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology of Human Reproduction",
+    "course_code": "1149",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology of Human Reproduction",
+    "courseCode": "1149",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2217/fall_2025/sarah-peacock-48d8f4f9fa.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2217/fall_2025/sarah-peacock-48d8f4f9fa.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Integrated Anat & Physiol 1",
+    "course_code": "2217",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Integrated Anat & Physiol 1",
+    "courseCode": "2217",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2217/fall_2025/sarah-peacock-ecae9e59bc.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2217/fall_2025/sarah-peacock-ecae9e59bc.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Integrated Anat & Physiol 1",
+    "course_code": "2217",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Integrated Anat & Physiol 1",
+    "courseCode": "2217",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-067004b9e6.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-067004b9e6.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-077f6da815.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-077f6da815.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-22cbc72356.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-22cbc72356.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-65bbe4f62b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-65bbe4f62b.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-7efaa385f4.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-7efaa385f4.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-859b2013fa.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-859b2013fa.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-a1ab4edb30.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-a1ab4edb30.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-aa8337566b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-aa8337566b.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-ad37eef3af.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-ad37eef3af.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-ba6a836d88.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-ba6a836d88.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-c1bf1c6682.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-c1bf1c6682.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-ff04d5348f.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/patricia-hampf-ff04d5348f.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-0a2bfada50.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-0a2bfada50.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-6cb33259b0.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-6cb33259b0.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-6cc6a28a8d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-6cc6a28a8d.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-a2da3131f2.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-a2da3131f2.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-ac806d85a4.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-ac806d85a4.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-b058c0b626.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-b058c0b626.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-b93031aac7.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-b93031aac7.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-cbc9f5c15b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-cbc9f5c15b.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-cc0f0adf39.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-cc0f0adf39.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-cf140b49a1.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-cf140b49a1.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-d572fe0d42.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-d572fe0d42.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-ec31298e5e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2218/fall_2025/sarah-peacock-ec31298e5e.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Peacock",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2217",
+    "course_code": "2218",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2217",
+    "courseCode": "2218",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2219/fall_2025/ayce-yesilaltay-cdeee30d56.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2219/fall_2025/ayce-yesilaltay-cdeee30d56.pdf",
+  "professor": {
+    "firstName": "Ayce",
+    "lastName": "Yesilaltay",
+    "tags": []
+  },
+  "course": {
+    "name": "Integrated Anat & Physiol 2",
+    "course_code": "2219",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Integrated Anat & Physiol 2",
+    "courseCode": "2219",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2220/fall_2025/ayce-yesilaltay-6c452f8023.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2220/fall_2025/ayce-yesilaltay-6c452f8023.pdf",
+  "professor": {
+    "firstName": "Ayce",
+    "lastName": "Yesilaltay",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2219",
+    "course_code": "2220",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2219",
+    "courseCode": "2220",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2220/fall_2025/ayce-yesilaltay-9faa89219a.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2220/fall_2025/ayce-yesilaltay-9faa89219a.pdf",
+  "professor": {
+    "firstName": "Ayce",
+    "lastName": "Yesilaltay",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2219",
+    "course_code": "2220",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2219",
+    "courseCode": "2220",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2220/fall_2025/ayce-yesilaltay-eaac3247b1.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2220/fall_2025/ayce-yesilaltay-eaac3247b1.pdf",
+  "professor": {
+    "firstName": "Ayce",
+    "lastName": "Yesilaltay",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2219",
+    "course_code": "2220",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2219",
+    "courseCode": "2220",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2220/fall_2025/ayce-yesilaltay-ee313e3906.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2220/fall_2025/ayce-yesilaltay-ee313e3906.pdf",
+  "professor": {
+    "firstName": "Ayce",
+    "lastName": "Yesilaltay",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2219",
+    "course_code": "2220",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2219",
+    "courseCode": "2220",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2220/fall_2025/patricia-hampf-404329f8ed.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2220/fall_2025/patricia-hampf-404329f8ed.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2219",
+    "course_code": "2220",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2219",
+    "courseCode": "2220",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2220/fall_2025/patricia-hampf-46412ed08b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2220/fall_2025/patricia-hampf-46412ed08b.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2219",
+    "course_code": "2220",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2219",
+    "courseCode": "2220",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2220/fall_2025/patricia-hampf-9a2a999f0c.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2220/fall_2025/patricia-hampf-9a2a999f0c.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2219",
+    "course_code": "2220",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2219",
+    "courseCode": "2220",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2220/fall_2025/patricia-hampf-dad7cf8104.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2220/fall_2025/patricia-hampf-dad7cf8104.pdf",
+  "professor": {
+    "firstName": "Patricia",
+    "lastName": "Hampf",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2219",
+    "course_code": "2220",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2219",
+    "courseCode": "2220",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2299/fall_2025/ayce-yesilaltay-60cfd6aef5.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2299/fall_2025/ayce-yesilaltay-60cfd6aef5.pdf",
+  "professor": {
+    "firstName": "Ayce",
+    "lastName": "Yesilaltay",
+    "tags": []
+  },
+  "course": {
+    "name": "Inquiries in Biological Sci",
+    "course_code": "2299",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Inquiries in Biological Sci",
+    "courseCode": "2299",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2299/fall_2025/ayce-yesilaltay-6932eb60a2.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2299/fall_2025/ayce-yesilaltay-6932eb60a2.pdf",
+  "professor": {
+    "firstName": "Ayce",
+    "lastName": "Yesilaltay",
+    "tags": []
+  },
+  "course": {
+    "name": "Inquiries in Biological Sci",
+    "course_code": "2299",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Inquiries in Biological Sci",
+    "courseCode": "2299",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2299/fall_2025/connie-phong-4b2b2c7a92.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2299/fall_2025/connie-phong-4b2b2c7a92.pdf",
+  "professor": {
+    "firstName": "Connie",
+    "lastName": "Phong",
+    "tags": []
+  },
+  "course": {
+    "name": "Inquiries in Biological Sci",
+    "course_code": "2299",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Inquiries in Biological Sci",
+    "courseCode": "2299",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2299/fall_2025/kirsten-fertuck-2cdae6b42e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2299/fall_2025/kirsten-fertuck-2cdae6b42e.pdf",
+  "professor": {
+    "firstName": "Kirsten",
+    "lastName": "Fertuck",
+    "tags": []
+  },
+  "course": {
+    "name": "Inquiries in Biological Sci",
+    "course_code": "2299",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Inquiries in Biological Sci",
+    "courseCode": "2299",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2299/fall_2025/nikolaos-soukos-b3b9ebcc84.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2299/fall_2025/nikolaos-soukos-b3b9ebcc84.pdf",
+  "professor": {
+    "firstName": "Nikolaos",
+    "lastName": "Soukos",
+    "tags": []
+  },
+  "course": {
+    "name": "Inquiries in Biological Sci",
+    "course_code": "2299",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Inquiries in Biological Sci",
+    "courseCode": "2299",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2299/fall_2025/sarah-swope-df69caa31b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2299/fall_2025/sarah-swope-df69caa31b.pdf",
+  "professor": {
+    "firstName": "Sarah",
+    "lastName": "Swope",
+    "tags": []
+  },
+  "course": {
+    "name": "Inquiries in Biological Sci",
+    "course_code": "2299",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Inquiries in Biological Sci",
+    "courseCode": "2299",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2299/fall_2025/tovah-day-9df7cd07b9.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2299/fall_2025/tovah-day-9df7cd07b9.pdf",
+  "professor": {
+    "firstName": "Tovah",
+    "lastName": "Day",
+    "tags": []
+  },
+  "course": {
+    "name": "Inquiries in Biological Sci",
+    "course_code": "2299",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Inquiries in Biological Sci",
+    "courseCode": "2299",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2301/fall_2025/jonathon-bennett-7e1b708174.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2301/fall_2025/jonathon-bennett-7e1b708174.pdf",
+  "professor": {
+    "firstName": "Jonathon",
+    "lastName": "Bennett",
+    "tags": []
+  },
+  "course": {
+    "name": "Genetics & Molecular Biology",
+    "course_code": "2301",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Genetics & Molecular Biology",
+    "courseCode": "2301",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2301/fall_2025/mark-grabiner-1dc2b76119.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2301/fall_2025/mark-grabiner-1dc2b76119.pdf",
+  "professor": {
+    "firstName": "Mark",
+    "lastName": "Grabiner",
+    "tags": []
+  },
+  "course": {
+    "name": "Genetics & Molecular Biology",
+    "course_code": "2301",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Genetics & Molecular Biology",
+    "courseCode": "2301",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2301/fall_2025/mark-grabiner-2d8e1dec57.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2301/fall_2025/mark-grabiner-2d8e1dec57.pdf",
+  "professor": {
+    "firstName": "Mark",
+    "lastName": "Grabiner",
+    "tags": []
+  },
+  "course": {
+    "name": "Genetics & Molecular Biology",
+    "course_code": "2301",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Genetics & Molecular Biology",
+    "courseCode": "2301",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2301/summer_2_2025/matthias-schlichting-4800bb4dc9.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2301/summer_2_2025/matthias-schlichting-4800bb4dc9.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Genetics & Molecular Biology",
+    "course_code": "2301",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Genetics & Molecular Biology",
+    "courseCode": "2301",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-064f349712.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-064f349712.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-0a4dc0c8a2.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-0a4dc0c8a2.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-10495b8daa.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-10495b8daa.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-1f692cdb75.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-1f692cdb75.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-27a330507b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-27a330507b.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-3bbd9ee6d3.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-3bbd9ee6d3.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-403a9bb17b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-403a9bb17b.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-47b49f9d0c.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-47b49f9d0c.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-4a5db5997d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-4a5db5997d.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-4d0c0fd2eb.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-4d0c0fd2eb.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-4d8775ef32.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-4d8775ef32.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-50522080fb.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-50522080fb.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-55f5a85688.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-55f5a85688.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-77f3c46f4e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-77f3c46f4e.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-a853cb393e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-a853cb393e.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-adf056c738.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-adf056c738.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-ae715f20b4.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-ae715f20b4.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-b3a36e9b2d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-b3a36e9b2d.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-bdd30375de.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-bdd30375de.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-bfc1cd71bc.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-bfc1cd71bc.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-c2178acbe1.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-c2178acbe1.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-c3cc3604a2.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-c3cc3604a2.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-f54256410b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/fall_2025/matthias-schlichting-f54256410b.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/summer_2_2025/daniil-mirzoyan-09583aeb83.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/summer_2_2025/daniil-mirzoyan-09583aeb83.pdf",
+  "professor": {
+    "firstName": "Daniil",
+    "lastName": "Mirzoyan",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/summer_2_2025/daniil-mirzoyan-345280ba46.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/summer_2_2025/daniil-mirzoyan-345280ba46.pdf",
+  "professor": {
+    "firstName": "Daniil",
+    "lastName": "Mirzoyan",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/summer_2_2025/daniil-mirzoyan-d6e3411a23.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/summer_2_2025/daniil-mirzoyan-d6e3411a23.pdf",
+  "professor": {
+    "firstName": "Daniil",
+    "lastName": "Mirzoyan",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/summer_2_2025/matthias-schlichting-281d88c7e0.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/summer_2_2025/matthias-schlichting-281d88c7e0.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/summer_2_2025/matthias-schlichting-7b16e71a9c.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/summer_2_2025/matthias-schlichting-7b16e71a9c.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2302/summer_2_2025/matthias-schlichting-f3508d32bb.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2302/summer_2_2025/matthias-schlichting-f3508d32bb.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 2301",
+    "course_code": "2302",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 2301",
+    "courseCode": "2302",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/desislava-raytcheva-4d4367a563.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/desislava-raytcheva-4d4367a563.pdf",
+  "professor": {
+    "firstName": "Desislava",
+    "lastName": "Raytcheva",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/desislava-raytcheva-f19a7ddcd3.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/desislava-raytcheva-f19a7ddcd3.pdf",
+  "professor": {
+    "firstName": "Desislava",
+    "lastName": "Raytcheva",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/erica-frank-7cf9ecacde.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/erica-frank-7cf9ecacde.pdf",
+  "professor": {
+    "firstName": "Erica",
+    "lastName": "Frank",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/erica-frank-b73b007117.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/erica-frank-b73b007117.pdf",
+  "professor": {
+    "firstName": "Erica",
+    "lastName": "Frank",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/jerrah-holth-082b005640.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/jerrah-holth-082b005640.pdf",
+  "professor": {
+    "firstName": "Jerrah",
+    "lastName": "Holth",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/lindsay-mehrmanesh-0387b68376.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/lindsay-mehrmanesh-0387b68376.pdf",
+  "professor": {
+    "firstName": "Lindsay",
+    "lastName": "Mehrmanesh",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/lindsay-mehrmanesh-1c8bc8b00a.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/lindsay-mehrmanesh-1c8bc8b00a.pdf",
+  "professor": {
+    "firstName": "Lindsay",
+    "lastName": "Mehrmanesh",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/madeline-balman-88defab1a8.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/madeline-balman-88defab1a8.pdf",
+  "professor": {
+    "firstName": "Madeline",
+    "lastName": "Balman",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/madeline-balman-c9787ea3d0.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/madeline-balman-c9787ea3d0.pdf",
+  "professor": {
+    "firstName": "Madeline",
+    "lastName": "Balman",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/matthias-schlichting-2173975faf.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/matthias-schlichting-2173975faf.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/matthias-schlichting-ab180f8164.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/matthias-schlichting-ab180f8164.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/meredith-sweeney-1fcbf83a29.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/meredith-sweeney-1fcbf83a29.pdf",
+  "professor": {
+    "firstName": "Meredith",
+    "lastName": "Sweeney",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/fall_2025/meredith-sweeney-25a9159592.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/fall_2025/meredith-sweeney-25a9159592.pdf",
+  "professor": {
+    "firstName": "Meredith",
+    "lastName": "Sweeney",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/summer_2_2025/johanna-farkas-14edb80227.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/summer_2_2025/johanna-farkas-14edb80227.pdf",
+  "professor": {
+    "firstName": "Johanna",
+    "lastName": "Farkas",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2309/summer_2_2025/matthias-schlichting-a6cdb1c2b7.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2309/summer_2_2025/matthias-schlichting-a6cdb1c2b7.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Project Lab",
+    "course_code": "2309",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Project Lab",
+    "courseCode": "2309",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/2329/summer_2_2025/ana-otero-92fe26bfad.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/2329/summer_2_2025/ana-otero-92fe26bfad.pdf",
+  "professor": {
+    "firstName": "Ana",
+    "lastName": "Otero",
+    "tags": []
+  },
+  "course": {
+    "name": "Bioethics",
+    "course_code": "2329",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Bioethics",
+    "courseCode": "2329",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3405/fall_2025/jamie-bunce-a84a81e4c9.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3405/fall_2025/jamie-bunce-a84a81e4c9.pdf",
+  "professor": {
+    "firstName": "Jamie",
+    "lastName": "Bunce",
+    "tags": []
+  },
+  "course": {
+    "name": "Neurobiology",
+    "course_code": "3405",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Neurobiology",
+    "courseCode": "3405",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3405/fall_2025/lesley-ricci-a9c18e7bca.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3405/fall_2025/lesley-ricci-a9c18e7bca.pdf",
+  "professor": {
+    "firstName": "Lesley",
+    "lastName": "Ricci",
+    "tags": []
+  },
+  "course": {
+    "name": "Neurobiology",
+    "course_code": "3405",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Neurobiology",
+    "courseCode": "3405",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3405/summer_2_2025/lesley-ricci-7b39f7b6b0.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3405/summer_2_2025/lesley-ricci-7b39f7b6b0.pdf",
+  "professor": {
+    "firstName": "Lesley",
+    "lastName": "Ricci",
+    "tags": []
+  },
+  "course": {
+    "name": "Neurobiology",
+    "course_code": "3405",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Neurobiology",
+    "courseCode": "3405",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3409/fall_2025/andreia-ionescu-f155c4d80a.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3409/fall_2025/andreia-ionescu-f155c4d80a.pdf",
+  "professor": {
+    "firstName": "Andreia",
+    "lastName": "Ionescu",
+    "tags": []
+  },
+  "course": {
+    "name": "Current Topics in Biology",
+    "course_code": "3409",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Current Topics in Biology",
+    "courseCode": "3409",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3415/fall_2025/lesley-ricci-942c4ea631.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3415/fall_2025/lesley-ricci-942c4ea631.pdf",
+  "professor": {
+    "firstName": "Lesley",
+    "lastName": "Ricci",
+    "tags": []
+  },
+  "course": {
+    "name": "Current Topics in Beh Neurosci",
+    "course_code": "3415",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Current Topics in Beh Neurosci",
+    "courseCode": "3415",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3415/fall_2025/matthias-schlichting-f86e330e75.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3415/fall_2025/matthias-schlichting-f86e330e75.pdf",
+  "professor": {
+    "firstName": "Matthias",
+    "lastName": "Schlichting",
+    "tags": []
+  },
+  "course": {
+    "name": "Current Topics in Beh Neurosci",
+    "course_code": "3415",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Current Topics in Beh Neurosci",
+    "courseCode": "3415",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3415/summer_2_2025/lesley-ricci-255a1227e3.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3415/summer_2_2025/lesley-ricci-255a1227e3.pdf",
+  "professor": {
+    "firstName": "Lesley",
+    "lastName": "Ricci",
+    "tags": []
+  },
+  "course": {
+    "name": "Current Topics in Beh Neurosci",
+    "course_code": "3415",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Current Topics in Beh Neurosci",
+    "courseCode": "3415",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3417/summer_2_2025/dori-woods-d2a103f810.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3417/summer_2_2025/dori-woods-d2a103f810.pdf",
+  "professor": {
+    "firstName": "Dori",
+    "lastName": "Woods",
+    "tags": []
+  },
+  "course": {
+    "name": "Bioethics Human Genome Editing",
+    "course_code": "3417",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Bioethics Human Genome Editing",
+    "courseCode": "3417",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3421/fall_2025/diviya-ray-3161ec65a1.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3421/fall_2025/diviya-ray-3161ec65a1.pdf",
+  "professor": {
+    "firstName": "Diviya",
+    "lastName": "Ray",
+    "tags": []
+  },
+  "course": {
+    "name": "Microbiology",
+    "course_code": "3421",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Microbiology",
+    "courseCode": "3421",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3421/fall_2025/lianyong-wang-87c685f9cc.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3421/fall_2025/lianyong-wang-87c685f9cc.pdf",
+  "professor": {
+    "firstName": "Lianyong",
+    "lastName": "Wang",
+    "tags": []
+  },
+  "course": {
+    "name": "Microbiology",
+    "course_code": "3421",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Microbiology",
+    "courseCode": "3421",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3422/fall_2025/diviya-ray-a0ef4b2926.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3422/fall_2025/diviya-ray-a0ef4b2926.pdf",
+  "professor": {
+    "firstName": "Diviya",
+    "lastName": "Ray",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3421",
+    "course_code": "3422",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3421",
+    "courseCode": "3422",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3422/fall_2025/diviya-ray-c650a71eeb.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3422/fall_2025/diviya-ray-c650a71eeb.pdf",
+  "professor": {
+    "firstName": "Diviya",
+    "lastName": "Ray",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3421",
+    "course_code": "3422",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3421",
+    "courseCode": "3422",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3422/fall_2025/evan-barfuss-6178f77731.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3422/fall_2025/evan-barfuss-6178f77731.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3421",
+    "course_code": "3422",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3421",
+    "courseCode": "3422",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3422/fall_2025/evan-barfuss-6ddef51e1e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3422/fall_2025/evan-barfuss-6ddef51e1e.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3421",
+    "course_code": "3422",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3421",
+    "courseCode": "3422",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3422/fall_2025/evan-barfuss-c92850f674.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3422/fall_2025/evan-barfuss-c92850f674.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3421",
+    "course_code": "3422",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3421",
+    "courseCode": "3422",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3422/fall_2025/evan-barfuss-d5766b827e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3422/fall_2025/evan-barfuss-d5766b827e.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3421",
+    "course_code": "3422",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3421",
+    "courseCode": "3422",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3422/fall_2025/yunrong-chai-0aaa8734aa.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3422/fall_2025/yunrong-chai-0aaa8734aa.pdf",
+  "professor": {
+    "firstName": "Yunrong",
+    "lastName": "Chai",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3421",
+    "course_code": "3422",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3421",
+    "courseCode": "3422",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3422/fall_2025/yunrong-chai-ddae295ea8.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3422/fall_2025/yunrong-chai-ddae295ea8.pdf",
+  "professor": {
+    "firstName": "Yunrong",
+    "lastName": "Chai",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3421",
+    "course_code": "3422",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3421",
+    "courseCode": "3422",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3603/fall_2025/jonathan-tilly-0841de8ccf.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3603/fall_2025/jonathan-tilly-0841de8ccf.pdf",
+  "professor": {
+    "firstName": "Jonathan",
+    "lastName": "Tilly",
+    "tags": []
+  },
+  "course": {
+    "name": "Mammalian Systems Physiology",
+    "course_code": "3603",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Mammalian Systems Physiology",
+    "courseCode": "3603",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3607/summer_2_2025/dori-woods-03a8b1a2bf.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3607/summer_2_2025/dori-woods-03a8b1a2bf.pdf",
+  "professor": {
+    "firstName": "Dori",
+    "lastName": "Woods",
+    "tags": []
+  },
+  "course": {
+    "name": "Trends in Reproductive Science",
+    "course_code": "3607",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Trends in Reproductive Science",
+    "courseCode": "3607",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3611/fall_2025/julian-sosnik-99cd93d76b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3611/fall_2025/julian-sosnik-99cd93d76b.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Biochemistry",
+    "course_code": "3611",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biochemistry",
+    "courseCode": "3611",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3611/fall_2025/veronica-godoy-carter-c29f8c85f4.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3611/fall_2025/veronica-godoy-carter-c29f8c85f4.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy- Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Biochemistry",
+    "course_code": "3611",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biochemistry",
+    "courseCode": "3611",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3611/summer_2_2025/jonathon-bennett-086195df34.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3611/summer_2_2025/jonathon-bennett-086195df34.pdf",
+  "professor": {
+    "firstName": "Jonathon",
+    "lastName": "Bennett",
+    "tags": []
+  },
+  "course": {
+    "name": "Biochemistry",
+    "course_code": "3611",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biochemistry",
+    "courseCode": "3611",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-20f151f307.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-20f151f307.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-2b36aeb075.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-2b36aeb075.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-314ec46781.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-314ec46781.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-359760566a.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-359760566a.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-38f62b12d2.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-38f62b12d2.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-3caecaeb41.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-3caecaeb41.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-41ae109e4b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-41ae109e4b.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-4345bd0d4e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-4345bd0d4e.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-465ea3b682.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-465ea3b682.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-4772e6b0cf.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-4772e6b0cf.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-571e78149b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-571e78149b.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-8102c950be.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-8102c950be.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-966906e84e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-966906e84e.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-a24169803e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-a24169803e.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-a4382c7cc8.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-a4382c7cc8.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-af508ddc6d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-af508ddc6d.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-cebc5e8a28.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-cebc5e8a28.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-f6b1da5793.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/evan-barfuss-f6b1da5793.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-120a7d3873.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-120a7d3873.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-3d929a1f9a.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-3d929a1f9a.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-791f1e2f12.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-791f1e2f12.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-7d95d86810.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-7d95d86810.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-8c1eca7937.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-8c1eca7937.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-b300178103.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-b300178103.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-bd607b400b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-bd607b400b.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-bdb22b265e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/julian-sosnik-bdb22b265e.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-02498711b5.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-02498711b5.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-3adc172bab.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-3adc172bab.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-470c2b57dc.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-470c2b57dc.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-5f79d67efb.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-5f79d67efb.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-626f1efff4.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-626f1efff4.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-6c7567eacd.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-6c7567eacd.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-92aefc62fb.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-92aefc62fb.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-9b3216cb48.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-9b3216cb48.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-d81503c653.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-d81503c653.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-e3bb994eea.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/fall_2025/veronica-godoy-carter-e3bb994eea.pdf",
+  "professor": {
+    "firstName": "Veronica",
+    "lastName": "Godoy-Carter",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-1f01390b56.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-1f01390b56.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-2c626dfd5d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-2c626dfd5d.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-5eb27e1588.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-5eb27e1588.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-7cc810c164.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-7cc810c164.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-a3f8b68454.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-a3f8b68454.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-aea358e9d4.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/evan-barfuss-aea358e9d4.pdf",
+  "professor": {
+    "firstName": "Evan",
+    "lastName": "Barfuss",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-14d61dccc9.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-14d61dccc9.pdf",
+  "professor": {
+    "firstName": "Kirsten",
+    "lastName": "Fertuck",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-1afa2205a7.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-1afa2205a7.pdf",
+  "professor": {
+    "firstName": "Kirsten",
+    "lastName": "Fertuck",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-2b3f47d5ed.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-2b3f47d5ed.pdf",
+  "professor": {
+    "firstName": "Kirsten",
+    "lastName": "Fertuck",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-a957dfad9a.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-a957dfad9a.pdf",
+  "professor": {
+    "firstName": "Kirsten",
+    "lastName": "Fertuck",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-b561c6cef4.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-b561c6cef4.pdf",
+  "professor": {
+    "firstName": "Kirsten",
+    "lastName": "Fertuck",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-ff2e743a9f.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/3612/summer_2_2025/kirsten-fertuck-ff2e743a9f.pdf",
+  "professor": {
+    "firstName": "Kirsten",
+    "lastName": "Fertuck",
+    "tags": []
+  },
+  "course": {
+    "name": "Lab for BIOL 3611",
+    "course_code": "3612",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Lab for BIOL 3611",
+    "courseCode": "3612",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4701/fall_2025/aaron-roth-7a702f6347.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4701/fall_2025/aaron-roth-7a702f6347.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Roth",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Capstone",
+    "course_code": "4701",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Capstone",
+    "courseCode": "4701",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4701/fall_2025/gunther-zupanc-2b7dfd54f8.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4701/fall_2025/gunther-zupanc-2b7dfd54f8.pdf",
+  "professor": {
+    "firstName": "Gunther",
+    "lastName": "Zupanc",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Capstone",
+    "course_code": "4701",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Capstone",
+    "courseCode": "4701",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4701/fall_2025/jared-young-0ac7bf295d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4701/fall_2025/jared-young-0ac7bf295d.pdf",
+  "professor": {
+    "firstName": "Jared",
+    "lastName": "Young",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Capstone",
+    "course_code": "4701",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Capstone",
+    "courseCode": "4701",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4701/fall_2025/jared-young-6daecde56b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4701/fall_2025/jared-young-6daecde56b.pdf",
+  "professor": {
+    "firstName": "Jared",
+    "lastName": "Young",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Capstone",
+    "course_code": "4701",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Capstone",
+    "courseCode": "4701",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4701/fall_2025/julian-sosnik-d393e99c66.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4701/fall_2025/julian-sosnik-d393e99c66.pdf",
+  "professor": {
+    "firstName": "Julian",
+    "lastName": "Sosnik",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Capstone",
+    "course_code": "4701",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Capstone",
+    "courseCode": "4701",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4701/fall_2025/steven-untersee-a4670000c0.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4701/fall_2025/steven-untersee-a4670000c0.pdf",
+  "professor": {
+    "firstName": "Steven",
+    "lastName": "Untersee",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Capstone",
+    "course_code": "4701",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Capstone",
+    "courseCode": "4701",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4701/fall_2025/steven-untersee-e72a44a3e6.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4701/fall_2025/steven-untersee-e72a44a3e6.pdf",
+  "professor": {
+    "firstName": "Steven",
+    "lastName": "Untersee",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Capstone",
+    "course_code": "4701",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Capstone",
+    "courseCode": "4701",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4701/summer_2_2025/aaron-roth-3b6956f40b.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4701/summer_2_2025/aaron-roth-3b6956f40b.pdf",
+  "professor": {
+    "firstName": "Aaron",
+    "lastName": "Roth",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Capstone",
+    "course_code": "4701",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Capstone",
+    "courseCode": "4701",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4707/fall_2025/diviya-ray-f4011a0a7e.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4707/fall_2025/diviya-ray-f4011a0a7e.pdf",
+  "professor": {
+    "firstName": "Diviya",
+    "lastName": "Ray",
+    "tags": []
+  },
+  "course": {
+    "name": "Cell and Molecular Biology",
+    "course_code": "4707",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Cell and Molecular Biology",
+    "courseCode": "4707",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4707/fall_2025/erica-frank-69b13ec05d.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4707/fall_2025/erica-frank-69b13ec05d.pdf",
+  "professor": {
+    "firstName": "Erica",
+    "lastName": "Frank",
+    "tags": []
+  },
+  "course": {
+    "name": "Cell and Molecular Biology",
+    "course_code": "4707",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Cell and Molecular Biology",
+    "courseCode": "4707",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4707/fall_2025/erin-cram-d6f94a33ec.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4707/fall_2025/erin-cram-d6f94a33ec.pdf",
+  "professor": {
+    "firstName": "Erin",
+    "lastName": "Cram",
+    "tags": []
+  },
+  "course": {
+    "name": "Cell and Molecular Biology",
+    "course_code": "4707",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Cell and Molecular Biology",
+    "courseCode": "4707",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4707/summer_2_2025/meredith-sweeney-e33d2047ea.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4707/summer_2_2025/meredith-sweeney-e33d2047ea.pdf",
+  "professor": {
+    "firstName": "Meredith",
+    "lastName": "Sweeney",
+    "tags": []
+  },
+  "course": {
+    "name": "Cell and Molecular Biology",
+    "course_code": "4707",
+    "num_credits": 4,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Cell and Molecular Biology",
+    "courseCode": "4707",
+    "semester": "summer_2",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}key:trace-evaluations/BIOL/4900/fall_2025/meredith-sweeney-54ece72f09.pdf, departmet:BIOL, result: {
+  "source": "trace-evaluations/BIOL/4900/fall_2025/meredith-sweeney-54ece72f09.pdf",
+  "professor": {
+    "firstName": "Meredith",
+    "lastName": "Sweeney",
+    "tags": []
+  },
+  "course": {
+    "name": "Biology Research Capstone",
+    "course_code": "4900",
+    "num_credits": 1,
+    "lecture_type": null
+  },
+  "trace": {
+    "courseName": "Biology Research Capstone",
+    "courseCode": "4900",
+    "semester": "fall",
+    "lectureYear": 2025,
+    "lectureType": null,
+    "hoursDevoted": {},
+    "proffesorEfficency": null,
+    "howOftenPercentage": {}
+  }
+}
