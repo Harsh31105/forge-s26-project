@@ -395,11 +395,6 @@ async function createAllTables(db: NodePgDatabase) {
         ALTER TABLE rmp
             ALTER COLUMN avg_difficulty DROP NOT NULL;
 
-        ALTER TABLE course
-            ADD COLUMN prereqs VARCHAR(1000),
-            ADD COLUMN coreqs VARCHAR(1000),
-            ADD COLUMN nupath VARCHAR(255);
-
         ALTER TABLE trace DROP CONSTRAINT IF EXISTS hours_devoted_check;
         ALTER TABLE trace DROP CONSTRAINT IF EXISTS how_often_percentage_check;
 
