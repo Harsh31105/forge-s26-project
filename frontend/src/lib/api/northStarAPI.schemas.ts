@@ -649,6 +649,73 @@ export interface AiSummary {
   displayName: string;
 }
 
+export interface Department {
+  id: number;
+  name: string;
+}
+
+export type MLRequestSemester = (typeof MLRequestSemester)[keyof typeof MLRequestSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const MLRequestSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+export interface MLRequest {
+  semester: MLRequestSemester;
+}
+
+export type RecommendRequestPreferredSemester =
+  (typeof RecommendRequestPreferredSemester)[keyof typeof RecommendRequestPreferredSemester];
+
+// eslint-disable-next-line @typescript-eslint/no-redeclare
+export const RecommendRequestPreferredSemester = {
+  fall: "fall",
+  spring: "spring",
+  summer_1: "summer_1",
+  summer_2: "summer_2",
+} as const;
+
+export interface RecommendRequest {
+  student_id: string;
+  preferred_semester: RecommendRequestPreferredSemester;
+  /** @nullable */
+  courses?: Course[] | null;
+  /** @nullable */
+  departments?: Department[] | null;
+  /** @nullable */
+  reviews?: CourseReview[] | null;
+  /** @nullable */
+  trace_rows?: Trace[] | null;
+  /** @nullable */
+  favorites?: Favourite[] | null;
+}
+
+export interface RecommendationResult {
+  course: Course;
+  score: number;
+}
+
+export interface RecommendResponse {
+  high: RecommendationResult[];
+  medium: RecommendationResult[];
+  low: RecommendationResult[];
+}
+
+export interface MLPredictionResult {
+  course: Course;
+  probability: number;
+}
+
+export interface MLRecommendResponse {
+  high: MLPredictionResult[];
+  medium: MLPredictionResult[];
+  low: MLPredictionResult[];
+}
+
 export type GetCourseReviewsIdThreadsParams = {
   /**
    * Page number of pagination

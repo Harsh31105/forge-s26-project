@@ -1,12 +1,12 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
-   Sample,
+  Sample,
   SamplePatchInputType,
   SamplePostInputType,
- } from "../models/sample";
+} from "../models/sample";
 import type {
-   CourseReview,
+  CourseReview,
   CreateParentReviewInput,
   ProfessorReview,
   Review,
@@ -220,6 +220,7 @@ export interface TraceRepository {
   getTraces(pagination: PaginationType, filters: TraceFilterType): Promise<Trace[]>;
   getBestProfessorsByCourseID(courseId: string): Promise<Professor[]>; // returns top 3 professors based on reviews for a given course
   getOfferHistory(pagination: PaginationType, filters: OfferHistoryFilterType): Promise<AcademicSemester[]>;
+  getAllTraces(): Promise<Trace[]>; 
 }
 
 export interface AiSummaryRepository {

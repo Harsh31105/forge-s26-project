@@ -37,6 +37,8 @@ import { TraceHandler } from "./handler/trace";
 import { traceRoutes } from "./handler/trace/routes";
 import { AiSummaryHandler } from "./handler/aiSummaries";
 import { aiSummaryRoutes } from "./handler/aiSummaries/routes";
+import { RecommendationHandler } from "./handler/recommendation";
+import { recommendationRoutes } from "./handler/recommendation/routes";
 
 class App {
     public server: Express;
@@ -142,4 +144,7 @@ function registerRoutes(router: Router, repo: Repository) {
 
     const aiSummaryHandler = new AiSummaryHandler(repo.aiSummaries, repo.courseThreads, repo.profThreads);
     router.use("/ai-summaries", aiSummaryRoutes(aiSummaryHandler));
+
+    const recHandler = new RecommendationHandler(repo);
+    router.use("/recommendations", recommendationRoutes(recHandler));
 }
