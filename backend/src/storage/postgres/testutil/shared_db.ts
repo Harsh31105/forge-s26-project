@@ -377,24 +377,45 @@ async function createAllTables(db: NodePgDatabase) {
             ADD CONSTRAINT professor_name_unique
                 UNIQUE (first_name, last_name);
 
-        DO $$ BEGIN
-            CREATE TYPE review_type AS ENUM ('course', 'professor');
-        EXCEPTION WHEN duplicate_object THEN null;
-        END $$;
-
-        CREATE TABLE IF NOT EXISTS ai_summary (
-            id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-            review_id UUID NOT NULL REFERENCES review(id) ON DELETE CASCADE,
-            review_type review_type NOT NULL,
-            summary TEXT NOT NULL,
-            score REAL NOT NULL DEFAULT 0,
-            summary_updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-            CONSTRAINT ai_summary_review_id_type_idx UNIQUE (review_id, review_type)
-        );
-
         ALTER TABLE rmp
             ALTER COLUMN avg_difficulty DROP NOT NULL;
+
+        DO $$ BEGIN
+            CREATE TYPE review_type AS ENUM ('course', 'professor');
+            EXCEPTION
+        WHEN duplicate_object THEN null;
+            END $$;
+
+        -- Create ai_summary table
+            CREATE TABLE IF NOT EXISTS ai_summary (
+                                                      id                  UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+                review_id           UUID NOT NULL REFERENCES review(id) ON DELETE CASCADE,
+                review_type         review_type NOT NULL,
+                summary             TEXT NOT NULL,
+                score               REAL NOT NULL DEFAULT 0,
+                summary_updated_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+                created_at          TIMESTAMPTZ NOT NULL DEFAULT NOW()
+            );
+
+        CREATE OR REPLACE FUNCTION update_ai_summary_updated_at_column()
+            RETURNS TRIGGER AS $$
+                    BEGIN
+                NEW.summary_updated_at
+                    = now();
+                    RETURN NEW;
+                    END;
+            $$
+        language 'plpgsql';
+
+        -- Create triggers for automatic updated_at timestamp updates
+        CREATE TRIGGER update_ai_summary_updated_at
+            BEFORE UPDATE
+            ON ai_summary
+            FOR EACH ROW EXECUTE FUNCTION update_ai_summary_updated_at_column();
+
+        -- Unique constraint so upserts work correctly
+        CREATE UNIQUE INDEX IF NOT EXISTS ai_summary_review_id_type_idx
+            ON ai_summary (review_id, review_type);
     `);
 
 }

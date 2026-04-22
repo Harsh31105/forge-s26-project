@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { useMe } from "@/src/hooks/useMe";
-import NavBar from "../components/NavBar";
+import { useAiSummaries } from "@/src/hooks/useAiSummaries";
 
 const MOCK_COURSES = [
   { id: "1", code: "CS 3000", name: "Algorithms & Data", rating: 1.1, viewed: "Viewed 3 days ago" },
@@ -10,12 +10,6 @@ const MOCK_COURSES = [
   { id: "3", code: "CS 3500", name: "Object-Oriented Design", rating: 3.8, viewed: "Viewed 1 week ago" },
   { id: "4", code: "CS 1800", name: "Discrete Structures", rating: 4.5, viewed: "Viewed 1 week ago" },
   { id: "5", code: "CS 3200", name: "Database Design", rating: 3.6, viewed: "Viewed 2 weeks ago" },
-];
-
-const MOCK_DISCUSSIONS = [
-  { id: "1", courseCode: "CS 3000", topic: "How to survive Akshar Verma's class?", replies: 200 },
-  { id: "2", courseCode: "CS 2510", topic: "Best study resources for final exam?", replies: 156 },
-  { id: "3", courseCode: "CS 3500", topic: "Tips for the midterm project?", replies: 89 },
 ];
 
 const cardStyle: React.CSSProperties = {
@@ -66,64 +60,10 @@ function NorthStarLogo() {
 
 export default function Home() {
   const { student } = useMe();
+  const { summaries, isLoading: summariesLoading } = useAiSummaries({ limit: 5 });
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
-
-      {/* <NavBar /> */}
-
-      {/* NavBar - commented out for now
-      <nav style={{ background: "var(--color-surface-light-cream)", borderBottom: "1px solid var(--color-border-tan)" }}>
-        <div style={{
-          maxWidth: 1280,
-          margin: "0 auto",
-          padding: "0 48px",
-          height: 68,
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}>
-          <NorthStarLogo />
-
-          <div style={{ display: "flex", gap: 48 }}>
-            {[
-              { label: "Home", href: "/", active: true },
-              { label: "Courses", href: "/courses", active: false },
-              { label: "Professors", href: "/professors", active: false },
-              { label: "Reviews", href: "/reviews", active: false },
-            ].map(({ label, href, active }) => (
-              <Link key={label} href={href} style={{
-                fontFamily: "var(--font-body)",
-                fontSize: "var(--font-size-base)",
-                color: active ? "var(--color-primary-navy)" : "var(--color-text-primary)",
-                textDecoration: active ? "underline" : "none",
-                fontWeight: active ? 600 : 400,
-              }}>
-                {label}
-              </Link>
-            ))}
-          </div>
-
-          <button style={{
-            width: 40,
-            height: 40,
-            borderRadius: "50%",
-            border: "1px solid var(--color-border-tan)",
-            background: "white",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            cursor: "pointer",
-          }}>
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-              <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
-              <circle cx="12" cy="7" r="4" />
-            </svg>
-          </button>
-        </div>
-      </nav>
-      */}
-
       {/* Page content */}
       <main style={{ maxWidth: 1280, margin: "0 auto", padding: "40px 48px 80px" }}>
 
@@ -236,24 +176,49 @@ export default function Home() {
         }}>
           Most-Talked About Course Discussion
         </h2>
+        {summariesLoading && (
+            <p style={{ fontFamily: "var(--font-body)", color: "var(--color-text-secondary)" }}>
+              Loading summaries...
+            </p>
+        )}
+
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          {MOCK_DISCUSSIONS.map((item) => (
-            <Link key={item.id} href="/reviews" style={{ textDecoration: "none", color: "inherit" }}>
-              <div style={{ ...cardStyle, padding: "20px 28px", cursor: "pointer" }}>
+          {summaries.map((item) => (
+              <div key={item.id} style={{ ...cardStyle, padding: "20px 28px" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 8 }}>
+                  <p style={{
+                    fontFamily: "var(--font-heading)",
+                    fontSize: "var(--font-size-sm)",
+                    fontWeight: 700,
+                    color: "var(--color-text-primary)",
+                    margin: 0,
+                  }}>
+                    {item.displayName}
+                  </p>
+                  <span style={{
+                    fontFamily: "var(--font-body)",
+                    fontSize: 11,
+                    fontWeight: 600,
+                    textTransform: "uppercase" as const,
+                    letterSpacing: "0.05em",
+                    color: "var(--color-text-secondary)",
+                    background: "var(--color-background-cream)",
+                    padding: "2px 8px",
+                    borderRadius: 4,
+                  }}>
+                  {item.reviewType === "course" ? "Course" : "Professor"}
+                </span>
+                </div>
                 <p style={{
-                  fontFamily: "var(--font-heading)",
+                  fontFamily: "var(--font-body)",
                   fontSize: "var(--font-size-sm)",
-                  fontWeight: 700,
                   color: "var(--color-text-primary)",
                   margin: 0,
+                  lineHeight: 1.6,
                 }}>
-                  {item.courseCode} — {item.topic}
-                </p>
-                <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-xs)", marginTop: 6, marginBottom: 0 }}>
-                  {item.replies} replies
+                  {item.summary}
                 </p>
               </div>
-            </Link>
           ))}
         </div>
 
