@@ -6,7 +6,8 @@ import { useCourse } from "@/src/hooks/useCourses";
 import { useReviews } from "@/src/hooks/useReviews";
 import { useCourseThreads, useCourseThreadMutations } from "@/src/hooks/useCourseThreads";
 import { useMe } from "@/src/hooks/useMe";
-import { ThumbsUp, MessageCircle, PenLine, ChevronUp, ChevronDown } from "lucide-react";
+import { MessageCircle, PenLine, ChevronUp, ChevronDown } from "lucide-react";
+import Navbar from "@/src/components/NavBar";
 import WriteReviewModal from "@/src/components/WriteReviewModal";
 import { Review } from "@/src/lib/api/northStarAPI.schemas";
 
@@ -27,6 +28,11 @@ export default function CourseReviewsPage() {
     [reviews, id]
   );
 
+  const myExistingReview = useMemo(
+    () => courseReviews.find(r => r.studentId === user?.id),
+    [courseReviews, user?.id]
+  );
+
   const sorted = useMemo(() => {
     const list = [...courseReviews];
     if (sort === "newest") return list.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -42,6 +48,8 @@ export default function CourseReviewsPage() {
 
   return (
     <div style={{ minHeight: "100vh", background: "var(--color-background-cream)" }}>
+      <Navbar />
+
       <div style={{ maxWidth: "800px", margin: "0 auto", padding: "32px 24px 100px" }}>
         <button
           onClick={() => router.back()}
@@ -172,7 +180,7 @@ export default function CourseReviewsPage() {
             boxShadow: "0 4px 16px rgba(32,58,138,0.3)",
           }}
         >
-          Write a Review
+          {myExistingReview ? "Edit Your Review" : "Write a Review"}
         </button>
       </div>
 
@@ -181,6 +189,7 @@ export default function CourseReviewsPage() {
         onClose={() => setShowModal(false)}
         courseId={id}
         courseName={courseName}
+        existingReview={myExistingReview}
       />
 
       <style>{`@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}`}</style>
@@ -202,18 +211,11 @@ function CourseReviewThread({
   onToggleExpand: () => void;
 }) {
   const { threads, isLoading } = useCourseThreads(review.id, { limit: 20 });
-  const { createThread, isCreating } = useCourseThreadMutations(review.id);
+  const { createThread, isCreating, updateThread, deleteThread, isUpdating } = useCourseThreadMutations(review.id);
   const [replyText, setReplyText] = useState("");
   const [showReplyBox, setShowReplyBox] = useState(false);
-
-  const [helpfulCount, setHelpfulCount] = useState(0);
-  const [hasVoted, setHasVoted] = useState(false);
-
-  const handleHelpful = () => {
-    if (hasVoted) return;
-    setHelpfulCount(prev => prev + 1);
-    setHasVoted(true);
-  };
+  const [editingThreadId, setEditingThreadId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
 
   const semLabel = review.semester && review.year
     ? `${review.semester.charAt(0).toUpperCase() + review.semester.slice(1).replaceAll("_", " ")} ${review.year}`
@@ -315,27 +317,6 @@ function CourseReviewThread({
           {/* Actions */}
           <div style={{ display: "flex", gap: "16px", alignItems: "center" }}>
             <button
-              onClick={handleHelpful}
-              style={{
-                background: hasVoted ? "var(--color-primary-navy)" : "none",
-                border: "var(--border-width) solid var(--color-border-tan)",
-                borderRadius: "var(--border-radius-sm)",
-                padding: "5px 14px",
-                fontSize: "var(--font-size-xs)",
-                color: hasVoted ? "var(--color-white)" : "var(--color-text-secondary)",
-                cursor: hasVoted ? "default" : "pointer",
-                fontFamily: "var(--font-body)",
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                transition: "all 0.15s ease",
-              }}
-            >
-              <ThumbsUp size={12} />
-              Helpful ({helpfulCount})
-            </button>
-
-            <button
               onClick={onToggleExpand}
               style={{
                 background: "none",
@@ -395,20 +376,77 @@ function CourseReviewThread({
                     }}>
                       {thread.studentId === currentUserId ? "You" : "Student"}
                     </p>
-                    {thread.createdAt && (
-                      <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", margin: 0 }}>
-                        {formatDate(thread.createdAt)}
-                      </p>
-                    )}
+                    <div style={{ display: "flex", gap: "8px", alignItems: "center" }}>
+                      {thread.createdAt && (
+                        <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-secondary)", margin: 0 }}>
+                          {formatDate(thread.createdAt)}
+                        </p>
+                      )}
+                      {thread.studentId === currentUserId && editingThreadId !== thread.id && (
+                        <>
+                          <button
+                            onClick={() => { setEditingThreadId(thread.id ?? null); setEditText(thread.content ?? ""); }}
+                            style={{ background: "none", border: "none", cursor: "pointer", fontSize: "var(--font-size-xs)", color: "var(--color-primary-navy)", fontFamily: "var(--font-body)", textDecoration: "underline", padding: 0 }}
+                          >
+                            Edit
+                          </button>
+                          <button
+                            onClick={() => deleteThread(thread.id ?? "")}
+                            style={{ background: "none", border: "none", cursor: "pointer", fontSize: "var(--font-size-xs)", color: "var(--color-error)", fontFamily: "var(--font-body)", textDecoration: "underline", padding: 0 }}
+                          >
+                            Delete
+                          </button>
+                        </>
+                      )}
+                    </div>
                   </div>
-                  <p style={{
-                    fontSize: "var(--font-size-xs)",
-                    color: "var(--color-text-primary)",
-                    margin: 0,
-                    lineHeight: "var(--line-height-tight)",
-                  }}>
-                    {thread.content}
-                  </p>
+
+                  {editingThreadId === thread.id ? (
+                    <div>
+                      <textarea
+                        value={editText}
+                        onChange={e => setEditText(e.target.value)}
+                        rows={3}
+                        maxLength={2000}
+                        style={{
+                          width: "100%",
+                          padding: "8px 12px",
+                          border: "var(--border-width) solid var(--color-border-tan)",
+                          borderRadius: "var(--border-radius-sm)",
+                          fontSize: "var(--font-size-xs)",
+                          fontFamily: "var(--font-body)",
+                          resize: "vertical",
+                          outline: "none",
+                          boxSizing: "border-box",
+                          background: "var(--color-white)",
+                        }}
+                      />
+                      <div style={{ display: "flex", gap: "8px", marginTop: "8px", justifyContent: "flex-end" }}>
+                        <button
+                          onClick={() => { setEditingThreadId(null); setEditText(""); }}
+                          style={{ padding: "6px 16px", border: "var(--border-width) solid var(--color-border-tan)", borderRadius: "var(--border-radius-sm)", background: "var(--color-white)", fontSize: "var(--font-size-xs)", fontFamily: "var(--font-body)", cursor: "pointer" }}
+                        >
+                          Cancel
+                        </button>
+                        <button
+                          onClick={async () => {
+                            if (!editText.trim()) return;
+                            await updateThread({ threadId: thread.id ?? "", input: { content: editText.trim() } });
+                            setEditingThreadId(null);
+                            setEditText("");
+                          }}
+                          disabled={isUpdating}
+                          style={{ padding: "6px 16px", border: "none", borderRadius: "var(--border-radius-sm)", background: "var(--color-primary-navy)", color: "var(--color-white)", fontSize: "var(--font-size-xs)", fontFamily: "var(--font-body)", fontWeight: "var(--font-weight-semibold)", cursor: "pointer" }}
+                        >
+                          {isUpdating ? "Saving..." : "Save"}
+                        </button>
+                      </div>
+                    </div>
+                  ) : (
+                    <p style={{ fontSize: "var(--font-size-xs)", color: "var(--color-text-primary)", margin: 0, lineHeight: "var(--line-height-tight)" }}>
+                      {thread.content}
+                    </p>
+                  )}
                 </div>
               ))}
 

@@ -14,6 +14,7 @@ interface WriteReviewModalProps {
   professorName?: string;
   courseId?: string;
   courseName?: string;
+  existingReview?: any;
 }
 
 const SEMESTER_OPTIONS: { value: ReviewPostInputSemester; label: string }[] = [
@@ -27,13 +28,41 @@ const CURRENT_YEAR = new Date().getFullYear();
 const YEAR_OPTIONS = Array.from({ length: 6 }, (_, i) => CURRENT_YEAR - i);
 
 const PROFESSOR_TAGS = [
+  { label: "Clear Lectures", value: "clear_lectures" },
+  { label: "Confusing Lectures", value: "confusing_lectures" },
+  { label: "Organized", value: "organized" },
+  { label: "Disorganized", value: "disorganized" },
   { label: "Engaging", value: "engaging" },
+  { label: "Boring", value: "boring" },
+  { label: "Reads Slides", value: "reads_slides" },
   { label: "Fair Grading", value: "fair_grading" },
-  { label: "Approachable", value: "approachable" },
   { label: "Tough Grader", value: "tough_grader" },
   { label: "Lenient Grader", value: "lenient_grader" },
+  { label: "Unclear Rubrics", value: "unclear_rubrics" },
+  { label: "Curve Based", value: "curve_based" },
+  { label: "No Curve", value: "no_curve" },
+  { label: "Tricky Exams", value: "tricky_exams" },
+  { label: "Straightforward Exams", value: "straightforward_exams" },
+  { label: "Heavy Workload", value: "heavy_workload" },
+  { label: "Manageable Workload", value: "manageable_workload" },
+  { label: "Busywork", value: "busywork" },
+  { label: "High Expectations", value: "high_expectations" },
+  { label: "Low Expectations", value: "low_expectations" },
+  { label: "Approachable", value: "approachable" },
+  { label: "Unapproachable", value: "unapproachable" },
+  { label: "Responsive", value: "responsive" },
+  { label: "Slow Responder", value: "slow_responder" },
+  { label: "Caring", value: "caring" },
+  { label: "Intimidating", value: "intimidating" },
   { label: "Passionate", value: "passionate" },
-  { label: "Organized", value: "organized" },
+  { label: "Monotone", value: "monotone" },
+  { label: "Attendance Required", value: "attendance_required" },
+  { label: "Attendance Optional", value: "attendance_optional" },
+  { label: "Strict Deadlines", value: "strict_deadlines" },
+  { label: "Flexible Deadlines", value: "flexible_deadlines" },
+  { label: "Extra Credit", value: "extra_credit" },
+  { label: "No Extra Credit", value: "no_extra_credit" },
+  { label: "Little to No Tests", value: "little_to_no_test" },
 ];
 
 const COURSE_TAGS = [
@@ -53,9 +82,10 @@ export default function WriteReviewModal({
   professorName,
   courseId,
   courseName,
+  existingReview,
 }: WriteReviewModalProps) {
 const { student: user } = useMe();
-  const { createReview, isCreating, createError } = useReviewMutations();
+  const { createReview, updateReview, deleteReview, isCreating, isUpdating, isDeleting, createError } = useReviewMutations();
   const { courses } = useCourses({ limit: 100 });
 
   const [rating, setRating] = useState<number>(0);
@@ -69,16 +99,16 @@ const { student: user } = useMe();
 
   useEffect(() => {
     if (isOpen) {
-      setRating(0);
+      setRating(existingReview?.rating ?? 0);
       setHoveredRating(0);
-      setReviewText("");
-      setSelectedTags([]);
-      setSemester("");
-      setYear(CURRENT_YEAR);
-      setSelectedCourseId(courseId ?? "");
+      setReviewText(existingReview?.reviewText ?? "");
+      setSelectedTags(existingReview?.tags ?? []);
+      setSemester(existingReview?.semester ?? "");
+      setYear(existingReview?.year ?? CURRENT_YEAR);
+      setSelectedCourseId(existingReview?.courseId ?? courseId ?? "");
       setSubmitted(false);
     }
-  }, [isOpen, courseId]);
+  }, [isOpen, courseId, existingReview]);
 
   useEffect(() => {
     const handler = (e: KeyboardEvent) => {
@@ -91,7 +121,9 @@ const { student: user } = useMe();
   if (!isOpen) return null;
 
   const tagOptions = professorId ? PROFESSOR_TAGS : COURSE_TAGS;
-  const title = professorId
+  const title = existingReview
+  ? `Edit Your Review for ${professorName ?? courseName ?? "Review"}`
+  : professorId
     ? `Write Your Review for ${professorName ?? "Professor"}`
     : `Write Your Review for ${courseName ?? "Course"}`;
 
@@ -110,22 +142,22 @@ const { student: user } = useMe();
     semester: semester || undefined,
     year: year || undefined,
   };
-  if (user?.id) payload.studentId = user.id;
-
-  if (professorId) {
-    payload.professorId = professorId;
-  } else if (courseId) {
-   payload.courseId = selectedCourseId || courseId;
-  }
 
   try {
-    await createReview(payload);
+    if (existingReview) {
+      await updateReview({ reviewId: existingReview.id, input: payload });
+    } else {
+      if (user?.id) payload.studentId = user.id;
+      if (professorId) payload.professorId = professorId;
+      else if (courseId) payload.courseId = selectedCourseId || courseId;
+      await createReview(payload);
+    }
     setSubmitted(true);
     setTimeout(() => onClose(), 1500);
   } catch (err: any) {
     console.error("Review submission failed:", err);
   }
-};
+  };
   const isValid = rating > 0 && reviewText.trim().length >= 10;
 
   return (
@@ -179,7 +211,7 @@ const { student: user } = useMe();
               color: "var(--color-primary-navy)",
               margin: "0 0 8px 0",
             }}>
-              Review Submitted!
+              {existingReview ? "Review Updated!" : "Review Submitted!"}
             </h2>
             <p style={{ color: "var(--color-text-secondary)", fontSize: "var(--font-size-sm)" }}>
               Thank you for your review.
@@ -228,11 +260,13 @@ const { student: user } = useMe();
                   style={selectStyle}
                 >
                   <option value="">Select course...</option>
-                  {courses.map(c => (
-                    <option key={c.id} value={c.id}>
-                      {c.department.name} {c.course_code}: {c.name}
-                    </option>
-                  ))}
+                  {[...courses]
+                    .sort((a, b) => a.course_code - b.course_code)
+                    .map(c => (
+                      <option key={c.id} value={c.id}>
+                        {c.department.name} {c.course_code}: {c.name}
+                      </option>
+                    ))}
                 </select>
               </FormField>
             )}
@@ -368,6 +402,28 @@ const { student: user } = useMe();
 
             {/* Actions */}
             <div style={{ display: "flex", gap: "12px", justifyContent: "flex-end", marginTop: "8px" }}>
+              {existingReview && (
+                <button
+                  onClick={async () => {
+                    await deleteReview(existingReview.id);
+                    onClose();
+                  }}
+                  style={{
+                    padding: "10px 24px",
+                    border: "none",
+                    borderRadius: "var(--border-radius-sm)",
+                    background: "var(--color-error)",
+                    color: "var(--color-white)",
+                    fontSize: "var(--font-size-sm)",
+                    fontFamily: "var(--font-body)",
+                    fontWeight: "var(--font-weight-semibold)",
+                    cursor: "pointer",
+                    marginRight: "auto",
+                  }}
+                >
+                  Delete Review
+                </button>
+              )}
               <button
                 onClick={onClose}
                 style={{
@@ -399,7 +455,7 @@ const { student: user } = useMe();
                   transition: "background 0.15s ease",
                 }}
               >
-                {isCreating ? "Submitting..." : "Submit Review"}
+                {isCreating || isUpdating ? "Saving..." : existingReview ? "Save Changes" : "Submit Review"}
               </button>
             </div>
           </>
