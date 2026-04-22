@@ -1,12 +1,12 @@
 import { Pool } from "pg";
 import { type NodePgDatabase } from "drizzle-orm/node-postgres";
 import type {
-   Sample,
+  Sample,
   SamplePatchInputType,
   SamplePostInputType,
- } from "../models/sample";
+} from "../models/sample";
 import type {
-   CourseReview,
+  CourseReview,
   CreateParentReviewInput,
   ProfessorReview,
   Review,
