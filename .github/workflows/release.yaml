@@ -1,0 +1,106 @@
+---
+# Release workflow — versions packages with Changesets and builds/pushes Docker images to ghcr.io
+name: Release
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  release:
+    name: Changesets Release
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      packages: write
+    outputs:
+      published: ${{ steps.changesets.outputs.published }}
+      publishedPackages: ${{ steps.changesets.outputs.publishedPackages }}
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          # Full history needed for Changesets to compute version bumps
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: package-lock.json
+
+      - name: Install root dependencies
+        run: npm ci
+
+      # Creates a "Version Packages" PR or publishes if the PR was merged
+      - name: Create Release Pull Request or Publish
+        id: changesets
+        uses: changesets/action@v1
+        with:
+          # Command run when Changesets decides to publish a new version
+          publish: npx changeset tag
+          title: 'chore: version packages'
+          commit: 'chore: version packages'
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  # Builds and pushes Docker images to ghcr.io only when a real release is published
+  docker:
+    name: Push Docker Images
+    runs-on: ubuntu-latest
+    needs: release
+    if: needs.release.outputs.published == 'true'
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+
+      # Extract the version from the first published package
+      - name: Extract released version
+        id: version
+        run: |
+          echo "version=$(echo '${{ needs.release.outputs.publishedPackages }}' | jq -r '.[0].version')" >> "$GITHUB_OUTPUT"
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Log in to GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Derive the lowercase repository owner for ghcr.io image names
+      - name: Compute image prefix
+        id: meta
+        run: echo "prefix=ghcr.io/$(echo '${{ github.repository_owner }}' | tr '[:upper:]' '[:lower:]')/$(echo '${{ github.event.repository.name }}' | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_OUTPUT"
+
+      - name: Build and push backend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./backend
+          file: ./images/backend/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.prefix }}-backend:${{ steps.version.outputs.version }}
+            ${{ steps.meta.outputs.prefix }}-backend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push frontend image
+        uses: docker/build-push-action@v6
+        with:
+          context: ./frontend
+          file: ./images/frontend/Dockerfile
+          push: true
+          tags: |
+            ${{ steps.meta.outputs.prefix }}-frontend:${{ steps.version.outputs.version }}
+            ${{ steps.meta.outputs.prefix }}-frontend:latest
+          cache-from: type=gha
+          cache-to: type=gha,mode=max

@@ -1,0 +1,31 @@
+---
+# Commitlint workflow
+# Enforces Conventional Commits format on all PR commits
+name: Commitlint
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  commitlint:
+    name: Lint Commit Messages
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v6
+        with:
+          # Fetch full history so commitlint can compare against origin/main
+          fetch-depth: 0
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install commitlint
+        run: npm install --no-save @commitlint/cli @commitlint/config-conventional
+
+      - name: Run commitlint
+        run: npx commitlint --from origin/main --to HEAD --verbose
