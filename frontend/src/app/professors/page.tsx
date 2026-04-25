@@ -5,44 +5,61 @@ import { useProfessors } from "@/src/hooks/useProfessors";
 import { useCourses } from "@/src/hooks/useCourses";
 import { useRMP } from "@/src/hooks/useRMP";
 import { useReviews } from "@/src/hooks/useReviews";
+import { useTraces } from "@/src/hooks/useTraces";
 import ProfessorCard from "@/src/components/ProfessorCard";
-import { Professor } from "@/src/lib/api/northStarAPI.schemas";
+import { Professor, Review } from "@/src/lib/api/northStarAPI.schemas";
 
 type SortOption = "relevance" | "highest" | "lowest";
 type CampusFilter = "boston" | "oakland" | "london";
 type RatingFilter = "4.5" | "4" | "3" | null;
-type WtaFilter = "90" | "80" | "70" | null;
-type DifficultyFilter = "easy" | "medium" | "hard" | null;
+
+function isProfessorReview(review: Review): review is Review & { professorId: string } {
+  return "professorId" in review;
+}
 
 export default function ProfessorsPage() {
   const [search, setSearch] = useState("");
   const [campusFilters, setCampusFilters] = useState<CampusFilter[]>([]);
   const [sortBy, setSortBy] = useState<SortOption>("relevance");
   const [ratingFilter, setRatingFilter] = useState<RatingFilter>(null);
-  const [wtaFilter, setWtaFilter] = useState<WtaFilter>(null);
-  const [difficultyFilter, setDifficultyFilter] = useState<DifficultyFilter>(null);
   const [selectedCourse, setSelectedCourse] = useState<string>("");
 
-  const { courses } = useCourses();
+  const { courses } = useCourses({ limit: 1000 });
   const { professors, isLoading, error } = useProfessors({
     limit: 1000,
     tags: campusFilters.length > 0 ? campusFilters : undefined,
-    ...(sortBy === "highest" && { sortBy: "firstName", sortOrder: "asc" }),
-    ...(sortBy === "lowest" && { sortBy: "firstName", sortOrder: "desc" }),
   });
 
   const { reviews } = useReviews({ limit: 1000 });
+  const { traces } = useTraces({ limit: 1000 });
+
   const reviewCountMap = useMemo(() => {
     const map: Record<string, number> = {};
     reviews.forEach(r => {
-      const pid = (r as any).professorId;
+      const pid = isProfessorReview(r) ? r.professorId : null;
       if (pid) map[pid] = (map[pid] ?? 0) + 1;
     });
     return map;
   }, [reviews]);
 
+  const ratingByProfessor = useMemo(() => {
+    const map: Record<string, { sum: number; count: number }> = {};
+    reviews.forEach(r => {
+      const pid = isProfessorReview(r) ? r.professorId : null;
+      if (!pid || r.rating == null) return;
+      if (!map[pid]) map[pid] = { sum: 0, count: 0 };
+      map[pid].sum += r.rating;
+      map[pid].count += 1;
+    });
+
+    return Object.fromEntries(
+      Object.entries(map).map(([id, { sum, count }]) => [id, sum / count]),
+    ) as Record<string, number>;
+  }, [reviews]);
+
   const filtered = useMemo(() => {
     let list = professors;
+
     if (search.trim()) {
       const q = search.toLowerCase();
       list = list.filter(
@@ -52,8 +69,29 @@ export default function ProfessorsPage() {
           `${p.firstName} ${p.lastName}`.toLowerCase().includes(q)
       );
     }
+
+    if (selectedCourse) {
+      const professorIdsForCourse = new Set(
+        traces
+          .filter(t => t.courseId === selectedCourse)
+          .map(t => t.professorId),
+      );
+      list = list.filter(p => professorIdsForCourse.has(p.id));
+    }
+
+    if (ratingFilter) {
+      const minRating = Number(ratingFilter);
+      list = list.filter(p => (ratingByProfessor[p.id] ?? 0) >= minRating);
+    }
+
+    if (sortBy === "highest") {
+      list = [...list].sort((a, b) => (ratingByProfessor[b.id] ?? 0) - (ratingByProfessor[a.id] ?? 0));
+    } else if (sortBy === "lowest") {
+      list = [...list].sort((a, b) => (ratingByProfessor[a.id] ?? 0) - (ratingByProfessor[b.id] ?? 0));
+    }
+
     return list;
-  }, [professors, search, ratingFilter, wtaFilter, difficultyFilter]);
+  }, [professors, ratingByProfessor, ratingFilter, search, selectedCourse, sortBy, traces]);
 
   const handleToggleCampus = (tag: CampusFilter) => {
     setCampusFilters(prev =>
@@ -122,7 +160,7 @@ export default function ProfessorsPage() {
                 margin: "4px 0 0 0",
                 fontStyle: "italic",
               }}>
-                ⚠ Professor filtering by course needs backend ticket
+                Showing professors with TRACE data for this course
               </p>
             )}
           </FilterSection>
@@ -149,28 +187,6 @@ export default function ProfessorsPage() {
             ))}
           </FilterSection>
 
-          <FilterSection label="WOULD TAKE AGAIN">
-            {([["90", "90%+"], ["80", "80%+"], ["70", "70%+"]] as [WtaFilter, string][]).map(([val, label]) => (
-              <CheckboxItem
-                key={val}
-                label={label}
-                checked={wtaFilter === val}
-                onChange={() => setWtaFilter(prev => prev === val ? null : val)}
-              />
-            ))}
-          </FilterSection>
-
-          <FilterSection label="DIFFICULTY LEVEL">
-            {([["easy", "Easy (1-2)"], ["medium", "Medium (2-3.5)"], ["hard", "Hard (3.5-5)"]] as [DifficultyFilter, string][]).map(([val, label]) => (
-              <CheckboxItem
-                key={val}
-                label={label}
-                checked={difficultyFilter === val}
-                onChange={() => setDifficultyFilter(prev => prev === val ? null : val)}
-              />
-            ))}
-          </FilterSection>
-
           <div style={{ borderTop: "var(--border-width) solid var(--color-border-tan)", margin: "8px 0 16px" }} />
 
           <button
@@ -178,8 +194,6 @@ export default function ProfessorsPage() {
               setCampusFilters([]);
               setSelectedCourse("");
               setRatingFilter(null);
-              setWtaFilter(null);
-              setDifficultyFilter(null);
             }}
             style={{
               background: "none",
@@ -269,8 +283,8 @@ export default function ProfessorsPage() {
                 }}
               >
                 <option value="relevance">Sort by: Relevance</option>
-                <option value="highest">Highest Rated</option>
-                <option value="lowest">Lowest Rated</option>
+                <option value="highest">Highest Reviewed</option>
+                <option value="lowest">Lowest Reviewed</option>
               </select>
             </div>
           </div>

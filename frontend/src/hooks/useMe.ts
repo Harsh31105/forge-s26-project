@@ -6,11 +6,12 @@ export function useMe() {
     const meAPI = getMe();
     const studentAPI = getStudent();
 
-    const { data: authData } = useQuery({
+    const { data: authData, isFetching } = useQuery({
         queryKey: ["me"],
         queryFn: () => meAPI.getAuthMe(),
         refetchOnWindowFocus: false,
         retry: false,
+        staleTime: 0,
     });
 
     const studentId = authData?.id ?? null;
@@ -22,5 +23,5 @@ export function useMe() {
         refetchOnWindowFocus: false,
     });
 
-    return { student, isLoading, error: error?.message || null };
+    return { student, isLoading, isFetching, error: error?.message || null };
 }

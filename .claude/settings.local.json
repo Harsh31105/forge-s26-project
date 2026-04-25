@@ -1,7 +1,23 @@
 {
   "permissions": {
     "allow": [
-      "Bash(netstat -ano)"
+      "Bash(netstat -ano)",
+      "Bash(npm run *)",
+      "Bash(curl -s http://localhost:3000)",
+      "Bash(curl -sI http://localhost:3000/)",
+      "Bash(curl -sI http://localhost:3000/login)",
+      "Bash(curl -sI http://localhost:3000/onboarding)",
+      "Bash(curl -s http://localhost:8080/health)",
+      "Bash(curl -s http://localhost:8080/)",
+      "Bash(curl -s http://localhost:8080/auth/me)",
+      "Bash(curl -s http://localhost:8080/auth/me -H \"Authorization: Bearer badtoken\")",
+      "Bash(curl -s http://localhost:8080/api/v1/auth/me)",
+      "Read(//private/tmp/**)",
+      "Bash(curl -s \"http://localhost:8080/api/v1/courses\")",
+      "Bash(curl -sv http://localhost:8080/api/v1/courses)",
+      "Bash(curl -s http://localhost:8080/api/v1/courses)",
+      "Bash(curl -o /tmp/courses_resp.txt -w \"%{http_code}\" http://localhost:8080/api/v1/courses)",
+      "Read(//tmp/**)"
     ]
   }
 }

@@ -15,6 +15,8 @@
 .env.local
 .env.*.local
 
+
+backend/.trace-playwright
 # TypeScript build artifacts
 *.js.map
 *.d.ts

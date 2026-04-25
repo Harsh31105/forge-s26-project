@@ -2,12 +2,15 @@
 
 import { useRouter } from "next/navigation";
 import { Course, Trace } from "@/src/lib/api/northStarAPI.schemas";
+import { getMockCourseMetrics } from "@/src/lib/mockCourseMetrics";
+import type { CourseMetrics } from "@/src/lib/mockCourseMetrics";
 
 interface CourseCardProps {
   course: Course;
   traces?: Trace[];
   reviewCount?: number;
   avgRating?: number | null;
+  metrics?: CourseMetrics;
 }
 
 export default function CourseCard({
@@ -15,15 +18,14 @@ export default function CourseCard({
   traces = [],
   reviewCount = 0,
   avgRating = null,
+  metrics,
 }: CourseCardProps) {
   const router = useRouter();
+  const courseMetrics = metrics ?? getMockCourseMetrics(course);
+  const overallRating = avgRating ?? courseMetrics.overallRating;
 
   const avgHours = traces.length > 0
     ? (traces.reduce((sum, t) => sum + t.hoursDevoted, 0) / traces.length).toFixed(1)
-    : null;
-
-  const avgEfficiency = traces.length > 0
-    ? (traces.reduce((sum, t) => sum + parseFloat(t.professorEfficiency), 0) / traces.length).toFixed(1)
     : null;
 
   const latestTrace = traces.length > 0
@@ -140,13 +142,13 @@ export default function CourseCard({
             <span>
               Difficulty:{" "}
               <strong style={{ color: "var(--color-text-primary)" }}>
-                {avgEfficiency !== null ? `${avgEfficiency}/5` : "—"}
+                {courseMetrics.difficulty.toFixed(1)}/5
               </strong>
             </span>
             <span>
-              Relevant:{" "}
+              Relevant to Degree:{" "}
               <strong style={{ color: "var(--color-text-primary)" }}>
-                {avgRating !== null ? `${avgRating.toFixed(1)}/5` : "—"}
+                {courseMetrics.relevanceToDegree.toFixed(1)}/5
               </strong>
             </span>
             <span>
@@ -161,7 +163,7 @@ export default function CourseCard({
 
         {/* Rating on the right */}
         <div style={{ textAlign: "right", flexShrink: 0, minWidth: "80px" }}>
-          {avgRating !== null ? (
+          {overallRating !== null ? (
             <>
               <div style={{
                 fontFamily: "var(--font-heading)",
@@ -170,7 +172,7 @@ export default function CourseCard({
                 color: "var(--color-primary-navy)",
                 lineHeight: 1,
               }}>
-                {avgRating.toFixed(1)}
+                {overallRating.toFixed(1)}
               </div>
               <div style={{
                 fontSize: "var(--font-size-xs)",

@@ -1,7 +1,7 @@
 
 "use client";
 
-import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { Professor } from "@/src/lib/api/northStarAPI.schemas";
 
 interface RMPData {
@@ -21,8 +21,6 @@ export default function ProfessorCard({
   rmpData,
   reviewCount = 0,
 }: ProfessorCardProps) {
-  const router = useRouter();
-
   const rating = rmpData?.ratingAvg ? parseFloat(rmpData.ratingAvg) : null;
   const difficulty = rmpData?.avgDifficulty ? parseFloat(rmpData.avgDifficulty) : null;
   const wta = rmpData?.ratingWta ?? null;
@@ -34,9 +32,10 @@ export default function ProfessorCard({
   };
 
   return (
-    <div
-      onClick={() => router.push(`/professors/${professor.id}`)}
+    <Link
+      href={`/professors/${professor.id}`}
       style={{
+        display: "block",
         background: "var(--color-white)",
         border: "var(--border-width) solid var(--color-border-tan)",
         borderRadius: "var(--border-radius-md)",
@@ -44,6 +43,7 @@ export default function ProfessorCard({
         cursor: "pointer",
         transition: "background 0.15s ease",
         position: "relative",
+        textDecoration: "none",
       }}
       onMouseEnter={e => (e.currentTarget.style.background = "var(--color-surface-extra-light)")}
       onMouseLeave={e => (e.currentTarget.style.background = "var(--color-white)")}
@@ -155,6 +155,6 @@ export default function ProfessorCard({
           </div>
         </div>
       </div>
-    </div>
+    </Link>
   );
 }

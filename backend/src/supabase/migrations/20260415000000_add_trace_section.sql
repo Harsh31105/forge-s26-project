@@ -1,0 +1,1 @@
+ALTER TABLE trace ADD COLUMN section VARCHAR(10);

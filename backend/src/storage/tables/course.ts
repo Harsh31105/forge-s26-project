@@ -11,6 +11,9 @@ export const course = pgTable("course", {
   description: varchar("description", { length: 1000 }).notNull(),
   numCredits: integer("num_credits").notNull(),
   lectureType: lectureTypeEnum("lecture_type"),
+  prereqs: varchar("prereqs", { length: 1000 }),
+  coreqs: varchar("coreqs", { length: 1000 }),
+  nupath: varchar("nupath", { length: 255 }),
   createdAt: timestamp("created_at", { withTimezone: true }).defaultNow().notNull(),
   updatedAt: timestamp("updated_at", { withTimezone: true }).defaultNow().notNull(),
 }, (table) => [

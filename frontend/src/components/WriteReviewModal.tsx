@@ -56,7 +56,7 @@ export default function WriteReviewModal({
 }: WriteReviewModalProps) {
 const { student: user } = useMe();
   const { createReview, isCreating, createError } = useReviewMutations();
-  const { courses } = useCourses({ limit: 100 });
+  const { courses } = useCourses({ limit: 1000 });
 
   const [rating, setRating] = useState<number>(0);
   const [hoveredRating, setHoveredRating] = useState<number>(0);

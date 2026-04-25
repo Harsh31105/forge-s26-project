@@ -13,8 +13,8 @@ export default function NavBar() {
   ];
 
   return (
-    <nav style={{ 
-      background: "var(--color-surface-light-cream)", 
+    <nav style={{
+      background: "var(--color-surface-light-cream)",
       borderBottom: "3px solid var(--color-border-tan)",
       height: 80,
       display: "flex",
